@@ -1,0 +1,407 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_cached_coupling_error.py": "7dc4f918d80699d1913ab863b03eaf1b9ed0e1fb492c10c10b811306a5897577",
+    "scripts/check_int16_core_capacity.py": "092aea8830f40dec71900e48ad78b64837c3ea321a1d1cf0d8f33e9abb0e7167",
+    "results/int16-core-capacity.json": "4e7facaf29e46968c95e4832434e3861ad062013232f0451e2bf1e9e5428eaf8"
+  },
+  "protocol": {
+    "rank": 8,
+    "payload_budget": 721200,
+    "precision": "Postquantized int16, first8columns/diagonal/scalesFP64; duplicate first8diagonals included. Core reduced so factor+8*n*rank <=721200.",
+    "mechanism": "Z=HB+UV^T approximates C^-1B, exact congruence T=[[I,-Z],[0,I]], diag(H,lambda^-1I). Raw SVD and C-energy weighted SVD via L^T deltaZ.",
+    "cost": "Denseconstruction, reference inverse, SVD, decodedfactor/cache and stopping free. n\u00b2entries/action models streamed HB and BT H applications plus lowrankarithmetic; no native memory/runtime or current-solve benefit. Accuratecoupling is overbudget oracle."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "core": 737,
+      "payload_bytes": 720520,
+      "weighted_error_fraction_after_rank8": 0.2610084104389691,
+      "weighted_spectral_error_fraction": 0.1599454872052632,
+      "prior_controls": [
+        {
+          "iterations": 42,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.0339609444211055e-09,
+          "analytical_entries": 183501772,
+          "entry_components": {
+            "FPS": 1228800,
+            "factor": 180300,
+            "actions": 176160768,
+            "boundary_cross": 1737600,
+            "final_verification": 4194304
+          },
+          "method": "float32",
+          "core": 600,
+          "factor_payload_bytes": 721200
+        },
+        {
+          "iterations": 384,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.938465397410897e-09,
+          "analytical_entries": 1618829555,
+          "entry_components": {
+            "FPS": 1675264,
+            "factor": 334971,
+            "actions": 1610612736,
+            "boundary_cross": 2012280,
+            "final_verification": 4194304
+          },
+          "method": "int16",
+          "core": 818,
+          "factor_payload_bytes": 720442
+        },
+        {
+          "iterations": 27,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.207712784176641e-09,
+          "analytical_entries": 121463027,
+          "entry_components": {
+            "FPS": 1675264,
+            "factor": 334971,
+            "actions": 113246208,
+            "boundary_cross": 2012280,
+            "final_verification": 4194304
+          },
+          "method": "exact",
+          "core": 818,
+          "factor_payload_bytes": 2679768
+        },
+        {
+          "method": "streamed_int16",
+          "status": "nonpositive_factor_pivot",
+          "converged": false,
+          "failed_pivot": 728,
+          "value": -0.00012013183134795824
+        }
+      ],
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 347,
+          "original_relative_residual": 9.312408079048788e-09,
+          "analytical_entries": 1463331535,
+          "method": "uncorrected"
+        },
+        {
+          "status": "converged",
+          "iterations": 86,
+          "original_relative_residual": 4.9170883369874286e-09,
+          "analytical_entries": 368618191,
+          "method": "raw_rank8"
+        },
+        {
+          "status": "converged",
+          "iterations": 86,
+          "original_relative_residual": 3.4265951803909977e-09,
+          "analytical_entries": 368618191,
+          "method": "weighted_rank8"
+        },
+        {
+          "status": "converged",
+          "iterations": 39,
+          "original_relative_residual": 7.92840151267615e-09,
+          "analytical_entries": 171485903,
+          "method": "exact_coupling_oracle"
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "core": 737,
+      "payload_bytes": 720520,
+      "weighted_error_fraction_after_rank8": 0.2610084104389691,
+      "weighted_spectral_error_fraction": 0.1599454872052632,
+      "prior_controls": [
+        {
+          "iterations": 40,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.146231880022853e-09,
+          "analytical_entries": 175113164,
+          "entry_components": {
+            "FPS": 1228800,
+            "factor": 180300,
+            "actions": 167772160,
+            "boundary_cross": 1737600,
+            "final_verification": 4194304
+          },
+          "method": "float32",
+          "core": 600,
+          "factor_payload_bytes": 721200
+        },
+        {
+          "iterations": 382,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.120493169608418e-09,
+          "analytical_entries": 1610440947,
+          "entry_components": {
+            "FPS": 1675264,
+            "factor": 334971,
+            "actions": 1602224128,
+            "boundary_cross": 2012280,
+            "final_verification": 4194304
+          },
+          "method": "int16",
+          "core": 818,
+          "factor_payload_bytes": 720442
+        },
+        {
+          "iterations": 24,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 5.788007237785428e-09,
+          "analytical_entries": 108880115,
+          "entry_components": {
+            "FPS": 1675264,
+            "factor": 334971,
+            "actions": 100663296,
+            "boundary_cross": 2012280,
+            "final_verification": 4194304
+          },
+          "method": "exact",
+          "core": 818,
+          "factor_payload_bytes": 2679768
+        },
+        {
+          "method": "streamed_int16",
+          "status": "nonpositive_factor_pivot",
+          "converged": false,
+          "failed_pivot": 728,
+          "value": -0.00012013183134795824
+        }
+      ],
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 345,
+          "original_relative_residual": 7.663038267720945e-09,
+          "analytical_entries": 1454942927,
+          "method": "uncorrected"
+        },
+        {
+          "status": "converged",
+          "iterations": 88,
+          "original_relative_residual": 7.128290509835172e-09,
+          "analytical_entries": 377006799,
+          "method": "raw_rank8"
+        },
+        {
+          "status": "converged",
+          "iterations": 82,
+          "original_relative_residual": 5.565225457359018e-09,
+          "analytical_entries": 351840975,
+          "method": "weighted_rank8"
+        },
+        {
+          "status": "converged",
+          "iterations": 35,
+          "original_relative_residual": 6.2670486196654305e-09,
+          "analytical_entries": 154708687,
+          "method": "exact_coupling_oracle"
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "core": 786,
+      "payload_bytes": 719898,
+      "weighted_error_fraction_after_rank8": 0.12187641909077518,
+      "weighted_spectral_error_fraction": 0.10133751351522212,
+      "prior_controls": [
+        {
+          "iterations": 18,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 4.899669055332535e-09,
+          "analytical_entries": 13844044,
+          "entry_components": {
+            "FPS": 494400,
+            "factor": 180300,
+            "actions": 12221568,
+            "boundary_cross": 268800,
+            "final_verification": 678976
+          },
+          "method": "float32",
+          "core": 600,
+          "factor_payload_bytes": 721200
+        },
+        {
+          "iterations": 30,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.075014681946371e-10,
+          "analytical_entries": 22067075,
+          "entry_components": {
+            "FPS": 674032,
+            "factor": 334971,
+            "actions": 20369280,
+            "boundary_cross": 9816,
+            "final_verification": 678976
+          },
+          "method": "int16",
+          "core": 818,
+          "factor_payload_bytes": 720442
+        },
+        {
+          "iterations": 6,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 1.424787845275787e-10,
+          "analytical_entries": 5771651,
+          "entry_components": {
+            "FPS": 674032,
+            "factor": 334971,
+            "actions": 4073856,
+            "boundary_cross": 9816,
+            "final_verification": 678976
+          },
+          "method": "exact",
+          "core": 818,
+          "factor_payload_bytes": 2679768
+        },
+        {
+          "method": "streamed_int16",
+          "status": "nonpositive_factor_pivot",
+          "converged": false,
+          "failed_pivot": 403,
+          "value": -1.9129331139344785e-05
+        }
+      ],
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 131,
+          "original_relative_residual": 7.3232283463921356e-09,
+          "analytical_entries": 90641523,
+          "method": "uncorrected"
+        },
+        {
+          "status": "converged",
+          "iterations": 33,
+          "original_relative_residual": 3.9119055705176495e-09,
+          "analytical_entries": 24101875,
+          "method": "raw_rank8"
+        },
+        {
+          "status": "converged",
+          "iterations": 33,
+          "original_relative_residual": 2.744571295056147e-09,
+          "analytical_entries": 24101875,
+          "method": "weighted_rank8"
+        },
+        {
+          "status": "converged",
+          "iterations": 14,
+          "original_relative_residual": 6.200157363656975e-09,
+          "analytical_entries": 11201331,
+          "method": "exact_coupling_oracle"
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "core": 771,
+      "payload_bytes": 719790,
+      "weighted_error_fraction_after_rank8": 0.12363732483970864,
+      "weighted_spectral_error_fraction": 0.0965336204164337,
+      "prior_controls": [
+        {
+          "iterations": 23,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 4.469196890564323e-09,
+          "analytical_entries": 36299196,
+          "entry_components": {
+            "FPS": 721200,
+            "factor": 180300,
+            "actions": 33230492,
+            "boundary_cross": 722400,
+            "final_verification": 1444804
+          },
+          "method": "float32",
+          "core": 600,
+          "factor_payload_bytes": 721200
+        },
+        {
+          "iterations": 336,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.172517750492861e-09,
+          "analytical_entries": 488845379,
+          "entry_components": {
+            "FPS": 983236,
+            "factor": 334971,
+            "actions": 485454144,
+            "boundary_cross": 628224,
+            "final_verification": 1444804
+          },
+          "method": "int16",
+          "core": 818,
+          "factor_payload_bytes": 720442
+        },
+        {
+          "iterations": 15,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 6.851196875698592e-09,
+          "analytical_entries": 25063295,
+          "entry_components": {
+            "FPS": 983236,
+            "factor": 334971,
+            "actions": 21672060,
+            "boundary_cross": 628224,
+            "final_verification": 1444804
+          },
+          "method": "exact",
+          "core": 818,
+          "factor_payload_bytes": 2679768
+        },
+        {
+          "method": "streamed_int16",
+          "status": "nonpositive_factor_pivot",
+          "converged": false,
+          "failed_pivot": 227,
+          "value": -2.521508902475489e-05
+        }
+      ],
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 341,
+          "original_relative_residual": 9.66916711789942e-09,
+          "analytical_entries": 496011918,
+          "method": "uncorrected"
+        },
+        {
+          "status": "converged",
+          "iterations": 69,
+          "original_relative_residual": 5.083145529181158e-09,
+          "analytical_entries": 103025230,
+          "method": "raw_rank8"
+        },
+        {
+          "status": "converged",
+          "iterations": 69,
+          "original_relative_residual": 5.707691367819618e-09,
+          "analytical_entries": 103025230,
+          "method": "weighted_rank8"
+        },
+        {
+          "status": "converged",
+          "iterations": 22,
+          "original_relative_residual": 3.4944630610233646e-09,
+          "analytical_entries": 35119442,
+          "method": "exact_coupling_oracle"
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 13.042007294017822,
+  "elapsed_cpu_seconds": 13.1851398
+}

@@ -1,0 +1,516 @@
+{
+  "status": "complete",
+  "protocol": {
+    "checkpoint": 20,
+    "core_count": 128,
+    "swap_sweeps": 1,
+    "factor_allowance_bytes": 103040,
+    "oracle": "Exact current error; two smallest generalized eigenvectors as matrix-only control",
+    "scope": "Free dense construction, true error and repartition; no end-to-end or memory claim",
+    "stopping": "First literal original residual <=1e-8, checked every iterate; original verification products counted",
+    "comparisons": [
+      "uninterrupted",
+      "unchanged_restart",
+      "exact_error_partition",
+      "matrix_only_partition",
+      "larger_core160_recomputed_control"
+    ],
+    "primary_decision": "Full verified solve action count, not partition score"
+  },
+  "sources": {
+    "scripts/check_schur_cancellation_oracle_v2.py": "9af9a008cb302f2c7b0131fcee0df0e965902760e7f02b49134c70f2da385a25",
+    "scripts/check_schur_block_headroom.py": "7ae9649624a38331fed9b3ecebad0c08e8869c75ecd30ac9ff4b882931eb506f",
+    "scripts/check_schur_block_matched_factors.py": "46b27655b7ab6e17318b9ab17125cc94633bcd4a53f538ddec93abdf9ffdacec",
+    "results/schur-block-matched-factors.json": "38f8f32f6445a63bdb30312adf598d4429300e9863ca555a37e262ad3b001191"
+  },
+  "runs": [
+    {
+      "dataset": "smooth",
+      "regularization": 0.001,
+      "score": {
+        "score_before": 0.003283736288130775,
+        "score_after": 0.001233150416239995,
+        "swaps_per_sweep": [
+          246
+        ],
+        "independent_swap_delta_error": 7.521652571618187e-19
+      },
+      "matrix_score": {
+        "score_before": 0.0058944245643177415,
+        "score_after": 0.0012998193570252336,
+        "swaps_per_sweep": [
+          294
+        ],
+        "independent_swap_delta_error": 4.396100996249819e-19
+      },
+      "smallest_eigenvalues": [
+        0.2047894045253347,
+        0.22096474438211386
+      ],
+      "branches": [
+        {
+          "mode": "uninterrupted",
+          "iterations": 33,
+          "solver_info": 0,
+          "true_relative_residual": 9.825160141976443e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 8110080,
+          "original_verification_products": 34,
+          "action_and_verification_entries": 17022976,
+          "free_diagonal_block_reuse_entries": 7823706
+        },
+        {
+          "mode": "unchanged_restart",
+          "iterations": 37,
+          "solver_info": 0,
+          "true_relative_residual": 9.020465634617826e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 9093120,
+          "original_verification_products": 38,
+          "action_and_verification_entries": 19054592,
+          "free_diagonal_block_reuse_entries": 8772034
+        },
+        {
+          "mode": "exact_error_partition",
+          "iterations": 35,
+          "solver_info": 0,
+          "true_relative_residual": 8.346142638766274e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 8601600,
+          "original_verification_products": 36,
+          "action_and_verification_entries": 18038784,
+          "free_diagonal_block_reuse_entries": 8297870
+        },
+        {
+          "mode": "matrix_only_partition",
+          "iterations": 38,
+          "solver_info": 0,
+          "true_relative_residual": 7.544008917236104e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 9338880,
+          "original_verification_products": 39,
+          "action_and_verification_entries": 19562496,
+          "free_diagonal_block_reuse_entries": 9009116
+        }
+      ],
+      "prefix_iterations": 20,
+      "exact_schur_solution_residual": 5.686082785426156e-16,
+      "larger_core_control": {
+        "iterations": 25,
+        "solver_info": 0,
+        "true_relative_residual": 7.3211011100693695e-09,
+        "converged": true,
+        "optimistic_action_kernel_entries": 5913600,
+        "original_verification_products": 26,
+        "action_and_verification_entries": 12729344
+      }
+    },
+    {
+      "dataset": "smooth",
+      "regularization": 1e-05,
+      "score": {
+        "score_before": 0.0004357415824143763,
+        "score_after": 4.6426949634674627e-05,
+        "swaps_per_sweep": [
+          215
+        ],
+        "independent_swap_delta_error": 4.701032857261367e-20
+      },
+      "matrix_score": {
+        "score_before": 0.0009464647006932308,
+        "score_after": 6.536426239822368e-05,
+        "swaps_per_sweep": [
+          281
+        ],
+        "independent_swap_delta_error": 8.470329472543003e-21
+      },
+      "smallest_eigenvalues": [
+        0.013149307660247092,
+        0.016386252079672176
+      ],
+      "branches": [
+        {
+          "mode": "uninterrupted",
+          "iterations": 167,
+          "solver_info": 0,
+          "true_relative_residual": 9.577668253585938e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 41041920,
+          "original_verification_products": 168,
+          "action_and_verification_entries": 85082112,
+          "free_diagonal_block_reuse_entries": 39592694
+        },
+        {
+          "mode": "unchanged_restart",
+          "iterations": 173,
+          "solver_info": 0,
+          "true_relative_residual": 6.89279810213924e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 42516480,
+          "original_verification_products": 174,
+          "action_and_verification_entries": 88129536,
+          "free_diagonal_block_reuse_entries": 41015186
+        },
+        {
+          "mode": "exact_error_partition",
+          "iterations": 174,
+          "solver_info": 0,
+          "true_relative_residual": 7.482603959359365e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 42762240,
+          "original_verification_products": 175,
+          "action_and_verification_entries": 88637440,
+          "free_diagonal_block_reuse_entries": 41252268
+        },
+        {
+          "mode": "matrix_only_partition",
+          "iterations": 190,
+          "solver_info": 0,
+          "true_relative_residual": 9.294049483926992e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 46694400,
+          "original_verification_products": 191,
+          "action_and_verification_entries": 96763904,
+          "free_diagonal_block_reuse_entries": 45045580
+        }
+      ],
+      "prefix_iterations": 20,
+      "exact_schur_solution_residual": 8.471529355565226e-15,
+      "larger_core_control": {
+        "iterations": 118,
+        "solver_info": 0,
+        "true_relative_residual": 7.72770292427704e-09,
+        "converged": true,
+        "optimistic_action_kernel_entries": 27912192,
+        "original_verification_products": 119,
+        "action_and_verification_entries": 59107328
+      }
+    },
+    {
+      "dataset": "mixed",
+      "regularization": 0.001,
+      "score": {
+        "score_before": 0.003964786569320978,
+        "score_after": 0.0012040358814435208,
+        "swaps_per_sweep": [
+          253
+        ],
+        "independent_swap_delta_error": 4.180107594699972e-19
+      },
+      "matrix_score": {
+        "score_before": 0.0058944245643177415,
+        "score_after": 0.0012998193570252336,
+        "swaps_per_sweep": [
+          294
+        ],
+        "independent_swap_delta_error": 4.396100996249819e-19
+      },
+      "smallest_eigenvalues": [
+        0.2047894045253347,
+        0.22096474438211386
+      ],
+      "branches": [
+        {
+          "mode": "uninterrupted",
+          "iterations": 33,
+          "solver_info": 0,
+          "true_relative_residual": 9.68331975369453e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 8110080,
+          "original_verification_products": 34,
+          "action_and_verification_entries": 17022976,
+          "free_diagonal_block_reuse_entries": 7823706
+        },
+        {
+          "mode": "unchanged_restart",
+          "iterations": 36,
+          "solver_info": 0,
+          "true_relative_residual": 8.167700153399984e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 8847360,
+          "original_verification_products": 37,
+          "action_and_verification_entries": 18546688,
+          "free_diagonal_block_reuse_entries": 8534952
+        },
+        {
+          "mode": "exact_error_partition",
+          "iterations": 34,
+          "solver_info": 0,
+          "true_relative_residual": 8.831577138528185e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 8355840,
+          "original_verification_products": 35,
+          "action_and_verification_entries": 17530880,
+          "free_diagonal_block_reuse_entries": 8060788
+        },
+        {
+          "mode": "matrix_only_partition",
+          "iterations": 37,
+          "solver_info": 0,
+          "true_relative_residual": 7.780920119747205e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 9093120,
+          "original_verification_products": 38,
+          "action_and_verification_entries": 19054592,
+          "free_diagonal_block_reuse_entries": 8772034
+        }
+      ],
+      "prefix_iterations": 20,
+      "exact_schur_solution_residual": 3.972375557180778e-16,
+      "larger_core_control": {
+        "iterations": 24,
+        "solver_info": 0,
+        "true_relative_residual": 4.754282940110481e-09,
+        "converged": true,
+        "optimistic_action_kernel_entries": 5677056,
+        "original_verification_products": 25,
+        "action_and_verification_entries": 12230656
+      }
+    },
+    {
+      "dataset": "mixed",
+      "regularization": 1e-05,
+      "score": {
+        "score_before": 0.0005356527901128154,
+        "score_after": 5.399825122118282e-05,
+        "swaps_per_sweep": [
+          229
+        ],
+        "independent_swap_delta_error": 8.470329472543003e-21
+      },
+      "matrix_score": {
+        "score_before": 0.0009464647006932308,
+        "score_after": 6.536426239822368e-05,
+        "swaps_per_sweep": [
+          281
+        ],
+        "independent_swap_delta_error": 8.470329472543003e-21
+      },
+      "smallest_eigenvalues": [
+        0.013149307660247092,
+        0.016386252079672176
+      ],
+      "branches": [
+        {
+          "mode": "uninterrupted",
+          "iterations": 126,
+          "solver_info": 0,
+          "true_relative_residual": 8.810576706325163e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 30965760,
+          "original_verification_products": 127,
+          "action_and_verification_entries": 64258048,
+          "free_diagonal_block_reuse_entries": 29872332
+        },
+        {
+          "mode": "unchanged_restart",
+          "iterations": 134,
+          "solver_info": 0,
+          "true_relative_residual": 7.414107422109193e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 32931840,
+          "original_verification_products": 135,
+          "action_and_verification_entries": 68321280,
+          "free_diagonal_block_reuse_entries": 31768988
+        },
+        {
+          "mode": "exact_error_partition",
+          "iterations": 128,
+          "solver_info": 0,
+          "true_relative_residual": 8.065027201325817e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 31457280,
+          "original_verification_products": 129,
+          "action_and_verification_entries": 65273856,
+          "free_diagonal_block_reuse_entries": 30346496
+        },
+        {
+          "mode": "matrix_only_partition",
+          "iterations": 153,
+          "solver_info": 0,
+          "true_relative_residual": 9.668909011022153e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 37601280,
+          "original_verification_products": 154,
+          "action_and_verification_entries": 77971456,
+          "free_diagonal_block_reuse_entries": 36273546
+        }
+      ],
+      "prefix_iterations": 20,
+      "exact_schur_solution_residual": 2.8263150884864404e-16,
+      "larger_core_control": {
+        "iterations": 84,
+        "solver_info": 0,
+        "true_relative_residual": 9.204134452739232e-09,
+        "converged": true,
+        "optimistic_action_kernel_entries": 19869696,
+        "original_verification_products": 85,
+        "action_and_verification_entries": 42151936
+      }
+    },
+    {
+      "dataset": "Concrete",
+      "regularization": 0.001,
+      "score": {
+        "score_before": 0.012111043309583494,
+        "score_after": 0.0012535025597999168,
+        "swaps_per_sweep": [
+          511
+        ],
+        "independent_swap_delta_error": 1.3942162311805784e-18
+      },
+      "matrix_score": {
+        "score_before": 0.021350813280073374,
+        "score_after": 0.001150085154067717,
+        "swaps_per_sweep": [
+          625
+        ],
+        "independent_swap_delta_error": 2.1321498459034222e-18
+      },
+      "smallest_eigenvalues": [
+        0.047528454780073795,
+        0.05093019579099067
+      ],
+      "branches": [
+        {
+          "mode": "uninterrupted",
+          "iterations": 88,
+          "solver_info": 0,
+          "true_relative_residual": 8.737334436591257e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 58308096,
+          "original_verification_products": 89,
+          "action_and_verification_entries": 118736960,
+          "free_diagonal_block_reuse_entries": 57559392
+        },
+        {
+          "mode": "unchanged_restart",
+          "iterations": 93,
+          "solver_info": 0,
+          "true_relative_residual": 7.250245957603863e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 61621056,
+          "original_verification_products": 94,
+          "action_and_verification_entries": 125444800,
+          "free_diagonal_block_reuse_entries": 60829812
+        },
+        {
+          "mode": "exact_error_partition",
+          "iterations": 102,
+          "solver_info": 0,
+          "true_relative_residual": 8.356177040075593e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 67584384,
+          "original_verification_products": 103,
+          "action_and_verification_entries": 137518912,
+          "free_diagonal_block_reuse_entries": 66716568
+        },
+        {
+          "mode": "matrix_only_partition",
+          "iterations": 117,
+          "solver_info": 0,
+          "true_relative_residual": 7.441587048841847e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 77523264,
+          "original_verification_products": 118,
+          "action_and_verification_entries": 157642432,
+          "free_diagonal_block_reuse_entries": 76527828
+        }
+      ],
+      "prefix_iterations": 20,
+      "exact_schur_solution_residual": 2.376845323125151e-15,
+      "larger_core_control": {
+        "iterations": 49,
+        "solver_info": 0,
+        "true_relative_residual": 6.402739745632718e-09,
+        "converged": true,
+        "optimistic_action_kernel_entries": 32015424,
+        "original_verification_products": 50,
+        "action_and_verification_entries": 65964224
+      }
+    },
+    {
+      "dataset": "Concrete",
+      "regularization": 1e-05,
+      "score": {
+        "score_before": 0.0023547332910300593,
+        "score_after": 7.694276125315274e-05,
+        "swaps_per_sweep": [
+          480
+        ],
+        "independent_swap_delta_error": 1.6173035336636797e-19
+      },
+      "matrix_score": {
+        "score_before": 0.01172672348038806,
+        "score_after": 6.97053196613451e-05,
+        "swaps_per_sweep": [
+          610
+        ],
+        "independent_swap_delta_error": 1.8212862727192563e-18
+      },
+      "smallest_eigenvalues": [
+        0.0009170896629359671,
+        0.0010103873809106133
+      ],
+      "branches": [
+        {
+          "mode": "uninterrupted",
+          "iterations": 799,
+          "solver_info": 0,
+          "true_relative_residual": 8.895536757110753e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 529411008,
+          "original_verification_products": 800,
+          "action_and_verification_entries": 1072591808,
+          "free_diagonal_block_reuse_entries": 522613116
+        },
+        {
+          "mode": "unchanged_restart",
+          "iterations": 796,
+          "solver_info": 0,
+          "true_relative_residual": 9.187016255228646e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 527423232,
+          "original_verification_products": 797,
+          "action_and_verification_entries": 1068567104,
+          "free_diagonal_block_reuse_entries": 520650864
+        },
+        {
+          "mode": "exact_error_partition",
+          "iterations": 826,
+          "solver_info": 0,
+          "true_relative_residual": 9.461746009837878e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 547300992,
+          "original_verification_products": 827,
+          "action_and_verification_entries": 1108814144,
+          "free_diagonal_block_reuse_entries": 540273384
+        },
+        {
+          "mode": "matrix_only_partition",
+          "iterations": 971,
+          "solver_info": 0,
+          "true_relative_residual": 9.876212259464295e-09,
+          "converged": true,
+          "optimistic_action_kernel_entries": 643376832,
+          "original_verification_products": 972,
+          "action_and_verification_entries": 1303341504,
+          "free_diagonal_block_reuse_entries": 635115564
+        }
+      ],
+      "prefix_iterations": 20,
+      "exact_schur_solution_residual": 1.2079410227786747e-13,
+      "larger_core_control": {
+        "iterations": 296,
+        "solver_info": 0,
+        "true_relative_residual": 8.586320093243165e-09,
+        "converged": true,
+        "optimistic_action_kernel_entries": 193399296,
+        "original_verification_products": 297,
+        "action_and_verification_entries": 395055168
+      }
+    }
+  ],
+  "elapsed_wall_seconds": 5.225989372993354,
+  "elapsed_cpu_seconds": 5.102301
+}

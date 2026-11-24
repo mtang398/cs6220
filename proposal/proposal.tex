@@ -1,0 +1,102 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=0.65in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,microtype}
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\normalsize\bfseries}{}{0pt}{}
+\titlespacing*{\section}{0pt}{6pt}{3pt}
+\usepackage[colorlinks=true,urlcolor=blue,citecolor=blue,linkcolor=blue]{hyperref}
+\hypersetup{pdftitle={Updating Nystrom Preconditioners with Solver Residuals}}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\newcommand{\nystrom}{Nystr\"om}
+\begin{document}
+\fontsize{10.5}{12.3}\selectfont
+\begin{center}
+  {\large\bfseries Updating Nystr\"om Preconditioners with Solver Residuals}\\[3pt]
+  CS 6220: Data-sparse Matrix Computations \quad Project Proposal
+\end{center}
+\vspace{-7pt}
+
+\textbf{Research question and motivation.}
+Kernel ridge regression learns a predictor by solving linear equations built from
+pairwise similarities between training examples.
+A \nystrom{} preconditioner approximates this similarity matrix using a small set
+of its columns and accelerates the conjugate-gradient solver~\cite{frangella2023nystrom}.
+Keeping more columns costs more memory; with a limited column budget, the choice
+of columns matters. A set chosen to approximate the whole matrix may spend that
+budget on components of the error that the solver has already corrected.
+The residual, the mismatch between the two sides of the equations, provides
+information about what remains to be solved.
+\textbf{Can the current residual guide kernel-column replacements that reduce the
+total time to reach a prescribed solution accuracy, while keeping the number of
+retained columns fixed?}
+The hypothesis is that replacing columns as the residual changes can make a
+small preconditioner more effective throughout the solve.
+
+Task-dependent kernel approximation already uses prediction targets to guide
+column selection~\cite{bach2005predictive}, and limited-memory preconditioning
+uses information from iterative solves~\cite{morales2000automatic}.
+I will develop a rule that uses the changing residual to decide which kernel
+columns to discard and which to acquire. Any reduction in iteration time must
+outweigh the cost of column replacement and solver restarts.
+
+\textbf{Initial method.}
+Let $A=K+\lambda I$, where $K$ is a Gaussian kernel matrix and $\lambda>0$ is the
+regularization parameter. The system $A\alpha=y$ determines the prediction
+coefficients $\alpha$ from training targets $y$.
+The initial $k$ columns will be selected by randomly pivoted
+Cholesky~\cite{chen2025rpcholesky}. For their indices $S$, the preconditioner is
+\[
+ M_S=K_{:,S}K_{S,S}^{\dagger}K_{S,:}+\lambda I,
+\]
+where $\dagger$ denotes the pseudoinverse.
+Here $K_{:,S}$ contains the selected columns and $K_{S,S}$ their entries at the
+selected rows. Retaining $k$ columns requires $O(nk)$ storage for $n$ examples.
+
+After a block of conjugate-gradient iterations, the method computes the residual
+$r_t=y-A\alpha_t$ and samples a small number of candidate column indices with
+probabilities proportional to $r_{t,i}^2$, emphasizing equations with larger
+remaining discrepancies.
+For each candidate, it considers replacing one retained column and selects the set
+$S'$ with the smallest score $r_t^{\mathsf T}M_{S'}^{-1}r_t$.
+The score is an upper bound on $r_t^{\mathsf T}A^{-1}r_t=e_t^{\mathsf T}Ae_t$,
+where $e_t$ is the difference between the exact and current solutions.
+A smaller score tightens this estimate of the remaining solution error.
+The experiment tests whether the replacements it favors improve subsequent convergence.
+An exchange is accepted when it reduces the score, keeping $k$ retained columns.
+The solver then restarts from the current solution.
+Updates of matrices of size $k+1$ allow exchanges to be evaluated using the
+retained columns and one candidate column at a time.
+I will revise the method as needed based on the convergence and timing results.
+
+\textbf{Experiments and interpretation.}
+I will evaluate the method on clustered synthetic inputs and the UCI
+\href{https://archive.ics.uci.edu/dataset/165/concrete+compressive+strength}{Concrete}
+and \href{https://archive.ics.uci.edu/dataset/291/airfoil+self+noise}{Airfoil}
+regression datasets, with at most 2,048 training examples.
+The experiments will vary the column budget, regularization, and replacement frequency.
+Changing the synthetic targets while keeping the kernel fixed will test
+whether replacement adapts to the particular system being solved.
+Comparisons will include fixed and periodically reconstructed \nystrom{} preconditioners,
+and limited-memory quasi-Newton preconditioning with comparable vector storage.
+Exchanges based on the initial targets instead of the current residual test the
+value of the current residual; restarting without exchanges isolates restart costs.
+
+All solvers will stop at a directly checked relative residual of $10^{-8}$.
+Measurements will include total runtime on CPUs, replacement overhead,
+matrix--vector products, and peak memory over five seeds.
+Direct Cholesky solves will check solution and prediction accuracy.
+Residual histories and score changes will help assess whether accepted
+replacements improve subsequent convergence.
+
+\vspace{-2pt}
+{\footnotesize
+\setlength{\parskip}{0pt}
+\bibliographystyle{unsrt}
+\bibliography{references}
+}
+\vspace{-3pt}
+{\scriptsize AI assistance: OpenAI Codex assisted with literature search and proposal drafting.}
+\end{document}

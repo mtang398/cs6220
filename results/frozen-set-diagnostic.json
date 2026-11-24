@@ -1,0 +1,416 @@
+{
+  "purpose": "Separate fixed-set preconditioner quality from changing-preconditioner history loss",
+  "scope": "One development case; offline dense accuracy/spectral diagnostic, not a timing benchmark",
+  "status": "complete",
+  "case": {
+    "dataset": "synthetic",
+    "seed": 0,
+    "target": "smooth",
+    "regularization": 0.001,
+    "synthetic_n": 640,
+    "n_train": 512,
+    "n_test": 128,
+    "bandwidth": 4.055322311617086,
+    "train_fraction": 0.8,
+    "preprocessing_seconds": 0.0036337920173536986,
+    "reference_preparation_seconds": 0.009135517990216613,
+    "reference_solve_seconds": 0.00858323197462596,
+    "reference_relative_residual": 7.183857777430909e-13,
+    "dataset_sha256": "5455e8a127bfb36e514dc62b82f37ead6779b86ad473b8be8541643d1bbdb1a9",
+    "train_indices_sha256": "b1dc82426735e634156b2c210eba321d138bdd9ff6a1eebb7ef7b0e59040fa24"
+  },
+  "protocol": {
+    "history_size": 8,
+    "checkpoint": 20,
+    "rtol": 1e-08,
+    "maxiter": 2000,
+    "start": "zero",
+    "preconditioner_updates": false,
+    "blas_threads": 1,
+    "cpu_limit_seconds": 55
+  },
+  "source_runs": {
+    "curvature4once_final": {
+      "path": "results/revision-curvature-001/runs/synthetic-n640-smooth-s0-lambda0.001-curvature4once-r0.json",
+      "sha256": "e69fbb70e73ce68e062cac72c5dc76e143b1a4593273f7ab5542f113786075ac"
+    },
+    "energy1_final": {
+      "path": "results/revision-screen-001/runs/synthetic-n640-smooth-s0-lambda0.001-fcg_energy1-r0.json",
+      "sha256": "31b4c7103e584cde2b6bab62808cd76850b6535cb3357647b6f43bcfa11411f7"
+    },
+    "direction1_final": {
+      "path": "results/revision-screen-001/runs/synthetic-n640-smooth-s0-lambda0.001-fcg_direction1-r0.json",
+      "sha256": "437999ed31ef0a284d950c2800595a43e2a21e71cbdecf3e91f887a3e69f6772"
+    }
+  },
+  "prepared_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+  "source_sha256": {
+    "src/nystrom_project/numerics.py": "27015a3d96632e4547c6faaaa736eb387308cf98ad6020ee6c6d4ffe6f937a0d",
+    "src/nystrom_project/flexible.py": "96f496589036216bb2fa2d6dba27d81af57ec36c018b5cc0a4d7fbc542d59337",
+    "scripts/check_frozen_sets.py": "2566e23d07f06eb84c97af36d38b9845359c281332ba3286ee924014e75ecf89"
+  },
+  "sets": [
+    {
+      "label": "initial_rebuilt",
+      "indices": [
+        272,
+        433,
+        60,
+        374,
+        169,
+        51,
+        365,
+        462,
+        128,
+        484,
+        97,
+        74,
+        264,
+        182,
+        181,
+        439
+      ],
+      "effective_rank": 16,
+      "factor_source": "core_eigendecomposition",
+      "trace_Khat": 494.1202439945048,
+      "trace_K_minus_Khat": 17.87975600549521,
+      "logdet_M": -3405.1972729108684,
+      "logdet_A_minus_logdet_M": 355.1863833593843,
+      "logdet_dense_check_absolute_error": 1.1823431123048067e-11,
+      "generalized_eigenvalue_min": 0.9999999999998725,
+      "generalized_eigenvalue_max": 2476.3938063521937,
+      "generalized_condition_number": 2476.3938063525093,
+      "generalized_eigenvalue_median": 1.0325662311261032,
+      "generalized_eigenvalues_largest_10": [
+        267.26855176222136,
+        291.2305077795896,
+        321.86380877221245,
+        405.0780588240139,
+        489.6114865530762,
+        519.7389587291616,
+        713.7726389079203,
+        745.5085847400727,
+        776.63636800052,
+        2476.3938063521937
+      ],
+      "generalized_eigenvalues_above_10": 59,
+      "generalized_eigenvalues_above_100": 18,
+      "initial_rhs_score": 117336.39595896506,
+      "frozen_solve": {
+        "converged": true,
+        "iterations": 137,
+        "true_relative_residual": 7.236166163382512e-09,
+        "relative_solution_error": 8.790661854920718e-09,
+        "matvecs": 144,
+        "breakdown": null,
+        "accepted_exchanges": 0,
+        "max_history_bytes": 65600
+      },
+      "relative_to_initial_rebuilt": {
+        "iteration_ratio": 1.0,
+        "condition_ratio": 1.0,
+        "trace_Khat_change": 0.0,
+        "logdet_M_change": 0.0
+      }
+    },
+    {
+      "label": "initial_rp_factor",
+      "indices": [
+        272,
+        433,
+        60,
+        374,
+        169,
+        51,
+        365,
+        462,
+        128,
+        484,
+        97,
+        74,
+        264,
+        182,
+        181,
+        439
+      ],
+      "effective_rank": 16,
+      "factor_source": "provided_factor",
+      "trace_Khat": 494.1202439945058,
+      "trace_K_minus_Khat": 17.879756005494187,
+      "logdet_M": -3405.1972729108684,
+      "logdet_A_minus_logdet_M": 355.1863833593843,
+      "logdet_dense_check_absolute_error": 1.000444171950221e-11,
+      "generalized_eigenvalue_min": 0.9999999999998062,
+      "generalized_eigenvalue_max": 2476.393806352492,
+      "generalized_condition_number": 2476.393806352972,
+      "generalized_eigenvalue_median": 1.0325662311262964,
+      "generalized_eigenvalues_largest_10": [
+        267.26855176217333,
+        291.2305077795326,
+        321.863808772316,
+        405.0780588240919,
+        489.6114865529617,
+        519.7389587288185,
+        713.7726389084053,
+        745.5085847400537,
+        776.6363680010894,
+        2476.393806352492
+      ],
+      "generalized_eigenvalues_above_10": 59,
+      "generalized_eigenvalues_above_100": 18,
+      "initial_rhs_score": 117336.39595896506,
+      "frozen_solve": {
+        "converged": true,
+        "iterations": 138,
+        "true_relative_residual": 9.61998379523373e-09,
+        "relative_solution_error": 8.182230462728463e-09,
+        "matvecs": 145,
+        "breakdown": null,
+        "accepted_exchanges": 0,
+        "max_history_bytes": 65600
+      },
+      "relative_to_initial_rebuilt": {
+        "iteration_ratio": 1.0072992700729928,
+        "condition_ratio": 1.000000000000187,
+        "trace_Khat_change": 1.0231815394945443e-12,
+        "logdet_M_change": 0.0
+      }
+    },
+    {
+      "label": "curvature4once_final",
+      "indices": [
+        272,
+        433,
+        60,
+        374,
+        169,
+        51,
+        365,
+        462,
+        484,
+        182,
+        181,
+        439,
+        89,
+        413,
+        203,
+        93
+      ],
+      "effective_rank": 16,
+      "factor_source": "core_eigendecomposition",
+      "trace_Khat": 490.7118809019374,
+      "trace_K_minus_Khat": 21.288119098062623,
+      "logdet_M": -3406.9177581385097,
+      "logdet_A_minus_logdet_M": 356.90686858702566,
+      "logdet_dense_check_absolute_error": 1.3642420526593924e-12,
+      "generalized_eigenvalue_min": 0.9999999999998366,
+      "generalized_eigenvalue_max": 1507.601957591085,
+      "generalized_condition_number": 1507.6019575913315,
+      "generalized_eigenvalue_median": 1.0325545618964918,
+      "generalized_eigenvalues_largest_10": [
+        268.4866100898347,
+        362.7862158223164,
+        379.63727540112114,
+        475.5737490973394,
+        520.0664374949116,
+        555.9557997112797,
+        672.7067602064768,
+        842.6398236261743,
+        1163.911795811109,
+        1507.601957591085
+      ],
+      "generalized_eigenvalues_above_10": 59,
+      "generalized_eigenvalues_above_100": 18,
+      "initial_rhs_score": 106579.24358685334,
+      "frozen_solve": {
+        "converged": true,
+        "iterations": 141,
+        "true_relative_residual": 8.62077859830365e-09,
+        "relative_solution_error": 9.178059270799282e-09,
+        "matvecs": 149,
+        "breakdown": null,
+        "accepted_exchanges": 0,
+        "max_history_bytes": 65600
+      },
+      "source_adaptive_solve": {
+        "iterations": 322,
+        "accepted_exchanges": 4,
+        "accepted_iterations": [
+          20
+        ]
+      },
+      "relative_to_initial_rebuilt": {
+        "iteration_ratio": 1.0291970802919708,
+        "condition_ratio": 0.6087892619194863,
+        "trace_Khat_change": -3.408363092567413,
+        "logdet_M_change": -1.7204852276413476
+      }
+    },
+    {
+      "label": "energy1_final",
+      "indices": [
+        272,
+        433,
+        60,
+        374,
+        169,
+        51,
+        365,
+        484,
+        97,
+        74,
+        264,
+        181,
+        439,
+        382,
+        298,
+        123
+      ],
+      "effective_rank": 16,
+      "factor_source": "core_eigendecomposition",
+      "trace_Khat": 495.87999466959536,
+      "trace_K_minus_Khat": 16.120005330404638,
+      "logdet_M": -3404.5693664237087,
+      "logdet_A_minus_logdet_M": 354.5584768722247,
+      "logdet_dense_check_absolute_error": 2.2737367544323206e-12,
+      "generalized_eigenvalue_min": 0.9999999999998803,
+      "generalized_eigenvalue_max": 1881.1942083721306,
+      "generalized_condition_number": 1881.1942083723557,
+      "generalized_eigenvalue_median": 1.032565949220988,
+      "generalized_eigenvalues_largest_10": [
+        254.7903499067718,
+        283.90124558129764,
+        324.6474599247558,
+        367.5220742249114,
+        484.7622785821895,
+        550.4660917578029,
+        618.4860573540203,
+        699.0694820101802,
+        809.5714940292651,
+        1881.1942083721306
+      ],
+      "generalized_eigenvalues_above_10": 59,
+      "generalized_eigenvalues_above_100": 18,
+      "initial_rhs_score": 116817.903601103,
+      "frozen_solve": {
+        "converged": true,
+        "iterations": 137,
+        "true_relative_residual": 8.253965764206756e-09,
+        "relative_solution_error": 8.572658189362147e-09,
+        "matvecs": 144,
+        "breakdown": null,
+        "accepted_exchanges": 0,
+        "max_history_bytes": 65600
+      },
+      "source_adaptive_solve": {
+        "iterations": 262,
+        "accepted_exchanges": 10,
+        "accepted_iterations": [
+          60,
+          80,
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          240,
+          260
+        ]
+      },
+      "relative_to_initial_rebuilt": {
+        "iteration_ratio": 1.0,
+        "condition_ratio": 0.7596506676549859,
+        "trace_Khat_change": 1.7597506750905723,
+        "logdet_M_change": 0.6279064871596347
+      }
+    },
+    {
+      "label": "direction1_final",
+      "indices": [
+        272,
+        60,
+        374,
+        169,
+        51,
+        484,
+        97,
+        74,
+        264,
+        182,
+        439,
+        102,
+        487,
+        161,
+        359,
+        109
+      ],
+      "effective_rank": 16,
+      "factor_source": "core_eigendecomposition",
+      "trace_Khat": 494.8635134988317,
+      "trace_K_minus_Khat": 17.136486501168292,
+      "logdet_M": -3404.8498946940044,
+      "logdet_A_minus_logdet_M": 354.83900514252036,
+      "logdet_dense_check_absolute_error": 5.4569682106375694e-12,
+      "generalized_eigenvalue_min": 0.9999999999996433,
+      "generalized_eigenvalue_max": 1337.8474605441502,
+      "generalized_condition_number": 1337.8474605446274,
+      "generalized_eigenvalue_median": 1.0325633900216737,
+      "generalized_eigenvalues_largest_10": [
+        258.4635393451882,
+        282.35453955319343,
+        329.5340824402865,
+        433.942779744977,
+        491.3963273121663,
+        541.4525972191047,
+        633.7226978589787,
+        718.024191805189,
+        812.0274007756664,
+        1337.8474605441502
+      ],
+      "generalized_eigenvalues_above_10": 59,
+      "generalized_eigenvalues_above_100": 18,
+      "initial_rhs_score": 117269.21645001392,
+      "frozen_solve": {
+        "converged": true,
+        "iterations": 140,
+        "true_relative_residual": 5.333627229158691e-09,
+        "relative_solution_error": 7.011027272159985e-09,
+        "matvecs": 147,
+        "breakdown": null,
+        "accepted_exchanges": 0,
+        "max_history_bytes": 65600
+      },
+      "source_adaptive_solve": {
+        "iterations": 273,
+        "accepted_exchanges": 11,
+        "accepted_iterations": [
+          60,
+          80,
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          220,
+          240,
+          260
+        ]
+      },
+      "relative_to_initial_rebuilt": {
+        "iteration_ratio": 1.0218978102189782,
+        "condition_ratio": 0.5402401900346975,
+        "trace_Khat_change": 0.7432695043269177,
+        "logdet_M_change": 0.34737821686394454
+      }
+    }
+  ],
+  "reference": {
+    "trace_K": 512.0,
+    "logdet_A": -3050.010889551484,
+    "relative_residual": 7.204721598994721e-13
+  },
+  "elapsed_wall_seconds": 2.268048361002002,
+  "elapsed_cpu_seconds": 1.9161053
+}

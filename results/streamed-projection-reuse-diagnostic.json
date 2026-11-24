@@ -1,0 +1,579 @@
+{
+  "status": "complete",
+  "scope": "Identical S/T/theta streamed Nystr\u00f6m control: current-solve projection reuse, no broader efficiency or research-success claim",
+  "protocol": {
+    "dataset": "synthetic-n640-smooth",
+    "n": 512,
+    "m": 64,
+    "seed": 0,
+    "regularizations": [
+      0.001,
+      1e-05
+    ],
+    "modes": [
+      "direct",
+      "fused"
+    ],
+    "repeats": 1,
+    "rtol": 1e-08,
+    "maxiter": 2500,
+    "H": "P^2/lambda + U diag(1/(lambda+theta)) U.T; P=I-UU.T, U=C*T",
+    "basis_row_size": 16,
+    "operator_row_size": 128,
+    "algorithm_owned_peak_array_budget": 1048576,
+    "direct": "3 C passes per H application",
+    "fused": "initial C projection;2 C passes per H; collect U.T(Ap) in existing full Kp tiles and update c-=alpha*U.T(Ap)",
+    "refresh": "every20/suspected true check collects both U.T r_recursive and U.T r_true; cache always matches whichever residual is retained",
+    "residual_policy": "same scalar PCG in both branches, restart only after a false recursive stopping test",
+    "iteration_order": [
+      {
+        "regularization": 0.001,
+        "modes": [
+          "direct",
+          "fused"
+        ]
+      },
+      {
+        "regularization": 1e-05,
+        "modes": [
+          "fused",
+          "direct"
+        ]
+      }
+    ],
+    "factor_seed_sequence": [
+      0,
+      6220,
+      93
+    ],
+    "blas_threads": 1,
+    "cpu_cap_seconds": 80,
+    "timing": "fresh isolated fork per solve; kernel, factor setup, packed selected features and all solver work included; frozen data loading excluded",
+    "memory": "named NumPy arrays and conservative setup/application workspace allowances; shared immutable inputs and interpreter/library RSS separately disclosed",
+    "dense_validation": "tiny48x48 explicit H and A only; not available inside native workers",
+    "validation_limitation": "All-trajectory equality is not assumed: the preserved tiny test exhibits finite-precision CG trajectory changes even for direct-vs-dense H; operator, first8 iterates, final solution and true tolerance are checked.",
+    "lock": "/tmp/cs6220-project-benchmark.lock"
+  },
+  "source_sha256": {
+    "scripts/check_streamed_projection_reuse.py": "7e8fa9276fa0e454520573774d4ec489cb2ba1e9c38535e4eceec3746999eda2",
+    "scripts/check_streamed_nystrom_inverse.py": "8f14fcd85f79f9b3dfde33a5535f430b7a7c95722e2ee6b60a1091cac9167b1b",
+    "src/nystrom_project/numerics.py": "53022a2afffbb65fb01ff24b8a7ee3be1f16881455b641baccd4f1da2a2f1d23"
+  },
+  "runs": [
+    {
+      "regularization": 0.001,
+      "mode": "direct",
+      "iterations": 46,
+      "converged": true,
+      "true_relative_residual": 9.642207851215355e-09,
+      "breakdown": null,
+      "residual_replacement_restarts": [],
+      "cache_checks": [],
+      "counters": {
+        "H_applications": 46,
+        "C_passes": 138,
+        "C_entry_queries": 4521984,
+        "C_query_seconds": 0.05895783708547242,
+        "basis_seconds": 0.025733507907716557,
+        "projection_seconds": 0.0026557499950286,
+        "full_A_passes": 49,
+        "full_A_rhs": 49,
+        "full_A_seconds": 0.103286813973682,
+        "fused_projection_passes": 0
+      },
+      "kernel_stats": {
+        "matvecs": 49,
+        "column_evaluations": 0,
+        "matvec_seconds": 0.103286813973682,
+        "column_seconds": 0.0,
+        "entry_blocks": 4513,
+        "entry_evaluations": 4624384,
+        "entry_seconds": 0.003445848939009011
+      },
+      "total_seconds": 0.232685135997599,
+      "total_cpu_seconds": 0.2409238,
+      "setup_seconds": 0.022760609979741275,
+      "solve_seconds": 0.20992452601785772,
+      "worker_cpu_seconds": 0.2647538,
+      "setup_kernel_stats": {
+        "matvecs": 0,
+        "column_evaluations": 0,
+        "matvec_seconds": 0.0,
+        "column_seconds": 0.0,
+        "entry_blocks": 97,
+        "entry_evaluations": 102400,
+        "entry_seconds": 0.003445848939009011
+      },
+      "retained_factor_and_selected_points_bytes": 37888,
+      "setup_array_allowance_bytes": 440320,
+      "measured_named_live_array_peak_bytes": 619520,
+      "application_array_allowance_bytes": 640000,
+      "algorithm_owned_peak_array_allowance_bytes": 640000,
+      "memory_limit_bytes": 1048576,
+      "memory_stages": {
+        "projection": 108032,
+        "H_middle": 112640,
+        "H_final": 117248,
+        "A_direct": 619520
+      },
+      "kernel_X_copy_bytes": 32768,
+      "common_original_X_bytes": 32768,
+      "common_b_bytes": 4096,
+      "common_b_also_conservatively_counted_in_algorithm_allowance": true,
+      "process_peak_rss_kib": 59432,
+      "factor_sha256": "7906b2cbcdf2a13b2a640df8d5b3184a64b74fab2c0c7026f54f105ba1a7340e",
+      "solution_sha256": "bdba94aad6515e60bbc7c8d21092748fe6bc3d230e6d004492c2890bc27a746e",
+      "setup_diagnostics": {
+        "requested_landmarks": 64,
+        "core_rank": 64,
+        "W_min_eigenvalue": 3.371950887140396e-05,
+        "W_max_eigenvalue": 43.612932201325926,
+        "W_truncation_threshold": 1.983286538294393e-11,
+        "initial_basis_gram_defect_2": 1.532093193805322e-11,
+        "final_basis_gram_defect_2": 8.363617035565863e-12,
+        "rank": 64,
+        "setup_named_array_peak_bytes": 264192,
+        "setup_array_allowance_with_lapack_bytes": 399360,
+        "setup_kernel_entries": 102400,
+        "setup_entry_blocks": 97,
+        "setup_passes": "one W query + QR pass + basis Gram pass + corrected Gram audit pass; all charged"
+      },
+      "full_kernel_entry_equivalents": 66.640625
+    },
+    {
+      "regularization": 0.001,
+      "mode": "fused",
+      "iterations": 45,
+      "converged": true,
+      "true_relative_residual": 9.915118711535415e-09,
+      "breakdown": null,
+      "residual_replacement_restarts": [],
+      "cache_checks": [
+        {
+          "iteration": 20,
+          "projection_gap_relative_to_rhs": 5.637041224979676e-16,
+          "projection_gap_relative_to_current_projection": 8.870820695028971e-13
+        },
+        {
+          "iteration": 40,
+          "projection_gap_relative_to_rhs": 1.6526742663194257e-19,
+          "projection_gap_relative_to_current_projection": 9.781278018315204e-13
+        },
+        {
+          "iteration": 45,
+          "projection_gap_relative_to_rhs": 5.320694833573611e-23,
+          "projection_gap_relative_to_current_projection": 6.3412463225873235e-15
+        }
+      ],
+      "counters": {
+        "H_applications": 45,
+        "C_passes": 91,
+        "C_entry_queries": 2981888,
+        "C_query_seconds": 0.036551572527969256,
+        "basis_seconds": 0.024175680096959695,
+        "projection_seconds": 0.0025926167145371437,
+        "full_A_passes": 48,
+        "full_A_rhs": 48,
+        "full_A_seconds": 0.11744122792151757,
+        "fused_projection_passes": 48
+      },
+      "kernel_stats": {
+        "matvecs": 48,
+        "column_evaluations": 0,
+        "matvec_seconds": 0.11744122792151757,
+        "column_seconds": 0.0,
+        "entry_blocks": 3009,
+        "entry_evaluations": 3084288,
+        "entry_seconds": 0.003757434373255819
+      },
+      "total_seconds": 0.20716365397674963,
+      "total_cpu_seconds": 0.2060746,
+      "setup_seconds": 0.022162648994708434,
+      "solve_seconds": 0.1850010049820412,
+      "worker_cpu_seconds": 0.2194789,
+      "setup_kernel_stats": {
+        "matvecs": 0,
+        "column_evaluations": 0,
+        "matvec_seconds": 0.0,
+        "column_seconds": 0.0,
+        "entry_blocks": 97,
+        "entry_evaluations": 102400,
+        "entry_seconds": 0.003757434373255819
+      },
+      "retained_factor_and_selected_points_bytes": 37888,
+      "setup_array_allowance_bytes": 440320,
+      "measured_named_live_array_peak_bytes": 637568,
+      "application_array_allowance_bytes": 658048,
+      "algorithm_owned_peak_array_allowance_bytes": 658048,
+      "memory_limit_bytes": 1048576,
+      "memory_stages": {
+        "projection": 95744,
+        "H_middle": 112640,
+        "H_final": 117248,
+        "A_fused": 637568
+      },
+      "kernel_X_copy_bytes": 32768,
+      "common_original_X_bytes": 32768,
+      "common_b_bytes": 4096,
+      "common_b_also_conservatively_counted_in_algorithm_allowance": true,
+      "process_peak_rss_kib": 59488,
+      "factor_sha256": "7906b2cbcdf2a13b2a640df8d5b3184a64b74fab2c0c7026f54f105ba1a7340e",
+      "solution_sha256": "aa2d767f3c817e334d1bc7f0ddcb7951aab002ab8289322ceec3d1b6ce88198f",
+      "setup_diagnostics": {
+        "requested_landmarks": 64,
+        "core_rank": 64,
+        "W_min_eigenvalue": 3.371950887140396e-05,
+        "W_max_eigenvalue": 43.612932201325926,
+        "W_truncation_threshold": 1.983286538294393e-11,
+        "initial_basis_gram_defect_2": 1.532093193805322e-11,
+        "final_basis_gram_defect_2": 8.363617035565863e-12,
+        "rank": 64,
+        "setup_named_array_peak_bytes": 264192,
+        "setup_array_allowance_with_lapack_bytes": 399360,
+        "setup_kernel_entries": 102400,
+        "setup_entry_blocks": 97,
+        "setup_passes": "one W query + QR pass + basis Gram pass + corrected Gram audit pass; all charged"
+      },
+      "full_kernel_entry_equivalents": 59.765625
+    },
+    {
+      "regularization": 1e-05,
+      "mode": "fused",
+      "iterations": 385,
+      "converged": true,
+      "true_relative_residual": 9.874422101139744e-09,
+      "breakdown": null,
+      "residual_replacement_restarts": [],
+      "cache_checks": [
+        {
+          "iteration": 20,
+          "projection_gap_relative_to_rhs": 7.761434345785195e-16,
+          "projection_gap_relative_to_current_projection": 9.287003419410079e-16
+        },
+        {
+          "iteration": 40,
+          "projection_gap_relative_to_rhs": 2.715295973503566e-16,
+          "projection_gap_relative_to_current_projection": 7.28208834725915e-16
+        },
+        {
+          "iteration": 60,
+          "projection_gap_relative_to_rhs": 1.3141818428388558e-16,
+          "projection_gap_relative_to_current_projection": 1.0707394954191885e-15
+        },
+        {
+          "iteration": 80,
+          "projection_gap_relative_to_rhs": 4.54715864660299e-17,
+          "projection_gap_relative_to_current_projection": 1.0360853649200102e-15
+        },
+        {
+          "iteration": 100,
+          "projection_gap_relative_to_rhs": 2.54112847644948e-17,
+          "projection_gap_relative_to_current_projection": 1.4312112237836347e-15
+        },
+        {
+          "iteration": 120,
+          "projection_gap_relative_to_rhs": 6.8494354426298044e-18,
+          "projection_gap_relative_to_current_projection": 9.93519650006979e-16
+        },
+        {
+          "iteration": 140,
+          "projection_gap_relative_to_rhs": 3.23345416924703e-18,
+          "projection_gap_relative_to_current_projection": 1.2747102472824354e-15
+        },
+        {
+          "iteration": 160,
+          "projection_gap_relative_to_rhs": 1.2147480200710774e-18,
+          "projection_gap_relative_to_current_projection": 1.4497944430040616e-15
+        },
+        {
+          "iteration": 180,
+          "projection_gap_relative_to_rhs": 3.7781434971794407e-19,
+          "projection_gap_relative_to_current_projection": 1.0498943100543152e-15
+        },
+        {
+          "iteration": 200,
+          "projection_gap_relative_to_rhs": 1.8005141788925754e-19,
+          "projection_gap_relative_to_current_projection": 1.5296677148348379e-15
+        },
+        {
+          "iteration": 220,
+          "projection_gap_relative_to_rhs": 5.4170293205925923e-20,
+          "projection_gap_relative_to_current_projection": 1.2059809871466054e-15
+        },
+        {
+          "iteration": 240,
+          "projection_gap_relative_to_rhs": 2.1225472828258205e-20,
+          "projection_gap_relative_to_current_projection": 1.3684683370911847e-15
+        },
+        {
+          "iteration": 260,
+          "projection_gap_relative_to_rhs": 7.492896947744637e-21,
+          "projection_gap_relative_to_current_projection": 1.1203118396896987e-15
+        },
+        {
+          "iteration": 280,
+          "projection_gap_relative_to_rhs": 2.353839487749285e-21,
+          "projection_gap_relative_to_current_projection": 1.0648985919689813e-15
+        },
+        {
+          "iteration": 300,
+          "projection_gap_relative_to_rhs": 1.0376493662898881e-21,
+          "projection_gap_relative_to_current_projection": 1.1002179911109056e-15
+        },
+        {
+          "iteration": 320,
+          "projection_gap_relative_to_rhs": 4.0857206652767646e-22,
+          "projection_gap_relative_to_current_projection": 1.3591202593353141e-15
+        },
+        {
+          "iteration": 340,
+          "projection_gap_relative_to_rhs": 1.2499360071015877e-22,
+          "projection_gap_relative_to_current_projection": 1.105678368878386e-15
+        },
+        {
+          "iteration": 360,
+          "projection_gap_relative_to_rhs": 3.474491771590898e-23,
+          "projection_gap_relative_to_current_projection": 9.42181172578534e-16
+        },
+        {
+          "iteration": 380,
+          "projection_gap_relative_to_rhs": 1.1367375779062893e-23,
+          "projection_gap_relative_to_current_projection": 8.703602633084931e-16
+        },
+        {
+          "iteration": 385,
+          "projection_gap_relative_to_rhs": 2.7032707620548892e-24,
+          "projection_gap_relative_to_current_projection": 2.8269577394023076e-16
+        }
+      ],
+      "counters": {
+        "H_applications": 385,
+        "C_passes": 771,
+        "C_entry_queries": 25264128,
+        "C_query_seconds": 0.3183825964515563,
+        "basis_seconds": 0.21088905734359287,
+        "projection_seconds": 0.022658886155113578,
+        "full_A_passes": 405,
+        "full_A_rhs": 405,
+        "full_A_seconds": 1.0285273931222036,
+        "fused_projection_passes": 405
+      },
+      "kernel_stats": {
+        "matvecs": 405,
+        "column_evaluations": 0,
+        "matvec_seconds": 1.0285273931222036,
+        "column_seconds": 0.0,
+        "entry_blocks": 24769,
+        "entry_evaluations": 25366528,
+        "entry_seconds": 0.0019121889781672508
+      },
+      "total_seconds": 1.630405337025877,
+      "total_cpu_seconds": 1.6888670000000001,
+      "setup_seconds": 0.010907855001278222,
+      "solve_seconds": 1.6194974820245989,
+      "worker_cpu_seconds": 1.6946437,
+      "setup_kernel_stats": {
+        "matvecs": 0,
+        "column_evaluations": 0,
+        "matvec_seconds": 0.0,
+        "column_seconds": 0.0,
+        "entry_blocks": 97,
+        "entry_evaluations": 102400,
+        "entry_seconds": 0.0019121889781672508
+      },
+      "retained_factor_and_selected_points_bytes": 37888,
+      "setup_array_allowance_bytes": 440320,
+      "measured_named_live_array_peak_bytes": 637568,
+      "application_array_allowance_bytes": 658048,
+      "algorithm_owned_peak_array_allowance_bytes": 658048,
+      "memory_limit_bytes": 1048576,
+      "memory_stages": {
+        "projection": 95744,
+        "H_middle": 112640,
+        "H_final": 117248,
+        "A_fused": 637568
+      },
+      "kernel_X_copy_bytes": 32768,
+      "common_original_X_bytes": 32768,
+      "common_b_bytes": 4096,
+      "common_b_also_conservatively_counted_in_algorithm_allowance": true,
+      "process_peak_rss_kib": 59500,
+      "factor_sha256": "7906b2cbcdf2a13b2a640df8d5b3184a64b74fab2c0c7026f54f105ba1a7340e",
+      "solution_sha256": "572f4fb70a032c366dbf1108309d0c98b31dd9c5b87aad110a37e46ba911c5e7",
+      "setup_diagnostics": {
+        "requested_landmarks": 64,
+        "core_rank": 64,
+        "W_min_eigenvalue": 3.371950887140396e-05,
+        "W_max_eigenvalue": 43.612932201325926,
+        "W_truncation_threshold": 1.983286538294393e-11,
+        "initial_basis_gram_defect_2": 1.532093193805322e-11,
+        "final_basis_gram_defect_2": 8.363617035565863e-12,
+        "rank": 64,
+        "setup_named_array_peak_bytes": 264192,
+        "setup_array_allowance_with_lapack_bytes": 399360,
+        "setup_kernel_entries": 102400,
+        "setup_entry_blocks": 97,
+        "setup_passes": "one W query + QR pass + basis Gram pass + corrected Gram audit pass; all charged"
+      },
+      "full_kernel_entry_equivalents": 501.765625
+    },
+    {
+      "regularization": 1e-05,
+      "mode": "direct",
+      "iterations": 387,
+      "converged": true,
+      "true_relative_residual": 9.3684003816247e-09,
+      "breakdown": null,
+      "residual_replacement_restarts": [],
+      "cache_checks": [],
+      "counters": {
+        "H_applications": 387,
+        "C_passes": 1161,
+        "C_entry_queries": 38043648,
+        "C_query_seconds": 0.4808517172350548,
+        "basis_seconds": 0.21118042958551086,
+        "projection_seconds": 0.021394103212514892,
+        "full_A_passes": 407,
+        "full_A_rhs": 407,
+        "full_A_seconds": 0.8836866074998397,
+        "fused_projection_passes": 0
+      },
+      "kernel_stats": {
+        "matvecs": 407,
+        "column_evaluations": 0,
+        "matvec_seconds": 0.8836866074998397,
+        "column_seconds": 0.0,
+        "entry_blocks": 37249,
+        "entry_evaluations": 38146048,
+        "entry_seconds": 0.00338046791148372
+      },
+      "total_seconds": 1.767204743984621,
+      "total_cpu_seconds": 1.7950602,
+      "setup_seconds": 0.019372826005565003,
+      "solve_seconds": 1.747831917979056,
+      "worker_cpu_seconds": 1.8158892,
+      "setup_kernel_stats": {
+        "matvecs": 0,
+        "column_evaluations": 0,
+        "matvec_seconds": 0.0,
+        "column_seconds": 0.0,
+        "entry_blocks": 97,
+        "entry_evaluations": 102400,
+        "entry_seconds": 0.00338046791148372
+      },
+      "retained_factor_and_selected_points_bytes": 37888,
+      "setup_array_allowance_bytes": 440320,
+      "measured_named_live_array_peak_bytes": 619520,
+      "application_array_allowance_bytes": 640000,
+      "algorithm_owned_peak_array_allowance_bytes": 640000,
+      "memory_limit_bytes": 1048576,
+      "memory_stages": {
+        "projection": 108032,
+        "H_middle": 112640,
+        "H_final": 117248,
+        "A_direct": 619520
+      },
+      "kernel_X_copy_bytes": 32768,
+      "common_original_X_bytes": 32768,
+      "common_b_bytes": 4096,
+      "common_b_also_conservatively_counted_in_algorithm_allowance": true,
+      "process_peak_rss_kib": 59484,
+      "factor_sha256": "7906b2cbcdf2a13b2a640df8d5b3184a64b74fab2c0c7026f54f105ba1a7340e",
+      "solution_sha256": "ef128bd093ee4dbd0b554ffd4de9763660f4bcce11e55930257059351c3f3ba0",
+      "setup_diagnostics": {
+        "requested_landmarks": 64,
+        "core_rank": 64,
+        "W_min_eigenvalue": 3.371950887140396e-05,
+        "W_max_eigenvalue": 43.612932201325926,
+        "W_truncation_threshold": 1.983286538294393e-11,
+        "initial_basis_gram_defect_2": 1.532093193805322e-11,
+        "final_basis_gram_defect_2": 8.363617035565863e-12,
+        "rank": 64,
+        "setup_named_array_peak_bytes": 264192,
+        "setup_array_allowance_with_lapack_bytes": 399360,
+        "setup_kernel_entries": 102400,
+        "setup_entry_blocks": 97,
+        "setup_passes": "one W query + QR pass + basis Gram pass + corrected Gram audit pass; all charged"
+      },
+      "full_kernel_entry_equivalents": 552.515625
+    }
+  ],
+  "tiny_validations": [
+    {
+      "regularization": 0.001,
+      "runs": {
+        "explicit": {
+          "iterations": 35,
+          "true_relative_residual": 4.9506106523372586e-11,
+          "solution_relative_error": 2.847719726595381e-11
+        },
+        "direct": {
+          "iterations": 35,
+          "true_relative_residual": 4.9508608581674147e-11,
+          "solution_relative_error": 2.8477398667151675e-11
+        },
+        "fused": {
+          "iterations": 35,
+          "true_relative_residual": 4.9504818925999867e-11,
+          "solution_relative_error": 2.8476776164465214e-11
+        }
+      },
+      "dense_H_vs_streamed_action_relative_error": 2.1472020981355384e-16,
+      "iterate_relative_errors_against_explicit_H": {
+        "direct": 0.00010322741669244813,
+        "fused": 0.000176318826828054
+      },
+      "first8_iterate_relative_errors": {
+        "direct": 2.329572066255315e-15,
+        "fused": 3.4292834793274173e-15
+      },
+      "final_solution_relative_gaps": {
+        "direct": 4.3210421673336813e-14,
+        "fused": 1.0662965695816283e-13
+      },
+      "strict_all_iterate_agreement_passed": false,
+      "finite_precision_note": "Strict all-iterate agreement failed, including direct-vs-dense. Action, first8 iterates and final solutions agree; later CG rounding trajectories and iteration counts remain reported.",
+      "fused_projection_vs_independent_dense_U_error": 7.220356129062395e-17,
+      "explicit_H_min_eigenvalue": 0.37098746931997584
+    },
+    {
+      "regularization": 1e-05,
+      "runs": {
+        "explicit": {
+          "iterations": 38,
+          "true_relative_residual": 5.491916538654179e-11,
+          "solution_relative_error": 3.749692983429026e-11
+        },
+        "direct": {
+          "iterations": 38,
+          "true_relative_residual": 5.648923462682485e-11,
+          "solution_relative_error": 3.702971724771378e-11
+        },
+        "fused": {
+          "iterations": 37,
+          "true_relative_residual": 8.958593862882462e-11,
+          "solution_relative_error": 6.706916034725834e-11
+        }
+      },
+      "dense_H_vs_streamed_action_relative_error": 2.1601498976319727e-16,
+      "iterate_relative_errors_against_explicit_H": {
+        "direct": 0.009601643125888517,
+        "fused": 0.0040766531744075764
+      },
+      "first8_iterate_relative_errors": {
+        "direct": 1.241045585634916e-15,
+        "fused": 8.1771075703646335e-16
+      },
+      "final_solution_relative_gaps": {
+        "direct": 1.6065231076790242e-11,
+        "fused": 3.37225083710546e-11
+      },
+      "strict_all_iterate_agreement_passed": false,
+      "finite_precision_note": "Strict all-iterate agreement failed, including direct-vs-dense. Action, first8 iterates and final solutions agree; later CG rounding trajectories and iteration counts remain reported.",
+      "fused_projection_vs_independent_dense_U_error": 8.970443098317569e-17,
+      "explicit_H_min_eigenvalue": 0.3711237747462074
+    }
+  ],
+  "elapsed_wall_seconds": 4.579610977991251,
+  "total_accounted_cpu_seconds": 4.0815143
+}

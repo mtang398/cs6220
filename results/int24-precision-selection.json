@@ -1,0 +1,451 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_int24_precision_selection.py": "11663bd942b0c6a725e1de2ac1773c86f2610ed47da37bee92c1877778881849",
+    "scripts/check_int24_core_capacity.py": "e8c10a83c7e6c1a7cc81760b30083e63bba4d57032962e76bc5ed9ca880d299d",
+    "scripts/check_fused_congruence_core.py": "33b205bc01549d9ba49a7646abd2a53db5fc86fb1b8688591af5d8f548e2c1ac",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "protocol": {
+    "core": 660,
+    "static_full_core": 675,
+    "prefix_steps": 4,
+    "payload_budget": 721200,
+    "selection": "Greedy squared first-order inverse-error score per extra byte. Matrix-only Frobenius score, initial b_core action score, current original residual core action score. FP64 column promotions, diagonal alreadyFP64. Common4-step exact-fusion prefix, matched original iterate and explicit restart.",
+    "scope": "Dense optimistic headroom. Full FP64 reference factor, inverse derivative matrices, mask scoring and factor regeneration are free. Payload includes promotion flags/offsets; full workspace not feasible. Prefix/restart boundary and kernel entries charged; per-iterate true stopping free. No native/adaptive-success claim."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.11906107902391051,
+        "analytical_entries": 24373490
+      },
+      "masks": {
+        "matrix": {
+          "columns": [
+            155,
+            122,
+            222,
+            215,
+            140,
+            245,
+            170,
+            66,
+            150,
+            131,
+            453,
+            639
+          ],
+          "payload_bytes": 721194
+        },
+        "initial": {
+          "columns": [
+            22,
+            38,
+            26,
+            84,
+            122,
+            85,
+            15,
+            36,
+            321,
+            645,
+            655
+          ],
+          "payload_bytes": 721194
+        },
+        "current": {
+          "columns": [
+            22,
+            38,
+            84,
+            26,
+            122,
+            85,
+            15,
+            36,
+            321,
+            645,
+            655
+          ],
+          "payload_bytes": 721194
+        }
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 35,
+          "original_relative_residual": 8.449540080919579e-09,
+          "analytical_entries": 154459044,
+          "method": "full675_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 37,
+          "original_relative_residual": 5.3933446855575065e-09,
+          "analytical_entries": 170381796,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 36,
+          "original_relative_residual": 6.611899482101088e-09,
+          "analytical_entries": 158591218,
+          "method": "matrix_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 36,
+          "original_relative_residual": 7.561080242655527e-09,
+          "analytical_entries": 166187492,
+          "method": "matrix_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 37,
+          "original_relative_residual": 5.3935967255850916e-09,
+          "analytical_entries": 170381796,
+          "method": "initial_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 37,
+          "original_relative_residual": 5.3935967255850916e-09,
+          "analytical_entries": 170381796,
+          "method": "current_restart"
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.02403182076384921,
+        "analytical_entries": 24373490
+      },
+      "masks": {
+        "matrix": {
+          "columns": [
+            155,
+            122,
+            222,
+            215,
+            140,
+            245,
+            170,
+            66,
+            150,
+            131,
+            453,
+            639
+          ],
+          "payload_bytes": 721194
+        },
+        "initial": {
+          "columns": [
+            64,
+            150,
+            145,
+            184,
+            129,
+            213,
+            23,
+            24,
+            92,
+            379,
+            645
+          ],
+          "payload_bytes": 721199
+        },
+        "current": {
+          "columns": [
+            64,
+            150,
+            145,
+            184,
+            129,
+            213,
+            23,
+            24,
+            92,
+            379,
+            645
+          ],
+          "payload_bytes": 721199
+        }
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 32,
+          "original_relative_residual": 9.259995775509427e-09,
+          "analytical_entries": 141876132,
+          "method": "full675_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 32,
+          "original_relative_residual": 8.975275529162388e-09,
+          "analytical_entries": 149410276,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 33,
+          "original_relative_residual": 7.189406842773544e-09,
+          "analytical_entries": 146008306,
+          "method": "matrix_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 32,
+          "original_relative_residual": 8.988451354244687e-09,
+          "analytical_entries": 149410276,
+          "method": "matrix_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 32,
+          "original_relative_residual": 8.98944166865388e-09,
+          "analytical_entries": 149410276,
+          "method": "initial_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 32,
+          "original_relative_residual": 8.98944166865388e-09,
+          "analytical_entries": 149410276,
+          "method": "current_restart"
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.0027573452919718144,
+        "analytical_entries": 4373330
+      },
+      "masks": {
+        "matrix": {
+          "columns": [
+            210,
+            276,
+            225,
+            201,
+            349,
+            203,
+            224,
+            127,
+            177,
+            124,
+            128,
+            521,
+            617,
+            648,
+            655
+          ],
+          "payload_bytes": 721194
+        },
+        "initial": {
+          "columns": [
+            79,
+            98,
+            57,
+            177,
+            164,
+            13,
+            26,
+            239,
+            19,
+            551,
+            642,
+            648,
+            655,
+            657
+          ],
+          "payload_bytes": 721199
+        },
+        "current": {
+          "columns": [
+            79,
+            98,
+            177,
+            57,
+            164,
+            239,
+            197,
+            19,
+            25,
+            349,
+            648,
+            655
+          ],
+          "payload_bytes": 721199
+        }
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 3.9637172060810455e-09,
+          "analytical_entries": 11849116,
+          "method": "full675_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 5.4557845507624944e-09,
+          "analytical_entries": 13499492,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 5.729693304158654e-09,
+          "analytical_entries": 11842066,
+          "method": "matrix_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 5.456023553088854e-09,
+          "analytical_entries": 13499492,
+          "method": "matrix_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 5.474276119708573e-09,
+          "analytical_entries": 13499492,
+          "method": "initial_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 5.478462824207873e-09,
+          "analytical_entries": 13499492,
+          "method": "current_restart"
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.019584918801758614,
+        "analytical_entries": 8950910
+      },
+      "masks": {
+        "matrix": {
+          "columns": [
+            107,
+            151,
+            47,
+            84,
+            89,
+            91,
+            56,
+            150,
+            120,
+            503,
+            650
+          ],
+          "payload_bytes": 721199
+        },
+        "initial": {
+          "columns": [
+            49,
+            107,
+            39,
+            89,
+            84,
+            16,
+            34,
+            150,
+            196,
+            647,
+            649,
+            654,
+            652
+          ],
+          "payload_bytes": 721199
+        },
+        "current": {
+          "columns": [
+            49,
+            107,
+            39,
+            89,
+            84,
+            34,
+            16,
+            150,
+            196,
+            647,
+            649,
+            654,
+            652
+          ],
+          "payload_bytes": 721199
+        }
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 7.458901571776921e-09,
+          "analytical_entries": 32091834,
+          "method": "full675_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 9.566511441724933e-09,
+          "analytical_entries": 35239468,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 6.624063359624414e-09,
+          "analytical_entries": 32067774,
+          "method": "matrix_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 9.603216822385484e-09,
+          "analytical_entries": 35239468,
+          "method": "matrix_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 8.685219426563893e-09,
+          "analytical_entries": 35239468,
+          "method": "initial_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 8.685219426563893e-09,
+          "analytical_entries": 35239468,
+          "method": "current_restart"
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 4.011101943033282,
+  "elapsed_cpu_seconds": 3.9972184000000004
+}

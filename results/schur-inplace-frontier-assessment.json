@@ -1,0 +1,279 @@
+{
+  "scope": "Stronger static memory control; higher selected-core rank is not current-solve feedback or research-goal success",
+  "corrected_result_sha256": "84896f8cebda4bf1a5c7de6442249af6c057a4138c96cc5d13904f7c5e7c9b3f",
+  "initial_result_sha256": "475864b91ff0cb475ed610afec4382a5a006e33b8ea23754794f170d1dd22a00",
+  "original_source_unchanged": true,
+  "initial_outcome": "Four converged rows and eight allocation-guard failures preserved. The guards were caused by common-input backing-root bookkeeping, not numerical or physical memory failures.",
+  "correction": "v2 changes common-input root normalization and output/provenance only. Same numerical method, candidate counts, selected sets, tolerance,64KiB reserve and1MiB cap. Derived tile sizes respond to corrected counts.",
+  "feasible_frontier": "All tested192/256/320 configurations fit both the declared named-array+reserve contract and separate untimed tracemalloc audit.320 is largest tested, not proven maximal or globally optimal.",
+  "factorization": "SciPy1.18.1 Fortran overwrite_a=True Cholesky returns identical object/buffer in every audit. Traced extra factorization peak560B; no additional m-by-m factor copy.",
+  "resources": "Named arrays plus64KiB library/Python/expression reserve. Common immutable X/b separate; X is shared, temporary feature packs counted. Single live kernel tile. Phase-specific vectors replace the blanket32n-vector allowance.",
+  "trace_scope": "Separate untimed setup+one Schur action+reconstruction/full verification with steady CG vectors; common inputs predate trace. No claim that tracemalloc sees all native-library allocator activity or enforces a whole-process RSS cap.",
+  "CPU_seconds": {
+    "initial": 0.7339532,
+    "corrected": 4.4333412,
+    "combined": 5.1672944
+  },
+  "source_hashes_still_match": true,
+  "all_converged": true,
+  "maximum_true_residual": 9.573099168157647e-09,
+  "max_named_plus_reserve_bytes": 1043768,
+  "max_tracemalloc_bytes": 985620,
+  "all_traces_under_cap": true,
+  "selected_set_consistency": [
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "m": 192,
+      "fps192_prefix_matches_nested": true
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "m": 256,
+      "fps192_prefix_matches_nested": true
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "m": 320,
+      "fps192_prefix_matches_nested": true
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "m": 192,
+      "fps192_prefix_matches_nested": true
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "m": 256,
+      "fps192_prefix_matches_nested": true
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "m": 320,
+      "fps192_prefix_matches_nested": true
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "m": 192,
+      "fps192_prefix_matches_nested": true
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "m": 256,
+      "fps192_prefix_matches_nested": true
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "m": 320,
+      "fps192_prefix_matches_nested": true
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "m": 192,
+      "fps192_prefix_matches_nested": true
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "m": 256,
+      "fps192_prefix_matches_nested": true
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "m": 320,
+      "fps192_prefix_matches_nested": true
+    }
+  ],
+  "runs": [
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "m": 192,
+      "iterations": 21,
+      "total_seconds": 0.05859287900966592,
+      "total_cpu_seconds": 0.05989040000000001,
+      "true_relative_residual": 5.9180718283671774e-09,
+      "retained_factor_and_indices_bytes": 299008,
+      "named_plus_reserve_bytes": 908288,
+      "tracemalloc_peak_bytes": 850576,
+      "verification_row_sizes": [
+        128
+      ]
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "m": 256,
+      "iterations": 17,
+      "total_seconds": 0.0500406049832236,
+      "total_cpu_seconds": 0.04160459999999999,
+      "true_relative_residual": 3.366425315362426e-09,
+      "retained_factor_and_indices_bytes": 528384,
+      "named_plus_reserve_bytes": 1041224,
+      "tracemalloc_peak_bytes": 983528,
+      "verification_row_sizes": [
+        105
+      ]
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "m": 320,
+      "iterations": 12,
+      "total_seconds": 0.03592881100485101,
+      "total_cpu_seconds": 0.02818529999999997,
+      "true_relative_residual": 7.341733963223676e-09,
+      "retained_factor_and_indices_bytes": 823296,
+      "named_plus_reserve_bytes": 1043288,
+      "tracemalloc_peak_bytes": 985392,
+      "verification_row_sizes": [
+        34
+      ]
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "m": 192,
+      "iterations": 93,
+      "total_seconds": 0.2192083979898598,
+      "total_cpu_seconds": 0.2267072,
+      "true_relative_residual": 8.942851071017992e-09,
+      "retained_factor_and_indices_bytes": 299008,
+      "named_plus_reserve_bytes": 908288,
+      "tracemalloc_peak_bytes": 850334,
+      "verification_row_sizes": [
+        128
+      ]
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "m": 256,
+      "iterations": 53,
+      "total_seconds": 0.1304334820015356,
+      "total_cpu_seconds": 0.1333449,
+      "true_relative_residual": 6.358091836583459e-09,
+      "retained_factor_and_indices_bytes": 528384,
+      "named_plus_reserve_bytes": 1041224,
+      "tracemalloc_peak_bytes": 983424,
+      "verification_row_sizes": [
+        105
+      ]
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "m": 320,
+      "iterations": 34,
+      "total_seconds": 0.07920491599361412,
+      "total_cpu_seconds": 0.07185940000000013,
+      "true_relative_residual": 6.416736533225565e-09,
+      "retained_factor_and_indices_bytes": 823296,
+      "named_plus_reserve_bytes": 1043288,
+      "tracemalloc_peak_bytes": 985266,
+      "verification_row_sizes": [
+        34
+      ]
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "m": 192,
+      "iterations": 41,
+      "total_seconds": 0.263373376976233,
+      "total_cpu_seconds": 0.2647754,
+      "true_relative_residual": 7.399834620610652e-09,
+      "retained_factor_and_indices_bytes": 301504,
+      "named_plus_reserve_bytes": 1041984,
+      "tracemalloc_peak_bytes": 982448,
+      "verification_row_sizes": [
+        97
+      ]
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "m": 256,
+      "iterations": 30,
+      "total_seconds": 0.19582202399033122,
+      "total_cpu_seconds": 0.19448679999999996,
+      "true_relative_residual": 5.252744699575575e-09,
+      "retained_factor_and_indices_bytes": 530880,
+      "named_plus_reserve_bytes": 1043576,
+      "tracemalloc_peak_bytes": 985514,
+      "verification_row_sizes": [
+        63
+      ]
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "m": 320,
+      "iterations": 22,
+      "total_seconds": 0.15280550401075743,
+      "total_cpu_seconds": 0.14859139999999993,
+      "true_relative_residual": 9.573099168157647e-09,
+      "retained_factor_and_indices_bytes": 825792,
+      "named_plus_reserve_bytes": 1043768,
+      "tracemalloc_peak_bytes": 985506,
+      "verification_row_sizes": [
+        18
+      ]
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "m": 192,
+      "iterations": 239,
+      "total_seconds": 1.4445062589948066,
+      "total_cpu_seconds": 1.4900704999999999,
+      "true_relative_residual": 5.85667511155469e-09,
+      "retained_factor_and_indices_bytes": 301504,
+      "named_plus_reserve_bytes": 1041984,
+      "tracemalloc_peak_bytes": 982462,
+      "verification_row_sizes": [
+        97
+      ]
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "m": 256,
+      "iterations": 133,
+      "total_seconds": 0.7601916740240995,
+      "total_cpu_seconds": 0.7819801000000006,
+      "true_relative_residual": 7.4076440888795045e-09,
+      "retained_factor_and_indices_bytes": 530880,
+      "named_plus_reserve_bytes": 1043576,
+      "tracemalloc_peak_bytes": 985282,
+      "verification_row_sizes": [
+        63
+      ]
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "m": 320,
+      "iterations": 72,
+      "total_seconds": 0.4242562190047465,
+      "total_cpu_seconds": 0.43526540000000047,
+      "true_relative_residual": 7.190353817769943e-09,
+      "retained_factor_and_indices_bytes": 825792,
+      "named_plus_reserve_bytes": 1043768,
+      "tracemalloc_peak_bytes": 985620,
+      "verification_row_sizes": [
+        18
+      ]
+    }
+  ]
+}

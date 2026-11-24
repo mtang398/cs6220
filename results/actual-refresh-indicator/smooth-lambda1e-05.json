@@ -1,0 +1,475 @@
+{
+  "status": "complete",
+  "dataset": "smooth",
+  "regularization": 1e-05,
+  "n": 2048,
+  "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+  "input_array_hashes": {
+    "X": "935328f32fe7a6841558d49a5d8adf6059b6b7063c9fa1244f8e503bf6113508",
+    "b": "c3a23bfcc266181b02d4f31ba5403a859d112a49e365bf1e690e7af09c93e209"
+  },
+  "sources": {
+    "results/first8_factor_product.so": "ae791d74c6b29fbc2eaaab2bdec33caeafdf6fa793a8117f91a3fb44b72dd0d1",
+    "results/mixed_column_factor_first8.so": "943741be07c35b2e1fb85cc2116dd9367a171ac20ee3a1e23c6293478f8d277a",
+    "results/packed_float_factor.so": "13408d14463ede1b1a13015cc92a0991d43cde780177c280615fc4da40614ac3",
+    "results/packed_int24_factor.so": "4aa9cee0fd4136cd9ed6d83eec9a9c2425fde37bffcaf099caedee9ea6ddd528",
+    "scripts/check_actual_refresh_indicator.py": "109fe656192b231f19f2994dd6f495c808c93b1de99aa179bbe4f0c838fe882f",
+    "scripts/check_compressed_core_schur.py": "a4e8e154e8748296a55f7afe1e81375da2cd1f6ad2817e7c8c3eaf5e32979910",
+    "scripts/check_compressed_core_schur_odd.py": "26f0680e297a25781e913ac54fd9d07f97feedc5e945161036623c8a5dac9585",
+    "scripts/check_core_precision_allocation.py": "ce97909f61de27d880812330a31bacc6d4427fdcccc466811050282c77371f7e",
+    "scripts/check_factor_product_cost.py": "ebba94a57536a5a4a0b110addc3e07bd6047ed5bcd301309e141ebf03ea5659c",
+    "scripts/check_native_accumulated_refresh_diagonal.py": "f012f3d9d8e35d3bcfde5986b84b884eee3d71da4158c6d09d8e1d4eb618eea1",
+    "scripts/check_native_adaptive_fused.py": "0fbffcfe2e3e58fddd72aa42608a29d70c6df9226416b959573c2da2c2ecb571",
+    "scripts/check_native_first8_schur.py": "ba770aee8fcd1c469b54b37c729a4e33c2594f15e5f5e4eaa8c2c498d087847d",
+    "scripts/check_native_int24_fused.py": "23b49394db0a2eb77e0faad81526f60b3a38e646e5f75b6da330d29ba552cf76",
+    "scripts/check_native_uniform_fused.py": "f35ea2202954769e49cdaccbbb4a4e08547bbae72dd3d99798b0fa3d88899856",
+    "scripts/check_packed_float_allocation.py": "09216df37c25aee4096d94fc2c49a5cdaa6c89ebdc086f88107fd263519545f1",
+    "scripts/check_packed_float_factor.py": "aba5e0daebae9fbde98897523ad44e41bf8f5cc974f2950cabbce3d375489909",
+    "scripts/check_packed_int24_factor.py": "4017ad1b06af7bb0027d201ee2588c6e849463839c62e58f930125d133e0e3f2",
+    "scripts/check_packed_schur_feasibility.py": "7b853198fd2476504a40cfeb7dc9d9a3f68e5e5b2a66454580e3119ab1c519ac",
+    "scripts/check_refresh_regularization_scope.py": "2b8b6b4f71f5f9c6407966d55506e671d846da076c8be5b72a1d3c11a2070f82",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959",
+    "scripts/first8_factor_product.c": "aa578cc68ae3ed87eb96962d2f72dfd66aed351f78d1210a73aeede002bb5ed1",
+    "scripts/mixed_column_factor_first8.c": "d65fbe1054ca852e71f69ed7f8e78355f949ea59d491fbcf0c6974ce4dc720ff",
+    "scripts/packed_float_factor.c": "a5e847d19c76cee939b2054b4e0444950d6ef8d70e3b4d08ed52d0ad31e13f94",
+    "scripts/packed_int24_factor.c": "53b70224003d5e13d97113614f7329dd3b154d66dfb3e93f78871fa6bd368dc8",
+    "results/refresh-scope/smooth-lambda1e-05.json": "f66cbbf6a3053836b88e738d6f8ea0c86c4116e3fd241e8b45a3bccd1a20379c"
+  },
+  "prior_source_hash_checks": {
+    "results/first8_factor_product.so": true,
+    "results/mixed_column_factor_first8.so": true,
+    "results/packed_float_factor.so": true,
+    "results/packed_int24_factor.so": true,
+    "scripts/check_compressed_core_schur.py": true,
+    "scripts/check_compressed_core_schur_odd.py": true,
+    "scripts/check_core_precision_allocation.py": true,
+    "scripts/check_factor_product_cost.py": true,
+    "scripts/check_native_accumulated_refresh_diagonal.py": true,
+    "scripts/check_native_adaptive_fused.py": true,
+    "scripts/check_native_first8_schur.py": true,
+    "scripts/check_native_int24_fused.py": true,
+    "scripts/check_native_uniform_fused.py": true,
+    "scripts/check_packed_float_allocation.py": true,
+    "scripts/check_packed_float_factor.py": true,
+    "scripts/check_packed_int24_factor.py": true,
+    "scripts/check_packed_schur_feasibility.py": true,
+    "scripts/check_refresh_regularization_scope.py": true,
+    "scripts/check_schur_inplace_frontier_v2.py": true,
+    "scripts/first8_factor_product.c": true,
+    "scripts/mixed_column_factor_first8.c": true,
+    "scripts/packed_float_factor.c": true,
+    "scripts/packed_int24_factor.c": true
+  },
+  "function_change": {
+    "original_solve_source_sha256": "52a64f3911cdcb9d5058b056ad30b8f06dec4b91ae2525e0dced8f3cecce0ec7",
+    "modified_solve_source_sha256": "57f5d3b76e23ddd5670ba3a6fb74a08a719bc899155cfed9470eeb3788ee2755",
+    "replacement_count": 1,
+    "replaced": "op.error_bound*np.linalg.norm(s)",
+    "replacement": "op.actual_error_norm(s)",
+    "reverse_replacement_recovers_original": true,
+    "original_module_unchanged": true
+  },
+  "protocol": {
+    "policy": "Frozen FIRST8core592 native accumulated-refresh-diagonal; replace bound*norm(s) by actual dense norm((C\u2212LL^T)s) only. Same .1*norm(r) trigger, continuation, factor and original1e-8 acceptance.",
+    "oracle": "Dense E from actual streamed factor decoding and exact SharedKernel arithmetic on a separate instance. Reference kernel queries and dense indicator work excluded from solver-entry comparison. Computed floating-point E, not a rigorous exact-real error certificate.",
+    "comparison": "Actual native kernel entry_evaluations include factor setup, actions, refreshes, reconstruction, all attempted original checks and final verification. Compare frozen scope controls with verified source/data identity.",
+    "scope": "One policy, no threshold sweep. Dense E violates1MiB and is free oracle assistance for entry headroom only. Native measured wall includes oracle overhead and is NOT a speedup result. No future sketch, storage, or novelty claim.",
+    "limits": "Onecase/command;80/85CPU;external120wall/flock;7CPU per solve;BLAS1"
+  },
+  "oracle": [
+    {
+      "core": 592,
+      "regularization": 1e-05,
+      "excluded_oracle_kernel_entries": 350464,
+      "retained_dense_error_bytes": 2803712,
+      "decoded_factor_sha256": "32da72c5d47186f969d2ee776694fb1f4d5f5798597b082490eaa5c0b602d6ed",
+      "selected_indices_sha256": "e045ef9b457a02de0ab26b8c5b5a8d67e8675d4757c8651d001fadfea8a7a966",
+      "error_frobenius": 1.334031987460092e-07,
+      "prior_factor_bound": 1.3635993018357403e-07,
+      "indicator_calls": [
+        {
+          "actual_norm": 0.0005154626277141304,
+          "previous_bound_norm": 0.015844662178033927
+        },
+        {
+          "actual_norm": 0.0006858778513707634,
+          "previous_bound_norm": 0.019986031388799032
+        },
+        {
+          "actual_norm": 0.0006548974164300142,
+          "previous_bound_norm": 0.019861199645824616
+        },
+        {
+          "actual_norm": 0.0005150953499618427,
+          "previous_bound_norm": 0.0191259564884687
+        },
+        {
+          "actual_norm": 0.0005559878392047224,
+          "previous_bound_norm": 0.018532769266630594
+        },
+        {
+          "actual_norm": 0.0005545022755431738,
+          "previous_bound_norm": 0.018110256608042694
+        },
+        {
+          "actual_norm": 0.0005457339592721031,
+          "previous_bound_norm": 0.017956232951464337
+        },
+        {
+          "actual_norm": 0.0005639340678570485,
+          "previous_bound_norm": 0.017926132241265914
+        },
+        {
+          "actual_norm": 0.0005568922944698067,
+          "previous_bound_norm": 0.017901393795225578
+        },
+        {
+          "actual_norm": 0.000552069811729472,
+          "previous_bound_norm": 0.017908133461329398
+        },
+        {
+          "actual_norm": 0.000549530236202258,
+          "previous_bound_norm": 0.017929820113228103
+        },
+        {
+          "actual_norm": 0.0005501549493912112,
+          "previous_bound_norm": 0.0179451889565494
+        },
+        {
+          "actual_norm": 0.0005485942719877402,
+          "previous_bound_norm": 0.017951171853383695
+        },
+        {
+          "actual_norm": 0.0005497511206829474,
+          "previous_bound_norm": 0.017960805030137656
+        },
+        {
+          "actual_norm": 0.0005501628319767598,
+          "previous_bound_norm": 0.017965183376196885
+        },
+        {
+          "actual_norm": 0.0005501623461528812,
+          "previous_bound_norm": 0.0179679747436759
+        },
+        {
+          "actual_norm": 0.0005500778046522319,
+          "previous_bound_norm": 0.017970381758482198
+        },
+        {
+          "actual_norm": 0.0005500692212476166,
+          "previous_bound_norm": 0.017971067138450442
+        },
+        {
+          "actual_norm": 0.0005502867800439332,
+          "previous_bound_norm": 0.017972413817658992
+        },
+        {
+          "actual_norm": 0.0005503791317455926,
+          "previous_bound_norm": 0.01797324899684531
+        },
+        {
+          "actual_norm": 2.3711189808350214e-07,
+          "previous_bound_norm": 6.088778975560544e-06
+        },
+        {
+          "actual_norm": 3.791415108022383e-07,
+          "previous_bound_norm": 7.380113438009334e-06
+        },
+        {
+          "actual_norm": 4.1511852826748436e-07,
+          "previous_bound_norm": 7.5366951423763526e-06
+        },
+        {
+          "actual_norm": 4.4493778107633414e-07,
+          "previous_bound_norm": 7.592320253543279e-06
+        },
+        {
+          "actual_norm": 4.7464632259149817e-07,
+          "previous_bound_norm": 7.380563742410538e-06
+        },
+        {
+          "actual_norm": 5.006790237983597e-07,
+          "previous_bound_norm": 7.4778852912100245e-06
+        },
+        {
+          "actual_norm": 5.19155529445708e-07,
+          "previous_bound_norm": 7.4080453528790544e-06
+        },
+        {
+          "actual_norm": 5.323976058520535e-07,
+          "previous_bound_norm": 7.450712553258599e-06
+        },
+        {
+          "actual_norm": 5.408273010735714e-07,
+          "previous_bound_norm": 7.443355348965461e-06
+        },
+        {
+          "actual_norm": 5.464938015016389e-07,
+          "previous_bound_norm": 7.472231455973368e-06
+        },
+        {
+          "actual_norm": 5.501966235503512e-07,
+          "previous_bound_norm": 7.475392086667843e-06
+        },
+        {
+          "actual_norm": 5.542105283496213e-07,
+          "previous_bound_norm": 7.492580078409062e-06
+        },
+        {
+          "actual_norm": 5.565084210605054e-07,
+          "previous_bound_norm": 7.509208660078422e-06
+        },
+        {
+          "actual_norm": 5.576049288723325e-07,
+          "previous_bound_norm": 7.5085216456752545e-06
+        },
+        {
+          "actual_norm": 5.584387853435631e-07,
+          "previous_bound_norm": 7.517301718203443e-06
+        },
+        {
+          "actual_norm": 5.589987696888785e-07,
+          "previous_bound_norm": 7.514505834919248e-06
+        },
+        {
+          "actual_norm": 5.594572331829383e-07,
+          "previous_bound_norm": 7.51784477072063e-06
+        },
+        {
+          "actual_norm": 5.597117369999295e-07,
+          "previous_bound_norm": 7.518569213242409e-06
+        },
+        {
+          "actual_norm": 5.599276681640252e-07,
+          "previous_bound_norm": 7.519205227871306e-06
+        },
+        {
+          "actual_norm": 2.658455749979127e-10,
+          "previous_bound_norm": 6.000858973927316e-09
+        },
+        {
+          "actual_norm": 4.861184540339463e-10,
+          "previous_bound_norm": 7.788836991587178e-09
+        },
+        {
+          "actual_norm": 5.49773708002999e-10,
+          "previous_bound_norm": 7.887625628392833e-09
+        },
+        {
+          "actual_norm": 5.860534442801556e-10,
+          "previous_bound_norm": 7.764691315917994e-09
+        },
+        {
+          "actual_norm": 6.220303469278344e-10,
+          "previous_bound_norm": 7.766676664741073e-09
+        },
+        {
+          "actual_norm": 6.445591383815947e-10,
+          "previous_bound_norm": 7.765968196122774e-09
+        },
+        {
+          "actual_norm": 6.612440926266003e-10,
+          "previous_bound_norm": 7.7766318750309e-09
+        },
+        {
+          "actual_norm": 6.721663716076536e-10,
+          "previous_bound_norm": 7.79603236074356e-09
+        }
+      ]
+    }
+  ],
+  "run": {
+    "method": "actual_error_indicator",
+    "status": "converged",
+    "converged": true,
+    "iterations": 47,
+    "original_relative_residual": 7.039616439685429e-09,
+    "error": null,
+    "total_seconds": 1.9971185130416416,
+    "total_cpu_seconds": 2.0622802,
+    "refresh_steps": [
+      20,
+      39
+    ],
+    "memory": {
+      "named_peak_bytes": 978600,
+      "peak_with_reserve_bytes": 1044136,
+      "reserve_bytes": 65536,
+      "phase_named_peaks": {
+        "selection": 37504,
+        "mixed_stream_setup": 778368,
+        "mixed_stream_column": 783104,
+        "mixed_permutation": 761088,
+        "mixed_triangular_solve": 822400,
+        "fused_rhs": 976640,
+        "initial_direction_copy": 812928,
+        "refresh_first_pass": 976048,
+        "refresh_reorder": 829312,
+        "refresh_q": 822400,
+        "factor_product": 831872,
+        "refresh_second_pass": 975680,
+        "refresh_tail_shift": 834048,
+        "refresh_iterate_update": 834048,
+        "gap_accumulate": 806016,
+        "refresh_direction_update": 829312,
+        "gap_core": 978600,
+        "gap_shift": 806016,
+        "gap_cross": 978528,
+        "fused_reconstruction": 969448,
+        "fused_reconstruction_update": 822400,
+        "full_verification": 976840,
+        "fused_original_residual": 845696
+      },
+      "phase_row_sizes": {
+        "fused_rhs": [
+          32
+        ],
+        "refresh_first_pass": [
+          6
+        ],
+        "refresh_second_pass": [
+          24
+        ],
+        "gap_core": [
+          29
+        ],
+        "gap_cross": [
+          28
+        ],
+        "fused_reconstruction": [
+          5
+        ],
+        "full_verification": [
+          9
+        ]
+      }
+    },
+    "kernel_stats": {
+      "column_queries": 592,
+      "entry_evaluations": 190391464,
+      "entry_blocks": 20664,
+      "full_matvecs": 1
+    },
+    "actions": 47,
+    "verifications": 1,
+    "core_solve_calls": 99,
+    "setup_seconds": 0.11553866905160248,
+    "omitted": 47,
+    "timing_includes_free_oracle_work_not_speed_evidence": true
+  },
+  "controls": [
+    {
+      "method": "adaptive",
+      "entry_evaluations": 181284776,
+      "iterations": [
+        44,
+        44
+      ],
+      "refresh_steps": [
+        [
+          12,
+          22,
+          32,
+          42
+        ],
+        [
+          12,
+          22,
+          32,
+          42
+        ]
+      ],
+      "source_result": "results/refresh-scope/smooth-lambda1e-05.json"
+    },
+    {
+      "method": "periodic8",
+      "entry_evaluations": 182497192,
+      "iterations": [
+        44,
+        44
+      ],
+      "refresh_steps": [
+        [
+          8,
+          16,
+          24,
+          32,
+          40
+        ],
+        [
+          8,
+          16,
+          24,
+          32,
+          40
+        ]
+      ],
+      "source_result": "results/refresh-scope/smooth-lambda1e-05.json"
+    },
+    {
+      "method": "uniform600",
+      "entry_evaluations": 183501772,
+      "iterations": [
+        42,
+        42
+      ],
+      "refresh_steps": [
+        null,
+        null
+      ],
+      "source_result": "results/refresh-scope/smooth-lambda1e-05.json"
+    },
+    {
+      "method": "packed24",
+      "entry_evaluations": 158653348,
+      "iterations": [
+        36,
+        36
+      ],
+      "refresh_steps": [
+        null,
+        null
+      ],
+      "source_result": "results/refresh-scope/smooth-lambda1e-05.json"
+    },
+    {
+      "method": "original_exact416",
+      "entry_evaluations": 300041936,
+      "iterations": [
+        73,
+        73
+      ],
+      "refresh_steps": [
+        null,
+        null
+      ],
+      "source_result": "results/refresh-scope/smooth-lambda1e-05.json"
+    }
+  ],
+  "comparisons": [
+    {
+      "method": "adaptive",
+      "entry_ratio": 1.0502341575555136
+    },
+    {
+      "method": "periodic8",
+      "entry_ratio": 1.0432569504959834
+    },
+    {
+      "method": "uniform600",
+      "entry_ratio": 1.0375456428834922
+    },
+    {
+      "method": "packed24",
+      "entry_ratio": 1.2000469350322187
+    },
+    {
+      "method": "original_exact416",
+      "entry_ratio": 0.6345495117722477
+    }
+  ],
+  "elapsed_wall_seconds": 2.4408380429958925,
+  "elapsed_cpu_seconds": 2.1322515000000006,
+  "source_hashes_unchanged": true,
+  "input_hashes_unchanged": true
+}

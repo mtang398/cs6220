@@ -1,0 +1,150 @@
+{
+  "audit_of": "results/calibrated-factor-rounding.json",
+  "status": "complete",
+  "sources": {
+    "scripts/check_calibrated_rounding_range.py": "271326d1f6e2285ebc3251baba1ee40e6e69d896604125d300c25e7c456edf3b",
+    "scripts/calibrated_factor_rounding.c": "ae66e0ee4c797d9837a43c62b437524eb8105042dfd4b39af7dfc4fd6838f938",
+    "results/calibrated_factor_rounding.so": "3c992d9b788a5914b2771efa52f8f2667186de8c0eba7d05669d7b70a4feaca9",
+    "scripts/check_int24_precision_selection.py": "11663bd942b0c6a725e1de2ac1773c86f2610ed47da37bee92c1877778881849",
+    "scripts/check_int16_core_capacity.py": "092aea8830f40dec71900e48ad78b64837c3ea321a1d1cf0d8f33e9abb0e7167"
+  },
+  "protocol": {
+    "core": 818,
+    "comparison_core": 600,
+    "shift": 1e-05,
+    "rounding": "Two coordinate-flip sweeps within floor/ceil of each exact offdiagonal entry on fixed signedint16 scale. First8 columns and diagonal unchanged. Minimize ||(Q-L)V||F\u00b2+||(Q-L)^T U||F\u00b2. U from exact core inverse applied to [rS,B rR]; V=L^TU; columns normalized independently. Same4step nearest-rounding prefix.",
+    "scope": "All dense reference construction, calibration, scoring and re-encoding free. Payload720442bytes unchanged; no fullmemory/native claim. Compare initialRHS/currentresidual calibration, matched nearestrestart and upfrontFP32core600. First-order action calibration is not GPTQ implementation or novelty claim."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.9257103134935831,
+        "analytical_entries": 24994035
+      },
+      "runs": [
+        {
+          "method": "initial_restart",
+          "max_code": 32768.0,
+          "min_code": -32768.0,
+          "representable": false,
+          "flips": 36980,
+          "calibration_before": 7.378309195507031e-10,
+          "calibration_after": 2.408291423684848e-11,
+          "calibration_ratio": 0.03264015318240336
+        },
+        {
+          "method": "current_restart",
+          "max_code": 32768.0,
+          "min_code": -32768.0,
+          "representable": false,
+          "flips": 43542,
+          "calibration_before": 1.6982700608675599e-09,
+          "calibration_after": 7.12533235194479e-11,
+          "calibration_ratio": 0.04195641503745771
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.49144006433440185,
+        "analytical_entries": 24994035
+      },
+      "runs": [
+        {
+          "method": "initial_restart",
+          "max_code": 32768.0,
+          "min_code": -32768.0,
+          "representable": false,
+          "flips": 34178,
+          "calibration_before": 3.426584756314958e-09,
+          "calibration_after": 2.980430765330564e-11,
+          "calibration_ratio": 0.008697963066104921
+        },
+        {
+          "method": "current_restart",
+          "max_code": 32768.0,
+          "min_code": -32768.0,
+          "representable": false,
+          "flips": 36183,
+          "calibration_before": 2.5383521933720345e-09,
+          "calibration_after": 1.1245181178949284e-10,
+          "calibration_ratio": 0.04430110686890458
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.9749729743846929,
+        "analytical_entries": 4413699
+      },
+      "runs": [
+        {
+          "method": "initial_restart",
+          "max_code": 32768.0,
+          "min_code": -32768.0,
+          "representable": false,
+          "flips": 60940,
+          "calibration_before": 6.304804580841011e-09,
+          "calibration_after": 8.364398067159467e-11,
+          "calibration_ratio": 0.013266704716871212
+        },
+        {
+          "method": "current_restart",
+          "max_code": 32768.0,
+          "min_code": -32768.0,
+          "representable": false,
+          "flips": 133646,
+          "calibration_before": 1.8970127685364885e-08,
+          "calibration_after": 8.674395001212769e-10,
+          "calibration_ratio": 0.045726603136703764
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 2.205294424446829,
+        "analytical_entries": 9170451
+      },
+      "runs": [
+        {
+          "method": "initial_restart",
+          "max_code": 32768.0,
+          "min_code": -32768.0,
+          "representable": false,
+          "flips": 40055,
+          "calibration_before": 7.277628819814836e-10,
+          "calibration_after": 2.2283388910218257e-11,
+          "calibration_ratio": 0.030619023670934085
+        },
+        {
+          "method": "current_restart",
+          "max_code": 32768.0,
+          "min_code": -32768.0,
+          "representable": false,
+          "flips": 53491,
+          "calibration_before": 3.0509044361255524e-09,
+          "calibration_after": 1.0864692372192944e-10,
+          "calibration_ratio": 0.035611382131622536
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 1.0779120019869879,
+  "elapsed_cpu_seconds": 0.9004412000000004
+}

@@ -1,0 +1,874 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_taylor_kernel_cost.py": "f591508d0426b8c1747bb556bc74a0c3cfac664c2b94677b1dae78581aea6560",
+    "scripts/taylor_kernel_tile.c": "b47c367d631a1de6cd11a8540f69592a7086d917f6c0e3ae64ee551d1ed9dd48",
+    "scripts/check_kernel_precision_cost.py": "795cdaa90abe044b4d4ba92c32901dab6dda4e8831796f7441ad72bfbec5c2ee"
+  },
+  "protocol": {
+    "tile_bytes": 131072,
+    "repeats": 5,
+    "compiler": [
+      "gcc",
+      "-O3",
+      "-march=native",
+      "-shared",
+      "-fPIC",
+      "/mnt/c/users/maosen/cs6220/project/scripts/taylor_kernel_tile.c",
+      "-o",
+      "/mnt/c/users/maosen/cs6220/project/results/taylor_kernel_tile.so"
+    ],
+    "center": "zero in existing standardized input coordinates",
+    "regularizations": [
+      0.001,
+      1e-05
+    ],
+    "selection": "least p in 0..255 with trace or diagonal-corrected row bound <= lambda/2",
+    "extra_degrees": [
+      0,
+      2,
+      4,
+      8
+    ],
+    "scope": "Standalone actions; extra context separately reported; no full-solver memory claim"
+  },
+  "selections": [
+    {
+      "dataset": "smooth512",
+      "regularization": 0.001,
+      "diagonal_correction": false,
+      "degree": 8,
+      "bound": 0.00031191267140426185
+    },
+    {
+      "dataset": "smooth512",
+      "regularization": 0.001,
+      "diagonal_correction": true,
+      "degree": 9,
+      "bound": 0.00013972227647102343
+    },
+    {
+      "dataset": "smooth512",
+      "regularization": 1e-05,
+      "diagonal_correction": false,
+      "degree": 10,
+      "bound": 4.894679503831665e-06
+    },
+    {
+      "dataset": "smooth512",
+      "regularization": 1e-05,
+      "diagonal_correction": true,
+      "degree": 11,
+      "bound": 1.8750379961268413e-06
+    },
+    {
+      "dataset": "Concrete824",
+      "regularization": 0.001,
+      "diagonal_correction": false,
+      "degree": 12,
+      "bound": 0.0001277789379069976
+    },
+    {
+      "dataset": "Concrete824",
+      "regularization": 0.001,
+      "diagonal_correction": true,
+      "degree": 12,
+      "bound": 0.0002354788715090975
+    },
+    {
+      "dataset": "Concrete824",
+      "regularization": 1e-05,
+      "diagonal_correction": false,
+      "degree": 15,
+      "bound": 9.65396383500472e-07
+    },
+    {
+      "dataset": "Concrete824",
+      "regularization": 1e-05,
+      "diagonal_correction": true,
+      "degree": 15,
+      "bound": 1.5595979762691919e-06
+    },
+    {
+      "dataset": "Airfoil1202",
+      "regularization": 0.001,
+      "diagonal_correction": false,
+      "degree": 13,
+      "bound": 0.00035559202376286614
+    },
+    {
+      "dataset": "Airfoil1202",
+      "regularization": 0.001,
+      "diagonal_correction": true,
+      "degree": 13,
+      "bound": 0.0004420482363294777
+    },
+    {
+      "dataset": "Airfoil1202",
+      "regularization": 1e-05,
+      "diagonal_correction": false,
+      "degree": 16,
+      "bound": 4.914894761827136e-06
+    },
+    {
+      "dataset": "Airfoil1202",
+      "regularization": 1e-05,
+      "diagonal_correction": true,
+      "degree": 17,
+      "bound": 1.156024129547133e-06
+    },
+    {
+      "dataset": "smooth2048",
+      "regularization": 0.001,
+      "diagonal_correction": false,
+      "degree": 9,
+      "bound": 6.347821213519091e-05
+    },
+    {
+      "dataset": "smooth2048",
+      "regularization": 0.001,
+      "diagonal_correction": true,
+      "degree": 9,
+      "bound": 0.00035362070895689316
+    },
+    {
+      "dataset": "smooth2048",
+      "regularization": 1e-05,
+      "diagonal_correction": false,
+      "degree": 11,
+      "bound": 7.233942392244758e-07
+    },
+    {
+      "dataset": "smooth2048",
+      "regularization": 1e-05,
+      "diagonal_correction": true,
+      "degree": 11,
+      "bound": 4.075965905561305e-06
+    }
+  ],
+  "runs": [
+    {
+      "dataset": "smooth512",
+      "mode": "cdist64",
+      "n": 512,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "context_bytes": 0,
+      "rows_per_tile": 32,
+      "error_over_rhs_norm": 0.0,
+      "seconds": [
+        0.004571412981022149,
+        0.0018247549887746572,
+        0.0017919359961524606,
+        0.002405263017863035,
+        0.002529081015381962
+      ],
+      "median_seconds": 0.002405263017863035,
+      "action_traced_peak_bytes": 136308
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "gram64",
+      "n": 512,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "context_bytes": 4096,
+      "rows_per_tile": 32,
+      "error_over_rhs_norm": 2.4392426061257127e-13,
+      "seconds": [
+        0.003783848020248115,
+        0.0017947679734788835,
+        0.0017101039993576705,
+        0.0017855319892987609,
+        0.0020722639746963978
+      ],
+      "median_seconds": 0.0017947679734788835,
+      "action_traced_peak_bytes": 202252
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "taylor0_diag1",
+      "n": 512,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "context_bytes": 45056,
+      "rows_per_tile": 16,
+      "error_over_rhs_norm": 36.956985646121275,
+      "seconds": [
+        0.0011293140123598278,
+        0.0006334860227070749,
+        0.0007118739886209369,
+        0.0008952859789133072,
+        0.0009297489887103438
+      ],
+      "median_seconds": 0.0008952859789133072,
+      "action_traced_peak_bytes": 174252
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "taylor2_diag1",
+      "n": 512,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "context_bytes": 45056,
+      "rows_per_tile": 16,
+      "error_over_rhs_norm": 3.777632382558013,
+      "seconds": [
+        0.0014109789626672864,
+        0.0007624200079590082,
+        0.0007087249541655183,
+        0.0007487299735657871,
+        0.0007212189957499504
+      ],
+      "median_seconds": 0.0007487299735657871,
+      "action_traced_peak_bytes": 174252
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "taylor4_diag1",
+      "n": 512,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "context_bytes": 45056,
+      "rows_per_tile": 16,
+      "error_over_rhs_norm": 0.2062081125300723,
+      "seconds": [
+        0.0011757650063373148,
+        0.0007979840156622231,
+        0.0007915040478110313,
+        0.0011422369861975312,
+        0.0008364859968423843
+      ],
+      "median_seconds": 0.0008364859968423843,
+      "action_traced_peak_bytes": 174252
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "taylor8_diag0",
+      "n": 512,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "context_bytes": 45056,
+      "rows_per_tile": 16,
+      "error_over_rhs_norm": 9.167385028478167e-05,
+      "seconds": [
+        0.0013096699840389192,
+        0.0010416710283607244,
+        0.0010131490416824818,
+        0.0016597060021013021,
+        0.0012464559986256063
+      ],
+      "median_seconds": 0.0012464559986256063,
+      "action_traced_peak_bytes": 174300
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "taylor8_diag1",
+      "n": 512,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "context_bytes": 45056,
+      "rows_per_tile": 16,
+      "error_over_rhs_norm": 0.00016465997138128538,
+      "seconds": [
+        0.0010729980422183871,
+        0.001208436966408044,
+        0.0009648039704188704,
+        0.0011524360161274672,
+        0.001058307010680437
+      ],
+      "median_seconds": 0.0010729980422183871,
+      "action_traced_peak_bytes": 160534
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "taylor9_diag1",
+      "n": 512,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "context_bytes": 45056,
+      "rows_per_tile": 16,
+      "error_over_rhs_norm": 2.1847596266613317e-05,
+      "seconds": [
+        0.0010463770013302565,
+        0.0010462860227562487,
+        0.001036777044646442,
+        0.0038148629828356206,
+        0.0010370229720138013
+      ],
+      "median_seconds": 0.0010462860227562487,
+      "action_traced_peak_bytes": 171436
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "taylor10_diag0",
+      "n": 512,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "context_bytes": 45056,
+      "rows_per_tile": 16,
+      "error_over_rhs_norm": 2.0404190807156977e-06,
+      "seconds": [
+        0.0010836849687620997,
+        0.0010893430444411933,
+        0.0011176859843544662,
+        0.0012890479993075132,
+        0.0017038630321621895
+      ],
+      "median_seconds": 0.0011176859843544662,
+      "action_traced_peak_bytes": 174300
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "taylor11_diag1",
+      "n": 512,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "context_bytes": 45056,
+      "rows_per_tile": 16,
+      "error_over_rhs_norm": 3.0463666171495115e-07,
+      "seconds": [
+        0.0011383729870431125,
+        0.001143758010584861,
+        0.001340265036560595,
+        0.0011587970075197518,
+        0.0016211610054597259
+      ],
+      "median_seconds": 0.0011587970075197518,
+      "action_traced_peak_bytes": 174252
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "cdist64",
+      "n": 824,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "context_bytes": 0,
+      "rows_per_tile": 19,
+      "error_over_rhs_norm": 0.0,
+      "seconds": [
+        0.005667038029059768,
+        0.004839564033318311,
+        0.004757673945277929,
+        0.008875726023688912,
+        0.004802071955054998
+      ],
+      "median_seconds": 0.004839564033318311,
+      "action_traced_peak_bytes": 132876
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "gram64",
+      "n": 824,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "context_bytes": 6592,
+      "rows_per_tile": 19,
+      "error_over_rhs_norm": 1.0483653038928634e-12,
+      "seconds": [
+        0.005274872004520148,
+        0.00470366096124053,
+        0.004580795997753739,
+        0.004665124986786395,
+        0.004679807985667139
+      ],
+      "median_seconds": 0.004679807985667139,
+      "action_traced_peak_bytes": 192716
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "taylor0_diag1",
+      "n": 824,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "context_bytes": 72512,
+      "rows_per_tile": 9,
+      "error_over_rhs_norm": 91.60448926848346,
+      "seconds": [
+        0.0018628660473041236,
+        0.0018963809707202017,
+        0.001864875026512891,
+        0.001914719003252685,
+        0.001870766980573535
+      ],
+      "median_seconds": 0.001870766980573535,
+      "action_traced_peak_bytes": 232284
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "taylor2_diag1",
+      "n": 824,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "context_bytes": 72512,
+      "rows_per_tile": 9,
+      "error_over_rhs_norm": 14.288714754912744,
+      "seconds": [
+        0.0021297390339896083,
+        0.0025055890437215567,
+        0.002101466991007328,
+        0.002155377995222807,
+        0.0022204250562936068
+      ],
+      "median_seconds": 0.002155377995222807,
+      "action_traced_peak_bytes": 232380
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "taylor4_diag1",
+      "n": 824,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "context_bytes": 72512,
+      "rows_per_tile": 9,
+      "error_over_rhs_norm": 2.302980647250454,
+      "seconds": [
+        0.0025734759983606637,
+        0.002379198034759611,
+        0.002958990982733667,
+        0.002804844989441335,
+        0.0025180739467032254
+      ],
+      "median_seconds": 0.0025734759983606637,
+      "action_traced_peak_bytes": 232284
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "taylor8_diag1",
+      "n": 824,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "context_bytes": 72512,
+      "rows_per_tile": 9,
+      "error_over_rhs_norm": 0.019381008810712298,
+      "seconds": [
+        0.0029057240462861955,
+        0.0032589059555903077,
+        0.002793226041831076,
+        0.002742858021520078,
+        0.0031835970003157854
+      ],
+      "median_seconds": 0.0029057240462861955,
+      "action_traced_peak_bytes": 188252
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "taylor12_diag0",
+      "n": 824,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "context_bytes": 72512,
+      "rows_per_tile": 9,
+      "error_over_rhs_norm": 3.14173370973961e-05,
+      "seconds": [
+        0.0036513739614747465,
+        0.003233559022191912,
+        0.0035503749968484044,
+        0.003247721993830055,
+        0.0033649600227363408
+      ],
+      "median_seconds": 0.0033649600227363408,
+      "action_traced_peak_bytes": 232284
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "taylor12_diag1",
+      "n": 824,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "context_bytes": 72512,
+      "rows_per_tile": 9,
+      "error_over_rhs_norm": 5.5201975672101395e-05,
+      "seconds": [
+        0.004079276055563241,
+        0.0036000339896418154,
+        0.003523414023220539,
+        0.003260799974668771,
+        0.0033262140350416303
+      ],
+      "median_seconds": 0.003523414023220539,
+      "action_traced_peak_bytes": 232284
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "taylor15_diag0",
+      "n": 824,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "context_bytes": 72512,
+      "rows_per_tile": 9,
+      "error_over_rhs_norm": 3.634412763228765e-07,
+      "seconds": [
+        0.0036284990492276847,
+        0.003627754980698228,
+        0.00354601297294721,
+        0.004007678013294935,
+        0.0038140370161272585
+      ],
+      "median_seconds": 0.0036284990492276847,
+      "action_traced_peak_bytes": 232284
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "taylor15_diag1",
+      "n": 824,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "context_bytes": 72512,
+      "rows_per_tile": 9,
+      "error_over_rhs_norm": 4.109743495899673e-07,
+      "seconds": [
+        0.004033724020700902,
+        0.003699936030898243,
+        0.003938891983125359,
+        0.00660929101286456,
+        0.003612256026826799
+      ],
+      "median_seconds": 0.003938891983125359,
+      "action_traced_peak_bytes": 213596
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "cdist64",
+      "n": 1202,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "context_bytes": 0,
+      "rows_per_tile": 13,
+      "error_over_rhs_norm": 0.0,
+      "seconds": [
+        0.009392359992489219,
+        0.00899866595864296,
+        0.010723573970608413,
+        0.00918172299861908,
+        0.009026247018482536
+      ],
+      "median_seconds": 0.00918172299861908,
+      "action_traced_peak_bytes": 135612
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "gram64",
+      "n": 1202,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "context_bytes": 9616,
+      "rows_per_tile": 13,
+      "error_over_rhs_norm": 2.1178806079038988e-12,
+      "seconds": [
+        0.009638773975893855,
+        0.009774442005436867,
+        0.00995462405262515,
+        0.00990158598870039,
+        0.010012220009230077
+      ],
+      "median_seconds": 0.00990158598870039,
+      "action_traced_peak_bytes": 193868
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "taylor0_diag1",
+      "n": 1202,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "context_bytes": 76928,
+      "rows_per_tile": 6,
+      "error_over_rhs_norm": 171.46789335452624,
+      "seconds": [
+        0.00448621204122901,
+        0.004480050993151963,
+        0.004484168021008372,
+        0.00429667200660333,
+        0.004533921019174159
+      ],
+      "median_seconds": 0.004484168021008372,
+      "action_traced_peak_bytes": 357612
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "taylor2_diag1",
+      "n": 1202,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "context_bytes": 76928,
+      "rows_per_tile": 6,
+      "error_over_rhs_norm": 26.268011153168082,
+      "seconds": [
+        0.004830489051528275,
+        0.005236016004346311,
+        0.0045673990389332175,
+        0.0049638740019872785,
+        0.00456194399157539
+      ],
+      "median_seconds": 0.004830489051528275,
+      "action_traced_peak_bytes": 244508
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "taylor4_diag1",
+      "n": 1202,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "context_bytes": 76928,
+      "rows_per_tile": 6,
+      "error_over_rhs_norm": 3.17013976397204,
+      "seconds": [
+        0.005693724961020052,
+        0.005050883977673948,
+        0.005222426960244775,
+        0.005262194026727229,
+        0.0052613759762607515
+      ],
+      "median_seconds": 0.0052613759762607515,
+      "action_traced_peak_bytes": 357660
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "taylor8_diag1",
+      "n": 1202,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "context_bytes": 76928,
+      "rows_per_tile": 6,
+      "error_over_rhs_norm": 0.06388736546893557,
+      "seconds": [
+        0.00636481202673167,
+        0.007185921014752239,
+        0.00697026401758194,
+        0.010324926988687366,
+        0.006277107982896268
+      ],
+      "median_seconds": 0.00697026401758194,
+      "action_traced_peak_bytes": 308972
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "taylor13_diag0",
+      "n": 1202,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "context_bytes": 76928,
+      "rows_per_tile": 6,
+      "error_over_rhs_norm": 0.0001817483056469992,
+      "seconds": [
+        0.007958600006531924,
+        0.008284410985652357,
+        0.007435939973220229,
+        0.008241548959631473,
+        0.009409571008291095
+      ],
+      "median_seconds": 0.008241548959631473,
+      "action_traced_peak_bytes": 338198
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "taylor13_diag1",
+      "n": 1202,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "context_bytes": 76928,
+      "rows_per_tile": 6,
+      "error_over_rhs_norm": 0.00019059577054714473,
+      "seconds": [
+        0.008074385987129062,
+        0.009106768993660808,
+        0.007548903988208622,
+        0.007593177957460284,
+        0.0075730959651991725
+      ],
+      "median_seconds": 0.007593177957460284,
+      "action_traced_peak_bytes": 356044
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "taylor16_diag0",
+      "n": 1202,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "context_bytes": 76928,
+      "rows_per_tile": 6,
+      "error_over_rhs_norm": 2.8751223352289285e-06,
+      "seconds": [
+        0.008647404960356653,
+        0.008346417045686394,
+        0.00987296097446233,
+        0.009742591995745897,
+        0.00813728995854035
+      ],
+      "median_seconds": 0.008647404960356653,
+      "action_traced_peak_bytes": 273686
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "taylor17_diag1",
+      "n": 1202,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "context_bytes": 76928,
+      "rows_per_tile": 6,
+      "error_over_rhs_norm": 5.753274863094209e-07,
+      "seconds": [
+        0.00855433999095112,
+        0.008283229020889848,
+        0.00961366097908467,
+        0.008644413959700614,
+        0.008388717018533498
+      ],
+      "median_seconds": 0.00855433999095112,
+      "action_traced_peak_bytes": 357708
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "cdist64",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "context_bytes": 0,
+      "rows_per_tile": 8,
+      "error_over_rhs_norm": 0.0,
+      "seconds": [
+        0.028697024972643703,
+        0.03036656597396359,
+        0.02930987998843193,
+        0.030843786022160202,
+        0.03025683097075671
+      ],
+      "median_seconds": 0.03025683097075671,
+      "action_traced_peak_bytes": 148460
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "gram64",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "context_bytes": 16384,
+      "rows_per_tile": 8,
+      "error_over_rhs_norm": 7.622454623024144e-13,
+      "seconds": [
+        0.029070782009512186,
+        0.03173516201786697,
+        0.030924997001420707,
+        0.02930633700452745,
+        0.03020744997775182
+      ],
+      "median_seconds": 0.03020744997775182,
+      "action_traced_peak_bytes": 214540
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "taylor0_diag1",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "context_bytes": 180224,
+      "rows_per_tile": 4,
+      "error_over_rhs_norm": 36.11566129395023,
+      "seconds": [
+        0.013054798007942736,
+        0.013837472011800855,
+        0.013312765979208052,
+        0.013103060016874224,
+        0.013290776987560093
+      ],
+      "median_seconds": 0.013290776987560093,
+      "action_traced_peak_bytes": 543606
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "taylor2_diag1",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "context_bytes": 180224,
+      "rows_per_tile": 4,
+      "error_over_rhs_norm": 3.5290639121969165,
+      "seconds": [
+        0.02496518997941166,
+        0.014820604992564768,
+        0.014619771973229945,
+        0.014256498019676656,
+        0.015272068965714425
+      ],
+      "median_seconds": 0.014820604992564768,
+      "action_traced_peak_bytes": 491564
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "taylor4_diag1",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "context_bytes": 180224,
+      "rows_per_tile": 4,
+      "error_over_rhs_norm": 0.15959507949957316,
+      "seconds": [
+        0.01599803799763322,
+        0.01662211900111288,
+        0.016702852968592197,
+        0.016102192050311714,
+        0.017123805999290198
+      ],
+      "median_seconds": 0.01662211900111288,
+      "action_traced_peak_bytes": 543558
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "taylor8_diag1",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "context_bytes": 180224,
+      "rows_per_tile": 4,
+      "error_over_rhs_norm": 0.00011108807943087861,
+      "seconds": [
+        0.020712223020382226,
+        0.018759260012302548,
+        0.01862480799900368,
+        0.02026947500417009,
+        0.020340007031336427
+      ],
+      "median_seconds": 0.02026947500417009,
+      "action_traced_peak_bytes": 475436
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "taylor9_diag0",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "context_bytes": 180224,
+      "rows_per_tile": 4,
+      "error_over_rhs_norm": 8.195938911519628e-06,
+      "seconds": [
+        0.019951240974478424,
+        0.019053151016123593,
+        0.02035316702676937,
+        0.019810110970865935,
+        0.021576149971224368
+      ],
+      "median_seconds": 0.019951240974478424,
+      "action_traced_peak_bytes": 543510
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "taylor9_diag1",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "context_bytes": 180224,
+      "rows_per_tile": 4,
+      "error_over_rhs_norm": 1.4361707285439816e-05,
+      "seconds": [
+        0.019487945013679564,
+        0.019139226991683245,
+        0.020544163999147713,
+        0.01986605703132227,
+        0.02053563401568681
+      ],
+      "median_seconds": 0.01986605703132227,
+      "action_traced_peak_bytes": 460508
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "taylor11_diag0",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "context_bytes": 180224,
+      "rows_per_tile": 4,
+      "error_over_rhs_norm": 1.5512321110337262e-07,
+      "seconds": [
+        0.020563274971209466,
+        0.020517091965302825,
+        0.02904747804859653,
+        0.021938717982266098,
+        0.021756853035185486
+      ],
+      "median_seconds": 0.021756853035185486,
+      "action_traced_peak_bytes": 543510
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "taylor11_diag1",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "context_bytes": 180224,
+      "rows_per_tile": 4,
+      "error_over_rhs_norm": 1.908999226009443e-07,
+      "seconds": [
+        0.020815733005292714,
+        0.02138567197835073,
+        0.021666085987817496,
+        0.02120322600239888,
+        0.02222971396986395
+      ],
+      "median_seconds": 0.02138567197835073,
+      "action_traced_peak_bytes": 444332
+    }
+  ],
+  "changed_path_check_absolute_error": 2.6645352591003757e-15,
+  "elapsed_wall_seconds": 4.9391729650087655,
+  "elapsed_cpu_seconds": 2.9922210000000002
+}

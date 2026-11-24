@@ -1,0 +1,310 @@
+{
+  "diagnostic_of": "results/calibrated-factor-rounding-bounded.json",
+  "status": "complete",
+  "sources": {
+    "scripts/check_calibrated_rounding_inverse.py": "28ed254a4ad5f74e66bba556fde5083f16a512def1731b28136ac3cc3210f3ce",
+    "scripts/calibrated_factor_rounding_bounded.c": "889154e2c60ab4462fac585a53930c55587416821e89383c484e7757cdf5bd9b",
+    "results/calibrated_factor_rounding_bounded.so": "105519c05c3186758e3c3c604ef7beb278460824f48c9f343c30a6de9b8a1459",
+    "scripts/check_int24_precision_selection.py": "11663bd942b0c6a725e1de2ac1773c86f2610ed47da37bee92c1877778881849",
+    "scripts/check_int16_core_capacity.py": "092aea8830f40dec71900e48ad78b64837c3ea321a1d1cf0d8f33e9abb0e7167"
+  },
+  "protocol": {
+    "core": 818,
+    "comparison_core": 600,
+    "shift": 1e-05,
+    "rounding": "Two coordinate-flip sweeps within floor/ceil of each exact offdiagonal entry on fixed signedint16 scale, candidates explicitly restricted to symmetric[-32767,32767]. First8 columns and diagonal unchanged. Minimize ||(Q-L)V||F\u00b2+||(Q-L)^T U||F\u00b2. U from exact core inverse applied to [rS,B rR]; V=L^TU; columns normalized independently. Same4step nearest-rounding prefix.",
+    "scope": "All dense reference construction, calibration, scoring and re-encoding free. Payload720442bytes unchanged; no fullmemory/native claim. Compare initialRHS/currentresidual calibration, matched nearestrestart and upfrontFP32core600. First-order action calibration is not GPTQ implementation or novelty claim."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.9257103134935831,
+        "analytical_entries": 24994035
+      },
+      "runs": [
+        {
+          "method": "nearest_restart",
+          "factor_relative_error": 1.315210837725673e-05,
+          "inverse_factor_error": 0.0727398124219294,
+          "core_generalized_condition": 1.0486441124582684,
+          "inverse_action_relative_errors": {
+            "initial": [
+              0.0005505384004029383,
+              5.7358996583066
+            ],
+            "current": [
+              0.0004907672278750951,
+              6.645364231266597
+            ]
+          }
+        },
+        {
+          "method": "initial_restart",
+          "factor_relative_error": 1.743946797284781e-05,
+          "inverse_factor_error": 0.09250990918265752,
+          "core_generalized_condition": 1.0775689986312647,
+          "inverse_action_relative_errors": {
+            "initial": [
+              0.00014220468508775106,
+              1.6436511706383472
+            ],
+            "current": [
+              0.0003170976090959267,
+              2.2432311926881034
+            ]
+          },
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 36632,
+          "calibration_before": 7.378309195507031e-10,
+          "calibration_after": 2.3204478115872744e-11,
+          "calibration_ratio": 0.03144958756947045
+        },
+        {
+          "method": "current_restart",
+          "factor_relative_error": 1.816253833153075e-05,
+          "inverse_factor_error": 0.09590064603329258,
+          "core_generalized_condition": 1.0766201927380936,
+          "inverse_action_relative_errors": {
+            "initial": [
+              0.0004021341698957837,
+              2.4022633420359325
+            ],
+            "current": [
+              0.00020457355354572105,
+              2.512762167664462
+            ]
+          },
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 43044,
+          "calibration_before": 1.6982700608675599e-09,
+          "calibration_after": 7.372658991929033e-11,
+          "calibration_ratio": 0.04341275961823596
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.49144006433440185,
+        "analytical_entries": 24994035
+      },
+      "runs": [
+        {
+          "method": "nearest_restart",
+          "factor_relative_error": 1.315210837725673e-05,
+          "inverse_factor_error": 0.0727398124219294,
+          "core_generalized_condition": 1.0486441124582684,
+          "inverse_action_relative_errors": {
+            "initial": [
+              0.0034523255103893606,
+              7.042326429276116
+            ],
+            "current": [
+              0.001102096529807195,
+              6.485667598653929
+            ]
+          }
+        },
+        {
+          "method": "initial_restart",
+          "factor_relative_error": 1.7998546462052664e-05,
+          "inverse_factor_error": 0.098406937042136,
+          "core_generalized_condition": 1.0886612978589723,
+          "inverse_action_relative_errors": {
+            "initial": [
+              0.0005647708152074793,
+              0.5157564887924538
+            ],
+            "current": [
+              0.0004112918613663447,
+              7.915144098418786
+            ]
+          },
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 34025,
+          "calibration_before": 3.426584756314958e-09,
+          "calibration_after": 2.9645678229118815e-11,
+          "calibration_ratio": 0.008651669325991101
+        },
+        {
+          "method": "current_restart",
+          "factor_relative_error": 1.8219431185866413e-05,
+          "inverse_factor_error": 0.09482096601864302,
+          "core_generalized_condition": 1.075137395221031,
+          "inverse_action_relative_errors": {
+            "initial": [
+              0.001302017818241445,
+              8.248239220039919
+            ],
+            "current": [
+              0.00024195527621081783,
+              4.283643242045075
+            ]
+          },
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 36808,
+          "calibration_before": 2.5383521933720345e-09,
+          "calibration_after": 1.119316577069426e-10,
+          "calibration_ratio": 0.04409618885795699
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.9749729743846929,
+        "analytical_entries": 4413699
+      },
+      "runs": [
+        {
+          "method": "nearest_restart",
+          "factor_relative_error": 2.3444621222865817e-05,
+          "inverse_factor_error": 0.1563095506661743,
+          "core_generalized_condition": 1.092337617880342,
+          "inverse_action_relative_errors": {
+            "initial": [
+              0.0005126893344009567,
+              19.134907835864233
+            ],
+            "current": [
+              0.0019816060853368035,
+              9.448726043578041
+            ]
+          }
+        },
+        {
+          "method": "initial_restart",
+          "factor_relative_error": 3.336852441629687e-05,
+          "inverse_factor_error": 0.2196204658850323,
+          "core_generalized_condition": 1.1847259291852854,
+          "inverse_action_relative_errors": {
+            "initial": [
+              0.00016284376897035666,
+              2.3968954149575117
+            ],
+            "current": [
+              0.0032076489455351684,
+              9.45120178100094
+            ]
+          },
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 60850,
+          "calibration_before": 6.304804580841011e-09,
+          "calibration_after": 8.101212299413772e-11,
+          "calibration_ratio": 0.012849267880612303
+        },
+        {
+          "method": "current_restart",
+          "factor_relative_error": 3.596058924355488e-05,
+          "inverse_factor_error": 0.23425078364387522,
+          "core_generalized_condition": 1.2071183437614146,
+          "inverse_action_relative_errors": {
+            "initial": [
+              0.0008862436102829507,
+              21.113720253587804
+            ],
+            "current": [
+              0.0018664029595051618,
+              3.98322078475774
+            ]
+          },
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 133449,
+          "calibration_before": 1.8970127685364885e-08,
+          "calibration_after": 8.229137355106425e-10,
+          "calibration_ratio": 0.04337945158616437
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 2.205294424446829,
+        "analytical_entries": 9170451
+      },
+      "runs": [
+        {
+          "method": "nearest_restart",
+          "factor_relative_error": 1.615470333641151e-05,
+          "inverse_factor_error": 0.12827619083603278,
+          "core_generalized_condition": 1.1028455858356718,
+          "inverse_action_relative_errors": {
+            "initial": [
+              0.00036202006943831437,
+              11.55249612580529
+            ],
+            "current": [
+              0.0005088723299871384,
+              19.836184385439314
+            ]
+          }
+        },
+        {
+          "method": "initial_restart",
+          "factor_relative_error": 2.2292027660373987e-05,
+          "inverse_factor_error": 0.1753166749660394,
+          "core_generalized_condition": 1.171932158923413,
+          "inverse_action_relative_errors": {
+            "initial": [
+              9.419127693032713e-05,
+              3.166785791357094
+            ],
+            "current": [
+              0.000617217744559857,
+              31.966245901518842
+            ]
+          },
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 41285,
+          "calibration_before": 7.277628819814836e-10,
+          "calibration_after": 2.2708380083361786e-11,
+          "calibration_ratio": 0.031202992960473012
+        },
+        {
+          "method": "current_restart",
+          "factor_relative_error": 2.3063710645535625e-05,
+          "inverse_factor_error": 0.18340661639919886,
+          "core_generalized_condition": 1.2086623570349129,
+          "inverse_action_relative_errors": {
+            "initial": [
+              0.0004859716959943914,
+              15.996122034429735
+            ],
+            "current": [
+              0.0002473620169644992,
+              4.365224958516169
+            ]
+          },
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 54317,
+          "calibration_before": 3.0509044361255524e-09,
+          "calibration_after": 1.119519967946711e-10,
+          "calibration_ratio": 0.03669469140660556
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 3.029929140000604,
+  "elapsed_cpu_seconds": 2.9178992
+}

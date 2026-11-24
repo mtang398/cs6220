@@ -1,0 +1,144 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\title{Selecting coupling modes during PCG: a diagnostic}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-2em}
+
+Can the current residual guide a fixed-rank preconditioner update without
+mixing error back into directions already resolved by preconditioned conjugate
+gradients (PCG)? A global
+Nystr\"om column replacement generally changes the preconditioned eigenvectors.
+Scaled off-diagonal compression offers a different possibility: in an exact
+two-block model, changing which singular modes are retained preserves a common
+eigenvector basis. The hypothesis was that preserving this structure could make
+adaptation useful in a hierarchical preconditioner. The experiment below tests
+the selection rule in the exact two-block setting.
+
+\textbf{Positive definite compression.}
+Let $A=K+\lambda I$ with $K$ positive semidefinite and $\lambda>0$.
+Let $A_{\mathrm{old}}$ be the symmetric positive definite (SPD) approximation
+entering a compression level. Factor its diagonal blocks as
+$(A_{\mathrm{old}})_{ii}=L_iL_i^\top$, and define
+\[
+  L=\operatorname{diag}(L_i),\qquad
+  B=L^{-1}A_{\mathrm{old}}L^{-\top},\qquad
+  P=\operatorname{diag}(V_iV_i^\top),\quad V_i^\top V_i=I.
+\]
+The scaling-and-compression construction described by Xing, Huang, and
+Chow~\cite{xing2021} can be written as
+\begin{equation}
+  M=L\bigl[PBP+(I-P)\bigr]L^\top.                 \label{eq:spd}
+\end{equation}
+It retains the diagonal blocks and projects the scaled couplings. For nonzero
+$w$, the middle matrix has quadratic form
+$(Pw)^\top B(Pw)+\|(I-P)w\|_2^2>0$, so $M$ is SPD.
+At successive levels, both the scaling and the compressed couplings must come
+from the preceding SPD approximation. Replacing its couplings with blocks of
+the original matrix does not inherit this argument.
+
+\textbf{A common basis for changing the retained modes.}
+For one partition of the original matrix, take exact diagonal-block factors.
+Then
+\[
+ B=L^{-1}AL^{-\top}=
+ \begin{bmatrix}I&T\\T^\top&I\end{bmatrix},\qquad
+ T=U\Sigma V^\top,\qquad 0\leq\sigma_j<1.
+\]
+For a set $R$ of retained mode pairs, use
+$P_R=\operatorname{diag}(U_RU_R^\top,V_RV_R^\top)$ in~\eqref{eq:spd}.
+The resulting scaled matrix $B_R$ has eigenvectors
+$w_j^{\pm}=2^{-1/2}(u_j,\pm v_j)^\top$.
+Its eigenvalues are $1\pm\sigma_j$ for $j\in R$ and $1$ for omitted modes.
+Thus every $B_R$ commutes with $B$: selection changes eigenvalues within the
+same basis. In exact arithmetic, a residual component that is zero in this
+basis remains zero after changing $R$ and restarting PCG. This does not preserve
+the previous Krylov polynomial or establish a multistep convergence improvement.
+Approximate bases and recursive compression can also destroy commutation.
+
+\textbf{A residual-dependent selection criterion.}
+At the current iterate, let $r=b-Ax$, $q=L^{-1}r$, and partition $q=(q_1,q_2)$.
+Write $a_j=u_j^\top q_1$ and $b_j=v_j^\top q_2$. The contribution of an omitted
+mode pair to the squared energy error in the inverse action is
+\begin{equation}
+ \eta_j=\frac{\sigma_j^2}{2}
+ \left[\frac{(a_j+b_j)^2}{1+\sigma_j}
+       +\frac{(a_j-b_j)^2}{1-\sigma_j}\right],\qquad
+ \|M_R^{-1}r-A^{-1}r\|_A^2=\sum_{j\notin R}\eta_j, \label{eq:eta}
+\end{equation}
+where $\|z\|_A^2=z^\top Az$. This identity follows by resolving $q$ along
+$w_j^+$ and $w_j^-$. At a single partition each mode pair has the same storage
+cost, so retaining the $k$ largest $\eta_j$ minimizes this inverse-action error
+over all size-$k$ subsets. The score is computable from $r$ and the coupling
+SVD; it does not require the solution $A^{-1}b$.
+
+\textbf{Diagnostic.}
+The partition used a stable median split along the training feature with largest
+range, exact diagonal-block factors, and $k\in\{16,32\}$ retained mode pairs.
+The cases were synthetic smooth/random targets, Concrete, and Airfoil, with
+seed 0 and $\lambda\in\{10^{-3},10^{-5}\}$. PCG began with the $k$ largest
+singular values retained. Five branches compared uninterrupted static PCG,
+unchanged-preconditioner restart at iteration 8, a complete subset replacement
+by~\eqref{eq:eta} at iteration 8 followed by a frozen preconditioner, static
+restarts at iterations 8/16/24, and subset replacements at those three iterations.
+Branches shared the same prefix and used the directly checked original-system
+tolerance $\|b-Ax\|_2/\|b\|_2\leq10^{-8}$. PCG ran in the common orthogonal
+mode basis. Spectral products, original-matrix verification products, and dense
+mappings for the original residual norm were counted separately.
+
+\textbf{Observed outcome.}
+All 80 solves reached the tolerance. One subset replacement required more
+iterations than its matched static restart in all 16 comparisons; periodic
+replacement lost 15 of 16. Its sole win was the smooth case at
+$\lambda=10^{-3}$ and $k=32$: 28 versus 34 iterations. Yet all 64 adaptive
+checkpoints reduced the exact squared inverse-action error by at least $80.2\%$.
+An independent dense check gave relative error $6.96\times10^{-15}$ for
+\eqref{eq:eta}, normalized commutator $1.97\times10^{-16}$, and a successful
+Cholesky SPD check. The complete run used 4.88 CPU seconds; its raw record is
+\texttt{results/two-block-oracle-diagnostic.json}.
+
+Noncommutation is therefore unnecessary for this criterion to fail. An exactly
+absent component stays absent, but a small component along a difficult mode is
+not eliminated. Dropping that mode's correction can harm subsequent convergence
+despite reducing current inverse-action error. These results retire selection
+by~\eqref{eq:eta} and do not support proceeding to a hierarchical implementation.
+
+\textbf{Resources and scope.}
+The two exact diagonal factors require quadratic storage; the full
+candidate SVD, residual-mapping caches, and dense kernel matrix are additional
+resources, recorded separately from selection and solve work. Here $k$
+counts singular mode pairs, not retained actual kernel columns. The experiment
+therefore establishes neither an $O(nk)$ implementation nor an advantage at
+the original column budget. For a hierarchy, node sizes, transfer matrices,
+and candidate storage also prevent a fixed sum of ranks from being a fixed
+memory budget.
+
+Solution-dependent hierarchical refinement is already established: Bauer and
+Bebendorf's block-adaptive cross approximation improves selected blocks using
+the current approximate solution~\cite{bauer2019}. The present negative result
+concerns replacing coupling modes at fixed capacity using~\eqref{eq:eta}; it
+does not establish that all hierarchical adaptation fails. Any subsequent
+mechanism still requires comparison with static allocation and total resource
+accounting across the project's synthetic and real workloads.
+
+\begin{thebibliography}{2}
+\small
+\bibitem{xing2021}
+X. Xing, H. Huang, and E. Chow.
+\emph{Efficient Construction of an HSS Preconditioner for Symmetric Positive
+Definite $H^2$ Matrices}. SIAM J. Matrix Anal. Appl., 2021.
+\href{https://doi.org/10.1137/20M1365776}{doi:10.1137/20M1365776}.
+
+\bibitem{bauer2019}
+M. Bauer and M. Bebendorf.
+\emph{Block-adaptive Cross Approximation of Discrete Integral Operators}, 2019.
+\href{https://arxiv.org/abs/1905.01918}{arXiv:1905.01918}.
+\end{thebibliography}
+\end{document}

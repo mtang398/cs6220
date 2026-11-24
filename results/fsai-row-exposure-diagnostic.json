@@ -1,0 +1,1969 @@
+{
+  "status": "complete",
+  "purpose": "Offline row-allocation mechanism test, no production timing claim",
+  "protocol": {
+    "row_budget": 8,
+    "updated_rows": 8,
+    "new_neighbors": 4,
+    "checkpoint": 8,
+    "within_row_selection": "maximum logdet gain, independent of RHS",
+    "static_row_score": "available positive logdet gain",
+    "exposed_row_score": "(Gq)_i**2 times available positive logdet gain",
+    "candidate_pool": "same four nearest earlier outside neighbors and every drop-one old neighbor",
+    "candidate_cache": "regenerated once per case and shared by both rules",
+    "extra_schur_matvecs_for_selection": 0,
+    "blas_threads": 1,
+    "cpu_budget_seconds": 54
+  },
+  "source_sha256": {
+    "scripts/check_fsai_row_exposure.py": "11f3ea4410cf3122923e19e16b5e4c55c5b883b76e9b8b2bf71cc22ccbc42b17",
+    "scripts/check_fsai_pattern_exchange.py": "a3236571cd3e1ffce281d2a2d915099fbf749c582e535402dae1e1fa02068d8c",
+    "scripts/check_schur_fsai.py": "79a0e88ee4130901e9cb926c1450f6d6c65dc1b63a05b97a4dc0768d50c4e69c",
+    "scripts/check_projected_balancing.py": "e50b2c628939e456a05b6565d1a18b5da17676d56205b27bdb04d8cf0f5c7e28"
+  },
+  "previous_results": {
+    "path": "results/fsai-pattern-exchange-diagnostic.json",
+    "sha256": "74450037d5a7d0b79c466474a1d1e5cbfa54e7d432c665ccdde44367f2dc64ee"
+  },
+  "cases": [
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "rank": 16,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 190,
+          "converged": true,
+          "true_relative_residual": 7.200419826465644e-09,
+          "residual_replacements": 0,
+          "operator_applications": 201,
+          "breakdown": null,
+          "method": "static_determinant",
+          "total_iterations": 198,
+          "selection": {
+            "changes": [
+              {
+                "row": 386,
+                "added": 142,
+                "removed": 98,
+                "determinant_gain": 0.7606401343279976,
+                "exposure": 0.10618586930345217,
+                "allocation_score": 0.7606401343279976
+              },
+              {
+                "row": 401,
+                "added": 316,
+                "removed": 262,
+                "determinant_gain": 0.6785519813710853,
+                "exposure": 1.792445420257717,
+                "allocation_score": 0.6785519813710853
+              },
+              {
+                "row": 149,
+                "added": 89,
+                "removed": 13,
+                "determinant_gain": 0.6717014069494951,
+                "exposure": 3.482401022414435,
+                "allocation_score": 0.6717014069494951
+              },
+              {
+                "row": 434,
+                "added": 163,
+                "removed": 121,
+                "determinant_gain": 0.664609734916853,
+                "exposure": 1.5734095175271912,
+                "allocation_score": 0.664609734916853
+              },
+              {
+                "row": 231,
+                "added": 193,
+                "removed": 59,
+                "determinant_gain": 0.6381154886489981,
+                "exposure": 0.8112893144617118,
+                "allocation_score": 0.6381154886489981
+              },
+              {
+                "row": 121,
+                "added": 60,
+                "removed": 112,
+                "determinant_gain": 0.5925436906620994,
+                "exposure": 0.7464649962465357,
+                "allocation_score": 0.5925436906620994
+              },
+              {
+                "row": 472,
+                "added": 13,
+                "removed": 209,
+                "determinant_gain": 0.5820164074242601,
+                "exposure": 8.742406953958328,
+                "allocation_score": 0.5820164074242601
+              },
+              {
+                "row": 344,
+                "added": 325,
+                "removed": 172,
+                "determinant_gain": 0.5810941364808715,
+                "exposure": 0.21898586145456173,
+                "allocation_score": 0.5810941364808715
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 5.169272980781661
+          },
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        },
+        {
+          "iterations": 184,
+          "converged": true,
+          "true_relative_residual": 9.687369873603282e-09,
+          "residual_replacements": 0,
+          "operator_applications": 195,
+          "breakdown": null,
+          "method": "residual_exposure",
+          "total_iterations": 192,
+          "selection": {
+            "changes": [
+              {
+                "row": 367,
+                "added": 303,
+                "removed": 115,
+                "determinant_gain": 0.4469006103818005,
+                "exposure": 18.92867771142832,
+                "allocation_score": 8.4592376229577
+              },
+              {
+                "row": 175,
+                "added": 37,
+                "removed": 157,
+                "determinant_gain": 0.4748512305346013,
+                "exposure": 11.525734356706876,
+                "allocation_score": 5.473009142097191
+              },
+              {
+                "row": 323,
+                "added": 223,
+                "removed": 270,
+                "determinant_gain": 0.3144739209660654,
+                "exposure": 16.258505329396385,
+                "allocation_score": 5.112875919982952
+              },
+              {
+                "row": 472,
+                "added": 13,
+                "removed": 209,
+                "determinant_gain": 0.5820164074242601,
+                "exposure": 8.742406953958328,
+                "allocation_score": 5.088224287583695
+              },
+              {
+                "row": 312,
+                "added": 37,
+                "removed": 250,
+                "determinant_gain": 0.38439766203503367,
+                "exposure": 10.830659854485736,
+                "allocation_score": 4.163280326361015
+              },
+              {
+                "row": 37,
+                "added": 19,
+                "removed": 22,
+                "determinant_gain": 0.32090291755083383,
+                "exposure": 11.716119526245375,
+                "allocation_score": 3.759736938346434
+              },
+              {
+                "row": 288,
+                "added": 199,
+                "removed": 145,
+                "determinant_gain": 0.20860075576007445,
+                "exposure": 16.584533278061954,
+                "allocation_score": 3.4595461757318287
+              },
+              {
+                "row": 476,
+                "added": 209,
+                "removed": 46,
+                "determinant_gain": 0.4979135289744287,
+                "exposure": 6.569655329095415,
+                "allocation_score": 3.27112026905556
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 3.230057033627098
+          },
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 149,
+        "converged": true,
+        "true_relative_residual": 5.265274710835817e-09,
+        "residual_replacements": 0,
+        "operator_applications": 157,
+        "breakdown": null,
+        "retained_state_bytes": 133376
+      },
+      "static_uninterrupted": {
+        "iterations": 196,
+        "converged": true,
+        "true_relative_residual": 9.635296547741095e-09,
+        "residual_replacements": 0,
+        "operator_applications": 206,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 3940,
+        "minimum_positive_diagonal": 3.2950194040288148,
+        "maximum_row_D_energy_normalization_error": 1.021405182655144e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 49268,
+        "retained_state_bytes": 118900,
+        "byte_ratio_to_fixed_rp": 0.8914647312859885,
+        "iteration_ratio_to_fixed_rp": 1.3154362416107384
+      },
+      "matched_restart": {
+        "iterations": 190,
+        "converged": true,
+        "true_relative_residual": 7.628572568834466e-09,
+        "residual_replacements": 0,
+        "operator_applications": 201,
+        "breakdown": null,
+        "method": "matched_restart",
+        "total_iterations": 198,
+        "retained_state_bytes": 118900,
+        "selection": null,
+        "helper_final_check_products_not_in_legacy_counter": 1
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 0.405200609017047,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 0.405200609017047,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 3940,
+        "minimum_positive_diagonal": 3.2950194040288148,
+        "maximum_row_D_energy_normalization_error": 1.021405182655144e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 49268
+      },
+      "retained_state_bytes": 118900,
+      "candidate_pool": {
+        "canonical_candidates_solved": 13622,
+        "positive_potential_rows": 483
+      },
+      "shared_candidate_pool_dense_seconds": 0.5928378980024718,
+      "q_and_exposure_storage_bytes": 7936,
+      "static_control_iteration_difference_from_previous": 0
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "rank": 32,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 104,
+          "converged": true,
+          "true_relative_residual": 9.201844612516431e-09,
+          "residual_replacements": 0,
+          "operator_applications": 111,
+          "breakdown": null,
+          "method": "static_determinant",
+          "total_iterations": 112,
+          "selection": {
+            "changes": [
+              {
+                "row": 456,
+                "added": 12,
+                "removed": 202,
+                "determinant_gain": 0.485308033036545,
+                "exposure": 0.7059810661700874,
+                "allocation_score": 0.485308033036545
+              },
+              {
+                "row": 450,
+                "added": 255,
+                "removed": 229,
+                "determinant_gain": 0.46117511643069137,
+                "exposure": 3.896217439130929,
+                "allocation_score": 0.46117511643069137
+              },
+              {
+                "row": 271,
+                "added": 234,
+                "removed": 148,
+                "determinant_gain": 0.40321612417291713,
+                "exposure": 1.6668307758775431,
+                "allocation_score": 0.40321612417291713
+              },
+              {
+                "row": 460,
+                "added": 317,
+                "removed": 12,
+                "determinant_gain": 0.39192968496857244,
+                "exposure": 1.499610353254007,
+                "allocation_score": 0.39192968496857244
+              },
+              {
+                "row": 199,
+                "added": 163,
+                "removed": 149,
+                "determinant_gain": 0.3771069130936267,
+                "exposure": 0.2767863905768919,
+                "allocation_score": 0.3771069130936267
+              },
+              {
+                "row": 143,
+                "added": 86,
+                "removed": 12,
+                "determinant_gain": 0.37475419607177757,
+                "exposure": 11.22133589903508,
+                "allocation_score": 0.37475419607177757
+              },
+              {
+                "row": 421,
+                "added": 69,
+                "removed": 62,
+                "determinant_gain": 0.36660738365590134,
+                "exposure": 0.01195605059704575,
+                "allocation_score": 0.36660738365590134
+              },
+              {
+                "row": 425,
+                "added": 303,
+                "removed": 104,
+                "determinant_gain": 0.3636345004815862,
+                "exposure": 0.5514825837614823,
+                "allocation_score": 0.3636345004815862
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3812,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 3.223731951911618
+          },
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        },
+        {
+          "iterations": 106,
+          "converged": true,
+          "true_relative_residual": 8.745689761899942e-09,
+          "residual_replacements": 0,
+          "operator_applications": 113,
+          "breakdown": null,
+          "method": "residual_exposure",
+          "total_iterations": 114,
+          "selection": {
+            "changes": [
+              {
+                "row": 143,
+                "added": 86,
+                "removed": 12,
+                "determinant_gain": 0.37475419607177757,
+                "exposure": 11.22133589903508,
+                "allocation_score": 4.205242713694269
+              },
+              {
+                "row": 210,
+                "added": 188,
+                "removed": 29,
+                "determinant_gain": 0.2554563901819711,
+                "exposure": 10.654713903807064,
+                "allocation_score": 2.7218147522882097
+              },
+              {
+                "row": 450,
+                "added": 255,
+                "removed": 229,
+                "determinant_gain": 0.46117511643069137,
+                "exposure": 3.896217439130929,
+                "allocation_score": 1.7968385311304964
+              },
+              {
+                "row": 107,
+                "added": 24,
+                "removed": 106,
+                "determinant_gain": 0.2415307463945553,
+                "exposure": 7.314920379425901,
+                "allocation_score": 1.7667781790594816
+              },
+              {
+                "row": 222,
+                "added": 186,
+                "removed": 57,
+                "determinant_gain": 0.36234323406076163,
+                "exposure": 4.25215134980766,
+                "allocation_score": 1.5407382718051403
+              },
+              {
+                "row": 204,
+                "added": 123,
+                "removed": 176,
+                "determinant_gain": 0.15328267378389213,
+                "exposure": 8.254045393473845,
+                "allocation_score": 1.265202147445289
+              },
+              {
+                "row": 384,
+                "added": 60,
+                "removed": 310,
+                "determinant_gain": 0.2559710563990339,
+                "exposure": 4.830099984650364,
+                "allocation_score": 1.236365795583911
+              },
+              {
+                "row": 403,
+                "added": 42,
+                "removed": 363,
+                "determinant_gain": 0.1460356396071931,
+                "exposure": 8.151703982341399,
+                "allocation_score": 1.1904393049497293
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3812,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 2.250549052929876
+          },
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 84,
+        "converged": true,
+        "true_relative_residual": 8.053158961917197e-09,
+        "residual_replacements": 0,
+        "operator_applications": 89,
+        "breakdown": null,
+        "retained_state_bytes": 270848
+      },
+      "static_uninterrupted": {
+        "iterations": 113,
+        "converged": true,
+        "true_relative_residual": 6.137272822171968e-09,
+        "residual_replacements": 0,
+        "operator_applications": 119,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 3812,
+        "minimum_positive_diagonal": 4.385609281356556,
+        "maximum_row_D_energy_normalization_error": 2.7755575615628914e-15,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 47668,
+        "retained_state_bytes": 182836,
+        "byte_ratio_to_fixed_rp": 0.6750502126654064,
+        "iteration_ratio_to_fixed_rp": 1.3452380952380953
+      },
+      "matched_restart": {
+        "iterations": 105,
+        "converged": true,
+        "true_relative_residual": 8.65599543266715e-09,
+        "residual_replacements": 0,
+        "operator_applications": 112,
+        "breakdown": null,
+        "method": "matched_restart",
+        "total_iterations": 113,
+        "retained_state_bytes": 182836,
+        "selection": null,
+        "helper_final_check_products_not_in_legacy_counter": 1
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 0.22158910684684935,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 0.22158910684684935,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 3812,
+        "minimum_positive_diagonal": 4.385609281356556,
+        "maximum_row_D_energy_normalization_error": 2.7755575615628914e-15,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 47668
+      },
+      "retained_state_bytes": 182836,
+      "candidate_pool": {
+        "canonical_candidates_solved": 13174,
+        "positive_potential_rows": 466
+      },
+      "shared_candidate_pool_dense_seconds": 0.5870084099879023,
+      "q_and_exposure_storage_bytes": 7680,
+      "static_control_iteration_difference_from_previous": 0
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "rank": 16,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 1168,
+          "converged": true,
+          "true_relative_residual": 9.481303173779e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1228,
+          "breakdown": null,
+          "method": "static_determinant",
+          "total_iterations": 1176,
+          "selection": {
+            "changes": [
+              {
+                "row": 93,
+                "added": 32,
+                "removed": 0,
+                "determinant_gain": 1.5664566710203507,
+                "exposure": 0.03442741063839781,
+                "allocation_score": 1.5664566710203507
+              },
+              {
+                "row": 408,
+                "added": 226,
+                "removed": 378,
+                "determinant_gain": 1.484198553781215,
+                "exposure": 2.0491310539993823,
+                "allocation_score": 1.484198553781215
+              },
+              {
+                "row": 401,
+                "added": 316,
+                "removed": 262,
+                "determinant_gain": 1.3125362677549917,
+                "exposure": 105.76193253319964,
+                "allocation_score": 1.3125362677549917
+              },
+              {
+                "row": 280,
+                "added": 243,
+                "removed": 128,
+                "determinant_gain": 1.2649729336757372,
+                "exposure": 0.06411128040460193,
+                "allocation_score": 1.2649729336757372
+              },
+              {
+                "row": 313,
+                "added": 158,
+                "removed": 191,
+                "determinant_gain": 1.2424365957805732,
+                "exposure": 0.19106084472656723,
+                "allocation_score": 1.2424365957805732
+              },
+              {
+                "row": 211,
+                "added": 157,
+                "removed": 63,
+                "determinant_gain": 1.215047820709847,
+                "exposure": 112.33674687355314,
+                "allocation_score": 1.215047820709847
+              },
+              {
+                "row": 371,
+                "added": 177,
+                "removed": 276,
+                "determinant_gain": 1.2087238655816699,
+                "exposure": 9.280755420013042,
+                "allocation_score": 1.2087238655816699
+              },
+              {
+                "row": 386,
+                "added": 142,
+                "removed": 93,
+                "determinant_gain": 1.1216895451953586,
+                "exposure": 0.09888934023767841,
+                "allocation_score": 1.1216895451953586
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 10.416062253499744
+          },
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        },
+        {
+          "iterations": 1166,
+          "converged": true,
+          "true_relative_residual": 7.585245727155208e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1226,
+          "breakdown": null,
+          "method": "residual_exposure",
+          "total_iterations": 1174,
+          "selection": {
+            "changes": [
+              {
+                "row": 366,
+                "added": 309,
+                "removed": 61,
+                "determinant_gain": 0.8421427638639765,
+                "exposure": 385.2587985721166,
+                "allocation_score": 324.44290943243726
+              },
+              {
+                "row": 378,
+                "added": 196,
+                "removed": 322,
+                "determinant_gain": 0.6250517686630958,
+                "exposure": 403.54920211448405,
+                "allocation_score": 252.23914252423936
+              },
+              {
+                "row": 231,
+                "added": 196,
+                "removed": 59,
+                "determinant_gain": 0.9844844336494682,
+                "exposure": 238.93486186219937,
+                "allocation_score": 235.22765215952128
+              },
+              {
+                "row": 454,
+                "added": 341,
+                "removed": 259,
+                "determinant_gain": 0.7935135040392627,
+                "exposure": 283.8519584919601,
+                "allocation_score": 225.2403622113626
+              },
+              {
+                "row": 445,
+                "added": 222,
+                "removed": 237,
+                "determinant_gain": 0.608340723351475,
+                "exposure": 341.7015701200675,
+                "allocation_score": 207.87098033717663
+              },
+              {
+                "row": 359,
+                "added": 224,
+                "removed": 206,
+                "determinant_gain": 0.4465562434596309,
+                "exposure": 454.4475953068297,
+                "allocation_score": 202.93641100948048
+              },
+              {
+                "row": 77,
+                "added": 59,
+                "removed": 52,
+                "determinant_gain": 0.6142893641009127,
+                "exposure": 275.50250201699316,
+                "allocation_score": 169.23825677222916
+              },
+              {
+                "row": 441,
+                "added": 313,
+                "removed": 204,
+                "determinant_gain": 0.9613742736667114,
+                "exposure": 159.84574598696125,
+                "allocation_score": 153.6715879469285
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 5.875753074794533
+          },
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 1311,
+        "converged": true,
+        "true_relative_residual": 9.517715955598278e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1377,
+        "breakdown": null,
+        "retained_state_bytes": 133376
+      },
+      "static_uninterrupted": {
+        "iterations": 1244,
+        "converged": true,
+        "true_relative_residual": 7.355028178098576e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1307,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 3940,
+        "minimum_positive_diagonal": 3.3497545073533526,
+        "maximum_row_D_energy_normalization_error": 5.795364188543317e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 49268,
+        "retained_state_bytes": 118900,
+        "byte_ratio_to_fixed_rp": 0.8914647312859885,
+        "iteration_ratio_to_fixed_rp": 0.9488939740655988
+      },
+      "matched_restart": {
+        "iterations": 1207,
+        "converged": true,
+        "true_relative_residual": 9.585693500555128e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1269,
+        "breakdown": null,
+        "method": "matched_restart",
+        "total_iterations": 1215,
+        "retained_state_bytes": 118900,
+        "selection": null,
+        "helper_final_check_products_not_in_legacy_counter": 1
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 1.4147086755252374,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 1.4147086755252374,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 3940,
+        "minimum_positive_diagonal": 3.3497545073533526,
+        "maximum_row_D_energy_normalization_error": 5.795364188543317e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 49268
+      },
+      "retained_state_bytes": 118900,
+      "candidate_pool": {
+        "canonical_candidates_solved": 13622,
+        "positive_potential_rows": 483
+      },
+      "shared_candidate_pool_dense_seconds": 0.6078105950145982,
+      "q_and_exposure_storage_bytes": 7936,
+      "static_control_iteration_difference_from_previous": 0
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "rank": 32,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 639,
+          "converged": true,
+          "true_relative_residual": 6.667718543344317e-09,
+          "residual_replacements": 0,
+          "operator_applications": 672,
+          "breakdown": null,
+          "method": "static_determinant",
+          "total_iterations": 647,
+          "selection": {
+            "changes": [
+              {
+                "row": 271,
+                "added": 234,
+                "removed": 204,
+                "determinant_gain": 1.0938133639477132,
+                "exposure": 5.382004162419948,
+                "allocation_score": 1.0938133639477132
+              },
+              {
+                "row": 463,
+                "added": 400,
+                "removed": 278,
+                "determinant_gain": 0.8109354399796702,
+                "exposure": 36.214210318212956,
+                "allocation_score": 0.8109354399796702
+              },
+              {
+                "row": 226,
+                "added": 161,
+                "removed": 37,
+                "determinant_gain": 0.7690341117713392,
+                "exposure": 23.161973191533153,
+                "allocation_score": 0.7690341117713392
+              },
+              {
+                "row": 111,
+                "added": 108,
+                "removed": 20,
+                "determinant_gain": 0.7674314090572706,
+                "exposure": 9.136795257199552,
+                "allocation_score": 0.7674314090572706
+              },
+              {
+                "row": 204,
+                "added": 149,
+                "removed": 106,
+                "determinant_gain": 0.7611711691288046,
+                "exposure": 0.13819954797733758,
+                "allocation_score": 0.7611711691288046
+              },
+              {
+                "row": 395,
+                "added": 217,
+                "removed": 109,
+                "determinant_gain": 0.7580768562176626,
+                "exposure": 39.11350453859049,
+                "allocation_score": 0.7580768562176626
+              },
+              {
+                "row": 456,
+                "added": 12,
+                "removed": 202,
+                "determinant_gain": 0.7541269075132587,
+                "exposure": 33.18131610931421,
+                "allocation_score": 0.7541269075132587
+              },
+              {
+                "row": 180,
+                "added": 170,
+                "removed": 119,
+                "determinant_gain": 0.7364027045227364,
+                "exposure": 310.8198585671622,
+                "allocation_score": 0.7364027045227364
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3812,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 6.450991962138456
+          },
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        },
+        {
+          "iterations": 643,
+          "converged": true,
+          "true_relative_residual": 9.896813438780028e-09,
+          "residual_replacements": 0,
+          "operator_applications": 677,
+          "breakdown": null,
+          "method": "residual_exposure",
+          "total_iterations": 651,
+          "selection": {
+            "changes": [
+              {
+                "row": 329,
+                "added": 282,
+                "removed": 61,
+                "determinant_gain": 0.643400416819862,
+                "exposure": 432.54136037551837,
+                "allocation_score": 278.29729155743865
+              },
+              {
+                "row": 230,
+                "added": 185,
+                "removed": 121,
+                "determinant_gain": 0.5622076194389269,
+                "exposure": 459.8981749885854,
+                "allocation_score": 258.55825814463964
+              },
+              {
+                "row": 180,
+                "added": 170,
+                "removed": 119,
+                "determinant_gain": 0.7364027045227364,
+                "exposure": 310.8198585671622,
+                "allocation_score": 228.88858446823266
+              },
+              {
+                "row": 460,
+                "added": 202,
+                "removed": 239,
+                "determinant_gain": 0.5015039415609995,
+                "exposure": 320.16314416878527,
+                "allocation_score": 160.56307874320837
+              },
+              {
+                "row": 390,
+                "added": 298,
+                "removed": 121,
+                "determinant_gain": 0.2222305035027495,
+                "exposure": 614.7503298049808,
+                "allocation_score": 136.6162753210422
+              },
+              {
+                "row": 120,
+                "added": 91,
+                "removed": 74,
+                "determinant_gain": 0.32455172932653303,
+                "exposure": 397.5975573040459,
+                "allocation_score": 129.04097479903342
+              },
+              {
+                "row": 384,
+                "added": 60,
+                "removed": 312,
+                "determinant_gain": 0.3687795538807481,
+                "exposure": 306.137472149211,
+                "allocation_score": 112.89724040536599
+              },
+              {
+                "row": 447,
+                "added": 304,
+                "removed": 337,
+                "determinant_gain": 0.40987882485584237,
+                "exposure": 244.98161482377535,
+                "allocation_score": 100.41277639525565
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3812,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 3.768955293908398
+          },
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 725,
+        "converged": true,
+        "true_relative_residual": 9.728248735361572e-09,
+        "residual_replacements": 0,
+        "operator_applications": 762,
+        "breakdown": null,
+        "retained_state_bytes": 270848
+      },
+      "static_uninterrupted": {
+        "iterations": 658,
+        "converged": true,
+        "true_relative_residual": 7.066870408085797e-09,
+        "residual_replacements": 0,
+        "operator_applications": 691,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 3812,
+        "minimum_positive_diagonal": 4.5253106278742505,
+        "maximum_row_D_energy_normalization_error": 3.175237850427948e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 47668,
+        "retained_state_bytes": 182836,
+        "byte_ratio_to_fixed_rp": 0.6750502126654064,
+        "iteration_ratio_to_fixed_rp": 0.9075862068965517
+      },
+      "matched_restart": {
+        "iterations": 653,
+        "converged": true,
+        "true_relative_residual": 9.917869876839035e-09,
+        "residual_replacements": 0,
+        "operator_applications": 687,
+        "breakdown": null,
+        "method": "matched_restart",
+        "total_iterations": 661,
+        "retained_state_bytes": 182836,
+        "selection": null,
+        "helper_final_check_products_not_in_legacy_counter": 1
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 0.8739547798045266,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 0.8739547798045266,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 3812,
+        "minimum_positive_diagonal": 4.5253106278742505,
+        "maximum_row_D_energy_normalization_error": 3.175237850427948e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 47668
+      },
+      "retained_state_bytes": 182836,
+      "candidate_pool": {
+        "canonical_candidates_solved": 13174,
+        "positive_potential_rows": 466
+      },
+      "shared_candidate_pool_dense_seconds": 0.5690866340009961,
+      "q_and_exposure_storage_bytes": 7680,
+      "static_control_iteration_difference_from_previous": 0
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "rank": 16,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 225,
+          "converged": true,
+          "true_relative_residual": 7.97976305536689e-09,
+          "residual_replacements": 0,
+          "operator_applications": 238,
+          "breakdown": null,
+          "method": "static_determinant",
+          "total_iterations": 233,
+          "selection": {
+            "changes": [
+              {
+                "row": 510,
+                "added": 360,
+                "removed": 317,
+                "determinant_gain": 0.9130238552273994,
+                "exposure": 1.287960811857389,
+                "allocation_score": 0.9130238552273994
+              },
+              {
+                "row": 100,
+                "added": 60,
+                "removed": 97,
+                "determinant_gain": 0.8880363658949281,
+                "exposure": 30.265297705361196,
+                "allocation_score": 0.8880363658949281
+              },
+              {
+                "row": 612,
+                "added": 574,
+                "removed": 297,
+                "determinant_gain": 0.8687887084012634,
+                "exposure": 6.577129478605457,
+                "allocation_score": 0.8687887084012634
+              },
+              {
+                "row": 204,
+                "added": 193,
+                "removed": 1,
+                "determinant_gain": 0.7843255965119447,
+                "exposure": 75.49323306131294,
+                "allocation_score": 0.7843255965119447
+              },
+              {
+                "row": 668,
+                "added": 110,
+                "removed": 579,
+                "determinant_gain": 0.7671466809984783,
+                "exposure": 16.543436410263173,
+                "allocation_score": 0.7671466809984783
+              },
+              {
+                "row": 663,
+                "added": 122,
+                "removed": 566,
+                "determinant_gain": 0.7038409696067365,
+                "exposure": 4.178713717385379,
+                "allocation_score": 0.7038409696067365
+              },
+              {
+                "row": 312,
+                "added": 208,
+                "removed": 293,
+                "determinant_gain": 0.6972497569210178,
+                "exposure": 31.317334413859975,
+                "allocation_score": 0.6972497569210178
+              },
+              {
+                "row": 149,
+                "added": 7,
+                "removed": 28,
+                "determinant_gain": 0.6745959773817405,
+                "exposure": 37.966450280265285,
+                "allocation_score": 0.6745959773817405
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6436,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 6.297007910943509
+          },
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        },
+        {
+          "iterations": 227,
+          "converged": true,
+          "true_relative_residual": 8.459810231248157e-09,
+          "residual_replacements": 0,
+          "operator_applications": 240,
+          "breakdown": null,
+          "method": "residual_exposure",
+          "total_iterations": 235,
+          "selection": {
+            "changes": [
+              {
+                "row": 204,
+                "added": 193,
+                "removed": 1,
+                "determinant_gain": 0.7843255965119447,
+                "exposure": 75.49323306131294,
+                "allocation_score": 59.21127505342953
+              },
+              {
+                "row": 400,
+                "added": 184,
+                "removed": 373,
+                "determinant_gain": 0.6140032893842575,
+                "exposure": 63.78393868866209,
+                "allocation_score": 39.16354816472233
+              },
+              {
+                "row": 100,
+                "added": 60,
+                "removed": 97,
+                "determinant_gain": 0.8880363658949281,
+                "exposure": 30.265297705361196,
+                "allocation_score": 26.876684986997063
+              },
+              {
+                "row": 690,
+                "added": 340,
+                "removed": 628,
+                "determinant_gain": 0.283098625173661,
+                "exposure": 92.82789285569471,
+                "allocation_score": 26.279448845215082
+              },
+              {
+                "row": 149,
+                "added": 7,
+                "removed": 28,
+                "determinant_gain": 0.6745959773817405,
+                "exposure": 37.966450280265285,
+                "allocation_score": 25.612014634530816
+              },
+              {
+                "row": 312,
+                "added": 208,
+                "removed": 293,
+                "determinant_gain": 0.6972497569210178,
+                "exposure": 31.317334413859975,
+                "allocation_score": 21.836003807478093
+              },
+              {
+                "row": 154,
+                "added": 92,
+                "removed": 134,
+                "determinant_gain": 0.3458792480738157,
+                "exposure": 55.24937325040412,
+                "allocation_score": 19.109611676399364
+              },
+              {
+                "row": 603,
+                "added": 397,
+                "removed": 366,
+                "determinant_gain": 0.24648798965687918,
+                "exposure": 73.70602141233546,
+                "allocation_score": 18.16764904353346
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6436,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 4.533676848998244
+          },
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 291,
+        "converged": true,
+        "true_relative_residual": 6.329996164346407e-09,
+        "residual_replacements": 0,
+        "operator_applications": 306,
+        "breakdown": null,
+        "retained_state_bytes": 213248
+      },
+      "static_uninterrupted": {
+        "iterations": 236,
+        "converged": true,
+        "true_relative_residual": 7.2406085358806625e-09,
+        "residual_replacements": 0,
+        "operator_applications": 248,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 6436,
+        "minimum_positive_diagonal": 2.295458620000647,
+        "maximum_row_D_energy_normalization_error": 8.060219158778636e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 80468,
+        "retained_state_bytes": 192532,
+        "byte_ratio_to_fixed_rp": 0.9028548919567827,
+        "iteration_ratio_to_fixed_rp": 0.8109965635738832
+      },
+      "matched_restart": {
+        "iterations": 230,
+        "converged": true,
+        "true_relative_residual": 7.917741620361026e-09,
+        "residual_replacements": 0,
+        "operator_applications": 243,
+        "breakdown": null,
+        "method": "matched_restart",
+        "total_iterations": 238,
+        "retained_state_bytes": 192532,
+        "selection": null,
+        "helper_final_check_products_not_in_legacy_counter": 1
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 0.9919208497570084,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 0.9919208497570084,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 6436,
+        "minimum_positive_diagonal": 2.295458620000647,
+        "maximum_row_D_energy_normalization_error": 8.060219158778636e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 80468
+      },
+      "retained_state_bytes": 192532,
+      "candidate_pool": {
+        "canonical_candidates_solved": 22358,
+        "positive_potential_rows": 778
+      },
+      "shared_candidate_pool_dense_seconds": 0.9860582969849929,
+      "q_and_exposure_storage_bytes": 12928,
+      "static_control_iteration_difference_from_previous": 0
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "rank": 32,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 140,
+          "converged": true,
+          "true_relative_residual": 7.534743587782276e-09,
+          "residual_replacements": 0,
+          "operator_applications": 148,
+          "breakdown": null,
+          "method": "static_determinant",
+          "total_iterations": 148,
+          "selection": {
+            "changes": [
+              {
+                "row": 492,
+                "added": 165,
+                "removed": 31,
+                "determinant_gain": 0.8949845851643068,
+                "exposure": 17.63302877365313,
+                "allocation_score": 0.8949845851643068
+              },
+              {
+                "row": 600,
+                "added": 562,
+                "removed": 290,
+                "determinant_gain": 0.6922716679918992,
+                "exposure": 15.870046642534888,
+                "allocation_score": 0.6922716679918992
+              },
+              {
+                "row": 500,
+                "added": 353,
+                "removed": 175,
+                "determinant_gain": 0.6593227149347343,
+                "exposure": 7.883298098667488,
+                "allocation_score": 0.6593227149347343
+              },
+              {
+                "row": 449,
+                "added": 21,
+                "removed": 284,
+                "determinant_gain": 0.6124298939624279,
+                "exposure": 0.1545933721161093,
+                "allocation_score": 0.6124298939624279
+              },
+              {
+                "row": 785,
+                "added": 52,
+                "removed": 237,
+                "determinant_gain": 0.5223487435297126,
+                "exposure": 6.226315532929036,
+                "allocation_score": 0.5223487435297126
+              },
+              {
+                "row": 655,
+                "added": 108,
+                "removed": 18,
+                "determinant_gain": 0.49162816920436886,
+                "exposure": 2.0409326345673,
+                "allocation_score": 0.49162816920436886
+              },
+              {
+                "row": 82,
+                "added": 14,
+                "removed": 70,
+                "determinant_gain": 0.4695497055805454,
+                "exposure": 6.525414100604311,
+                "allocation_score": 0.4695497055805454
+              },
+              {
+                "row": 195,
+                "added": 13,
+                "removed": 14,
+                "determinant_gain": 0.4239190667080673,
+                "exposure": 1.4146427946287685,
+                "allocation_score": 0.4239190667080673
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 4.766454547076062
+          },
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        },
+        {
+          "iterations": 144,
+          "converged": true,
+          "true_relative_residual": 7.3851789527191515e-09,
+          "residual_replacements": 0,
+          "operator_applications": 153,
+          "breakdown": null,
+          "method": "residual_exposure",
+          "total_iterations": 152,
+          "selection": {
+            "changes": [
+              {
+                "row": 492,
+                "added": 165,
+                "removed": 31,
+                "determinant_gain": 0.8949845851643068,
+                "exposure": 17.63302877365313,
+                "allocation_score": 15.781288942178232
+              },
+              {
+                "row": 600,
+                "added": 562,
+                "removed": 290,
+                "determinant_gain": 0.6922716679918992,
+                "exposure": 15.870046642534888,
+                "allocation_score": 10.986383660336866
+              },
+              {
+                "row": 607,
+                "added": 11,
+                "removed": 578,
+                "determinant_gain": 0.33568310383603217,
+                "exposure": 21.559827514972515,
+                "allocation_score": 7.237269818395462
+              },
+              {
+                "row": 242,
+                "added": 28,
+                "removed": 159,
+                "determinant_gain": 0.17421778350237807,
+                "exposure": 35.25280407406589,
+                "allocation_score": 6.141665388027363
+              },
+              {
+                "row": 500,
+                "added": 353,
+                "removed": 175,
+                "determinant_gain": 0.6593227149347343,
+                "exposure": 7.883298098667488,
+                "allocation_score": 5.197637505053277
+              },
+              {
+                "row": 146,
+                "added": 7,
+                "removed": 95,
+                "determinant_gain": 0.3639033753131829,
+                "exposure": 14.220557431998484,
+                "allocation_score": 5.174908848339217
+              },
+              {
+                "row": 60,
+                "added": 46,
+                "removed": 26,
+                "determinant_gain": 0.11446306217708371,
+                "exposure": 31.151015954266786,
+                "allocation_score": 3.5656406760525656
+              },
+              {
+                "row": 641,
+                "added": 391,
+                "removed": 43,
+                "determinant_gain": 0.3422570877718423,
+                "exposure": 10.008908493529413,
+                "allocation_score": 3.4256198727702345
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 3.5771033806914594
+          },
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 179,
+        "converged": true,
+        "true_relative_residual": 9.603724467956966e-09,
+        "residual_replacements": 0,
+        "operator_applications": 188,
+        "breakdown": null,
+        "retained_state_bytes": 430592
+      },
+      "static_uninterrupted": {
+        "iterations": 149,
+        "converged": true,
+        "true_relative_residual": 8.129443574838438e-09,
+        "residual_replacements": 0,
+        "operator_applications": 157,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 6308,
+        "minimum_positive_diagonal": 2.5649212208681442,
+        "maximum_row_D_energy_normalization_error": 2.19824158875781e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 78868,
+        "retained_state_bytes": 296404,
+        "byte_ratio_to_fixed_rp": 0.6883639268727705,
+        "iteration_ratio_to_fixed_rp": 0.8324022346368715
+      },
+      "matched_restart": {
+        "iterations": 143,
+        "converged": true,
+        "true_relative_residual": 9.96299072223845e-09,
+        "residual_replacements": 0,
+        "operator_applications": 152,
+        "breakdown": null,
+        "method": "matched_restart",
+        "total_iterations": 151,
+        "retained_state_bytes": 296404,
+        "selection": null,
+        "helper_final_check_products_not_in_legacy_counter": 1
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 0.45495064859180784,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 0.45495064859180784,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 6308,
+        "minimum_positive_diagonal": 2.5649212208681442,
+        "maximum_row_D_energy_normalization_error": 2.19824158875781e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 78868
+      },
+      "retained_state_bytes": 296404,
+      "candidate_pool": {
+        "canonical_candidates_solved": 21910,
+        "positive_potential_rows": 766
+      },
+      "shared_candidate_pool_dense_seconds": 1.0370561959862243,
+      "q_and_exposure_storage_bytes": 12672,
+      "static_control_iteration_difference_from_previous": 0
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "rank": 16,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 1238,
+          "converged": true,
+          "true_relative_residual": 8.268750365233724e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1301,
+          "breakdown": null,
+          "method": "static_determinant",
+          "total_iterations": 1246,
+          "selection": {
+            "changes": [
+              {
+                "row": 510,
+                "added": 472,
+                "removed": 18,
+                "determinant_gain": 2.1667214932479273,
+                "exposure": 44.64204301421485,
+                "allocation_score": 2.1667214932479273
+              },
+              {
+                "row": 458,
+                "added": 343,
+                "removed": 139,
+                "determinant_gain": 1.7636662457611143,
+                "exposure": 420.56256823047477,
+                "allocation_score": 1.7636662457611143
+              },
+              {
+                "row": 529,
+                "added": 392,
+                "removed": 18,
+                "determinant_gain": 1.6519646005313575,
+                "exposure": 11.713439239839587,
+                "allocation_score": 1.6519646005313575
+              },
+              {
+                "row": 470,
+                "added": 65,
+                "removed": 339,
+                "determinant_gain": 1.4685131578351156,
+                "exposure": 15.167207683754093,
+                "allocation_score": 1.4685131578351156
+              },
+              {
+                "row": 423,
+                "added": 350,
+                "removed": 98,
+                "determinant_gain": 1.437403859386172,
+                "exposure": 0.2204292768170068,
+                "allocation_score": 1.437403859386172
+              },
+              {
+                "row": 555,
+                "added": 388,
+                "removed": 532,
+                "determinant_gain": 1.4232442973845858,
+                "exposure": 767.2725575300174,
+                "allocation_score": 1.4232442973845858
+              },
+              {
+                "row": 512,
+                "added": 323,
+                "removed": 182,
+                "determinant_gain": 1.338473461106359,
+                "exposure": 170.66683588994937,
+                "allocation_score": 1.338473461106359
+              },
+              {
+                "row": 626,
+                "added": 303,
+                "removed": 408,
+                "determinant_gain": 1.336800465953227,
+                "exposure": 0.07540620861719655,
+                "allocation_score": 1.336800465953227
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6436,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 12.586787581205858
+          },
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        },
+        {
+          "iterations": 1212,
+          "converged": true,
+          "true_relative_residual": 9.573652724424741e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1274,
+          "breakdown": null,
+          "method": "residual_exposure",
+          "total_iterations": 1220,
+          "selection": {
+            "changes": [
+              {
+                "row": 448,
+                "added": 182,
+                "removed": 223,
+                "determinant_gain": 1.0980100613867056,
+                "exposure": 1682.305243879744,
+                "allocation_score": 1847.1880841035745
+              },
+              {
+                "row": 690,
+                "added": 340,
+                "removed": 88,
+                "determinant_gain": 0.40508130120295516,
+                "exposure": 3089.700452727025,
+                "allocation_score": 1251.579879718023
+              },
+              {
+                "row": 769,
+                "added": 614,
+                "removed": 636,
+                "determinant_gain": 1.108684618756575,
+                "exposure": 1041.7714951673088,
+                "allocation_score": 1154.996032951035
+              },
+              {
+                "row": 555,
+                "added": 388,
+                "removed": 532,
+                "determinant_gain": 1.4232442973845858,
+                "exposure": 767.2725575300174,
+                "allocation_score": 1092.0162920442838
+              },
+              {
+                "row": 177,
+                "added": 16,
+                "removed": 116,
+                "determinant_gain": 1.0836044556963078,
+                "exposure": 887.4924063995355,
+                "allocation_score": 961.6907259711751
+              },
+              {
+                "row": 554,
+                "added": 180,
+                "removed": 530,
+                "determinant_gain": 0.5405891742124393,
+                "exposure": 1648.4850123629255,
+                "allocation_score": 891.1531515348568
+              },
+              {
+                "row": 458,
+                "added": 343,
+                "removed": 139,
+                "determinant_gain": 1.7636662457611143,
+                "exposure": 420.56256823047477,
+                "allocation_score": 741.7320058186939
+              },
+              {
+                "row": 594,
+                "added": 516,
+                "removed": 67,
+                "determinant_gain": 1.220931950031224,
+                "exposure": 543.0234686800599,
+                "allocation_score": 662.9947025282647
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6436,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 8.643812104431907
+          },
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 2500,
+        "converged": false,
+        "true_relative_residual": 7.8364917778762e-08,
+        "residual_replacements": 0,
+        "operator_applications": 2625,
+        "breakdown": null,
+        "retained_state_bytes": 213248
+      },
+      "static_uninterrupted": {
+        "iterations": 1238,
+        "converged": true,
+        "true_relative_residual": 9.390725096845565e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1300,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 6436,
+        "minimum_positive_diagonal": 2.3203795918224657,
+        "maximum_row_D_energy_normalization_error": 5.7336357883741584e-12,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 80468,
+        "retained_state_bytes": 192532,
+        "byte_ratio_to_fixed_rp": 0.9028548919567827,
+        "iteration_ratio_to_fixed_rp": null
+      },
+      "matched_restart": {
+        "iterations": 1236,
+        "converged": true,
+        "true_relative_residual": 8.350822844303029e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1299,
+        "breakdown": null,
+        "method": "matched_restart",
+        "total_iterations": 1244,
+        "retained_state_bytes": 192532,
+        "selection": null,
+        "helper_final_check_products_not_in_legacy_counter": 1
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 5.742236842213528,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 5.742236842213528,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 6436,
+        "minimum_positive_diagonal": 2.3203795918224657,
+        "maximum_row_D_energy_normalization_error": 5.7336357883741584e-12,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 80468
+      },
+      "retained_state_bytes": 192532,
+      "candidate_pool": {
+        "canonical_candidates_solved": 22358,
+        "positive_potential_rows": 767
+      },
+      "shared_candidate_pool_dense_seconds": 1.004565109993564,
+      "q_and_exposure_storage_bytes": 12928,
+      "static_control_iteration_difference_from_previous": 0
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "rank": 32,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 739,
+          "converged": true,
+          "true_relative_residual": 9.108460528851994e-09,
+          "residual_replacements": 0,
+          "operator_applications": 777,
+          "breakdown": null,
+          "method": "static_determinant",
+          "total_iterations": 747,
+          "selection": {
+            "changes": [
+              {
+                "row": 500,
+                "added": 463,
+                "removed": 17,
+                "determinant_gain": 1.9614945427198673,
+                "exposure": 980.3984260831629,
+                "allocation_score": 1.9614945427198673
+              },
+              {
+                "row": 449,
+                "added": 21,
+                "removed": 301,
+                "determinant_gain": 1.8601241521369423,
+                "exposure": 434.3318205661662,
+                "allocation_score": 1.8601241521369423
+              },
+              {
+                "row": 519,
+                "added": 383,
+                "removed": 17,
+                "determinant_gain": 1.5551800698565361,
+                "exposure": 9.952839019071577,
+                "allocation_score": 1.5551800698565361
+              },
+              {
+                "row": 540,
+                "added": 314,
+                "removed": 499,
+                "determinant_gain": 1.359777420091082,
+                "exposure": 54.8138834955084,
+                "allocation_score": 1.359777420091082
+              },
+              {
+                "row": 600,
+                "added": 562,
+                "removed": 257,
+                "determinant_gain": 1.3567020629018602,
+                "exposure": 253.5009599257808,
+                "allocation_score": 1.3567020629018602
+              },
+              {
+                "row": 614,
+                "added": 296,
+                "removed": 399,
+                "determinant_gain": 1.3035918432072366,
+                "exposure": 1464.7178434487137,
+                "allocation_score": 1.3035918432072366
+              },
+              {
+                "row": 261,
+                "added": 248,
+                "removed": 148,
+                "determinant_gain": 1.2862083550054482,
+                "exposure": 721.4226740840029,
+                "allocation_score": 1.2862083550054482
+              },
+              {
+                "row": 789,
+                "added": 390,
+                "removed": 696,
+                "determinant_gain": 1.2324972290231124,
+                "exposure": 486.44165500788665,
+                "allocation_score": 1.2324972290231124
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 11.915575674942085
+          },
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        },
+        {
+          "iterations": 734,
+          "converged": true,
+          "true_relative_residual": 9.678235033294269e-09,
+          "residual_replacements": 0,
+          "operator_applications": 772,
+          "breakdown": null,
+          "method": "residual_exposure",
+          "total_iterations": 742,
+          "selection": {
+            "changes": [
+              {
+                "row": 500,
+                "added": 463,
+                "removed": 17,
+                "determinant_gain": 1.9614945427198673,
+                "exposure": 980.3984260831629,
+                "allocation_score": 1923.0461624532713
+              },
+              {
+                "row": 614,
+                "added": 296,
+                "removed": 399,
+                "determinant_gain": 1.3035918432072366,
+                "exposure": 1464.7178434487137,
+                "allocation_score": 1909.3942333198374
+              },
+              {
+                "row": 174,
+                "added": 15,
+                "removed": 138,
+                "determinant_gain": 0.8709179967641093,
+                "exposure": 1815.381219512389,
+                "allocation_score": 1581.0481750609156
+              },
+              {
+                "row": 455,
+                "added": 95,
+                "removed": 301,
+                "determinant_gain": 0.4971184543287504,
+                "exposure": 1908.9121923368484,
+                "allocation_score": 948.9554785038004
+              },
+              {
+                "row": 261,
+                "added": 248,
+                "removed": 148,
+                "determinant_gain": 1.2862083550054482,
+                "exposure": 721.4226740840029,
+                "allocation_score": 927.8998708972169
+              },
+              {
+                "row": 242,
+                "added": 28,
+                "removed": 3,
+                "determinant_gain": 0.38292086542176834,
+                "exposure": 2258.367550700685,
+                "allocation_score": 864.7760569547456
+              },
+              {
+                "row": 449,
+                "added": 21,
+                "removed": 301,
+                "determinant_gain": 1.8601241521369423,
+                "exposure": 434.3318205661662,
+                "allocation_score": 807.9111094767344
+              },
+              {
+                "row": 104,
+                "added": 94,
+                "removed": 2,
+                "determinant_gain": 0.545500434764418,
+                "exposure": 1415.6952721665857,
+                "allocation_score": 772.2623864608036
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "positive_factor_diagonal": true,
+            "logdet_H_change": 8.707876644348541
+          },
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 1572,
+        "converged": true,
+        "true_relative_residual": 9.653039307148612e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1651,
+        "breakdown": null,
+        "retained_state_bytes": 430592
+      },
+      "static_uninterrupted": {
+        "iterations": 782,
+        "converged": true,
+        "true_relative_residual": 9.079353632846336e-09,
+        "residual_replacements": 0,
+        "operator_applications": 822,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 6308,
+        "minimum_positive_diagonal": 2.6645906999870226,
+        "maximum_row_D_energy_normalization_error": 2.3208102106764272e-12,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 78868,
+        "retained_state_bytes": 296404,
+        "byte_ratio_to_fixed_rp": 0.6883639268727705,
+        "iteration_ratio_to_fixed_rp": 0.49745547073791346
+      },
+      "matched_restart": {
+        "iterations": 778,
+        "converged": true,
+        "true_relative_residual": 9.632203366225516e-09,
+        "residual_replacements": 0,
+        "operator_applications": 818,
+        "breakdown": null,
+        "method": "matched_restart",
+        "total_iterations": 786,
+        "retained_state_bytes": 296404,
+        "selection": null,
+        "helper_final_check_products_not_in_legacy_counter": 1
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 4.669911371484941,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 4.669911371484941,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 6308,
+        "minimum_positive_diagonal": 2.6645906999870226,
+        "maximum_row_D_energy_normalization_error": 2.3208102106764272e-12,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 78868
+      },
+      "retained_state_bytes": 296404,
+      "candidate_pool": {
+        "canonical_candidates_solved": 21910,
+        "positive_potential_rows": 759
+      },
+      "shared_candidate_pool_dense_seconds": 1.0218580380023923,
+      "q_and_exposure_storage_bytes": 12672,
+      "static_control_iteration_difference_from_previous": 0
+    }
+  ],
+  "cpu_seconds": 8.8606755,
+  "wall_seconds": 9.65237252699444,
+  "offline_peak_rss_kib": 437096
+}

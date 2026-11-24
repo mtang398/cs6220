@@ -1,0 +1,90 @@
+Updating Nyström Preconditioners with Solver Residuals
+
+Research question
+
+Can the current residual guide kernel-column replacements that reduce the total time to reach a prescribed solution accuracy, while keeping the number of retained columns fixed?
+
+Kernel ridge regression requires solving (K + λI)α = y. A Nyström preconditioner represents K using a few kernel columns. Each retained column costs n entries, so a small memory budget limits how many directions the preconditioner can represent. The proposed intervention is to replace columns as the residual changes during the solve. The intended contribution is an inexpensive selection rule that uses the remaining error to decide what to retain. Its success is a better relationship between total solution time and retained-column storage.
+
+The question concerns how to construct a changing preconditioner. Merely comparing existing column selectors, showing that one selector is better on one dataset, or giving a new name to adaptive preconditioning would not answer it. A useful result must connect the selection criterion to subsequent convergence and account for the work needed to make those selections.
+
+Initial mechanism and mathematical meaning
+
+Let K_ij = exp(-||x_i-x_j||²/(2h²)), A = K + λI, λ > 0, and let S contain k selected indices. Define C = K[:,S], W = K[S,S], and M_S = C W† Cᵀ + λI. The symbol † denotes the pseudoinverse. Nyström approximation gives 0 ≼ C W† Cᵀ ≼ K, hence 0 ≺ M_S ≼ A. The ordering B ≼ D means vᵀBv ≤ vᵀDv for every vector v.
+
+Start with randomly pivoted Cholesky (RPCholesky). Reuse its factor to apply the initial preconditioner; do not charge a redundant reconstruction to the fixed RPCholesky baseline. Keep the selected kernel columns for exchanges. Preconditioned conjugate gradients (PCG) operates with one fixed preconditioner within each block of iterations.
+
+At a checkpoint compute the true residual v = y - Aα. For the unselected indices U, sample j with probability v_j² / sum_{i in U} v_i². Stop candidate sampling if the denominator is zero. Evaluate a small number of candidates sequentially. For each candidate, consider all sets S' = (S ∪ {j}) \ {i}, including i = j, which leaves the current set unchanged. Choose the set minimizing q(S';v) = vᵀ M_S'⁻¹ v. Accept only a decrease exceeding a numerical tolerance and preserve the number of retained columns. Restart PCG at the current α after accepted changes. A rejected checkpoint can continue the existing recurrence with the unchanged preconditioner.
+
+If α* = A⁻¹y and e = α* - α, then v = Ae and vᵀA⁻¹v = eᵀAe. Because M_S' ≼ A, q(S';v) ≥ eᵀAe. Thus a smaller score tightens an upper bound on the current solution error in the A-norm. The current solution and its true error do not change when only the preconditioner changes. The proposed link to faster subsequent convergence is a hypothesis, not a consequence of the inequality. This distinction determines the diagnostic experiment.
+
+An efficient way to score all removals
+
+For T = S ∪ {j}, form C_T = K[:,T], W_T = K[T,T], G = C_TᵀC_T, b = C_Tᵀv, and H = W_T + G/λ. For a positive definite W_T, Woodbury and the principal-submatrix inverse identity give
+
+q(T \ {i};v) = ||v||²/λ - [bᵀH⁻¹b - ((H⁻¹b)_i)² / (H⁻¹)_ii] / λ².
+
+One small factorization therefore evaluates every possible removal. Cache G for the retained columns; a new candidate needs its kernel column, its inner products with the retained columns, and b. The initial implementation uses stable factorizations and triangular solves. Its candidate cost is O(nk + k³); factorization updates can reduce the small-matrix cost after the basic algorithm is checked. Do not report the optimized cost for an implementation that refactorizes.
+
+Gaussian kernels on distinct inputs are positive definite in exact arithmetic. Nearly dependent columns still need numerical handling. Reject candidates that cannot be evaluated reliably; verify near-ties with a direct factor-based preconditioner application. If a rank-revealing truncation is needed, evaluate q from the same factor actually used by the solver. The formula above must not be applied blindly with singular H. Use relative tolerances, record rejected candidates, and avoid explicit inverses in the solver.
+
+The score formula subtracts terms that may nearly cancel for small λ. The direct check should compute M⁻¹v using an orthonormal basis for the low-rank factor, separating its span and orthogonal complement. This also provides an independent implementation for checking accepted exchanges.
+
+Retained columns use O(nk) entries. A candidate requires an additional n-vector, and the small matrices require O(k²) workspace. Report these allocations and actual peak memory. The initial implementation can use a dense kernel for algebra checks; performance experiments should use the same blockwise kernel matrix-vector operation for every solver to avoid hiding an n² kernel allocation behind a small-preconditioner memory claim.
+
+Experiment scope
+
+Use one implementation of the original regularized system for all methods. The core data are clustered synthetic inputs, UCI Concrete Compressive Strength, and UCI Airfoil Self-Noise, with at most 2,048 training examples. These sizes support repeated CPU experiments and a dense Cholesky reference. Their purpose is to test the mechanism and its costs; no large-scale performance result is implied by the proposal.
+
+Standardize inputs with training-set statistics, center and scale targets with training-set statistics, and apply the same transformation to held-out examples. Use an 80/20 split and five fixed random seeds. Choose h from the median pairwise training distance, with a sensitivity check on synthetic data. In this document λ refers to the coefficient in K + λI; a loss written as (1/n)||f-y||² + η||f||² uses λ = nη.
+
+Use k in {16, 32, 64} and λ in {10^-1, 10^-3, 10^-5}. Begin with a checkpoint every 20 iterations and four sequential candidates per checkpoint. Study checkpoint intervals {10, 20, 40} and candidate counts {1, 4, 8} on selected representative cases, changing one factor at a time. This avoids an unnecessary full Cartesian product. An iteration cap of 2,000 applies to every solver; record nonconvergence rather than counting an incomplete solve as faster.
+
+For synthetic inputs, keep K fixed while changing y. Include smooth targets, random targets, and mixtures of components from different eigenspaces. An eigendecomposition may construct controlled synthetic targets and offline diagnostics; its eigenvectors must not enter the selection algorithm. This experiment asks whether column updates respond to the particular unresolved system rather than merely improving a global matrix approximation.
+
+Primary comparisons
+
+1. Fixed RPCholesky preconditioning with the same k retained columns and no restarts. Share the initial selected set between this solver and the proposed solver for paired comparisons.
+2. Periodic reconstruction using RPCholesky and the same k, checkpoint schedule, and candidate-independent matrix information. Count every reconstruction and restart. This tests whether informed replacement is better than refreshing the approximation.
+3. Limited-memory BFGS inverse updates as an adaptive preconditioning comparison. Store at most floor(k/2) pairs (s, z), where s is a solution increment and z = As, so pair storage is comparable to k kernel columns. Retain only pairs with positive, numerically reliable sᵀz. Construct a positive definite inverse approximation using the standard two-loop recursion with a positive scalar initial matrix. Freeze that approximation within each PCG block and restart when it changes. Identify this as a specified baseline using established limited-memory BFGS updates; it is not an exact reproduction of Morales and Nocedal's experiments on sequences of systems. Count pair collection, update, application, and restart costs.
+4. Unpreconditioned CG and dense Cholesky supply accuracy and overall-cost references.
+
+Controlled comparisons on representative cases
+
+Use the initial y in both candidate sampling and scoring throughout the solve, with all other exchange settings held fixed, to isolate the value of the changing residual. Use uniform candidate sampling with the current-residual score to separate sampling from exchange evaluation. Restart the fixed preconditioner at matched checkpoints to quantify the cost of restarting. When the proposed method accepts an exchange, branch from the same solution into two short solves with the old and new preconditioners and the same restart; compare actual error reduction. These branch diagnostics are reported separately and excluded from production-solver timing.
+
+Measures and interpretation
+
+Stop when the explicitly recomputed ||y-Aα||/||y|| is at most 10^-8. Handle y = 0 directly. Recompute this residual at checkpoints and before declaring convergence, with the same verification policy across methods. Count verification matrix-vector products and their time. Compare solution error and held-out predictions to dense Cholesky, because a small residual alone need not imply a small coefficient error when A is ill conditioned.
+
+Measure elapsed time on a CPU with a fixed thread count. Include initialization, candidate columns, scoring, factor updates, all preconditioner applications, matrix-vector products, and stopping checks. Report numerical library and CPU configuration. For very short solves, use repeated timed runs and report the median; distinguish timing repetitions from the five independent seeds. Report paired runtime ratios, their spread across seeds, accepted-exchange counts, residual histories, kernel-column evaluations, and peak memory. Avoid presenting fewer iterations alone as a speed improvement.
+
+The strongest evidence would be an improvement in total time across multiple column budgets and regularization values, accompanied by branch diagnostics connecting accepted exchanges to greater subsequent error reduction. If the score falls without better subsequent convergence, the error-bound surrogate is inadequate. If convergence improves but total time rises, update cost or frequency is the bottleneck. Either outcome provides a concrete basis for changing the initial selection rule while preserving the experimental infrastructure.
+
+Closest work and contribution assessment
+
+Frangella, Tropp, and Udell, Randomized Nyström Preconditioning, SIAM J. Matrix Anal. Appl. 44(2), 718–752, 2023. https://doi.org/10.1137/21M1466244
+Read formulation, preconditioner construction, and adaptive-rank material. This establishes Nyström PCG and adaptive rank selection. Its spectral scaling differs from the simple Khat + λI preconditioner used here. Its guarantees must not be transferred without checking the assumptions and preconditioner definition.
+
+Chen, Epperly, Tropp, and Webber, Randomly pivoted Cholesky, Comm. Pure Appl. Math. 78(5), 995–1041, 2025. https://doi.org/10.1002/cpa.22234
+Read Nyström construction and pivoting algorithm. RPCholesky samples from the diagonal of the matrix-approximation residual. The proposed sampling uses the vector residual of Aα = y. These are different residuals and must remain clearly distinguished in code and prose.
+
+Bach and Jordan, Predictive Low-Rank Decomposition for Kernel Methods, ICML 2005, 33–40. https://www.di.ens.fr/~fbach/bach_jordan_csi.pdf
+Read the introduction and Section 3.2 objective. Target-dependent kernel approximation is established. Its predictive objective guides construction of a low-rank kernel representation. The proposed study updates a preconditioner from the changing residual while solving the original system. A target-dependent selection claim by itself is not new.
+
+Morales and Nocedal, Automatic Preconditioning by Limited Memory Quasi-Newton Updating, SIAM J. Optim. 10(4), 1079–1096, 2000. https://doi.org/10.1137/S1052623497327854
+Publisher abstract and method description inspected. Iterative-solver information and limited-memory preconditioning are established. The proposed contribution must be the kernel-column exchange criterion and its cost/performance, not the general idea of adapting a preconditioner.
+
+Additional screening: Zhao et al., An Adaptive Factorized Nyström Preconditioner for Regularized Kernel Matrices, arXiv:2304.05460; Si et al., Nonlinear Online Learning with Adaptive Nyström Approximation, arXiv:1802.07887; Kang, Adaptive Nyström for Gaussian Process Regression, arXiv:2607.27427; Li et al., BandPC, arXiv:2609.37140. Abstracts inspected. They cover adaptive kernel factorization, landmark changes with arriving data, landmark expansion during hyperparameter optimization, and residual-stage switching among classical preconditioners. Their complete algorithms were not audited. The search supports developing this specific exchange mechanism; it does not establish priority over every existing adaptive preconditioner.
+
+Concept assessment: develop the method and test the research question. The substantive opportunity is a selection rule for fixed-budget preconditioning of the current solve. The principal conceptual concern is whether a tighter residual-dependent upper bound predicts useful subsequent progress. A second concern is whether previously useful columns must be retained to prevent slow directions from returning after a restart. Both concerns are directly observable with the planned controls. A finding that an existing method already implements the same exchange criterion would require reconsidering the topic, not restricting the claim to a different dataset.
+
+Implementation, application, and mathematical discussion
+
+The implementation work is column acquisition, exchange scoring, stable low-rank updates, and restarted PCG, with explicit cost accounting. The application is kernel ridge regression on synthetic and real regression data. The mathematical discussion connects Nyström matrix ordering, the inverse quadratic-form bound, Woodbury identities, and the role of a fixed positive definite preconditioner within each CG block. No new convergence theorem is required. These are the three aspects required by the public project instructions; the proposal integrates them into its research motivation and method.
+
+Evidence status and artifacts
+
+proposal.tex is the canonical proposal; proposal.pdf is its compiled output. The bibliography contains verified reference metadata. course-reading-index.csv records actual reading coverage, including materials that were only screened and private portals that were not accessed.
+
+The earlier check_kernel_pipeline.py tested an abandoned comparison of static selectors. Its 12 cases and residual results remain historical evidence only; they do not validate the new exchange method. The separate check_exchange_score.py compares the proposed removal-score identity against direct dense solves. This is an algebraic correctness check, not a performance experiment. No comparative runtime results or full benchmark are reported in the proposal.

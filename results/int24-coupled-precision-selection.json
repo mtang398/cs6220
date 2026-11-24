@@ -1,0 +1,428 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_int24_coupled_precision_selection.py": "374be8d1329a73ebe5515a2278a8b3f8997ae2104400c5fd905867299d2e308d",
+    "scripts/check_int24_core_capacity.py": "e8c10a83c7e6c1a7cc81760b30083e63bba4d57032962e76bc5ed9ca880d299d",
+    "scripts/check_fused_congruence_core.py": "33b205bc01549d9ba49a7646abd2a53db5fc86fb1b8688591af5d8f548e2c1ac",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "protocol": {
+    "core": 660,
+    "static_full_core": 675,
+    "prefix_steps": 4,
+    "payload_budget": 721200,
+    "selection": "Greedy squared first-order full block-preconditioner-error score per extra byte. Matrix-only Frobenius score, initial full b action score, current full original residual action score. FP64 column promotions, diagonal alreadyFP64. Common4-step exact-fusion prefix, matched original iterate and explicit restart.",
+    "scope": "Dense optimistic headroom. Full FP64 reference factor, inverse derivative matrices, mask scoring and factor regeneration are free. Payload includes promotion flags/offsets; full workspace not feasible. Common prefixsetup charged once; restart regeneration free; both boundary/verification entries charged; per-iterate true stopping free. No native/adaptive-success claim."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.11906107902391051,
+        "analytical_entries": 24373490
+      },
+      "masks": {
+        "matrix": {
+          "columns": [
+            9,
+            11,
+            8,
+            13,
+            10,
+            15,
+            26,
+            12,
+            634,
+            652
+          ],
+          "payload_bytes": 721194
+        },
+        "initial": {
+          "columns": [
+            9,
+            13,
+            8,
+            10,
+            14,
+            19,
+            12,
+            17,
+            634,
+            653
+          ],
+          "payload_bytes": 721199
+        },
+        "current": {
+          "columns": [
+            11,
+            8,
+            9,
+            26,
+            13,
+            10,
+            12,
+            15,
+            634,
+            655,
+            657
+          ],
+          "payload_bytes": 721189
+        }
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 35,
+          "original_relative_residual": 8.449540080919579e-09,
+          "analytical_entries": 154459044,
+          "method": "full675_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 37,
+          "original_relative_residual": 5.3933446855575065e-09,
+          "analytical_entries": 168811986,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 36,
+          "original_relative_residual": 6.427376992410017e-09,
+          "analytical_entries": 158591218,
+          "method": "matrix_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 37,
+          "original_relative_residual": 5.233272378493429e-09,
+          "analytical_entries": 168811986,
+          "method": "matrix_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 36,
+          "original_relative_residual": 9.588258993457562e-09,
+          "analytical_entries": 164617682,
+          "method": "initial_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 36,
+          "original_relative_residual": 9.149657716629365e-09,
+          "analytical_entries": 164617682,
+          "method": "current_restart"
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.02403182076384921,
+        "analytical_entries": 24373490
+      },
+      "masks": {
+        "matrix": {
+          "columns": [
+            9,
+            11,
+            8,
+            13,
+            10,
+            15,
+            26,
+            12,
+            634,
+            652
+          ],
+          "payload_bytes": 721194
+        },
+        "initial": {
+          "columns": [
+            11,
+            9,
+            8,
+            26,
+            12,
+            15,
+            29,
+            20,
+            620,
+            639
+          ],
+          "payload_bytes": 721199
+        },
+        "current": {
+          "columns": [
+            11,
+            9,
+            15,
+            26,
+            8,
+            13,
+            16,
+            21,
+            634,
+            647,
+            648
+          ],
+          "payload_bytes": 721199
+        }
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 32,
+          "original_relative_residual": 9.259995775509427e-09,
+          "analytical_entries": 141876132,
+          "method": "full675_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 32,
+          "original_relative_residual": 8.975275529162388e-09,
+          "analytical_entries": 147840466,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 32,
+          "original_relative_residual": 8.583494744674176e-09,
+          "analytical_entries": 141814002,
+          "method": "matrix_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 32,
+          "original_relative_residual": 8.945046223807255e-09,
+          "analytical_entries": 147840466,
+          "method": "matrix_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 32,
+          "original_relative_residual": 8.984054706254288e-09,
+          "analytical_entries": 147840466,
+          "method": "initial_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 32,
+          "original_relative_residual": 9.21560336378723e-09,
+          "analytical_entries": 147840466,
+          "method": "current_restart"
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.0027573452919718144,
+        "analytical_entries": 4373330
+      },
+      "masks": {
+        "matrix": {
+          "columns": [
+            8,
+            10,
+            9,
+            13,
+            16,
+            12,
+            14,
+            17,
+            632
+          ],
+          "payload_bytes": 721194
+        },
+        "initial": {
+          "columns": [
+            13,
+            8,
+            10,
+            14,
+            21,
+            16,
+            23,
+            9,
+            617
+          ],
+          "payload_bytes": 721194
+        },
+        "current": {
+          "columns": [
+            8,
+            12,
+            10,
+            14,
+            13,
+            23,
+            11,
+            18,
+            625,
+            655
+          ],
+          "payload_bytes": 721199
+        }
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 3.9637172060810455e-09,
+          "analytical_entries": 11849116,
+          "method": "full675_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 5.4557845507624944e-09,
+          "analytical_entries": 12737522,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 2.686923701513462e-09,
+          "analytical_entries": 11842066,
+          "method": "matrix_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 4.570523686570998e-09,
+          "analytical_entries": 12737522,
+          "method": "matrix_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 4.476355233520718e-09,
+          "analytical_entries": 12737522,
+          "method": "initial_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 15,
+          "original_relative_residual": 4.887609957273129e-09,
+          "analytical_entries": 12737522,
+          "method": "current_restart"
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.019584918801758614,
+        "analytical_entries": 8950910
+      },
+      "masks": {
+        "matrix": {
+          "columns": [
+            8,
+            10,
+            12,
+            14,
+            16,
+            9,
+            11,
+            15,
+            649,
+            647,
+            657
+          ],
+          "payload_bytes": 721199
+        },
+        "initial": {
+          "columns": [
+            16,
+            10,
+            12,
+            14,
+            11,
+            8,
+            9,
+            13,
+            649,
+            647
+          ],
+          "payload_bytes": 721199
+        },
+        "current": {
+          "columns": [
+            10,
+            12,
+            14,
+            16,
+            8,
+            9,
+            17,
+            18,
+            651,
+            649,
+            647,
+            656
+          ],
+          "payload_bytes": 721199
+        }
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 7.458901571776921e-09,
+          "analytical_entries": 32091834,
+          "method": "full675_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 9.566511441724933e-09,
+          "analytical_entries": 34228018,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 19,
+          "original_relative_residual": 8.215607550595792e-09,
+          "analytical_entries": 30622970,
+          "method": "matrix_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 5.493890742806184e-09,
+          "analytical_entries": 34228018,
+          "method": "matrix_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 5.414437068354267e-09,
+          "analytical_entries": 34228018,
+          "method": "initial_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 5.657552971111863e-09,
+          "analytical_entries": 34228018,
+          "method": "current_restart"
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 4.616649512026925,
+  "elapsed_cpu_seconds": 4.5866457
+}

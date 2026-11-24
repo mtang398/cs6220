@@ -1,0 +1,70 @@
+{
+  "purpose": "Test multi-direction curvature fitting as a distinct replacement criterion, preserving column and history budgets.",
+  "workloads": [
+    {
+      "dataset": "synthetic",
+      "target": "smooth"
+    }
+  ],
+  "synthetic_n": 640,
+  "seeds": [
+    0
+  ],
+  "regularization": [
+    0.001
+  ],
+  "repetitions": 1,
+  "solver_defaults": {
+    "rank": 16,
+    "checkpoint": 20
+  },
+  "variants": [
+    {
+      "id": "pcg16",
+      "method": "fixed"
+    },
+    {
+      "id": "pcg24",
+      "method": "fixed",
+      "rank": 24
+    },
+    {
+      "id": "fcg_fixed",
+      "method": "flex_fixed",
+      "history_size": 8
+    },
+    {
+      "id": "curvature1",
+      "method": "flex_curvature",
+      "history_size": 8,
+      "candidate_count": 1
+    },
+    {
+      "id": "curvature4",
+      "method": "flex_curvature",
+      "history_size": 8,
+      "candidate_count": 4
+    },
+    {
+      "id": "curvature4once",
+      "method": "flex_curvature",
+      "history_size": 8,
+      "candidate_count": 4,
+      "update_limit": 1
+    },
+    {
+      "id": "uniform_curvature4",
+      "method": "flex_uniform_curvature",
+      "history_size": 8,
+      "candidate_count": 4
+    },
+    {
+      "id": "residual_curvature4",
+      "method": "flex_residual_curvature",
+      "history_size": 8,
+      "candidate_count": 4
+    }
+  ],
+  "max_wall_seconds": 300,
+  "run_timeout_seconds": 90
+}

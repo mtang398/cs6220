@@ -1,0 +1,312 @@
+{
+  "status": "complete",
+  "protocol": {
+    "m": 592,
+    "regularizations": [
+      0.001,
+      1e-05
+    ],
+    "repetitions": 5,
+    "method_order": "Cyclic generic/specialized across five repetitions and the two shifts",
+    "scope": "Primitive factor/solve timing using an already formed dense core. Kernel construction/FPS and dense oracle storage are excluded from these medians; no full-solver or fixed-memory claim.",
+    "arithmetic": "Identical FP64 operation order, FIRST8 FP64 stores and remaining FP32 stores; FP contraction disabled; disjoint buffers required.",
+    "ABI": "Original mixed_column/mixed_solve signatures. FIRST8 layout validated on first column and every solve. No metadata loads in numerical inner loops.",
+    "cpu_limit_seconds": 10,
+    "external_wall_limit_seconds": 20,
+    "blas_threads": 1,
+    "lock": "/tmp/cs6220-project-benchmark.lock"
+  },
+  "sources": {
+    "scripts/check_first8_specialization.py": "3404678c796bd40e5f39d2167341dac01a1ff67f3b3fc85979bcaf1db1b0f42a",
+    "scripts/mixed_column_factor_first8.c": "d65fbe1054ca852e71f69ed7f8e78355f949ea59d491fbcf0c6974ce4dc720ff",
+    "scripts/mixed_column_factor.c": "8515cdd9b1ac498284f6cd4f12b7c97474e8fe873029385c121b25c18acb6530",
+    "results/mixed_column_factor.so": "cb74e07e083248f44c7b54fb86f06eac8e778d1bab05ea47c3843cfdbada7808",
+    "scripts/check_core_precision_allocation.py": "ce97909f61de27d880812330a31bacc6d4427fdcccc466811050282c77371f7e",
+    "scripts/check_native_first8_schur.py": "ba770aee8fcd1c469b54b37c729a4e33c2594f15e5f5e4eaa8c2c498d087847d",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "compile_command": [
+    "gcc",
+    "-O3",
+    "-march=native",
+    "-ffp-contract=off",
+    "-shared",
+    "-fPIC",
+    "/mnt/c/users/maosen/cs6220/project/scripts/mixed_column_factor_first8.c",
+    "-o",
+    "/mnt/c/users/maosen/cs6220/project/results/mixed_column_factor_first8.so",
+    "-lm"
+  ],
+  "compile_seconds": 0.6191483259899542,
+  "compiler_version": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "specialized_library_sha256": "943741be07c35b2e1fb85cc2116dd9367a171ac20ee3a1e23c6293478f8d277a",
+  "tiny_checks": [
+    {
+      "m": 7,
+      "bitwise_checks": {
+        "high": true,
+        "offsets": true,
+        "low": true,
+        "wide": true,
+        "epsilon": true,
+        "pivots": true,
+        "solve": true
+      },
+      "independent_triangular_relative_error": 2.3334740291214246e-16,
+      "invalid_flags_and_offsets_rejected": true
+    },
+    {
+      "m": 17,
+      "bitwise_checks": {
+        "high": true,
+        "offsets": true,
+        "low": true,
+        "wide": true,
+        "epsilon": true,
+        "pivots": true,
+        "solve": true
+      },
+      "independent_triangular_relative_error": 2.176355711127026e-16,
+      "invalid_flags_and_offsets_rejected": true
+    }
+  ],
+  "cases": [
+    {
+      "n": 2048,
+      "m": 592,
+      "regularization": 0.001,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "selected_indices_sha256": "e045ef9b457a02de0ab26b8c5b5a8d67e8675d4757c8651d001fadfea8a7a966",
+      "dense_core_sha256": "13d717b3a6377423b68a728402f00a591cae40c344bf0d2f6b665f4dd2a453ae",
+      "bitwise_checks": {
+        "high": true,
+        "offsets": true,
+        "low": true,
+        "wide": true,
+        "epsilon": true,
+        "pivots": true,
+        "solve": true
+      },
+      "original_streamed_build_checks": {
+        "indices": true,
+        "low": true,
+        "wide": true,
+        "solve": true,
+        "minimum_pivot": true,
+        "epsilon_norm": true
+      },
+      "low_factor_sha256": "7408364888dcc18ca976fe53402de164583011ea1a26991181e544fce0083c30",
+      "wide_factor_sha256": "e42de9bd3de6198e12c64f3eb93b8595a3fd5bfa806701f58198f3bfc483b82a",
+      "original_streamed_factor_seconds": 0.042600749991834164,
+      "methods": {
+        "generic": {
+          "factor_seconds": [
+            0.02830479701515287,
+            0.028411237988620996,
+            0.028582455997820944,
+            0.03036940796300769,
+            0.030551807023584843
+          ],
+          "factor_cpu_seconds": [
+            0.031259600000000054,
+            0.031257699999999944,
+            0.03125940000000005,
+            0.03125900000000004,
+            0.03125979999999995
+          ],
+          "solve_seconds": [
+            0.0002525090239942074,
+            0.0002498700050637126,
+            0.0002464469871483743,
+            0.00024128000950440764,
+            0.00024993903934955597
+          ],
+          "solve_cpu_seconds": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "combined_seconds": [
+            0.02855730603914708,
+            0.02866110799368471,
+            0.028828902984969318,
+            0.030610687972512096,
+            0.0308017460629344
+          ],
+          "median_factor_seconds": 0.028582455997820944,
+          "median_factor_cpu_seconds": 0.03125940000000005,
+          "median_solve_seconds": 0.0002498700050637126,
+          "median_solve_cpu_seconds": 0.0,
+          "median_combined_seconds": 0.028828902984969318
+        },
+        "specialized": {
+          "factor_seconds": [
+            0.011933475965633988,
+            0.011669635016005486,
+            0.011370063992217183,
+            0.011804971029050648,
+            0.011903953971341252
+          ],
+          "factor_cpu_seconds": [
+            0.010469799999999974,
+            0.010370800000000013,
+            0.010420099999999932,
+            0.010419700000000032,
+            0.010420799999999897
+          ],
+          "solve_seconds": [
+            0.00016609299927949905,
+            0.00018767098663374782,
+            0.00016678095562383533,
+            0.00016929098637774587,
+            0.0001928129931911826
+          ],
+          "solve_cpu_seconds": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "combined_seconds": [
+            0.012099568964913487,
+            0.011857306002639234,
+            0.011536844947841018,
+            0.011974262015428394,
+            0.012096766964532435
+          ],
+          "median_factor_seconds": 0.011804971029050648,
+          "median_factor_cpu_seconds": 0.010420099999999932,
+          "median_solve_seconds": 0.00016929098637774587,
+          "median_solve_cpu_seconds": 0.0,
+          "median_combined_seconds": 0.011974262015428394
+        }
+      },
+      "factor_speedup": 2.4212220366727606,
+      "solve_speedup": 1.4759793797064156
+    },
+    {
+      "n": 2048,
+      "m": 592,
+      "regularization": 1e-05,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "selected_indices_sha256": "e045ef9b457a02de0ab26b8c5b5a8d67e8675d4757c8651d001fadfea8a7a966",
+      "dense_core_sha256": "c3e4c1d7f4f5810bf17447afe12f6e5d1b6d5327e530454f9b73d1641f7846c6",
+      "bitwise_checks": {
+        "high": true,
+        "offsets": true,
+        "low": true,
+        "wide": true,
+        "epsilon": true,
+        "pivots": true,
+        "solve": true
+      },
+      "original_streamed_build_checks": {
+        "indices": true,
+        "low": true,
+        "wide": true,
+        "solve": true,
+        "minimum_pivot": true,
+        "epsilon_norm": true
+      },
+      "low_factor_sha256": "b1f7a3040b06c4bffaf1e9526e75563cf0499a379d866c629244a91537098e55",
+      "wide_factor_sha256": "15d8d25f1f63eb780bf4660b0256aa2448d16550a836ea512164b66e47743b21",
+      "original_streamed_factor_seconds": 0.03980912797851488,
+      "methods": {
+        "generic": {
+          "factor_seconds": [
+            0.029378565028309822,
+            0.030342284007929265,
+            0.03065436502220109,
+            0.02944788703462109,
+            0.0284088600310497
+          ],
+          "factor_cpu_seconds": [
+            0.03125830000000018,
+            0.03126019999999996,
+            0.031363199999999924,
+            0.031156399999999973,
+            0.03125830000000018
+          ],
+          "solve_seconds": [
+            0.00025175302289426327,
+            0.00023613194935023785,
+            0.0002524330047890544,
+            0.0002653439878486097,
+            0.000248741009272635
+          ],
+          "solve_cpu_seconds": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "combined_seconds": [
+            0.029630318051204085,
+            0.030578415957279503,
+            0.030906798026990145,
+            0.0297132310224697,
+            0.028657601040322334
+          ],
+          "median_factor_seconds": 0.02944788703462109,
+          "median_factor_cpu_seconds": 0.03125830000000018,
+          "median_solve_seconds": 0.00025175302289426327,
+          "median_solve_cpu_seconds": 0.0,
+          "median_combined_seconds": 0.0297132310224697
+        },
+        "specialized": {
+          "factor_seconds": [
+            0.011972787964623421,
+            0.011420499009545892,
+            0.01148254401050508,
+            0.011854420008603483,
+            0.011374387016985565
+          ],
+          "factor_cpu_seconds": [
+            0.010421499999999861,
+            0.020838399999999924,
+            0.010420000000000096,
+            0.010419500000000026,
+            0.01041929999999991
+          ],
+          "solve_seconds": [
+            0.00016299402341246605,
+            0.00016144098481163383,
+            0.0001699230051599443,
+            0.00016676494851708412,
+            0.00017194397514685988
+          ],
+          "solve_cpu_seconds": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "combined_seconds": [
+            0.012135781988035887,
+            0.011581939994357526,
+            0.011652467015665025,
+            0.012021184957120568,
+            0.011546330992132425
+          ],
+          "median_factor_seconds": 0.01148254401050508,
+          "median_factor_cpu_seconds": 0.010420000000000096,
+          "median_solve_seconds": 0.00016676494851708412,
+          "median_solve_cpu_seconds": 0.0,
+          "median_combined_seconds": 0.011652467015665025
+        }
+      },
+      "factor_speedup": 2.5645786341145294,
+      "solve_speedup": 1.5096279232111693
+    }
+  ],
+  "elapsed_wall_seconds": 1.747657051018905,
+  "elapsed_cpu_seconds": 0.8326369,
+  "child_cpu_seconds": 0.198796,
+  "process_peak_rss_kib": 79736,
+  "sources_unchanged": true
+}

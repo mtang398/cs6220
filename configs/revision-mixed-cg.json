@@ -1,0 +1,12 @@
+{
+  "purpose": "Unpreconditioned control for the controlled mixed-eigenspace target.",
+  "workloads": [{"dataset": "synthetic", "target": "mixed"}],
+  "synthetic_n": 640,
+  "seeds": [0],
+  "regularization": [0.1, 0.001, 0.00001],
+  "repetitions": 1,
+  "solver_defaults": {"rank": 32, "checkpoint": 20, "maxiter": 2500, "rtol": 1e-8},
+  "variants": [{"id": "cg", "method": "cg"}],
+  "max_wall_seconds": 120,
+  "run_timeout_seconds": 40
+}

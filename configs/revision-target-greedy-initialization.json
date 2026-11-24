@@ -1,0 +1,17 @@
+{
+  "purpose": "Separate target-aware column quality from the loss caused by replacing a preconditioner during CG.",
+  "status": "predeclared",
+  "seed": 0,
+  "workloads": ["synthetic-n640-smooth", "synthetic-n640-random", "synthetic-n640-mixed", "concrete-observed", "airfoil-observed"],
+  "rank": 32,
+  "regularizations": [0.001, 0.00001],
+  "criterion": "The established f/P-greedy criterion applied to A=K+lambda I: choose the remaining index maximizing the squared Schur right-hand-side residual divided by the Schur diagonal.",
+  "construction": "Build exactly 32 partial Cholesky columns of A and update the forward-substitution residual. Build the ordinary kernel Nystrom preconditioner from the chosen actual K columns, then freeze it before PCG begins.",
+  "initial_guess": "Run both zero and the coordinate Galerkin solution supported on selected indices; apply the identical initial-guess variants to RP and matrix-only greedy pivot controls.",
+  "strong_controls": "Unpreconditioned CG and Gaussian power Nystrom with 2, 4, and 8 setup passes, all rank32. One solve recurrence and true residual tolerance across methods.",
+  "independent_checks": ["each pivot score equals the exact coordinate-Galerkin energy decrease on a small SPD problem", "Schur residual equals b-A[:,S]A[S,S]^{-1}b[S]", "independent Cholesky solve for coordinate initial guess", "true original relative residual <= 1e-8"],
+  "max_iterations": 2500,
+  "cpu_limit_seconds": 110,
+  "decision": "No selection-criterion weight, rank, or tolerance sweep after failure against strong fixed controls. Positive iteration evidence requires a later complete-cost test and a separate novelty assessment.",
+  "novelty_boundary": "f/P-greedy is established target-dependent kernel approximation. This diagnostic tests transfer to fixed-budget preconditioning; it does not claim a new algorithm."
+}

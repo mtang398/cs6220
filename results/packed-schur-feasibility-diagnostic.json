@@ -1,0 +1,210 @@
+{
+  "status": "complete",
+  "scope": "Classical packed Cholesky representation feasibility; no full solve timing or new method claim",
+  "validation_history": "Initial tiny prefix-reference check reused an RHS view that the requested in-place solve overwrote. Corrected test to copy its RHS; no allocation/benchmark path ran in that failed invocation.",
+  "scipy_version": "1.18.1",
+  "interfaces": {
+    "dpptrf": "ul,info = dpptrf(n,ap,[lower,overwrite_ap])\n\nWrapper for ``dpptrf``.\n\nParameters\n----------\nn : input int\nap : input rank-1 array('d') with bounds (L)\n\nOther Parameters\n----------------\nlower : input int, optional\n    Default: 0\noverwrite_ap : input int, optional\n    Default: 0\n\nReturns\n-------\nul : rank-1 array('d') with bounds (L) and ap storage\ninfo : int\n",
+    "dpptrs": "x,info = dpptrs(n,ap,b,[lower,overwrite_b])\n\nWrapper for ``dpptrs``.\n\nParameters\n----------\nn : input int\nap : input rank-1 array('d') with bounds (L)\nb : input rank-2 array('d') with bounds (ldb,nrhs)\n\nOther Parameters\n----------------\nlower : input int, optional\n    Default: 0\noverwrite_b : input int, optional\n    Default: 0\n\nReturns\n-------\nx : rank-2 array('d') with bounds (ldb,nrhs) and b storage\ninfo : int\n",
+    "dtpmv": "xout = dtpmv(n,ap,x,[incx,offx,lower,trans,diag,overwrite_x])\n\nWrapper for ``dtpmv``.\n\nParameters\n----------\nn : input int\nap : input rank-1 array('d') with bounds (*)\nx : input rank-1 array('d') with bounds (*)\n\nOther Parameters\n----------------\noverwrite_x : input int, optional\n    Default: 0\nincx : input int, optional\n    Default: 1\noffx : input int, optional\n    Default: 0\nlower : input int, optional\n    Default: 0\ntrans : input int, optional\n    Default: 0\ndiag : input int, optional\n    Default: 0\n\nReturns\n-------\nxout : rank-1 array('d') with bounds (*) and x storage\n",
+    "dtpsv": "xout = dtpsv(n,ap,x,[incx,offx,lower,trans,diag,overwrite_x])\n\nWrapper for ``dtpsv``.\n\nParameters\n----------\nn : input int\nap : input rank-1 array('d') with bounds (*)\nx : input rank-1 array('d') with bounds (*)\n\nOther Parameters\n----------------\noverwrite_x : input int, optional\n    Default: 0\nincx : input int, optional\n    Default: 1\noffx : input int, optional\n    Default: 0\nlower : input int, optional\n    Default: 0\ntrans : input int, optional\n    Default: 0\ndiag : input int, optional\n    Default: 0\n\nReturns\n-------\nxout : rank-1 array('d') with bounds (*) and x storage\n"
+  },
+  "source_sha256": {
+    "scripts/check_packed_schur_feasibility.py": "7b853198fd2476504a40cfeb7dc9d9a3f68e5e5b2a66454580e3119ab1c519ac",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "allocation_checks": [
+    {
+      "status": "feasible",
+      "n": 512,
+      "m": 480,
+      "packed_core_bytes": 923520,
+      "full_core_bytes": 1843200,
+      "named": {
+        "named_peak_bytes": 978080,
+        "peak_with_reserve_bytes": 1043616,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "packed_core_assembly": 966016,
+          "packed_cholesky": 935552,
+          "packed_rhs_solve": 940672,
+          "reduced_rhs": 978080,
+          "Schur_first_pass": 968576,
+          "Schur_vector_update": 937088,
+          "Schur_second_pass": 975376,
+          "reconstruct_cross": 976512,
+          "reconstruct_vector": 936576,
+          "full_verification": 977872
+        },
+        "phase_row_sizes": {
+          "reduced_rhs": [
+            4
+          ],
+          "Schur_first_pass": [
+            128
+          ],
+          "Schur_second_pass": [
+            2
+          ],
+          "reconstruct_cross": [
+            128
+          ],
+          "full_verification": [
+            10
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 984828,
+      "trace_within_1MiB": true,
+      "factor_alias": true,
+      "factor_same_object": true,
+      "core_solve_alias": true,
+      "factor_trace": {
+        "earlier_peak": 965304,
+        "traced_before": 929772,
+        "traced_after": 929948,
+        "peak_extra_during_factorization": 736
+      },
+      "kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 440048,
+        "entry_blocks": 564,
+        "full_matvecs": 1
+      },
+      "protocol": "Untimed setup +one Schur action +reconstruction +one full verification; no CG solve or FPS cost benchmark.",
+      "dataset": "synthetic-n640-smooth",
+      "pretrace_owned_index_bytes": 3840,
+      "conservative_trace_plus_preallocated_indices_bytes": 988668
+    },
+    {
+      "status": "feasible",
+      "n": 1202,
+      "m": 448,
+      "packed_core_bytes": 804608,
+      "full_core_bytes": 1605632,
+      "named": {
+        "named_peak_bytes": 977200,
+        "peak_with_reserve_bytes": 1042736,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "packed_core_assembly": 839312,
+          "packed_cholesky": 821904,
+          "packed_rhs_solve": 855648,
+          "reduced_rhs": 976144,
+          "Schur_first_pass": 974768,
+          "Schur_vector_update": 863616,
+          "Schur_second_pass": 977200,
+          "reconstruct_cross": 975456,
+          "reconstruct_vector": 851552,
+          "full_verification": 973072
+        },
+        "phase_row_sizes": {
+          "reduced_rhs": [
+            37
+          ],
+          "Schur_first_pass": [
+            16
+          ],
+          "Schur_second_pass": [
+            28
+          ],
+          "reconstruct_cross": [
+            17
+          ],
+          "full_verification": [
+            12
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 984020,
+      "trace_within_1MiB": true,
+      "factor_alias": true,
+      "factor_same_object": true,
+      "core_solve_alias": true,
+      "factor_trace": {
+        "earlier_peak": 838784,
+        "traced_before": 816304,
+        "traced_after": 816400,
+        "peak_extra_during_factorization": 656
+      },
+      "kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 3465064,
+        "entry_blocks": 700,
+        "full_matvecs": 1
+      },
+      "protocol": "Untimed setup +one Schur action +reconstruction +one full verification; no CG solve or FPS cost benchmark.",
+      "dataset": "airfoil-observed",
+      "pretrace_owned_index_bytes": 3584,
+      "conservative_trace_plus_preallocated_indices_bytes": 987604
+    },
+    {
+      "status": "failure",
+      "n": 1202,
+      "m": 480,
+      "error": "No row tile fits at Schur_first_pass",
+      "named": {
+        "named_peak_bytes": 977504,
+        "peak_with_reserve_bytes": 1043040,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "packed_core_assembly": 960016,
+          "packed_cholesky": 941072,
+          "packed_rhs_solve": 941072,
+          "reduced_rhs": 977504
+        },
+        "phase_row_sizes": {
+          "reduced_rhs": [
+            4
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 999653,
+      "packed_core_bytes": 923520,
+      "dataset": "airfoil-observed",
+      "pretrace_owned_index_bytes": 3840,
+      "conservative_trace_plus_preallocated_indices_bytes": 1003493
+    }
+  ],
+  "numerical_check": {
+    "lower": {
+      "inverse_relative_error": 5.651263630745506e-16,
+      "core_product_relative_error": 2.641715022999165e-16,
+      "triangular_solve_relative_error": 5.651263630745506e-16,
+      "Schur_action_relative_error": 3.513850889433642e-16,
+      "constraint_relative_residual": 4.4240885830297425e-16,
+      "factor_same_object": true,
+      "factor_alias": true,
+      "RHS_alias_verified": true,
+      "upper_prefix_relative_errors": [],
+      "packed_bytes": 528,
+      "full_core_bytes": 968
+    },
+    "upper": {
+      "inverse_relative_error": 2.7138450452296995e-16,
+      "core_product_relative_error": 4.2058022809145747e-16,
+      "triangular_solve_relative_error": 2.7138450452296995e-16,
+      "Schur_action_relative_error": 3.0801866137211633e-16,
+      "constraint_relative_residual": 6.578355737577018e-16,
+      "factor_same_object": true,
+      "factor_alias": true,
+      "RHS_alias_verified": true,
+      "upper_prefix_relative_errors": [
+        7.439501522304959e-17,
+        1.6355000993763146e-16
+      ],
+      "packed_bytes": 528,
+      "full_core_bytes": 968
+    },
+    "copy_contract": {
+      "strided_packed_input_copied": true,
+      "C_order_multiple_RHS_copied": true,
+      "required": "Contiguous native float64 packed buffer; one-column reshape or Fortran-contiguous multiple RHS. Assert pointer/sharing at runtime."
+    }
+  },
+  "elapsed_wall_seconds": 0.19446777200209908,
+  "elapsed_cpu_seconds": 0.1590556999999999,
+  "process_peak_rss_kib": 66264,
+  "allocation_trace_note": "The predeclared m-index input was allocated just before tracing, explicitly charged by Budget during setup, then released. Conservative trace-plus-index upper bounds are recorded; both feasible paths remain below1MiB. Common X/b and imports were allocated before trace. Native LAPACK allocations outside tracemalloc remain covered only by declared reserve, not measured as RSS.",
+  "representation_note": "Packed storage is4m(m+1) bytes. Lower-packed columns have lengths m,m-1,... and leading subcores are not contiguous prefixes. Upper-packed columns have lengths1,2,...; leading m factor is exactly the firstm(m+1)/2 entries, verified by independent dense solves."
+}

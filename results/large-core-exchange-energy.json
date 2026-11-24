@@ -1,0 +1,123 @@
+{
+  "status": "complete",
+  "source_sha256": "4eb41aefe19614567be880d0688cf7d208663d059d0c625f0d7237c5d72bf185",
+  "protocol": {
+    "core": 416,
+    "checkpoint": 10,
+    "selection": "j=argmax r_j\u00b2/Sjj; i=argmin (C^-1 A_Sj)_i\u00b2/(C^-1)ii",
+    "controls": "same j, exact old-core Schur-coordinate correction then identical restart",
+    "free": "same dense/rebuild/selection oracle as parent; no native claim"
+  },
+  "runs": [
+    {
+      "dataset": "smooth",
+      "regularization": 0.001,
+      "baseline": {
+        "iterations": 27,
+        "converged": true,
+        "true_relative_residual": 6.929289528731435e-09
+      },
+      "swapped": {
+        "iterations": 19,
+        "converged": true,
+        "true_relative_residual": 5.756080824686297e-09
+      },
+      "old_core_coordinate_control": {
+        "iterations": 19,
+        "converged": true,
+        "true_relative_residual": 5.545510092752234e-09
+      },
+      "swapped_total_iterations": 29,
+      "coordinate_control_total_iterations": 29,
+      "added": 887,
+      "removed": 1679,
+      "swapped_energy_gain": 0.0024317686180233534,
+      "measured_swapped_energy_gain": 0.0024317686147851485,
+      "old_core_energy_gain": 0.002431768618028893,
+      "conditional_correlation_squared": 2.2781125468871252e-12
+    },
+    {
+      "dataset": "smooth",
+      "regularization": 1e-05,
+      "baseline": {
+        "iterations": 73,
+        "converged": true,
+        "true_relative_residual": 8.995401528735412e-09
+      },
+      "swapped": {
+        "iterations": 65,
+        "converged": true,
+        "true_relative_residual": 8.586231352650406e-09
+      },
+      "old_core_coordinate_control": {
+        "iterations": 65,
+        "converged": true,
+        "true_relative_residual": 8.868660446379214e-09
+      },
+      "swapped_total_iterations": 75,
+      "coordinate_control_total_iterations": 75,
+      "added": 500,
+      "removed": 1453,
+      "swapped_energy_gain": 269.2131875374864,
+      "measured_swapped_energy_gain": 269.21318639264666,
+      "old_core_energy_gain": 269.2132377573324,
+      "conditional_correlation_squared": 1.8654300354226892e-07
+    },
+    {
+      "dataset": "mixed",
+      "regularization": 0.001,
+      "baseline": {
+        "iterations": 29,
+        "converged": true,
+        "true_relative_residual": 7.461004146430364e-09
+      },
+      "swapped": {
+        "iterations": 20,
+        "converged": true,
+        "true_relative_residual": 7.243038954223215e-09
+      },
+      "old_core_coordinate_control": {
+        "iterations": 20,
+        "converged": true,
+        "true_relative_residual": 7.927547000477559e-09
+      },
+      "swapped_total_iterations": 30,
+      "coordinate_control_total_iterations": 30,
+      "added": 1076,
+      "removed": 1913,
+      "swapped_energy_gain": 0.021828626567197924,
+      "measured_swapped_energy_gain": 0.021828626518106124,
+      "old_core_energy_gain": 0.02182862656730147,
+      "conditional_correlation_squared": 4.743491688396372e-12
+    },
+    {
+      "dataset": "mixed",
+      "regularization": 1e-05,
+      "baseline": {
+        "iterations": 67,
+        "converged": true,
+        "true_relative_residual": 7.747260817659138e-09
+      },
+      "swapped": {
+        "iterations": 58,
+        "converged": true,
+        "true_relative_residual": 9.317287298076812e-09
+      },
+      "old_core_coordinate_control": {
+        "iterations": 58,
+        "converged": true,
+        "true_relative_residual": 8.724957666341095e-09
+      },
+      "swapped_total_iterations": 68,
+      "coordinate_control_total_iterations": 68,
+      "added": 271,
+      "removed": 1175,
+      "swapped_energy_gain": 7.648428055578348,
+      "measured_swapped_energy_gain": 7.648428063063426,
+      "old_core_energy_gain": 7.648428055747773,
+      "conditional_correlation_squared": 2.2151589771449867e-11
+    }
+  ],
+  "elapsed_wall_seconds": 1.9033122949767858,
+  "elapsed_cpu_seconds": 1.9030985
+}

@@ -1,0 +1,133 @@
+{
+  "scope": "Tiny validation diagnosis before workload timing",
+  "initial_failed_check": "all-iterate relative gap <1e-7 against dense H; direct branch gap0.00010322741669244813",
+  "source_sha256": "5c04e329fcd6ba39ecaf7c79e5ece6aa1b4071882c63391d25716c82a33525a1",
+  "cases": [
+    {
+      "lambda": 0.001,
+      "H_relative_error": 2.1472020981355384e-16,
+      "Hmaxabs": 4.547473508864641e-13,
+      "basis_gram_error": 1.62971442784339e-14,
+      "runs": {
+        "explicit": {
+          "iterations": 35,
+          "converged": true,
+          "true_relative_residual": 4.9506106523372586e-11,
+          "residual_replacement_restarts": [],
+          "cache_checks": [],
+          "solution_relative_error": 2.847719726595381e-11
+        },
+        "direct": {
+          "iterations": 35,
+          "converged": true,
+          "true_relative_residual": 4.9508608581674147e-11,
+          "residual_replacement_restarts": [],
+          "cache_checks": [],
+          "solution_relative_error": 2.8477398667151675e-11
+        },
+        "fused": {
+          "iterations": 35,
+          "converged": true,
+          "true_relative_residual": 4.9504818925999867e-11,
+          "residual_replacement_restarts": [],
+          "cache_checks": [
+            {
+              "iteration": 20,
+              "projection_gap_relative_to_rhs": 1.1070616069343061e-16,
+              "projection_gap_relative_to_current_projection": 1.8203005077914538e-13
+            },
+            {
+              "iteration": 35,
+              "projection_gap_relative_to_rhs": 9.694747510898165e-20,
+              "projection_gap_relative_to_current_projection": 1.1540436064963982e-08
+            }
+          ],
+          "solution_relative_error": 2.8476776164465214e-11
+        }
+      },
+      "gaps": {
+        "direct_vs_explicit": {
+          "max": 0.00010322741669244813,
+          "argmax": 23,
+          "first8max": 2.329572066255315e-15,
+          "final_solution_gap": 4.3210421673336813e-14
+        },
+        "fused_vs_explicit": {
+          "max": 0.000176318826828054,
+          "argmax": 23,
+          "first8max": 3.4292834793274173e-15,
+          "final_solution_gap": 1.0662965695816283e-13
+        },
+        "fused_vs_direct": {
+          "max": 7.486609840067919e-05,
+          "argmax": 23,
+          "first8max": 1.2511202732779143e-15,
+          "final_solution_gap": 1.4925792367031487e-13
+        }
+      }
+    },
+    {
+      "lambda": 1e-05,
+      "H_relative_error": 2.1601498976319727e-16,
+      "Hmaxabs": 4.3655745685100555e-11,
+      "basis_gram_error": 1.62971442784339e-14,
+      "runs": {
+        "explicit": {
+          "iterations": 38,
+          "converged": true,
+          "true_relative_residual": 5.491916538654179e-11,
+          "residual_replacement_restarts": [],
+          "cache_checks": [],
+          "solution_relative_error": 3.749692983429026e-11
+        },
+        "direct": {
+          "iterations": 38,
+          "converged": true,
+          "true_relative_residual": 5.648923462682485e-11,
+          "residual_replacement_restarts": [],
+          "cache_checks": [],
+          "solution_relative_error": 3.702971724771378e-11
+        },
+        "fused": {
+          "iterations": 37,
+          "converged": true,
+          "true_relative_residual": 8.958593862882462e-11,
+          "residual_replacement_restarts": [],
+          "cache_checks": [
+            {
+              "iteration": 20,
+              "projection_gap_relative_to_rhs": 1.1305179588791623e-16,
+              "projection_gap_relative_to_current_projection": 8.5811429639309855e-16
+            },
+            {
+              "iteration": 37,
+              "projection_gap_relative_to_rhs": 1.8149334663053095e-17,
+              "projection_gap_relative_to_current_projection": 1.0445419937608167e-06
+            }
+          ],
+          "solution_relative_error": 6.706916034725834e-11
+        }
+      },
+      "gaps": {
+        "direct_vs_explicit": {
+          "max": 0.009601643125888517,
+          "argmax": 23,
+          "first8max": 1.241045585634916e-15,
+          "final_solution_gap": 1.6065231076790242e-11
+        },
+        "fused_vs_explicit": {
+          "max": 0.0040766531744075764,
+          "argmax": 24,
+          "first8max": 8.1771075703646335e-16,
+          "final_solution_gap": 3.37225083710546e-11
+        },
+        "fused_vs_direct": {
+          "max": 0.012429475625503575,
+          "argmax": 23,
+          "first8max": 1.7549329202012514e-15,
+          "final_solution_gap": 3.508294840709626e-11
+        }
+      }
+    }
+  ]
+}

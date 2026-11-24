@@ -1,0 +1,342 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_int24_promoted_refresh.py": "34725803d03fe20a4c7fd7436b2a4c69001f24ac955a9ccea58e8de5a0d74ffb",
+    "results/int24-coupled-precision-selection.json": "381ef1b79aa437be622c5ffda413be09a1f9fe58d7180ff706ac163eb415f333",
+    "scripts/check_int24_precision_selection.py": "11663bd942b0c6a725e1de2ac1773c86f2610ed47da37bee92c1877778881849",
+    "scripts/check_int24_core_capacity.py": "e8c10a83c7e6c1a7cc81760b30083e63bba4d57032962e76bc5ed9ca880d299d"
+  },
+  "protocol": {
+    "choice": "Reuse coupled column masks and common4step prefix. Oracle norm(E s)>.1norm(transformed r) triggers cheap residual correction; current/initial/matrix masks, unchanged660 and full675upfront controls.",
+    "scope": "All E applications/selection/factor regeneration and per-step true stopping free; correction kernel entries, commonprefix/boundaries/finalverification charged. Tests opportunity for cheaper approximate actions, not native runtime or feasible memory."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 39,
+          "original_relative_residual": 9.802350226258526e-09,
+          "refresh_steps": [
+            10,
+            17,
+            23,
+            30,
+            37
+          ],
+          "analytical_entries": 160378885,
+          "method": "full675"
+        },
+        {
+          "status": "converged",
+          "iterations": 42,
+          "original_relative_residual": 8.29078355585261e-09,
+          "refresh_steps": [
+            9,
+            15,
+            21,
+            30,
+            37
+          ],
+          "analytical_entries": 179989106,
+          "method": "unchanged"
+        },
+        {
+          "status": "converged",
+          "iterations": 40,
+          "original_relative_residual": 7.123189255725714e-09,
+          "refresh_steps": [
+            11,
+            19,
+            28
+          ],
+          "analytical_entries": 169768338,
+          "method": "matrix"
+        },
+        {
+          "status": "converged",
+          "iterations": 40,
+          "original_relative_residual": 9.982061944515331e-09,
+          "refresh_steps": [
+            10,
+            17,
+            25,
+            34
+          ],
+          "analytical_entries": 171120018,
+          "method": "initial"
+        },
+        {
+          "status": "converged",
+          "iterations": 40,
+          "original_relative_residual": 7.125978154199997e-09,
+          "refresh_steps": [
+            11,
+            19,
+            28
+          ],
+          "analytical_entries": 169768338,
+          "method": "current"
+        }
+      ],
+      "exact_control": {
+        "status": "converged",
+        "iterations": 35,
+        "original_relative_residual": 8.449540080919579e-09,
+        "analytical_entries": 154459044,
+        "method": "full675_upfront"
+      }
+    },
+    {
+      "dataset": "mixed",
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 35,
+          "original_relative_residual": 7.794959205344627e-09,
+          "refresh_steps": [
+            10,
+            16,
+            22,
+            27,
+            33
+          ],
+          "analytical_entries": 145424169,
+          "method": "full675"
+        },
+        {
+          "status": "converged",
+          "iterations": 49,
+          "original_relative_residual": 6.421172761441041e-09,
+          "refresh_steps": [
+            9,
+            17,
+            24,
+            32,
+            42
+          ],
+          "analytical_entries": 206300034,
+          "method": "unchanged"
+        },
+        {
+          "status": "converged",
+          "iterations": 37,
+          "original_relative_residual": 9.0537187836202e-09,
+          "refresh_steps": [
+            10,
+            20,
+            28
+          ],
+          "analytical_entries": 158492226,
+          "method": "matrix"
+        },
+        {
+          "status": "converged",
+          "iterations": 39,
+          "original_relative_residual": 7.294665633887301e-09,
+          "refresh_steps": [
+            10,
+            19,
+            26,
+            34
+          ],
+          "analytical_entries": 167361314,
+          "method": "initial"
+        },
+        {
+          "status": "converged",
+          "iterations": 38,
+          "original_relative_residual": 8.155741979738203e-09,
+          "refresh_steps": [
+            10,
+            19,
+            26,
+            34
+          ],
+          "analytical_entries": 163602610,
+          "method": "current"
+        }
+      ],
+      "exact_control": {
+        "status": "converged",
+        "iterations": 32,
+        "original_relative_residual": 9.259995775509427e-09,
+        "analytical_entries": 141876132,
+        "method": "full675_upfront"
+      }
+    },
+    {
+      "dataset": "Concrete",
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 18,
+          "original_relative_residual": 4.062636863248201e-09,
+          "refresh_steps": [
+            3,
+            5,
+            7,
+            9,
+            11,
+            14,
+            17
+          ],
+          "analytical_entries": 9578194,
+          "method": "full675"
+        },
+        {
+          "status": "converged",
+          "iterations": 18,
+          "original_relative_residual": 4.193076728379627e-09,
+          "refresh_steps": [
+            3,
+            6,
+            8,
+            10,
+            12,
+            14
+          ],
+          "analytical_entries": 11939090,
+          "method": "unchanged"
+        },
+        {
+          "status": "converged",
+          "iterations": 17,
+          "original_relative_residual": 8.088431605745884e-09,
+          "refresh_steps": [
+            4,
+            7,
+            9,
+            13
+          ],
+          "analytical_entries": 10608034,
+          "method": "matrix"
+        },
+        {
+          "status": "converged",
+          "iterations": 17,
+          "original_relative_residual": 8.407536973644875e-09,
+          "refresh_steps": [
+            4,
+            6,
+            8,
+            11,
+            13
+          ],
+          "analytical_entries": 11151874,
+          "method": "initial"
+        },
+        {
+          "status": "converged",
+          "iterations": 18,
+          "original_relative_residual": 1.463072691528081e-09,
+          "refresh_steps": [
+            4,
+            6,
+            8,
+            10,
+            13
+          ],
+          "analytical_entries": 11395250,
+          "method": "current"
+        }
+      ],
+      "exact_control": {
+        "status": "converged",
+        "iterations": 15,
+        "original_relative_residual": 3.9637172060810455e-09,
+        "analytical_entries": 11849116,
+        "method": "full675_upfront"
+      }
+    },
+    {
+      "dataset": "Airfoil",
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 23,
+          "original_relative_residual": 5.67294432918318e-09,
+          "refresh_steps": [
+            4,
+            6,
+            8,
+            10,
+            12,
+            14,
+            17,
+            20,
+            22
+          ],
+          "analytical_entries": 33249021,
+          "method": "full675"
+        },
+        {
+          "status": "converged",
+          "iterations": 25,
+          "original_relative_residual": 6.214386058908185e-09,
+          "refresh_steps": [
+            4,
+            6,
+            8,
+            10,
+            13,
+            16,
+            19
+          ],
+          "analytical_entries": 37857678,
+          "method": "unchanged"
+        },
+        {
+          "status": "converged",
+          "iterations": 22,
+          "original_relative_residual": 6.850182640728441e-09,
+          "refresh_steps": [
+            5,
+            9,
+            13,
+            17
+          ],
+          "analytical_entries": 32450106,
+          "method": "matrix"
+        },
+        {
+          "status": "converged",
+          "iterations": 22,
+          "original_relative_residual": 8.419319822812396e-09,
+          "refresh_steps": [
+            5,
+            9,
+            13,
+            17
+          ],
+          "analytical_entries": 32450106,
+          "method": "initial"
+        },
+        {
+          "status": "converged",
+          "iterations": 22,
+          "original_relative_residual": 7.060961782901496e-09,
+          "refresh_steps": [
+            5,
+            8,
+            11,
+            14,
+            17
+          ],
+          "analytical_entries": 33243426,
+          "method": "current"
+        }
+      ],
+      "exact_control": {
+        "status": "converged",
+        "iterations": 20,
+        "original_relative_residual": 7.458901571776921e-09,
+        "analytical_entries": 32091834,
+        "method": "full675_upfront"
+      }
+    }
+  ],
+  "elapsed_wall_seconds": 3.888778201013338,
+  "elapsed_cpu_seconds": 3.8441796999999998
+}

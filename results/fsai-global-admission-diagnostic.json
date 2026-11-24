@@ -1,0 +1,5527 @@
+{
+  "status": "complete",
+  "purpose": "Offline nonlocal admission diagnostic, not a production timing claim",
+  "protocol": {
+    "checkpoint": 8,
+    "row_nnz": 8,
+    "rows_per_fair_method": 8,
+    "admission_candidates": 4,
+    "canonical_fixed_nnz": true,
+    "global_admission": "largest conditional variance reduction using current-neighbor conditional denominator",
+    "local_quality": "sigma_i/S_ii=1/(G_ii**2*S_ii), remaining conditional variance fraction",
+    "current_priority": "abs(Gq)**2",
+    "uniform_seed": [
+      0,
+      6220,
+      93
+    ],
+    "fair_schur_column_queries": 64,
+    "static_oracle": "all eligible rows, Concrete k32 lambda.001 only, EXTRA QUERY upper-opportunity diagnostic",
+    "current_rhs_selection_products": 0,
+    "blas_threads": 1,
+    "cpu_limit_seconds": 89
+  },
+  "source_sha256": {
+    "scripts/check_fsai_global_admission.py": "f98cebc125c43566f9a197bff7241b06ceb3c24db58a4914663943d723591ea4",
+    "scripts/check_fsai_pattern_exchange.py": "a3236571cd3e1ffce281d2a2d915099fbf749c582e535402dae1e1fa02068d8c",
+    "scripts/check_schur_fsai.py": "79a0e88ee4130901e9cb926c1450f6d6c65dc1b63a05b97a4dc0768d50c4e69c",
+    "scripts/check_projected_balancing.py": "e50b2c628939e456a05b6565d1a18b5da17676d56205b27bdb04d8cf0f5c7e28"
+  },
+  "static_results_sha256": "1ac91295408361cae36e24f366485985c977bf4a39d5b79f315a70664fc55b22",
+  "cases": [
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "rank": 16,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 190,
+          "converged": true,
+          "true_relative_residual": 7.628572568834466e-09,
+          "residual_replacements": 0,
+          "operator_applications": 201,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 198,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 6.271002348512411e-06,
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 193,
+          "converged": true,
+          "true_relative_residual": 6.378055489071441e-09,
+          "residual_replacements": 0,
+          "operator_applications": 204,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 201,
+          "selection": {
+            "changes": [
+              {
+                "row": 32,
+                "gain": 0.01834793605412113,
+                "added": 19,
+                "removed": 0,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 19,
+                "gain": 0.049280523188942556,
+                "added": 15,
+                "removed": 10,
+                "normalization_error": 8.881784197001252e-16
+              },
+              {
+                "row": 367,
+                "gain": 0.4469006103818005,
+                "added": 303,
+                "removed": 115,
+                "normalization_error": 8.881784197001252e-16
+              },
+              {
+                "row": 357,
+                "gain": 0.11960205626369658,
+                "added": 4,
+                "removed": 50,
+                "normalization_error": 2.7755575615628914e-15
+              },
+              {
+                "row": 288,
+                "gain": 0.20860075576007045,
+                "added": 199,
+                "removed": 145,
+                "normalization_error": 1.9984014443252818e-15
+              },
+              {
+                "row": 323,
+                "gain": 0.31447392096606014,
+                "added": 223,
+                "removed": 270,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 265,
+                "gain": 0.1115757226409736,
+                "added": 207,
+                "removed": 257,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 87,
+                "gain": 0.1760719248619822,
+                "added": 84,
+                "removed": 24,
+                "normalization_error": 1.1102230246251565e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "logdet_H_change": 1.444853450117647,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 61,
+            "newly_evaluated_kernel_entries_equivalent": 31744,
+            "full_original_kernel_column_equivalents": 62.0,
+            "maximum_column_workspace_bytes": 31744,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.029649613017681986,
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 188,
+          "converged": true,
+          "true_relative_residual": 6.7008606742912375e-09,
+          "residual_replacements": 0,
+          "operator_applications": 199,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 196,
+          "selection": {
+            "changes": [
+              {
+                "row": 32,
+                "gain": 0.030275047931696084,
+                "added": 17,
+                "removed": 0,
+                "normalization_error": 1.3322676295501878e-15
+              },
+              {
+                "row": 19,
+                "gain": 0.049280523188942556,
+                "added": 15,
+                "removed": 10,
+                "normalization_error": 8.881784197001252e-16
+              },
+              {
+                "row": 367,
+                "gain": 0.5678671641201148,
+                "added": 103,
+                "removed": 315,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 357,
+                "gain": 0.24268140181932912,
+                "added": 71,
+                "removed": 50,
+                "normalization_error": 2.4424906541753444e-15
+              },
+              {
+                "row": 288,
+                "gain": 0.27112192371901556,
+                "added": 97,
+                "removed": 145,
+                "normalization_error": 2.220446049250313e-15
+              },
+              {
+                "row": 323,
+                "gain": 0.6379323328827388,
+                "added": 268,
+                "removed": 185,
+                "normalization_error": 1.5543122344752192e-15
+              },
+              {
+                "row": 265,
+                "gain": 0.5399665814546691,
+                "added": 226,
+                "removed": 173,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 87,
+                "gain": 0.1760719248619822,
+                "added": 84,
+                "removed": 24,
+                "normalization_error": 1.1102230246251565e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "logdet_H_change": 2.515196899978488,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 61,
+            "newly_evaluated_kernel_entries_equivalent": 31744,
+            "full_original_kernel_column_equivalents": 62.0,
+            "maximum_column_workspace_bytes": 31744,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.03367719499510713,
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 186,
+          "converged": true,
+          "true_relative_residual": 8.358746102065234e-09,
+          "residual_replacements": 0,
+          "operator_applications": 197,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 194,
+          "selection": {
+            "changes": [
+              {
+                "row": 10,
+                "gain": 0.006772650714987194,
+                "added": 1,
+                "removed": 4,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 187,
+                "gain": 0.6796209575787029,
+                "added": 185,
+                "removed": 106,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 55,
+                "gain": 0.15786044017157144,
+                "added": 19,
+                "removed": 53,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 355,
+                "gain": 0.47371370148851505,
+                "added": 143,
+                "removed": 87,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 482,
+                "gain": 0.24112253473331097,
+                "added": 292,
+                "removed": 239,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 391,
+                "gain": 0.12767642193246362,
+                "added": 86,
+                "removed": 378,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 452,
+                "gain": 0.16470868030927044,
+                "added": 426,
+                "removed": 342,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 324,
+                "gain": 0.1683888275646696,
+                "added": 163,
+                "removed": 174,
+                "normalization_error": 0.0
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "logdet_H_change": 2.019864214493491,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 62,
+            "newly_evaluated_kernel_entries_equivalent": 31744,
+            "full_original_kernel_column_equivalents": 62.0,
+            "maximum_column_workspace_bytes": 31744,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.027759902004618198,
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 190,
+          "converged": true,
+          "true_relative_residual": 7.467114649985299e-09,
+          "residual_replacements": 0,
+          "operator_applications": 201,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 198,
+          "selection": {
+            "changes": [
+              {
+                "row": 14,
+                "gain": 0.013019348426686811,
+                "added": 8,
+                "removed": 11,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 15,
+                "gain": 0.03481727963879334,
+                "added": 2,
+                "removed": 0,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 58,
+                "gain": 0.35701249376885436,
+                "added": 14,
+                "removed": 30,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 208,
+                "gain": 0.7612375806022061,
+                "added": 27,
+                "removed": 58,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 13,
+                "gain": 0.025694659303150503,
+                "added": 4,
+                "removed": 7,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 97,
+                "gain": 0.3207637899153979,
+                "added": 28,
+                "removed": 84,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 9,
+                "gain": 0.01831087059279166,
+                "added": 4,
+                "removed": 0,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 27,
+                "gain": 0.15422478028142977,
+                "added": 26,
+                "removed": 18,
+                "normalization_error": 2.220446049250313e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "logdet_H_change": 1.6850808025293107,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 34,
+            "newly_evaluated_kernel_entries_equivalent": 31744,
+            "full_original_kernel_column_equivalents": 62.0,
+            "maximum_column_workspace_bytes": 31744,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.027590325014898553,
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 149,
+        "converged": true,
+        "true_relative_residual": 5.265274710835817e-09,
+        "residual_replacements": 0,
+        "operator_applications": 157,
+        "breakdown": null,
+        "retained_state_bytes": 133376
+      },
+      "static_uninterrupted": {
+        "iterations": 196,
+        "converged": true,
+        "true_relative_residual": 9.635296547741095e-09,
+        "residual_replacements": 0,
+        "operator_applications": 206,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 3940,
+        "minimum_positive_diagonal": 3.2950194040288148,
+        "maximum_row_D_energy_normalization_error": 1.021405182655144e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 49268,
+        "retained_state_bytes": 118900,
+        "byte_ratio_to_fixed_rp": 0.8914647312859885,
+        "iteration_ratio_to_fixed_rp": 1.3154362416107384
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 0.405200609017047,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 0.405200609017047,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 3940,
+        "minimum_positive_diagonal": 3.2950194040288148,
+        "maximum_row_D_energy_normalization_error": 1.021405182655144e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 49268
+      },
+      "retained_state_bytes": 118900,
+      "priorities": {
+        "exposure_rows": [
+          32,
+          19,
+          367,
+          357,
+          288,
+          323,
+          265,
+          87
+        ],
+        "local_quality_rows": [
+          14,
+          15,
+          58,
+          208,
+          13,
+          97,
+          9,
+          27
+        ],
+        "uniform_rows": [
+          10,
+          187,
+          55,
+          355,
+          482,
+          391,
+          452,
+          324
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "rank": 32,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 105,
+          "converged": true,
+          "true_relative_residual": 8.65599543266715e-09,
+          "residual_replacements": 0,
+          "operator_applications": 112,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 113,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 5.240988684818149e-06,
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 106,
+          "converged": true,
+          "true_relative_residual": 7.5646850178183e-09,
+          "residual_replacements": 0,
+          "operator_applications": 113,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 114,
+          "selection": {
+            "changes": [
+              {
+                "row": 143,
+                "gain": 0.37475419607177757,
+                "added": 86,
+                "removed": 12,
+                "normalization_error": 9.992007221626409e-16
+              },
+              {
+                "row": 210,
+                "gain": 0.25545639018197813,
+                "added": 188,
+                "removed": 29,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 11,
+                "gain": 0.013053295017527954,
+                "added": 1,
+                "removed": 6,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 204,
+                "gain": 0.1532826737838905,
+                "added": 123,
+                "removed": 176,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 403,
+                "gain": 0.14603563960719101,
+                "added": 42,
+                "removed": 363,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 107,
+                "gain": 0.2415307463945553,
+                "added": 24,
+                "removed": 106,
+                "normalization_error": 5.551115123125783e-16
+              },
+              {
+                "row": 153,
+                "gain": 0.02275136913081567,
+                "added": 39,
+                "removed": 103,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 92,
+                "gain": 0.01811940340129246,
+                "added": 5,
+                "removed": 29,
+                "normalization_error": 2.220446049250313e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3812,
+            "logdet_H_change": 1.2249837135890287,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 57,
+            "newly_evaluated_kernel_entries_equivalent": 30720,
+            "full_original_kernel_column_equivalents": 60.0,
+            "maximum_column_workspace_bytes": 30720,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.029915652005001903,
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 105,
+          "converged": true,
+          "true_relative_residual": 5.4578180273436586e-09,
+          "residual_replacements": 0,
+          "operator_applications": 112,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 113,
+          "selection": {
+            "changes": [
+              {
+                "row": 143,
+                "gain": 0.37475419607177757,
+                "added": 86,
+                "removed": 12,
+                "normalization_error": 9.992007221626409e-16
+              },
+              {
+                "row": 210,
+                "gain": 0.5497725345396667,
+                "added": 184,
+                "removed": 74,
+                "normalization_error": 5.551115123125783e-16
+              },
+              {
+                "row": 11,
+                "gain": 0.013053295017527954,
+                "added": 1,
+                "removed": 6,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 204,
+                "gain": 0.25738727580514537,
+                "added": 107,
+                "removed": 43,
+                "normalization_error": 1.1102230246251565e-15
+              },
+              {
+                "row": 403,
+                "gain": 0.2327472347804797,
+                "added": 286,
+                "removed": 333,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 107,
+                "gain": 0.2415307463945553,
+                "added": 24,
+                "removed": 106,
+                "normalization_error": 5.551115123125783e-16
+              },
+              {
+                "row": 153,
+                "gain": 0.11027664565940525,
+                "added": 4,
+                "removed": 30,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 92,
+                "gain": 0.14688866462180308,
+                "added": 81,
+                "removed": 17,
+                "normalization_error": 6.661338147750939e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3812,
+            "logdet_H_change": 1.9264105928903608,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 57,
+            "newly_evaluated_kernel_entries_equivalent": 30720,
+            "full_original_kernel_column_equivalents": 60.0,
+            "maximum_column_workspace_bytes": 30720,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.028422670991858467,
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 108,
+          "converged": true,
+          "true_relative_residual": 5.957830050439769e-09,
+          "residual_replacements": 0,
+          "operator_applications": 115,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 116,
+          "selection": {
+            "changes": [
+              {
+                "row": 464,
+                "gain": 0.09116604837670668,
+                "added": 6,
+                "removed": 29,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 347,
+                "gain": 0.07593352554765882,
+                "added": 234,
+                "removed": 326,
+                "normalization_error": 3.6637359812630166e-15
+              },
+              {
+                "row": 435,
+                "gain": 0.1392563096326367,
+                "added": 301,
+                "removed": 135,
+                "normalization_error": 7.771561172376096e-16
+              },
+              {
+                "row": 47,
+                "gain": 0.05677206209381171,
+                "added": 33,
+                "removed": 29,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 338,
+                "gain": 0.057930523894733424,
+                "added": 217,
+                "removed": 65,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 246,
+                "gain": 0.05416812068015376,
+                "added": 168,
+                "removed": 151,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 187,
+                "gain": 0.10163396474955694,
+                "added": 150,
+                "removed": 139,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 322,
+                "gain": 0.13077360960014728,
+                "added": 52,
+                "removed": 153,
+                "normalization_error": 2.220446049250313e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3812,
+            "logdet_H_change": 0.7076341645754052,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 61,
+            "newly_evaluated_kernel_entries_equivalent": 30720,
+            "full_original_kernel_column_equivalents": 60.0,
+            "maximum_column_workspace_bytes": 30720,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.023946907982463017,
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 105,
+          "converged": true,
+          "true_relative_residual": 8.465210756091003e-09,
+          "residual_replacements": 0,
+          "operator_applications": 112,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 113,
+          "selection": {
+            "changes": [
+              {
+                "row": 12,
+                "gain": 0.008168864772571251,
+                "added": 10,
+                "removed": 5,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 13,
+                "gain": 0.007488770588204639,
+                "added": 9,
+                "removed": 10,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 16,
+                "gain": 0.011695528170487206,
+                "added": 4,
+                "removed": 2,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 116,
+                "gain": 0.3258574594635763,
+                "added": 58,
+                "removed": 59,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 14,
+                "gain": 0.006290061000340825,
+                "added": 3,
+                "removed": 13,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 155,
+                "gain": 0.18409063857992247,
+                "added": 40,
+                "removed": 91,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 71,
+                "gain": 0.08500160033704812,
+                "added": 17,
+                "removed": 36,
+                "normalization_error": 0.0
+              }
+            ],
+            "accepted_rows": 7,
+            "nnz": 3812,
+            "logdet_H_change": 0.6285929229121507,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 35,
+            "newly_evaluated_kernel_entries_equivalent": 30720,
+            "full_original_kernel_column_equivalents": 60.0,
+            "maximum_column_workspace_bytes": 30720,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.023942214000271633,
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 84,
+        "converged": true,
+        "true_relative_residual": 8.053158961917197e-09,
+        "residual_replacements": 0,
+        "operator_applications": 89,
+        "breakdown": null,
+        "retained_state_bytes": 270848
+      },
+      "static_uninterrupted": {
+        "iterations": 113,
+        "converged": true,
+        "true_relative_residual": 6.137272822171968e-09,
+        "residual_replacements": 0,
+        "operator_applications": 119,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 3812,
+        "minimum_positive_diagonal": 4.385609281356556,
+        "maximum_row_D_energy_normalization_error": 2.7755575615628914e-15,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 47668,
+        "retained_state_bytes": 182836,
+        "byte_ratio_to_fixed_rp": 0.6750502126654064,
+        "iteration_ratio_to_fixed_rp": 1.3452380952380953
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 0.22158910684684935,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 0.22158910684684935,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 3812,
+        "minimum_positive_diagonal": 4.385609281356556,
+        "maximum_row_D_energy_normalization_error": 2.7755575615628914e-15,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 47668
+      },
+      "retained_state_bytes": 182836,
+      "priorities": {
+        "exposure_rows": [
+          143,
+          210,
+          11,
+          204,
+          403,
+          107,
+          153,
+          92
+        ],
+        "local_quality_rows": [
+          12,
+          13,
+          16,
+          116,
+          9,
+          14,
+          155,
+          71
+        ],
+        "uniform_rows": [
+          464,
+          347,
+          435,
+          47,
+          338,
+          246,
+          187,
+          322
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "rank": 16,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 230,
+          "converged": true,
+          "true_relative_residual": 7.917741620361026e-09,
+          "residual_replacements": 0,
+          "operator_applications": 243,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 238,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 4.875997547060251e-06,
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 227,
+          "converged": true,
+          "true_relative_residual": 9.500781141388738e-09,
+          "residual_replacements": 0,
+          "operator_applications": 240,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 235,
+          "selection": {
+            "changes": [
+              {
+                "row": 18,
+                "gain": 0.10445737688318478,
+                "added": 3,
+                "removed": 8,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 91,
+                "gain": 0.0829360795215823,
+                "added": 83,
+                "removed": 14,
+                "normalization_error": 8.881784197001252e-16
+              },
+              {
+                "row": 690,
+                "gain": 0.2830986251736657,
+                "added": 340,
+                "removed": 628,
+                "normalization_error": 3.1086244689504383e-15
+              },
+              {
+                "row": 118,
+                "gain": 0.16960928157125066,
+                "added": 53,
+                "removed": 83,
+                "normalization_error": 1.1102230246251565e-15
+              },
+              {
+                "row": 732,
+                "gain": 0.003733090966660956,
+                "added": 66,
+                "removed": 690,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 27,
+                "gain": 0.06031120819090142,
+                "added": 18,
+                "removed": 5,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 335,
+                "gain": 0.10708612383780418,
+                "added": 258,
+                "removed": 137,
+                "normalization_error": 1.5543122344752192e-15
+              },
+              {
+                "row": 251,
+                "gain": 0.020609183429883205,
+                "added": 125,
+                "removed": 162,
+                "normalization_error": 0.0
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6436,
+            "logdet_H_change": 0.8318409695749331,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 47,
+            "newly_evaluated_kernel_entries_equivalent": 51712,
+            "full_original_kernel_column_equivalents": 62.75728155339806,
+            "maximum_column_workspace_bytes": 51712,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.05469260099926032,
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 225,
+          "converged": true,
+          "true_relative_residual": 9.64017768067089e-09,
+          "residual_replacements": 0,
+          "operator_applications": 238,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 233,
+          "selection": {
+            "changes": [
+              {
+                "row": 18,
+                "gain": 0.10445737688318478,
+                "added": 3,
+                "removed": 8,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 91,
+                "gain": 0.4552980675922962,
+                "added": 59,
+                "removed": 14,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 690,
+                "gain": 0.5368269396703728,
+                "added": 451,
+                "removed": 628,
+                "normalization_error": 1.9984014443252818e-15
+              },
+              {
+                "row": 118,
+                "gain": 0.31909334812113466,
+                "added": 74,
+                "removed": 83,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 732,
+                "gain": 0.6695797109955824,
+                "added": 421,
+                "removed": 482,
+                "normalization_error": 3.1086244689504383e-15
+              },
+              {
+                "row": 27,
+                "gain": 0.06031120819090142,
+                "added": 18,
+                "removed": 5,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 335,
+                "gain": 0.6289723984280235,
+                "added": 43,
+                "removed": 52,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 251,
+                "gain": 0.3491446441203906,
+                "added": 147,
+                "removed": 12,
+                "normalization_error": 2.220446049250313e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6436,
+            "logdet_H_change": 3.1236836940018864,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 47,
+            "newly_evaluated_kernel_entries_equivalent": 51712,
+            "full_original_kernel_column_equivalents": 62.75728155339806,
+            "maximum_column_workspace_bytes": 51712,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.02904048899654299,
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 227,
+          "converged": true,
+          "true_relative_residual": 9.290104836340663e-09,
+          "residual_replacements": 0,
+          "operator_applications": 240,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 235,
+          "selection": {
+            "changes": [
+              {
+                "row": 11,
+                "gain": 0.00930842666350315,
+                "added": 4,
+                "removed": 1,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 302,
+                "gain": 0.11942326651993646,
+                "added": 37,
+                "removed": 295,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 85,
+                "gain": 0.1582829083478948,
+                "added": 58,
+                "removed": 33,
+                "normalization_error": 1.1102230246251565e-15
+              },
+              {
+                "row": 580,
+                "gain": 0.004396794210882991,
+                "added": 340,
+                "removed": 520,
+                "normalization_error": 1.765254609153999e-14
+              },
+              {
+                "row": 785,
+                "gain": 0.16049293544056387,
+                "added": 391,
+                "removed": 618,
+                "normalization_error": 4.6629367034256575e-15
+              },
+              {
+                "row": 638,
+                "gain": 0.059032184249605324,
+                "added": 287,
+                "removed": 332,
+                "normalization_error": 1.1102230246251565e-15
+              },
+              {
+                "row": 740,
+                "gain": 0.004098223432770784,
+                "added": 539,
+                "removed": 446,
+                "normalization_error": 4.440892098500626e-15
+              },
+              {
+                "row": 528,
+                "gain": 0.030402801393504517,
+                "added": 179,
+                "removed": 114,
+                "normalization_error": 4.440892098500626e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6436,
+            "logdet_H_change": 0.5454375402586619,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 62,
+            "newly_evaluated_kernel_entries_equivalent": 51712,
+            "full_original_kernel_column_equivalents": 62.75728155339806,
+            "maximum_column_workspace_bytes": 51712,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.026858701021410525,
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 228,
+          "converged": true,
+          "true_relative_residual": 9.408824126262348e-09,
+          "residual_replacements": 0,
+          "operator_applications": 241,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 236,
+          "selection": {
+            "changes": [
+              {
+                "row": 221,
+                "gain": 0.028674113836315757,
+                "added": 15,
+                "removed": 73,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 11,
+                "gain": 0.00930842666350315,
+                "added": 4,
+                "removed": 1,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 204,
+                "gain": 0.7843255965119464,
+                "added": 193,
+                "removed": 1,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 18,
+                "gain": 0.10445737688318478,
+                "added": 3,
+                "removed": 8,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 757,
+                "gain": 0.08477584466818903,
+                "added": 526,
+                "removed": 62,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 10,
+                "gain": 0.009426048860231224,
+                "added": 6,
+                "removed": 0,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 89,
+                "gain": 0.14075505472907685,
+                "added": 33,
+                "removed": 86,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 34,
+                "gain": 0.09010303988072024,
+                "added": 17,
+                "removed": 33,
+                "normalization_error": 0.0
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6436,
+            "logdet_H_change": 1.2518255020331674,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 47,
+            "newly_evaluated_kernel_entries_equivalent": 51712,
+            "full_original_kernel_column_equivalents": 62.75728155339806,
+            "maximum_column_workspace_bytes": 51712,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.022709526994731277,
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 291,
+        "converged": true,
+        "true_relative_residual": 6.329996164346407e-09,
+        "residual_replacements": 0,
+        "operator_applications": 306,
+        "breakdown": null,
+        "retained_state_bytes": 213248
+      },
+      "static_uninterrupted": {
+        "iterations": 236,
+        "converged": true,
+        "true_relative_residual": 7.2406085358806625e-09,
+        "residual_replacements": 0,
+        "operator_applications": 248,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 6436,
+        "minimum_positive_diagonal": 2.295458620000647,
+        "maximum_row_D_energy_normalization_error": 8.060219158778636e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 80468,
+        "retained_state_bytes": 192532,
+        "byte_ratio_to_fixed_rp": 0.9028548919567827,
+        "iteration_ratio_to_fixed_rp": 0.8109965635738832
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 0.9919208497570084,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 0.9919208497570084,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 6436,
+        "minimum_positive_diagonal": 2.295458620000647,
+        "maximum_row_D_energy_normalization_error": 8.060219158778636e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 80468
+      },
+      "retained_state_bytes": 192532,
+      "priorities": {
+        "exposure_rows": [
+          18,
+          91,
+          690,
+          118,
+          732,
+          27,
+          335,
+          251
+        ],
+        "local_quality_rows": [
+          221,
+          11,
+          204,
+          18,
+          757,
+          10,
+          89,
+          34
+        ],
+        "uniform_rows": [
+          11,
+          302,
+          85,
+          580,
+          785,
+          638,
+          740,
+          528
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "rank": 32,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 143,
+          "converged": true,
+          "true_relative_residual": 9.96299072223845e-09,
+          "residual_replacements": 0,
+          "operator_applications": 152,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 151,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.00017146000755019486,
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 142,
+          "converged": true,
+          "true_relative_residual": 8.630033993233862e-09,
+          "residual_replacements": 0,
+          "operator_applications": 151,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 150,
+          "selection": {
+            "changes": [
+              {
+                "row": 450,
+                "gain": 0.009107059447796788,
+                "added": 183,
+                "removed": 59,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 513,
+                "gain": 0.028106709744777237,
+                "added": 338,
+                "removed": 375,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 242,
+                "gain": 0.17421778350238334,
+                "added": 28,
+                "removed": 159,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 227,
+                "gain": 0.10408270736282724,
+                "added": 72,
+                "removed": 144,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 60,
+                "gain": 0.11446306217708371,
+                "added": 46,
+                "removed": 26,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 595,
+                "gain": 0.016817612215090805,
+                "added": 120,
+                "removed": 86,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 25,
+                "gain": 0.03733241298203846,
+                "added": 24,
+                "removed": 17,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 56,
+                "gain": 0.05407124645998677,
+                "added": 21,
+                "removed": 31,
+                "normalization_error": 0.0
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "logdet_H_change": 0.5381985938919843,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 56,
+            "newly_evaluated_kernel_entries_equivalent": 50688,
+            "full_original_kernel_column_equivalents": 61.51456310679612,
+            "maximum_column_workspace_bytes": 50688,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.025217584014171734,
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 145,
+          "converged": true,
+          "true_relative_residual": 8.482590843624512e-09,
+          "residual_replacements": 0,
+          "operator_applications": 154,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 153,
+          "selection": {
+            "changes": [
+              {
+                "row": 450,
+                "gain": 0.39375599824262003,
+                "added": 362,
+                "removed": 59,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 513,
+                "gain": 0.1625987201727028,
+                "added": 423,
+                "removed": 395,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 242,
+                "gain": 0.17421778350238334,
+                "added": 28,
+                "removed": 159,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 227,
+                "gain": 0.19501384128686916,
+                "added": 3,
+                "removed": 144,
+                "normalization_error": 1.3322676295501878e-15
+              },
+              {
+                "row": 60,
+                "gain": 0.2110068581518731,
+                "added": 21,
+                "removed": 26,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 595,
+                "gain": 0.23177817346963103,
+                "added": 436,
+                "removed": 86,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 25,
+                "gain": 0.03733241298203846,
+                "added": 24,
+                "removed": 17,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 56,
+                "gain": 0.05652888101777778,
+                "added": 40,
+                "removed": 27,
+                "normalization_error": 3.3306690738754696e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "logdet_H_change": 1.4622326688258958,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 56,
+            "newly_evaluated_kernel_entries_equivalent": 50688,
+            "full_original_kernel_column_equivalents": 61.51456310679612,
+            "maximum_column_workspace_bytes": 50688,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.034881630999734625,
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 144,
+          "converged": true,
+          "true_relative_residual": 8.994580980663925e-09,
+          "residual_replacements": 0,
+          "operator_applications": 153,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 152,
+          "selection": {
+            "changes": [
+              {
+                "row": 767,
+                "gain": 0.01888771150352454,
+                "added": 718,
+                "removed": 467,
+                "normalization_error": 8.992806499463768e-15
+              },
+              {
+                "row": 572,
+                "gain": 0.05117398570875277,
+                "added": 329,
+                "removed": 385,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 720,
+                "gain": 0.10040654552019661,
+                "added": 223,
+                "removed": 332,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 73,
+                "gain": 0.1223613460511822,
+                "added": 70,
+                "removed": 16,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 559,
+                "gain": 0.0038595706178395383,
+                "added": 34,
+                "removed": 80,
+                "normalization_error": 1.7763568394002505e-14
+              },
+              {
+                "row": 406,
+                "gain": 0.025929857717427184,
+                "added": 388,
+                "removed": 359,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 306,
+                "gain": 0.03227092231807249,
+                "added": 209,
+                "removed": 149,
+                "normalization_error": 3.774758283725532e-15
+              },
+              {
+                "row": 531,
+                "gain": 0.1408626709051794,
+                "added": 22,
+                "removed": 138,
+                "normalization_error": 0.0
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "logdet_H_change": 0.4957526103421747,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 64,
+            "newly_evaluated_kernel_entries_equivalent": 50688,
+            "full_original_kernel_column_equivalents": 61.51456310679612,
+            "maximum_column_workspace_bytes": 50688,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.04594355900189839,
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 142,
+          "converged": true,
+          "true_relative_residual": 9.017942392485721e-09,
+          "residual_replacements": 0,
+          "operator_applications": 151,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 150,
+          "selection": {
+            "changes": [
+              {
+                "row": 99,
+                "gain": 0.04141031390827129,
+                "added": 46,
+                "removed": 64,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 516,
+                "gain": 0.021951637954770245,
+                "added": 238,
+                "removed": 200,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 10,
+                "gain": 0.00418874593521685,
+                "added": 2,
+                "removed": 8,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 60,
+                "gain": 0.2110068581518731,
+                "added": 21,
+                "removed": 26,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 11,
+                "gain": 0.011570801358581129,
+                "added": 4,
+                "removed": 0,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 216,
+                "gain": 0.035001280449722616,
+                "added": 14,
+                "removed": 71,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 658,
+                "gain": 0.016855817744799752,
+                "added": 132,
+                "removed": 546,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 33,
+                "gain": 0.1310249779131831,
+                "added": 16,
+                "removed": 27,
+                "normalization_error": 0.0
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "logdet_H_change": 0.4730104334164181,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 49,
+            "newly_evaluated_kernel_entries_equivalent": 50688,
+            "full_original_kernel_column_equivalents": 61.51456310679612,
+            "maximum_column_workspace_bytes": 50688,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.023456566006643698,
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 139,
+          "converged": true,
+          "true_relative_residual": 8.956926304402108e-09,
+          "residual_replacements": 0,
+          "operator_applications": 147,
+          "breakdown": null,
+          "method": "extra_query_global_row_search",
+          "total_iterations": 147,
+          "selection": {
+            "changes": [
+              {
+                "row": 492,
+                "gain": 0.894984585164323,
+                "added": 165,
+                "removed": 31,
+                "normalization_error": 1.1102230246251565e-15
+              },
+              {
+                "row": 535,
+                "gain": 0.7339151517998523,
+                "added": 124,
+                "removed": 78,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 600,
+                "gain": 0.6922716679919086,
+                "added": 562,
+                "removed": 290,
+                "normalization_error": 5.773159728050814e-15
+              },
+              {
+                "row": 771,
+                "gain": 0.6796816649418966,
+                "added": 114,
+                "removed": 723,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 500,
+                "gain": 0.6593227149347416,
+                "added": 353,
+                "removed": 175,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 237,
+                "gain": 0.6347939723361298,
+                "added": 195,
+                "removed": 52,
+                "normalization_error": 8.881784197001252e-16
+              },
+              {
+                "row": 449,
+                "gain": 0.6124298939624366,
+                "added": 21,
+                "removed": 284,
+                "normalization_error": 2.7755575615628914e-15
+              },
+              {
+                "row": 192,
+                "gain": 0.5927934017065587,
+                "added": 26,
+                "removed": 148,
+                "normalization_error": 2.220446049250313e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "logdet_H_change": 5.500193052837847,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 6272,
+            "unique_schur_columns": 792,
+            "newly_evaluated_kernel_entries_equivalent": 4967424,
+            "full_original_kernel_column_equivalents": 6028.42718446602,
+            "maximum_column_workspace_bytes": 50688,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 2.2226366190006956,
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 179,
+        "converged": true,
+        "true_relative_residual": 9.603724467956966e-09,
+        "residual_replacements": 0,
+        "operator_applications": 188,
+        "breakdown": null,
+        "retained_state_bytes": 430592
+      },
+      "static_uninterrupted": {
+        "iterations": 149,
+        "converged": true,
+        "true_relative_residual": 8.129443574838438e-09,
+        "residual_replacements": 0,
+        "operator_applications": 157,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 6308,
+        "minimum_positive_diagonal": 2.5649212208681442,
+        "maximum_row_D_energy_normalization_error": 2.19824158875781e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 78868,
+        "retained_state_bytes": 296404,
+        "byte_ratio_to_fixed_rp": 0.6883639268727705,
+        "iteration_ratio_to_fixed_rp": 0.8324022346368715
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 0.45495064859180784,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 0.45495064859180784,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 6308,
+        "minimum_positive_diagonal": 2.5649212208681442,
+        "maximum_row_D_energy_normalization_error": 2.19824158875781e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 78868
+      },
+      "retained_state_bytes": 296404,
+      "priorities": {
+        "exposure_rows": [
+          450,
+          513,
+          242,
+          227,
+          60,
+          595,
+          25,
+          56
+        ],
+        "local_quality_rows": [
+          99,
+          516,
+          10,
+          60,
+          11,
+          216,
+          658,
+          33
+        ],
+        "uniform_rows": [
+          767,
+          572,
+          720,
+          73,
+          559,
+          406,
+          306,
+          531
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    },
+    {
+      "dataset": "airfoil-observed",
+      "regularization": 0.001,
+      "rank": 16,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 200,
+          "converged": true,
+          "true_relative_residual": 8.850520265295983e-09,
+          "residual_replacements": 0,
+          "operator_applications": 211,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 208,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 1.781000173650682e-05,
+          "retained_state_bytes": 281740,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 205,
+          "converged": true,
+          "true_relative_residual": 9.348161781717875e-09,
+          "residual_replacements": 0,
+          "operator_applications": 217,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 213,
+          "selection": {
+            "changes": [
+              {
+                "row": 11,
+                "gain": 0.048639952720617184,
+                "added": 9,
+                "removed": 7,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 254,
+                "gain": 0.11207424506660747,
+                "added": 181,
+                "removed": 178,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 393,
+                "gain": 0.06884556946812061,
+                "added": 90,
+                "removed": 224,
+                "normalization_error": 1.1102230246251565e-15
+              },
+              {
+                "row": 191,
+                "gain": 0.3575587011680441,
+                "added": 180,
+                "removed": 54,
+                "normalization_error": 1.5543122344752192e-15
+              },
+              {
+                "row": 463,
+                "gain": 0.014198028878486545,
+                "added": 449,
+                "removed": 425,
+                "normalization_error": 6.106226635438361e-15
+              },
+              {
+                "row": 518,
+                "gain": 0.12202724403242382,
+                "added": 415,
+                "removed": 136,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 180,
+                "gain": 0.7005483122861076,
+                "added": 132,
+                "removed": 70,
+                "normalization_error": 1.5543122344752192e-15
+              },
+              {
+                "row": 76,
+                "gain": 0.1692444859527772,
+                "added": 57,
+                "removed": 71,
+                "normalization_error": 3.3306690738754696e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9460,
+            "logdet_H_change": 1.5931365395731847,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 59,
+            "newly_evaluated_kernel_entries_equivalent": 75904,
+            "full_original_kernel_column_equivalents": 63.14808652246256,
+            "maximum_column_workspace_bytes": 75904,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.09683737301384099,
+          "retained_state_bytes": 281740,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 208,
+          "converged": true,
+          "true_relative_residual": 7.228171109833099e-09,
+          "residual_replacements": 0,
+          "operator_applications": 220,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 216,
+          "selection": {
+            "changes": [
+              {
+                "row": 11,
+                "gain": 0.048639952720617184,
+                "added": 9,
+                "removed": 7,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 254,
+                "gain": 0.4111470820115829,
+                "added": 21,
+                "removed": 33,
+                "normalization_error": 1.7763568394002505e-15
+              },
+              {
+                "row": 393,
+                "gain": 0.28080913703816124,
+                "added": 213,
+                "removed": 322,
+                "normalization_error": 2.220446049250313e-15
+              },
+              {
+                "row": 191,
+                "gain": 0.5407021832970736,
+                "added": 132,
+                "removed": 111,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 463,
+                "gain": 0.126947005746993,
+                "added": 180,
+                "removed": 425,
+                "normalization_error": 8.881784197001252e-15
+              },
+              {
+                "row": 518,
+                "gain": 0.3857749614004004,
+                "added": 356,
+                "removed": 225,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 180,
+                "gain": 0.7902216522650586,
+                "added": 73,
+                "removed": 70,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 76,
+                "gain": 0.32711756119687463,
+                "added": 40,
+                "removed": 39,
+                "normalization_error": 1.6653345369377348e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9460,
+            "logdet_H_change": 2.9113595356767616,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 59,
+            "newly_evaluated_kernel_entries_equivalent": 75904,
+            "full_original_kernel_column_equivalents": 63.14808652246256,
+            "maximum_column_workspace_bytes": 75904,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.023559651017421857,
+          "retained_state_bytes": 281740,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 205,
+          "converged": true,
+          "true_relative_residual": 8.488651355199126e-09,
+          "residual_replacements": 0,
+          "operator_applications": 217,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 213,
+          "selection": {
+            "changes": [
+              {
+                "row": 13,
+                "gain": 0.08898165884409497,
+                "added": 12,
+                "removed": 1,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 442,
+                "gain": 0.5377228879275565,
+                "added": 157,
+                "removed": 125,
+                "normalization_error": 8.881784197001252e-16
+              },
+              {
+                "row": 122,
+                "gain": 0.04675313813338184,
+                "added": 85,
+                "removed": 52,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 853,
+                "gain": 0.22190947322329344,
+                "added": 56,
+                "removed": 21,
+                "normalization_error": 1.6653345369377348e-14
+              },
+              {
+                "row": 1152,
+                "gain": 0.010018506883261566,
+                "added": 47,
+                "removed": 406,
+                "normalization_error": 6.217248937900877e-15
+              },
+              {
+                "row": 937,
+                "gain": 0.013410395001465543,
+                "added": 20,
+                "removed": 910,
+                "normalization_error": 1.0547118733938987e-14
+              },
+              {
+                "row": 776,
+                "gain": 0.015093734476510925,
+                "added": 610,
+                "removed": 143,
+                "normalization_error": 0.0
+              }
+            ],
+            "accepted_rows": 7,
+            "nnz": 9460,
+            "logdet_H_change": 0.9338897944895648,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 59,
+            "newly_evaluated_kernel_entries_equivalent": 75904,
+            "full_original_kernel_column_equivalents": 63.14808652246256,
+            "maximum_column_workspace_bytes": 75904,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.03668813401600346,
+          "retained_state_bytes": 281740,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 202,
+          "converged": true,
+          "true_relative_residual": 9.694955145246421e-09,
+          "residual_replacements": 0,
+          "operator_applications": 214,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 210,
+          "selection": {
+            "changes": [
+              {
+                "row": 16,
+                "gain": 0.009650844608950422,
+                "added": 5,
+                "removed": 11,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 18,
+                "gain": 0.009327130254317003,
+                "added": 12,
+                "removed": 8,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 138,
+                "gain": 0.014673499542634352,
+                "added": 72,
+                "removed": 23,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 14,
+                "gain": 0.010497164598262564,
+                "added": 3,
+                "removed": 13,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 9,
+                "gain": 0.0016159761088753992,
+                "added": 0,
+                "removed": 7,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 268,
+                "gain": 0.10328740634962148,
+                "added": 189,
+                "removed": 174,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 111,
+                "gain": 0.02489475042729918,
+                "added": 15,
+                "removed": 16,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 724,
+                "gain": 0.09417184190862454,
+                "added": 463,
+                "removed": 158,
+                "normalization_error": 4.440892098500626e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9460,
+            "logdet_H_change": 0.2681186137985849,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 45,
+            "newly_evaluated_kernel_entries_equivalent": 75904,
+            "full_original_kernel_column_equivalents": 63.14808652246256,
+            "maximum_column_workspace_bytes": 75904,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.02349787999992259,
+          "retained_state_bytes": 281740,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 206,
+        "converged": true,
+        "true_relative_residual": 9.416942946639736e-09,
+        "residual_replacements": 0,
+        "operator_applications": 217,
+        "breakdown": null,
+        "retained_state_bytes": 310016
+      },
+      "static_uninterrupted": {
+        "iterations": 209,
+        "converged": true,
+        "true_relative_residual": 8.165017977465476e-09,
+        "residual_replacements": 0,
+        "operator_applications": 220,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 9460,
+        "minimum_positive_diagonal": 2.6706625654611984,
+        "maximum_row_D_energy_normalization_error": 8.060219158778636e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 118268,
+        "retained_state_bytes": 281740,
+        "byte_ratio_to_fixed_rp": 0.9087918042939719,
+        "iteration_ratio_to_fixed_rp": 1.0145631067961165
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 1.002832439840385,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 1.002832439840385,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 9460,
+        "minimum_positive_diagonal": 2.6706625654611984,
+        "maximum_row_D_energy_normalization_error": 8.060219158778636e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 118268
+      },
+      "retained_state_bytes": 281740,
+      "priorities": {
+        "exposure_rows": [
+          11,
+          254,
+          393,
+          191,
+          463,
+          518,
+          180,
+          76
+        ],
+        "local_quality_rows": [
+          16,
+          18,
+          138,
+          14,
+          9,
+          268,
+          111,
+          724
+        ],
+        "uniform_rows": [
+          13,
+          442,
+          122,
+          853,
+          1152,
+          937,
+          1089,
+          776
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    },
+    {
+      "dataset": "airfoil-observed",
+      "regularization": 0.001,
+      "rank": 32,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 116,
+          "converged": true,
+          "true_relative_residual": 9.977502207887217e-09,
+          "residual_replacements": 0,
+          "operator_applications": 123,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 124,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.00028825801564380527,
+          "retained_state_bytes": 433996,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 116,
+          "converged": true,
+          "true_relative_residual": 8.029766470662608e-09,
+          "residual_replacements": 0,
+          "operator_applications": 123,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 124,
+          "selection": {
+            "changes": [
+              {
+                "row": 88,
+                "gain": 0.01617800501385955,
+                "added": 47,
+                "removed": 55,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 26,
+                "gain": 0.0060331783777204965,
+                "added": 23,
+                "removed": 13,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 80,
+                "gain": 0.014484600420434113,
+                "added": 70,
+                "removed": 28,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 465,
+                "gain": 0.10485939944853723,
+                "added": 377,
+                "removed": 122,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 967,
+                "gain": 0.39611564321231757,
+                "added": 319,
+                "removed": 668,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 9,
+                "gain": 0.0038973589516868735,
+                "added": 0,
+                "removed": 8,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 177,
+                "gain": 0.2905125994650493,
+                "added": 130,
+                "removed": 16,
+                "normalization_error": 6.661338147750939e-16
+              }
+            ],
+            "accepted_rows": 7,
+            "nnz": 9332,
+            "logdet_H_change": 0.8320807848896051,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 55,
+            "newly_evaluated_kernel_entries_equivalent": 74880,
+            "full_original_kernel_column_equivalents": 62.296173044925126,
+            "maximum_column_workspace_bytes": 74880,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.055651092989137396,
+          "retained_state_bytes": 433996,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 116,
+          "converged": true,
+          "true_relative_residual": 9.001285985728528e-09,
+          "residual_replacements": 0,
+          "operator_applications": 123,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 124,
+          "selection": {
+            "changes": [
+              {
+                "row": 88,
+                "gain": 0.1495955344775132,
+                "added": 7,
+                "removed": 56,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 26,
+                "gain": 0.06398325077310524,
+                "added": 4,
+                "removed": 13,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 80,
+                "gain": 0.036622806390124094,
+                "added": 29,
+                "removed": 28,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 21,
+                "gain": 0.0036227578083525844,
+                "added": 11,
+                "removed": 12,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 465,
+                "gain": 0.1607964830213893,
+                "added": 150,
+                "removed": 306,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 967,
+                "gain": 0.39611564321231757,
+                "added": 319,
+                "removed": 668,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 9,
+                "gain": 0.0038973589516868735,
+                "added": 0,
+                "removed": 8,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 177,
+                "gain": 0.2905125994650493,
+                "added": 130,
+                "removed": 16,
+                "normalization_error": 6.661338147750939e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9332,
+            "logdet_H_change": 1.105146434099538,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 55,
+            "newly_evaluated_kernel_entries_equivalent": 74880,
+            "full_original_kernel_column_equivalents": 62.296173044925126,
+            "maximum_column_workspace_bytes": 74880,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.04092035998473875,
+          "retained_state_bytes": 433996,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 118,
+          "converged": true,
+          "true_relative_residual": 7.582927374491594e-09,
+          "residual_replacements": 0,
+          "operator_applications": 125,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 126,
+          "selection": {
+            "changes": [
+              {
+                "row": 1135,
+                "gain": 0.01388603649629663,
+                "added": 279,
+                "removed": 1058,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 846,
+                "gain": 0.029452113672354816,
+                "added": 46,
+                "removed": 176,
+                "normalization_error": 2.220446049250313e-15
+              },
+              {
+                "row": 1066,
+                "gain": 0.02402743054728615,
+                "added": 551,
+                "removed": 976,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 105,
+                "gain": 0.0236800234513141,
+                "added": 83,
+                "removed": 49,
+                "normalization_error": 1.1102230246251565e-15
+              },
+              {
+                "row": 826,
+                "gain": 0.03826081327709669,
+                "added": 744,
+                "removed": 763,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 600,
+                "gain": 0.08105926346943329,
+                "added": 386,
+                "removed": 413,
+                "normalization_error": 8.881784197001252e-16
+              },
+              {
+                "row": 450,
+                "gain": 0.11190609317649507,
+                "added": 415,
+                "removed": 273,
+                "normalization_error": 9.992007221626409e-16
+              },
+              {
+                "row": 783,
+                "gain": 0.07918814366929508,
+                "added": 353,
+                "removed": 482,
+                "normalization_error": 4.440892098500626e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9332,
+            "logdet_H_change": 0.4014599177595718,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 64,
+            "newly_evaluated_kernel_entries_equivalent": 74880,
+            "full_original_kernel_column_equivalents": 62.296173044925126,
+            "maximum_column_workspace_bytes": 74880,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.024169023003196344,
+          "retained_state_bytes": 433996,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 118,
+          "converged": true,
+          "true_relative_residual": 7.538333523554103e-09,
+          "residual_replacements": 0,
+          "operator_applications": 125,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 126,
+          "selection": {
+            "changes": [
+              {
+                "row": 71,
+                "gain": 0.1435329835019691,
+                "added": 67,
+                "removed": 70,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 16,
+                "gain": 0.016094451695855178,
+                "added": 13,
+                "removed": 14,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 14,
+                "gain": 0.009926129766447037,
+                "added": 3,
+                "removed": 13,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 11,
+                "gain": 0.020337001660230752,
+                "added": 3,
+                "removed": 6,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 136,
+                "gain": 0.011564551016780866,
+                "added": 70,
+                "removed": 23,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 88,
+                "gain": 0.1495955344775132,
+                "added": 7,
+                "removed": 56,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 45,
+                "gain": 0.007162528866027214,
+                "added": 7,
+                "removed": 39,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 33,
+                "gain": 0.0041042037687385804,
+                "added": 1,
+                "removed": 7,
+                "normalization_error": 2.220446049250313e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9332,
+            "logdet_H_change": 0.36231738475356196,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 43,
+            "newly_evaluated_kernel_entries_equivalent": 74880,
+            "full_original_kernel_column_equivalents": 62.296173044925126,
+            "maximum_column_workspace_bytes": 74880,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.04848143699928187,
+          "retained_state_bytes": 433996,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 103,
+        "converged": true,
+        "true_relative_residual": 5.547243355971278e-09,
+        "residual_replacements": 0,
+        "operator_applications": 109,
+        "breakdown": null,
+        "retained_state_bytes": 624128
+      },
+      "static_uninterrupted": {
+        "iterations": 120,
+        "converged": true,
+        "true_relative_residual": 8.827399250997953e-09,
+        "residual_replacements": 0,
+        "operator_applications": 126,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 9332,
+        "minimum_positive_diagonal": 3.75496340247861,
+        "maximum_row_D_energy_normalization_error": 1.2212453270876722e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 116668,
+        "retained_state_bytes": 433996,
+        "byte_ratio_to_fixed_rp": 0.6953637715340443,
+        "iteration_ratio_to_fixed_rp": 1.1650485436893203
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 0.43331077198768087,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 0.43331077198768087,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 9332,
+        "minimum_positive_diagonal": 3.75496340247861,
+        "maximum_row_D_energy_normalization_error": 1.2212453270876722e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 116668
+      },
+      "retained_state_bytes": 433996,
+      "priorities": {
+        "exposure_rows": [
+          88,
+          26,
+          80,
+          21,
+          465,
+          967,
+          9,
+          177
+        ],
+        "local_quality_rows": [
+          71,
+          16,
+          14,
+          11,
+          136,
+          88,
+          45,
+          33
+        ],
+        "uniform_rows": [
+          1135,
+          846,
+          1066,
+          105,
+          826,
+          600,
+          450,
+          783
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "rank": 16,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 1207,
+          "converged": true,
+          "true_relative_residual": 9.585693500555128e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1269,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 1215,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 4.704983439296484e-06,
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 1203,
+          "converged": true,
+          "true_relative_residual": 9.995077256170954e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1265,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 1211,
+          "selection": {
+            "changes": [
+              {
+                "row": 288,
+                "gain": 0.23866402202037237,
+                "added": 199,
+                "removed": 145,
+                "normalization_error": 5.773159728050814e-15
+              },
+              {
+                "row": 359,
+                "gain": 0.4465562434596629,
+                "added": 224,
+                "removed": 206,
+                "normalization_error": 5.88418203051333e-15
+              },
+              {
+                "row": 186,
+                "gain": 0.20730274099897028,
+                "added": 67,
+                "removed": 63,
+                "normalization_error": 1.5543122344752192e-15
+              },
+              {
+                "row": 97,
+                "gain": 0.04612102625980163,
+                "added": 24,
+                "removed": 37,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 378,
+                "gain": 0.6250517686631429,
+                "added": 196,
+                "removed": 322,
+                "normalization_error": 1.1546319456101628e-14
+              },
+              {
+                "row": 273,
+                "gain": 0.26519429853015003,
+                "added": 5,
+                "removed": 135,
+                "normalization_error": 1.5543122344752192e-15
+              },
+              {
+                "row": 366,
+                "gain": 0.8421427638639765,
+                "added": 309,
+                "removed": 61,
+                "normalization_error": 1.3322676295501878e-15
+              },
+              {
+                "row": 111,
+                "gain": 0.315406975859794,
+                "added": 6,
+                "removed": 92,
+                "normalization_error": 2.3314683517128287e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "logdet_H_change": 2.9864398396558705,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 62,
+            "newly_evaluated_kernel_entries_equivalent": 31744,
+            "full_original_kernel_column_equivalents": 62.0,
+            "maximum_column_workspace_bytes": 31744,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.02674119599396363,
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 1196,
+          "converged": true,
+          "true_relative_residual": 9.640044756523562e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1257,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 1204,
+          "selection": {
+            "changes": [
+              {
+                "row": 288,
+                "gain": 0.401126962172503,
+                "added": 97,
+                "removed": 204,
+                "normalization_error": 9.2148511043888e-15
+              },
+              {
+                "row": 359,
+                "gain": 0.4759588114217177,
+                "added": 166,
+                "removed": 206,
+                "normalization_error": 1.554312234475219e-14
+              },
+              {
+                "row": 186,
+                "gain": 0.48259327253606366,
+                "added": 107,
+                "removed": 68,
+                "normalization_error": 4.6629367034256575e-15
+              },
+              {
+                "row": 97,
+                "gain": 0.32177322937845454,
+                "added": 28,
+                "removed": 84,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 378,
+                "gain": 0.9288688688355604,
+                "added": 274,
+                "removed": 358,
+                "normalization_error": 2.3314683517128287e-15
+              },
+              {
+                "row": 273,
+                "gain": 0.5321132866538217,
+                "added": 70,
+                "removed": 135,
+                "normalization_error": 1.9984014443252818e-15
+              },
+              {
+                "row": 366,
+                "gain": 1.0123481211269079,
+                "added": 0,
+                "removed": 41,
+                "normalization_error": 8.215650382226158e-15
+              },
+              {
+                "row": 111,
+                "gain": 0.315406975859794,
+                "added": 6,
+                "removed": 92,
+                "normalization_error": 2.3314683517128287e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "logdet_H_change": 4.4701895279848225,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 62,
+            "newly_evaluated_kernel_entries_equivalent": 31744,
+            "full_original_kernel_column_equivalents": 62.0,
+            "maximum_column_workspace_bytes": 31744,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.030537983984686434,
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 1214,
+          "converged": true,
+          "true_relative_residual": 6.00393387779749e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1276,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 1222,
+          "selection": {
+            "changes": [
+              {
+                "row": 10,
+                "gain": 0.012354568160199385,
+                "added": 1,
+                "removed": 7,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 187,
+                "gain": 1.1272161379446441,
+                "added": 32,
+                "removed": 127,
+                "normalization_error": 1.3322676295501878e-15
+              },
+              {
+                "row": 55,
+                "gain": 0.26462639565876905,
+                "added": 19,
+                "removed": 49,
+                "normalization_error": 1.3322676295501878e-15
+              },
+              {
+                "row": 355,
+                "gain": 0.904684382880527,
+                "added": 143,
+                "removed": 87,
+                "normalization_error": 2.886579864025407e-15
+              },
+              {
+                "row": 482,
+                "gain": 0.3397927568637156,
+                "added": 333,
+                "removed": 121,
+                "normalization_error": 2.6645352591003757e-15
+              },
+              {
+                "row": 391,
+                "gain": 0.2830943740699919,
+                "added": 158,
+                "removed": 378,
+                "normalization_error": 1.3322676295501878e-14
+              },
+              {
+                "row": 452,
+                "gain": 0.4599635302455376,
+                "added": 216,
+                "removed": 342,
+                "normalization_error": 3.375077994860476e-14
+              },
+              {
+                "row": 324,
+                "gain": 0.38318951601531986,
+                "added": 160,
+                "removed": 174,
+                "normalization_error": 2.886579864025407e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "logdet_H_change": 3.7749216618387047,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 62,
+            "newly_evaluated_kernel_entries_equivalent": 31744,
+            "full_original_kernel_column_equivalents": 62.0,
+            "maximum_column_workspace_bytes": 31744,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.02379682700848207,
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 1211,
+          "converged": true,
+          "true_relative_residual": 8.896698870408868e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1273,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 1219,
+          "selection": {
+            "changes": [
+              {
+                "row": 14,
+                "gain": 0.013562801025658197,
+                "added": 8,
+                "removed": 11,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 15,
+                "gain": 0.04095259930782503,
+                "added": 2,
+                "removed": 0,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 58,
+                "gain": 0.4702503068964122,
+                "added": 14,
+                "removed": 13,
+                "normalization_error": 1.1102230246251565e-15
+              },
+              {
+                "row": 208,
+                "gain": 0.8966091487493283,
+                "added": 27,
+                "removed": 104,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 13,
+                "gain": 0.027317346564144016,
+                "added": 4,
+                "removed": 7,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 9,
+                "gain": 0.021213351082759294,
+                "added": 4,
+                "removed": 0,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 27,
+                "gain": 0.2138264127241805,
+                "added": 26,
+                "removed": 18,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 10,
+                "gain": 0.012354568160199385,
+                "added": 1,
+                "removed": 7,
+                "normalization_error": 2.220446049250313e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3940,
+            "logdet_H_change": 1.6960865345105067,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 27,
+            "newly_evaluated_kernel_entries_equivalent": 31744,
+            "full_original_kernel_column_equivalents": 62.0,
+            "maximum_column_workspace_bytes": 31744,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.018769292015349492,
+          "retained_state_bytes": 118900,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 1311,
+        "converged": true,
+        "true_relative_residual": 9.517715955598278e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1377,
+        "breakdown": null,
+        "retained_state_bytes": 133376
+      },
+      "static_uninterrupted": {
+        "iterations": 1244,
+        "converged": true,
+        "true_relative_residual": 7.355028178098576e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1307,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 3940,
+        "minimum_positive_diagonal": 3.3497545073533526,
+        "maximum_row_D_energy_normalization_error": 5.795364188543317e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 49268,
+        "retained_state_bytes": 118900,
+        "byte_ratio_to_fixed_rp": 0.8914647312859885,
+        "iteration_ratio_to_fixed_rp": 0.9488939740655988
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 1.4147086755252374,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 1.4147086755252374,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 3940,
+        "minimum_positive_diagonal": 3.3497545073533526,
+        "maximum_row_D_energy_normalization_error": 5.795364188543317e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 49268
+      },
+      "retained_state_bytes": 118900,
+      "priorities": {
+        "exposure_rows": [
+          288,
+          359,
+          186,
+          97,
+          378,
+          273,
+          366,
+          111
+        ],
+        "local_quality_rows": [
+          14,
+          15,
+          58,
+          208,
+          13,
+          9,
+          27,
+          10
+        ],
+        "uniform_rows": [
+          10,
+          187,
+          55,
+          355,
+          482,
+          391,
+          452,
+          324
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "rank": 32,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 653,
+          "converged": true,
+          "true_relative_residual": 9.917869876839035e-09,
+          "residual_replacements": 0,
+          "operator_applications": 687,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 661,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 5.251000402495265e-06,
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 647,
+          "converged": true,
+          "true_relative_residual": 9.967324485842145e-09,
+          "residual_replacements": 0,
+          "operator_applications": 681,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 655,
+          "selection": {
+            "changes": [
+              {
+                "row": 390,
+                "gain": 0.2222305035027388,
+                "added": 298,
+                "removed": 121,
+                "normalization_error": 8.881784197001252e-16
+              },
+              {
+                "row": 252,
+                "gain": 0.013608296474301156,
+                "added": 73,
+                "removed": 116,
+                "normalization_error": 5.773159728050814e-15
+              },
+              {
+                "row": 230,
+                "gain": 0.5622076194389528,
+                "added": 185,
+                "removed": 121,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 329,
+                "gain": 0.6434004168197529,
+                "added": 282,
+                "removed": 61,
+                "normalization_error": 9.992007221626409e-15
+              },
+              {
+                "row": 120,
+                "gain": 0.32455172932658927,
+                "added": 91,
+                "removed": 74,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 267,
+                "gain": 0.05209433095838359,
+                "added": 39,
+                "removed": 116,
+                "normalization_error": 4.107825191113079e-15
+              },
+              {
+                "row": 452,
+                "gain": 0.10599866046846657,
+                "added": 193,
+                "removed": 380,
+                "normalization_error": 7.993605777301127e-15
+              },
+              {
+                "row": 275,
+                "gain": 0.08795584872469897,
+                "added": 46,
+                "removed": 230,
+                "normalization_error": 8.881784197001252e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3812,
+            "logdet_H_change": 2.0120474057138837,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 55,
+            "newly_evaluated_kernel_entries_equivalent": 30720,
+            "full_original_kernel_column_equivalents": 60.0,
+            "maximum_column_workspace_bytes": 30720,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.03221750000375323,
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 645,
+          "converged": true,
+          "true_relative_residual": 7.826843370255547e-09,
+          "residual_replacements": 0,
+          "operator_applications": 679,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 653,
+          "selection": {
+            "changes": [
+              {
+                "row": 390,
+                "gain": 0.4022170543626865,
+                "added": 0,
+                "removed": 121,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 252,
+                "gain": 0.30728670543429465,
+                "added": 128,
+                "removed": 90,
+                "normalization_error": 1.2212453270876722e-15
+              },
+              {
+                "row": 230,
+                "gain": 0.7934478490816862,
+                "added": 30,
+                "removed": 175,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 329,
+                "gain": 0.7825659515693673,
+                "added": 139,
+                "removed": 182,
+                "normalization_error": 4.107825191113079e-15
+              },
+              {
+                "row": 120,
+                "gain": 0.4397213323489438,
+                "added": 84,
+                "removed": 29,
+                "normalization_error": 2.886579864025407e-15
+              },
+              {
+                "row": 267,
+                "gain": 0.23752099793912188,
+                "added": 128,
+                "removed": 116,
+                "normalization_error": 1.9984014443252818e-15
+              },
+              {
+                "row": 452,
+                "gain": 0.3841242283554892,
+                "added": 401,
+                "removed": 380,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 275,
+                "gain": 0.24772022547837294,
+                "added": 47,
+                "removed": 72,
+                "normalization_error": 6.661338147750939e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3812,
+            "logdet_H_change": 3.5946043445699623,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 55,
+            "newly_evaluated_kernel_entries_equivalent": 30720,
+            "full_original_kernel_column_equivalents": 60.0,
+            "maximum_column_workspace_bytes": 30720,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.04769606998888776,
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 650,
+          "converged": true,
+          "true_relative_residual": 7.382790369874771e-09,
+          "residual_replacements": 0,
+          "operator_applications": 684,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 658,
+          "selection": {
+            "changes": [
+              {
+                "row": 464,
+                "gain": 0.3722724564882654,
+                "added": 328,
+                "removed": 29,
+                "normalization_error": 6.439293542825908e-15
+              },
+              {
+                "row": 347,
+                "gain": 0.2891968282319376,
+                "added": 234,
+                "removed": 199,
+                "normalization_error": 6.661338147750939e-15
+              },
+              {
+                "row": 435,
+                "gain": 0.4245947910772178,
+                "added": 411,
+                "removed": 90,
+                "normalization_error": 7.327471962526033e-15
+              },
+              {
+                "row": 47,
+                "gain": 0.21373250246589953,
+                "added": 30,
+                "removed": 17,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 338,
+                "gain": 0.539175031646752,
+                "added": 337,
+                "removed": 61,
+                "normalization_error": 8.881784197001252e-15
+              },
+              {
+                "row": 246,
+                "gain": 0.260521944774881,
+                "added": 10,
+                "removed": 151,
+                "normalization_error": 1.2212453270876722e-15
+              },
+              {
+                "row": 187,
+                "gain": 0.4808340533332645,
+                "added": 150,
+                "removed": 182,
+                "normalization_error": 2.1094237467877974e-15
+              },
+              {
+                "row": 322,
+                "gain": 0.4067939371453272,
+                "added": 315,
+                "removed": 30,
+                "normalization_error": 4.884981308350689e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 3812,
+            "logdet_H_change": 2.987121545163545,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 61,
+            "newly_evaluated_kernel_entries_equivalent": 30720,
+            "full_original_kernel_column_equivalents": 60.0,
+            "maximum_column_workspace_bytes": 30720,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.022225068998523057,
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 645,
+          "converged": true,
+          "true_relative_residual": 9.600270468100081e-09,
+          "residual_replacements": 0,
+          "operator_applications": 679,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 653,
+          "selection": {
+            "changes": [
+              {
+                "row": 12,
+                "gain": 0.013019046898094393,
+                "added": 10,
+                "removed": 6,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 13,
+                "gain": 0.009373103238226469,
+                "added": 9,
+                "removed": 10,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 14,
+                "gain": 0.013239974992638357,
+                "added": 3,
+                "removed": 13,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 21,
+                "gain": 0.029366299989869497,
+                "added": 13,
+                "removed": 7,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 52,
+                "gain": 0.08749884187283163,
+                "added": 39,
+                "removed": 11,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 49,
+                "gain": 0.062237090072247585,
+                "added": 17,
+                "removed": 32,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 16,
+                "gain": 0.040885973442298766,
+                "added": 4,
+                "removed": 3,
+                "normalization_error": 2.220446049250313e-16
+              }
+            ],
+            "accepted_rows": 7,
+            "nnz": 3812,
+            "logdet_H_change": 0.2556203305062067,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 27,
+            "newly_evaluated_kernel_entries_equivalent": 30720,
+            "full_original_kernel_column_equivalents": 60.0,
+            "maximum_column_workspace_bytes": 30720,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.02140281000174582,
+          "retained_state_bytes": 182836,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 725,
+        "converged": true,
+        "true_relative_residual": 9.728248735361572e-09,
+        "residual_replacements": 0,
+        "operator_applications": 762,
+        "breakdown": null,
+        "retained_state_bytes": 270848
+      },
+      "static_uninterrupted": {
+        "iterations": 658,
+        "converged": true,
+        "true_relative_residual": 7.066870408085797e-09,
+        "residual_replacements": 0,
+        "operator_applications": 691,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 3812,
+        "minimum_positive_diagonal": 4.5253106278742505,
+        "maximum_row_D_energy_normalization_error": 3.175237850427948e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 47668,
+        "retained_state_bytes": 182836,
+        "byte_ratio_to_fixed_rp": 0.6750502126654064,
+        "iteration_ratio_to_fixed_rp": 0.9075862068965517
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 0.8739547798045266,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 0.8739547798045266,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 3812,
+        "minimum_positive_diagonal": 4.5253106278742505,
+        "maximum_row_D_energy_normalization_error": 3.175237850427948e-14,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 47668
+      },
+      "retained_state_bytes": 182836,
+      "priorities": {
+        "exposure_rows": [
+          390,
+          252,
+          230,
+          329,
+          120,
+          267,
+          452,
+          275
+        ],
+        "local_quality_rows": [
+          12,
+          13,
+          9,
+          14,
+          21,
+          52,
+          49,
+          16
+        ],
+        "uniform_rows": [
+          464,
+          347,
+          435,
+          47,
+          338,
+          246,
+          187,
+          322
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "rank": 16,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 1236,
+          "converged": true,
+          "true_relative_residual": 8.350822844303029e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1299,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 1244,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 5.192006938159466e-06,
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 1215,
+          "converged": true,
+          "true_relative_residual": 8.982581420820463e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1277,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 1223,
+          "selection": {
+            "changes": [
+              {
+                "row": 690,
+                "gain": 0.40508130120295516,
+                "added": 340,
+                "removed": 88,
+                "normalization_error": 2.4424906541753444e-15
+              },
+              {
+                "row": 283,
+                "gain": 0.1284056019379751,
+                "added": 206,
+                "removed": 112,
+                "normalization_error": 4.560796185160143e-13
+              },
+              {
+                "row": 158,
+                "gain": 0.08917025097731313,
+                "added": 10,
+                "removed": 30,
+                "normalization_error": 4.884981308350689e-15
+              },
+              {
+                "row": 742,
+                "gain": 0.10295378370502158,
+                "added": 512,
+                "removed": 414,
+                "normalization_error": 6.852296507986466e-13
+              },
+              {
+                "row": 215,
+                "gain": 0.15708579099271494,
+                "added": 40,
+                "removed": 54,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 175,
+                "gain": 0.20871762329448493,
+                "added": 9,
+                "removed": 138,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 642,
+                "gain": 0.2500941752471407,
+                "added": 404,
+                "removed": 133,
+                "normalization_error": 1.0014211682118912e-13
+              }
+            ],
+            "accepted_rows": 7,
+            "nnz": 6436,
+            "logdet_H_change": 1.3415085273576057,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 57,
+            "newly_evaluated_kernel_entries_equivalent": 51712,
+            "full_original_kernel_column_equivalents": 62.75728155339806,
+            "maximum_column_workspace_bytes": 51712,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.021908598020672798,
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 1196,
+          "converged": true,
+          "true_relative_residual": 8.905926997413665e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1257,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 1204,
+          "selection": {
+            "changes": [
+              {
+                "row": 690,
+                "gain": 0.8702395938049183,
+                "added": 463,
+                "removed": 66,
+                "normalization_error": 9.547918011776346e-15
+              },
+              {
+                "row": 694,
+                "gain": 0.03125247744739784,
+                "added": 146,
+                "removed": 218,
+                "normalization_error": 3.6637359812630166e-14
+              },
+              {
+                "row": 283,
+                "gain": 0.1284056019379751,
+                "added": 206,
+                "removed": 112,
+                "normalization_error": 4.560796185160143e-13
+              },
+              {
+                "row": 158,
+                "gain": 0.5163433823118845,
+                "added": 126,
+                "removed": 95,
+                "normalization_error": 7.771561172376096e-15
+              },
+              {
+                "row": 742,
+                "gain": 0.16157945059842163,
+                "added": 363,
+                "removed": 414,
+                "normalization_error": 4.3565151486291143e-13
+              },
+              {
+                "row": 215,
+                "gain": 0.3680565180205805,
+                "added": 43,
+                "removed": 54,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 175,
+                "gain": 0.2572427132733647,
+                "added": 23,
+                "removed": 103,
+                "normalization_error": 4.218847493575595e-15
+              },
+              {
+                "row": 642,
+                "gain": 0.4800619366830796,
+                "added": 520,
+                "removed": 123,
+                "normalization_error": 3.197442310920451e-14
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6436,
+            "logdet_H_change": 2.8131816740776223,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 57,
+            "newly_evaluated_kernel_entries_equivalent": 51712,
+            "full_original_kernel_column_equivalents": 62.75728155339806,
+            "maximum_column_workspace_bytes": 51712,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.03036706300918013,
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 1230,
+          "converged": true,
+          "true_relative_residual": 9.258796035188521e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1293,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 1238,
+          "selection": {
+            "changes": [
+              {
+                "row": 11,
+                "gain": 0.01370900674793982,
+                "added": 4,
+                "removed": 7,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 302,
+                "gain": 0.9720392275540648,
+                "added": 46,
+                "removed": 117,
+                "normalization_error": 1.7985612998927536e-14
+              },
+              {
+                "row": 85,
+                "gain": 0.35892166484144955,
+                "added": 58,
+                "removed": 61,
+                "normalization_error": 3.552713678800501e-15
+              },
+              {
+                "row": 580,
+                "gain": 0.05014751082396732,
+                "added": 345,
+                "removed": 520,
+                "normalization_error": 1.4349632593280148e-12
+              },
+              {
+                "row": 785,
+                "gain": 1.0066807187601556,
+                "added": 543,
+                "removed": 242,
+                "normalization_error": 1.680877659282487e-13
+              },
+              {
+                "row": 638,
+                "gain": 0.39193426563084677,
+                "added": 61,
+                "removed": 351,
+                "normalization_error": 1.0769163338864018e-13
+              },
+              {
+                "row": 740,
+                "gain": 0.004409305539944173,
+                "added": 539,
+                "removed": 36,
+                "normalization_error": 4.46753745109163e-13
+              },
+              {
+                "row": 528,
+                "gain": 0.07347734730357872,
+                "added": 219,
+                "removed": 475,
+                "normalization_error": 8.132383655379272e-13
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6436,
+            "logdet_H_change": 2.871319047201947,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 62,
+            "newly_evaluated_kernel_entries_equivalent": 51712,
+            "full_original_kernel_column_equivalents": 62.75728155339806,
+            "maximum_column_workspace_bytes": 51712,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.07608522800728679,
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 1224,
+          "converged": true,
+          "true_relative_residual": 8.92012617520256e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1287,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 1232,
+          "selection": {
+            "changes": [
+              {
+                "row": 204,
+                "gain": 0.8698663776510156,
+                "added": 193,
+                "removed": 1,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 11,
+                "gain": 0.01370900674793982,
+                "added": 4,
+                "removed": 7,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 18,
+                "gain": 0.11639485280369229,
+                "added": 3,
+                "removed": 8,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 89,
+                "gain": 0.14640331087424605,
+                "added": 33,
+                "removed": 17,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 34,
+                "gain": 0.10252030177267614,
+                "added": 17,
+                "removed": 33,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 10,
+                "gain": 0.01240455880195534,
+                "added": 6,
+                "removed": 8,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 502,
+                "gain": 1.0067615262775975,
+                "added": 168,
+                "removed": 311,
+                "normalization_error": 1.1102230246251565e-15
+              }
+            ],
+            "accepted_rows": 7,
+            "nnz": 6436,
+            "logdet_H_change": 2.2680599349291226,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 39,
+            "newly_evaluated_kernel_entries_equivalent": 51712,
+            "full_original_kernel_column_equivalents": 62.75728155339806,
+            "maximum_column_workspace_bytes": 51712,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.029507455008570105,
+          "retained_state_bytes": 192532,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 2500,
+        "converged": false,
+        "true_relative_residual": 7.8364917778762e-08,
+        "residual_replacements": 0,
+        "operator_applications": 2625,
+        "breakdown": null,
+        "retained_state_bytes": 213248
+      },
+      "static_uninterrupted": {
+        "iterations": 1238,
+        "converged": true,
+        "true_relative_residual": 9.390725096845565e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1300,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 6436,
+        "minimum_positive_diagonal": 2.3203795918224657,
+        "maximum_row_D_energy_normalization_error": 5.7336357883741584e-12,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 80468,
+        "retained_state_bytes": 192532,
+        "byte_ratio_to_fixed_rp": 0.9028548919567827,
+        "iteration_ratio_to_fixed_rp": null
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 5.742236842213528,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 5.742236842213528,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 6436,
+        "minimum_positive_diagonal": 2.3203795918224657,
+        "maximum_row_D_energy_normalization_error": 5.7336357883741584e-12,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 80468
+      },
+      "retained_state_bytes": 192532,
+      "priorities": {
+        "exposure_rows": [
+          690,
+          694,
+          283,
+          158,
+          742,
+          215,
+          175,
+          642
+        ],
+        "local_quality_rows": [
+          204,
+          11,
+          18,
+          89,
+          34,
+          10,
+          502,
+          8
+        ],
+        "uniform_rows": [
+          11,
+          302,
+          85,
+          580,
+          785,
+          638,
+          740,
+          528
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "rank": 32,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 778,
+          "converged": true,
+          "true_relative_residual": 9.632203366225516e-09,
+          "residual_replacements": 0,
+          "operator_applications": 818,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 786,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 4.603993147611618e-06,
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 771,
+          "converged": true,
+          "true_relative_residual": 7.8151514628172e-09,
+          "residual_replacements": 0,
+          "operator_applications": 811,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 779,
+          "selection": {
+            "changes": [
+              {
+                "row": 277,
+                "gain": 0.06283871332605546,
+                "added": 234,
+                "removed": 110,
+                "normalization_error": 5.051514762044462e-14
+              },
+              {
+                "row": 429,
+                "gain": 0.12850324554982356,
+                "added": 369,
+                "removed": 17,
+                "normalization_error": 2.6645352591003757e-15
+              },
+              {
+                "row": 242,
+                "gain": 0.3829208654217584,
+                "added": 28,
+                "removed": 213,
+                "normalization_error": 8.881784197001252e-16
+              },
+              {
+                "row": 34,
+                "gain": 0.035041721149147984,
+                "added": 0,
+                "removed": 28,
+                "normalization_error": 2.6645352591003757e-15
+              },
+              {
+                "row": 330,
+                "gain": 0.10814238954414478,
+                "added": 223,
+                "removed": 158,
+                "normalization_error": 1.3322676295501878e-15
+              },
+              {
+                "row": 179,
+                "gain": 0.05921098300642055,
+                "added": 174,
+                "removed": 52,
+                "normalization_error": 7.771561172376096e-16
+              },
+              {
+                "row": 455,
+                "gain": 0.49711845432869467,
+                "added": 95,
+                "removed": 301,
+                "normalization_error": 7.549516567451064e-15
+              }
+            ],
+            "accepted_rows": 7,
+            "nnz": 6308,
+            "logdet_H_change": 1.2737763723260453,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 57,
+            "newly_evaluated_kernel_entries_equivalent": 50688,
+            "full_original_kernel_column_equivalents": 61.51456310679612,
+            "maximum_column_workspace_bytes": 50688,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.022541054990142584,
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 782,
+          "converged": true,
+          "true_relative_residual": 8.905406400404261e-09,
+          "residual_replacements": 0,
+          "operator_applications": 823,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 790,
+          "selection": {
+            "changes": [
+              {
+                "row": 680,
+                "gain": 0.029890958209819782,
+                "added": 143,
+                "removed": 3,
+                "normalization_error": 1.4488410471358293e-13
+              },
+              {
+                "row": 277,
+                "gain": 0.06283871332605546,
+                "added": 234,
+                "removed": 110,
+                "normalization_error": 5.051514762044462e-14
+              },
+              {
+                "row": 429,
+                "gain": 0.4315784975531544,
+                "added": 62,
+                "removed": 127,
+                "normalization_error": 5.551115123125783e-16
+              },
+              {
+                "row": 242,
+                "gain": 0.684235094662117,
+                "added": 34,
+                "removed": 12,
+                "normalization_error": 8.659739592076221e-15
+              },
+              {
+                "row": 34,
+                "gain": 0.04905740706351504,
+                "added": 27,
+                "removed": 26,
+                "normalization_error": 2.6645352591003757e-15
+              },
+              {
+                "row": 330,
+                "gain": 0.26525364860256745,
+                "added": 279,
+                "removed": 44,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 179,
+                "gain": 0.05921098300642055,
+                "added": 174,
+                "removed": 52,
+                "normalization_error": 7.771561172376096e-16
+              },
+              {
+                "row": 455,
+                "gain": 0.49711845432869467,
+                "added": 95,
+                "removed": 301,
+                "normalization_error": 7.549516567451064e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "logdet_H_change": 2.0791837567523443,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 57,
+            "newly_evaluated_kernel_entries_equivalent": 50688,
+            "full_original_kernel_column_equivalents": 61.51456310679612,
+            "maximum_column_workspace_bytes": 50688,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.024816788005409762,
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 773,
+          "converged": true,
+          "true_relative_residual": 8.995308011520225e-09,
+          "residual_replacements": 0,
+          "operator_applications": 813,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 781,
+          "selection": {
+            "changes": [
+              {
+                "row": 767,
+                "gain": 0.002603696964482671,
+                "added": 34,
+                "removed": 280,
+                "normalization_error": 9.636735853746359e-14
+              },
+              {
+                "row": 572,
+                "gain": 0.33102551008381836,
+                "added": 363,
+                "removed": 282,
+                "normalization_error": 2.0650148258027912e-14
+              },
+              {
+                "row": 720,
+                "gain": 0.06176219054169241,
+                "added": 243,
+                "removed": 139,
+                "normalization_error": 3.4416913763379853e-15
+              },
+              {
+                "row": 73,
+                "gain": 0.16914696374063734,
+                "added": 70,
+                "removed": 1,
+                "normalization_error": 7.771561172376096e-16
+              },
+              {
+                "row": 559,
+                "gain": 0.022275665255110818,
+                "added": 187,
+                "removed": 241,
+                "normalization_error": 8.335554468885675e-13
+              },
+              {
+                "row": 406,
+                "gain": 0.5024887156122144,
+                "added": 180,
+                "removed": 283,
+                "normalization_error": 7.438494264988549e-15
+              },
+              {
+                "row": 306,
+                "gain": 0.21042589621598717,
+                "added": 101,
+                "removed": 117,
+                "normalization_error": 1.3322676295501878e-14
+              },
+              {
+                "row": 531,
+                "gain": 0.20822029614132406,
+                "added": 449,
+                "removed": 320,
+                "normalization_error": 4.218847493575595e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "logdet_H_change": 1.5079489345552672,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 64,
+            "newly_evaluated_kernel_entries_equivalent": 50688,
+            "full_original_kernel_column_equivalents": 61.51456310679612,
+            "maximum_column_workspace_bytes": 50688,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.0218384470208548,
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 781,
+          "converged": true,
+          "true_relative_residual": 7.522611687991305e-09,
+          "residual_replacements": 0,
+          "operator_applications": 822,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 789,
+          "selection": {
+            "changes": [
+              {
+                "row": 11,
+                "gain": 0.02020938792856023,
+                "added": 4,
+                "removed": 0,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 99,
+                "gain": 0.12414212906972671,
+                "added": 46,
+                "removed": 54,
+                "normalization_error": 3.3306690738754696e-16
+              },
+              {
+                "row": 60,
+                "gain": 0.3166611782339376,
+                "added": 21,
+                "removed": 26,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 33,
+                "gain": 0.15885692810691837,
+                "added": 16,
+                "removed": 26,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 113,
+                "gain": 0.14676329332892699,
+                "added": 1,
+                "removed": 69,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 10,
+                "gain": 0.006347121676936788,
+                "added": 2,
+                "removed": 4,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 492,
+                "gain": 1.1544689266545722,
+                "added": 165,
+                "removed": 27,
+                "normalization_error": 1.6653345369377348e-15
+              },
+              {
+                "row": 210,
+                "gain": 0.015240048383562224,
+                "added": 85,
+                "removed": 164,
+                "normalization_error": 2.2315482794965646e-14
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 6308,
+            "logdet_H_change": 1.942689013383141,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 47,
+            "newly_evaluated_kernel_entries_equivalent": 50688,
+            "full_original_kernel_column_equivalents": 61.51456310679612,
+            "maximum_column_workspace_bytes": 50688,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.02028431199141778,
+          "retained_state_bytes": 296404,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 1572,
+        "converged": true,
+        "true_relative_residual": 9.653039307148612e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1651,
+        "breakdown": null,
+        "retained_state_bytes": 430592
+      },
+      "static_uninterrupted": {
+        "iterations": 782,
+        "converged": true,
+        "true_relative_residual": 9.079353632846336e-09,
+        "residual_replacements": 0,
+        "operator_applications": 822,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 6308,
+        "minimum_positive_diagonal": 2.6645906999870226,
+        "maximum_row_D_energy_normalization_error": 2.3208102106764272e-12,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 78868,
+        "retained_state_bytes": 296404,
+        "byte_ratio_to_fixed_rp": 0.6883639268727705,
+        "iteration_ratio_to_fixed_rp": 0.49745547073791346
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 4.669911371484941,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 4.669911371484941,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 6308,
+        "minimum_positive_diagonal": 2.6645906999870226,
+        "maximum_row_D_energy_normalization_error": 2.3208102106764272e-12,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 78868
+      },
+      "retained_state_bytes": 296404,
+      "priorities": {
+        "exposure_rows": [
+          680,
+          277,
+          429,
+          242,
+          34,
+          330,
+          179,
+          455
+        ],
+        "local_quality_rows": [
+          11,
+          99,
+          60,
+          33,
+          113,
+          10,
+          492,
+          210
+        ],
+        "uniform_rows": [
+          767,
+          572,
+          720,
+          73,
+          559,
+          406,
+          306,
+          531
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    },
+    {
+      "dataset": "airfoil-observed",
+      "regularization": 1e-05,
+      "rank": 16,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 1612,
+          "converged": true,
+          "true_relative_residual": 8.519788331259969e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1694,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 1620,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 6.9350062403827906e-06,
+          "retained_state_bytes": 281740,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 1607,
+          "converged": true,
+          "true_relative_residual": 9.7433396393462e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1689,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 1615,
+          "selection": {
+            "changes": [
+              {
+                "row": 536,
+                "gain": 0.1388165284852167,
+                "added": 133,
+                "removed": 534,
+                "normalization_error": 2.05613304160579e-13
+              },
+              {
+                "row": 380,
+                "gain": 0.6236046385120961,
+                "added": 375,
+                "removed": 222,
+                "normalization_error": 5.284661597215745e-14
+              },
+              {
+                "row": 849,
+                "gain": 0.998778862380336,
+                "added": 679,
+                "removed": 161,
+                "normalization_error": 8.926193117986259e-14
+              },
+              {
+                "row": 888,
+                "gain": 0.11642574017983574,
+                "added": 802,
+                "removed": 715,
+                "normalization_error": 3.552713678800501e-15
+              },
+              {
+                "row": 562,
+                "gain": 0.06281890086147757,
+                "added": 327,
+                "removed": 165,
+                "normalization_error": 8.104628079763643e-15
+              },
+              {
+                "row": 131,
+                "gain": 0.22519477069131238,
+                "added": 68,
+                "removed": 34,
+                "normalization_error": 2.2648549702353193e-14
+              },
+              {
+                "row": 284,
+                "gain": 0.5658490131668606,
+                "added": 8,
+                "removed": 215,
+                "normalization_error": 1.7763568394002505e-15
+              },
+              {
+                "row": 490,
+                "gain": 0.16699571432553376,
+                "added": 312,
+                "removed": 128,
+                "normalization_error": 6.8833827526759706e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9460,
+            "logdet_H_change": 2.8984841686026686,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 62,
+            "newly_evaluated_kernel_entries_equivalent": 75904,
+            "full_original_kernel_column_equivalents": 63.14808652246256,
+            "maximum_column_workspace_bytes": 75904,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.05868666298920289,
+          "retained_state_bytes": 281740,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 1624,
+          "converged": true,
+          "true_relative_residual": 9.226823793603152e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1707,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 1632,
+          "selection": {
+            "changes": [
+              {
+                "row": 536,
+                "gain": 0.2513555054165911,
+                "added": 196,
+                "removed": 169,
+                "normalization_error": 1.454392162258955e-13
+              },
+              {
+                "row": 380,
+                "gain": 0.683296185654031,
+                "added": 240,
+                "removed": 86,
+                "normalization_error": 6.039613253960852e-14
+              },
+              {
+                "row": 849,
+                "gain": 0.998778862380336,
+                "added": 679,
+                "removed": 161,
+                "normalization_error": 8.926193117986259e-14
+              },
+              {
+                "row": 888,
+                "gain": 0.5335702700180304,
+                "added": 598,
+                "removed": 199,
+                "normalization_error": 9.992007221626409e-15
+              },
+              {
+                "row": 562,
+                "gain": 0.29621868612439806,
+                "added": 474,
+                "removed": 165,
+                "normalization_error": 1.2179146580137967e-13
+              },
+              {
+                "row": 131,
+                "gain": 0.24335138509939236,
+                "added": 31,
+                "removed": 34,
+                "normalization_error": 6.961098364399732e-14
+              },
+              {
+                "row": 284,
+                "gain": 0.987642925176259,
+                "added": 137,
+                "removed": 95,
+                "normalization_error": 1.176836406102666e-14
+              },
+              {
+                "row": 490,
+                "gain": 1.099457091185678,
+                "added": 205,
+                "removed": 128,
+                "normalization_error": 6.661338147750939e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9460,
+            "logdet_H_change": 5.093670911054716,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 62,
+            "newly_evaluated_kernel_entries_equivalent": 75904,
+            "full_original_kernel_column_equivalents": 63.14808652246256,
+            "maximum_column_workspace_bytes": 75904,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.02949881600216031,
+          "retained_state_bytes": 281740,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 1598,
+          "converged": true,
+          "true_relative_residual": 8.982760910940675e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1679,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 1606,
+          "selection": {
+            "changes": [
+              {
+                "row": 13,
+                "gain": 0.1758511237203514,
+                "added": 12,
+                "removed": 5,
+                "normalization_error": 7.771561172376096e-16
+              },
+              {
+                "row": 442,
+                "gain": 1.3010134437156726,
+                "added": 441,
+                "removed": 125,
+                "normalization_error": 4.3076653355456074e-14
+              },
+              {
+                "row": 122,
+                "gain": 0.013132617489038023,
+                "added": 55,
+                "removed": 20,
+                "normalization_error": 1.2878587085651816e-14
+              },
+              {
+                "row": 853,
+                "gain": 0.6870685976595061,
+                "added": 403,
+                "removed": 181,
+                "normalization_error": 4.065636716177323e-13
+              },
+              {
+                "row": 1152,
+                "gain": 0.07043935839130687,
+                "added": 780,
+                "removed": 883,
+                "normalization_error": 7.148726055561383e-13
+              },
+              {
+                "row": 937,
+                "gain": 0.3204037756055831,
+                "added": 558,
+                "removed": 697,
+                "normalization_error": 5.385691892456634e-13
+              },
+              {
+                "row": 1089,
+                "gain": 0.04792353312428481,
+                "added": 1003,
+                "removed": 962,
+                "normalization_error": 2.5224267119483557e-13
+              },
+              {
+                "row": 776,
+                "gain": 0.03815908658360551,
+                "added": 101,
+                "removed": 19,
+                "normalization_error": 3.4428015993626104e-13
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9460,
+            "logdet_H_change": 2.6539915362893485,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 59,
+            "newly_evaluated_kernel_entries_equivalent": 75904,
+            "full_original_kernel_column_equivalents": 63.14808652246256,
+            "maximum_column_workspace_bytes": 75904,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.02190273700398393,
+          "retained_state_bytes": 281740,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 1645,
+          "converged": true,
+          "true_relative_residual": 9.703461505820341e-09,
+          "residual_replacements": 0,
+          "operator_applications": 1729,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 1653,
+          "selection": {
+            "changes": [
+              {
+                "row": 16,
+                "gain": 0.018737452227029848,
+                "added": 13,
+                "removed": 7,
+                "normalization_error": 1.3322676295501878e-15
+              },
+              {
+                "row": 18,
+                "gain": 0.02462444936330129,
+                "added": 12,
+                "removed": 8,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 9,
+                "gain": 0.003456553519397773,
+                "added": 0,
+                "removed": 4,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 19,
+                "gain": 0.49215916566856116,
+                "added": 1,
+                "removed": 4,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 62,
+                "gain": 0.16469256654579864,
+                "added": 32,
+                "removed": 56,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 28,
+                "gain": 0.10379340988880156,
+                "added": 24,
+                "removed": 14,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 20,
+                "gain": 0.17474193289512283,
+                "added": 4,
+                "removed": 7,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 179,
+                "gain": 1.0210988526336873,
+                "added": 75,
+                "removed": 3,
+                "normalization_error": 2.220446049250313e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9460,
+            "logdet_H_change": 2.0033043827417005,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 32,
+            "newly_evaluated_kernel_entries_equivalent": 75904,
+            "full_original_kernel_column_equivalents": 63.14808652246256,
+            "maximum_column_workspace_bytes": 75904,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.025911789998644963,
+          "retained_state_bytes": 281740,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 1656,
+        "converged": true,
+        "true_relative_residual": 8.59999490190571e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1739,
+        "breakdown": null,
+        "retained_state_bytes": 310016
+      },
+      "static_uninterrupted": {
+        "iterations": 1660,
+        "converged": true,
+        "true_relative_residual": 8.048637684842728e-09,
+        "residual_replacements": 0,
+        "operator_applications": 1743,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 9460,
+        "minimum_positive_diagonal": 2.790661012204014,
+        "maximum_row_D_energy_normalization_error": 4.6349590832051035e-12,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 118268,
+        "retained_state_bytes": 281740,
+        "byte_ratio_to_fixed_rp": 0.9087918042939719,
+        "iteration_ratio_to_fixed_rp": 1.002415458937198
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 6.460111804504825,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 6.460111804504825,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 9460,
+        "minimum_positive_diagonal": 2.790661012204014,
+        "maximum_row_D_energy_normalization_error": 4.6349590832051035e-12,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 118268
+      },
+      "retained_state_bytes": 281740,
+      "priorities": {
+        "exposure_rows": [
+          536,
+          380,
+          849,
+          888,
+          562,
+          131,
+          284,
+          490
+        ],
+        "local_quality_rows": [
+          16,
+          18,
+          9,
+          19,
+          62,
+          28,
+          20,
+          179
+        ],
+        "uniform_rows": [
+          13,
+          442,
+          122,
+          853,
+          1152,
+          937,
+          1089,
+          776
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    },
+    {
+      "dataset": "airfoil-observed",
+      "regularization": 1e-05,
+      "rank": 32,
+      "status": "complete",
+      "runs": [
+        {
+          "iterations": 831,
+          "converged": true,
+          "true_relative_residual": 8.944962336571205e-09,
+          "residual_replacements": 0,
+          "operator_applications": 874,
+          "breakdown": null,
+          "method": "matched_restart",
+          "total_iterations": 839,
+          "selection": null,
+          "queries": {
+            "schur_column_queries": 0,
+            "unique_schur_columns": 0,
+            "newly_evaluated_kernel_entries_equivalent": 0,
+            "full_original_kernel_column_equivalents": 0.0,
+            "maximum_column_workspace_bytes": 0,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.00031937999301590025,
+          "retained_state_bytes": 433996,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 843,
+          "converged": true,
+          "true_relative_residual": 9.074266097940455e-09,
+          "residual_replacements": 0,
+          "operator_applications": 887,
+          "breakdown": null,
+          "method": "nearest_exposure",
+          "total_iterations": 851,
+          "selection": {
+            "changes": [
+              {
+                "row": 30,
+                "gain": 0.013153120257866928,
+                "added": 29,
+                "removed": 7,
+                "normalization_error": 4.440892098500626e-16
+              },
+              {
+                "row": 838,
+                "gain": 0.017112868212703122,
+                "added": 418,
+                "removed": 668,
+                "normalization_error": 7.027711745877241e-14
+              },
+              {
+                "row": 304,
+                "gain": 0.3560376458891014,
+                "added": 232,
+                "removed": 161,
+                "normalization_error": 2.220446049250313e-15
+              },
+              {
+                "row": 48,
+                "gain": 0.186156460889947,
+                "added": 29,
+                "removed": 47,
+                "normalization_error": 9.992007221626409e-16
+              },
+              {
+                "row": 211,
+                "gain": 0.5469440350995396,
+                "added": 25,
+                "removed": 92,
+                "normalization_error": 4.218847493575595e-15
+              },
+              {
+                "row": 218,
+                "gain": 0.28802148454163085,
+                "added": 42,
+                "removed": 61,
+                "normalization_error": 1.4432899320127035e-15
+              },
+              {
+                "row": 80,
+                "gain": 0.007914650397942914,
+                "added": 70,
+                "removed": 41,
+                "normalization_error": 1.0880185641326534e-14
+              },
+              {
+                "row": 44,
+                "gain": 0.3943799292505856,
+                "added": 22,
+                "removed": 19,
+                "normalization_error": 2.886579864025407e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9332,
+            "logdet_H_change": 1.8097201945393175,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 57,
+            "newly_evaluated_kernel_entries_equivalent": 74880,
+            "full_original_kernel_column_equivalents": 62.296173044925126,
+            "maximum_column_workspace_bytes": 74880,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.02183532199705951,
+          "retained_state_bytes": 433996,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": "Offline interface reads full existing-support columns; a production nearest-only control could use fewer local entry queries"
+        },
+        {
+          "iterations": 860,
+          "converged": true,
+          "true_relative_residual": 9.347748627688914e-09,
+          "residual_replacements": 0,
+          "operator_applications": 904,
+          "breakdown": null,
+          "method": "global_exposure",
+          "total_iterations": 868,
+          "selection": {
+            "changes": [
+              {
+                "row": 30,
+                "gain": 0.1722830049632616,
+                "added": 23,
+                "removed": 7,
+                "normalization_error": 2.4424906541753444e-15
+              },
+              {
+                "row": 838,
+                "gain": 0.019048350520204878,
+                "added": 260,
+                "removed": 668,
+                "normalization_error": 5.684341886080802e-14
+              },
+              {
+                "row": 304,
+                "gain": 0.5994851896624735,
+                "added": 83,
+                "removed": 262,
+                "normalization_error": 1.5543122344752192e-15
+              },
+              {
+                "row": 48,
+                "gain": 0.186156460889947,
+                "added": 29,
+                "removed": 47,
+                "normalization_error": 9.992007221626409e-16
+              },
+              {
+                "row": 211,
+                "gain": 0.5872983857755931,
+                "added": 105,
+                "removed": 193,
+                "normalization_error": 3.3306690738754696e-15
+              },
+              {
+                "row": 218,
+                "gain": 0.28802148454163085,
+                "added": 42,
+                "removed": 61,
+                "normalization_error": 1.4432899320127035e-15
+              },
+              {
+                "row": 80,
+                "gain": 0.1236769063219744,
+                "added": 71,
+                "removed": 28,
+                "normalization_error": 1.7763568394002505e-15
+              },
+              {
+                "row": 44,
+                "gain": 0.3943799292505856,
+                "added": 22,
+                "removed": 19,
+                "normalization_error": 2.886579864025407e-15
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9332,
+            "logdet_H_change": 2.370349711925671,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 57,
+            "newly_evaluated_kernel_entries_equivalent": 74880,
+            "full_original_kernel_column_equivalents": 62.296173044925126,
+            "maximum_column_workspace_bytes": 74880,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.02405074200942181,
+          "retained_state_bytes": 433996,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 840,
+          "converged": true,
+          "true_relative_residual": 8.913878814684996e-09,
+          "residual_replacements": 0,
+          "operator_applications": 883,
+          "breakdown": null,
+          "method": "global_uniform",
+          "total_iterations": 848,
+          "selection": {
+            "changes": [
+              {
+                "row": 1135,
+                "gain": 0.12972366258193477,
+                "added": 474,
+                "removed": 1058,
+                "normalization_error": 9.103828801926284e-15
+              },
+              {
+                "row": 846,
+                "gain": 0.00046918499341935875,
+                "added": 548,
+                "removed": 599,
+                "normalization_error": 3.042011087472929e-14
+              },
+              {
+                "row": 1066,
+                "gain": 0.15134421662097788,
+                "added": 487,
+                "removed": 976,
+                "normalization_error": 1.0325074129013956e-14
+              },
+              {
+                "row": 105,
+                "gain": 0.2375456207472563,
+                "added": 11,
+                "removed": 49,
+                "normalization_error": 4.9960036108132044e-15
+              },
+              {
+                "row": 826,
+                "gain": 0.19186360051508328,
+                "added": 111,
+                "removed": 435,
+                "normalization_error": 3.9968028886505635e-15
+              },
+              {
+                "row": 600,
+                "gain": 0.6507122742541649,
+                "added": 326,
+                "removed": 554,
+                "normalization_error": 3.708144902248023e-14
+              },
+              {
+                "row": 450,
+                "gain": 0.3590740692642911,
+                "added": 83,
+                "removed": 9,
+                "normalization_error": 2.531308496145357e-14
+              },
+              {
+                "row": 783,
+                "gain": 0.27815065761853475,
+                "added": 386,
+                "removed": 627,
+                "normalization_error": 2.475797344914099e-14
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9332,
+            "logdet_H_change": 1.998883286595662,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 64,
+            "newly_evaluated_kernel_entries_equivalent": 74880,
+            "full_original_kernel_column_equivalents": 62.296173044925126,
+            "maximum_column_workspace_bytes": 74880,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.02581921999808401,
+          "retained_state_bytes": 433996,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        },
+        {
+          "iterations": 870,
+          "converged": true,
+          "true_relative_residual": 6.529086661061188e-09,
+          "residual_replacements": 0,
+          "operator_applications": 915,
+          "breakdown": null,
+          "method": "global_local_quality",
+          "total_iterations": 878,
+          "selection": {
+            "changes": [
+              {
+                "row": 16,
+                "gain": 0.02862108364170456,
+                "added": 2,
+                "removed": 7,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 136,
+                "gain": 0.08946976290756846,
+                "added": 71,
+                "removed": 81,
+                "normalization_error": 1.1102230246251565e-16
+              },
+              {
+                "row": 71,
+                "gain": 0.0740487062327213,
+                "added": 21,
+                "removed": 53,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 891,
+                "gain": 0.00657598596160028,
+                "added": 71,
+                "removed": 225,
+                "normalization_error": 2.220446049250313e-16
+              },
+              {
+                "row": 109,
+                "gain": 0.08006817659302123,
+                "added": 21,
+                "removed": 43,
+                "normalization_error": 6.661338147750939e-16
+              },
+              {
+                "row": 1167,
+                "gain": 0.002611481914123753,
+                "added": 130,
+                "removed": 400,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 14,
+                "gain": 0.14984497925726026,
+                "added": 3,
+                "removed": 11,
+                "normalization_error": 0.0
+              },
+              {
+                "row": 8,
+                "gain": 0.002650160001928854,
+                "added": 3,
+                "removed": 1,
+                "normalization_error": 2.220446049250313e-16
+              }
+            ],
+            "accepted_rows": 8,
+            "nnz": 9332,
+            "logdet_H_change": 0.43389033650992875,
+            "spd_certificate": "unchanged lower-triangular pattern orientation and strictly positive diagonal"
+          },
+          "queries": {
+            "schur_column_queries": 64,
+            "unique_schur_columns": 35,
+            "newly_evaluated_kernel_entries_equivalent": 74880,
+            "full_original_kernel_column_equivalents": 62.296173044925126,
+            "maximum_column_workspace_bytes": 74880,
+            "dense_schur_matvecs_for_selection": 0
+          },
+          "selection_dense_seconds": 0.019583370973123237,
+          "retained_state_bytes": 433996,
+          "helper_final_check_products_not_in_legacy_counter": 1,
+          "nearest_query_note": null
+        }
+      ],
+      "fixed_rp": {
+        "iterations": 798,
+        "converged": true,
+        "true_relative_residual": 8.848038349517692e-09,
+        "residual_replacements": 0,
+        "operator_applications": 838,
+        "breakdown": null,
+        "retained_state_bytes": 624128
+      },
+      "static_uninterrupted": {
+        "iterations": 861,
+        "converged": true,
+        "true_relative_residual": 9.906270234386637e-09,
+        "residual_replacements": 0,
+        "operator_applications": 905,
+        "breakdown": null,
+        "row_budget_including_diagonal": 8,
+        "nnz": 9332,
+        "minimum_positive_diagonal": 4.612291828382238,
+        "maximum_row_D_energy_normalization_error": 8.166800569142652e-13,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 116668,
+        "retained_state_bytes": 433996,
+        "byte_ratio_to_fixed_rp": 0.6953637715340443,
+        "iteration_ratio_to_fixed_rp": 1.0789473684210527
+      },
+      "prefix": {
+        "iterations": 8,
+        "converged": false,
+        "true_relative_residual": 3.6950657821498,
+        "residual_replacements": 0,
+        "operator_applications": 9,
+        "breakdown": null,
+        "reconstruction_check_relative_residual": 3.6950657821498,
+        "helper_final_check_products_not_in_legacy_counter": 1,
+        "reconstruction_true_residual_extra_products": 1
+      },
+      "initial_factor": {
+        "row_budget_including_diagonal": 8,
+        "nnz": 9332,
+        "minimum_positive_diagonal": 4.612291828382238,
+        "maximum_row_D_energy_normalization_error": 8.166800569142652e-13,
+        "spd_certificate": "G is lower triangular with positive diagonal; H_D=G.T G is SPD",
+        "sparse_factor_bytes": 116668
+      },
+      "retained_state_bytes": 433996,
+      "priorities": {
+        "exposure_rows": [
+          30,
+          838,
+          304,
+          48,
+          211,
+          218,
+          80,
+          44
+        ],
+        "local_quality_rows": [
+          16,
+          136,
+          71,
+          891,
+          109,
+          1167,
+          14,
+          8
+        ],
+        "uniform_rows": [
+          1135,
+          846,
+          1066,
+          105,
+          826,
+          600,
+          450,
+          783
+        ]
+      },
+      "persistent_added_full_kernel_columns": 0
+    }
+  ],
+  "continued_from": {
+    "path": "results/fsai-global-admission-diagnostic-attempt1.json",
+    "sha256": "a3547ae6fcabb668010f7c2db2af0d4683e138ff42c48fe22c0dd70fec0386e0",
+    "reason": "First attempt stopped on numpy row-index JSON serialization in extra-query oracle",
+    "change": "Convert oracle row index to Python int; no scientific change; completed branches preserved"
+  },
+  "cpu_seconds": 19.7104033,
+  "wall_seconds": 21.469660104979994,
+  "offline_peak_rss_kib": 441728
+}

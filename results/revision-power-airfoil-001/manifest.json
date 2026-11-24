@@ -1,0 +1,80 @@
+{
+  "protocol": {
+    "purpose": "Compare current-solve rank truncation against two-pass Gaussian Nystr\u00f6m, including setup and all kernel products.",
+    "synthetic_n": 640,
+    "seeds": [
+      0
+    ],
+    "repetitions": 1,
+    "solver_defaults": {
+      "rank": 32,
+      "checkpoint": 20,
+      "history_size": 1,
+      "warmup_steps": 10,
+      "maxiter": 2500
+    },
+    "variants": [
+      {
+        "id": "flex_compact",
+        "method": "flex_compact"
+      },
+      {
+        "id": "flex_gaussian_qr",
+        "method": "flex_gaussian_qr"
+      },
+      {
+        "id": "flex_power",
+        "method": "flex_power"
+      },
+      {
+        "id": "flex_compress",
+        "method": "flex_compress"
+      }
+    ],
+    "max_wall_seconds": 175,
+    "run_timeout_seconds": 70,
+    "workloads": [
+      {
+        "dataset": "airfoil"
+      }
+    ],
+    "regularization": [
+      0.001,
+      1e-05
+    ]
+  },
+  "status": "complete",
+  "source_sha256": {
+    "src/nystrom_project/__init__.py": "160f59e9dc27f2624dd9467757579e986251bd3804b7278e98355a9910564967",
+    "src/nystrom_project/benchmark.py": "7db234a0d6f0e1c3dab88b0fe4b66f19247220c612e9f5d0f86af0ae667df43d",
+    "src/nystrom_project/curvature.py": "d9a768371a2555746bd6fad6105299833fb5a438b05d4fac01dd53b42492c71d",
+    "src/nystrom_project/datasets.py": "c5bce3d8b80f4535c161f064e16250d77654276fb153bafb17c2791feefdb803",
+    "src/nystrom_project/diagnostics.py": "04080c2dfa3dfdf833f6003527dc23cf8ec686fbfad097fbd8aeebd306e1ff92",
+    "src/nystrom_project/exchange.py": "a75af2a4063e7d82cb76af036889fcabd77ad572603198b241908ca49e9868ca",
+    "src/nystrom_project/flexible.py": "7efa791a717994f0a56193b7dc740f0fb9124e6b285c09d8491d66e90129647b",
+    "src/nystrom_project/learning.py": "19be6a433f2fc290a06cb1bda4d4313c73f7f424726e8c99d68f683f21183c77",
+    "src/nystrom_project/numerics.py": "c409d1df5bb84c666a26cd2f460d58267bf3a6f426e3511d79a0b59e3aaebdf2",
+    "src/nystrom_project/preconditioners.py": "86da13326a40c7f8c2aefdce86bfc8c655abd3ee4da76dcc8c511e2f413527a9",
+    "src/nystrom_project/revisions.py": "9366d2ddfb40154b7e4713791f3039c7dc262699e37f0e09a57d7b628308bf1d",
+    "src/nystrom_project/solvers.py": "8e4f7c6b0ce9df20f4dedba3abd6f3f721ddd0b6398febb70869e9b5ec73274f",
+    "src/nystrom_project/sweep.py": "c41281181b31358910ec7c1b7386b0c349d7fabbcb3dfe100e6d1773850e175a",
+    "src/nystrom_project/worker.py": "80b182ebcca9a929b569d98fb295c2deba59573e089a41de523f2f58d002753b"
+  },
+  "completed_runs": 8,
+  "python": "3.13.12 (main, Feb  4 2026, 09:25:39) [GCC 13.3.0]",
+  "platform": "Linux-5.15.167.4-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "order": [
+    "airfoil-observed-s0-lambda0.001-flex_power-r0",
+    "airfoil-observed-s0-lambda0.001-flex_compact-r0",
+    "airfoil-observed-s0-lambda0.001-flex_gaussian_qr-r0",
+    "airfoil-observed-s0-lambda0.001-flex_compress-r0",
+    "airfoil-observed-s0-lambda1e-05-flex_power-r0",
+    "airfoil-observed-s0-lambda1e-05-flex_compact-r0",
+    "airfoil-observed-s0-lambda1e-05-flex_gaussian_qr-r0",
+    "airfoil-observed-s0-lambda1e-05-flex_compress-r0"
+  ],
+  "failures": [],
+  "timing": "All setup, updates, kernel products and verification are inside worker solve time. Parent references and worker startup are outside.",
+  "elapsed_wall_seconds": 49.14797441099654,
+  "timing_scope": "Exploratory single-repeat screen; concurrent offline diagnostics may have overlapped. Confirmation requires isolated execution and repeated paired seeds."
+}

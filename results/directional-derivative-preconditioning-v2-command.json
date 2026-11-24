@@ -1,0 +1,28 @@
+{
+  "command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "145s",
+    "flock",
+    "-w",
+    "1",
+    "/tmp/cs6220-project-benchmark.lock",
+    "/home/maosen/.cache/cs6220-project-venv/bin/python",
+    "/mnt/c/Users/Maosen/cs6220/project/scripts/check_directional_derivative_preconditioning_v2.py"
+  ],
+  "cwd": "/mnt/c/Users/Maosen/cs6220/project",
+  "started_at": "2026-11-24T06:19:18.002798+00:00",
+  "blas_threads": 1,
+  "external_timeout_seconds": 145,
+  "script_cpu_limit_seconds": [
+    110,
+    115
+  ],
+  "source_sha256": "409241d72d2b2264d8c25397f1db1be38ad2ec5e3b0ac5383f68b32483fd6497",
+  "campaign_consumed_before": 4361.899940393855,
+  "returncode": 0,
+  "wall_seconds": 25.437081511016004,
+  "finished_at": "2026-11-24T06:19:44.543847+00:00",
+  "campaign_consumed_after": 4387.337021904871
+}

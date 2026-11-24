@@ -1,0 +1,342 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_refined_int16_congruence.py": "29872c6233b5915027833a1ed2bd108d1a6ac0f36649ef5af62ee5379bb5ed0b",
+    "scripts/check_int16_core_capacity.py": "092aea8830f40dec71900e48ad78b64837c3ea321a1d1cf0d8f33e9abb0e7167",
+    "results/int16-core-capacity.json": "4e7facaf29e46968c95e4832434e3861ad062013232f0451e2bf1e9e5428eaf8"
+  },
+  "protocol": {
+    "core": 818,
+    "shift": 1e-05,
+    "mechanism": "Use J=2H\u2212HCH only in T=[[I,-JB],[0,I]], keep diag(H,lambda^-1I) as preconditioner; exact G=T^TAT. Same postquantized int16 factor. Exact-transform reference free oracle.",
+    "cost": "Charge2additionalcoreproducts peraction plus2boundarycoreproducts forJ. Dense original stopping, all factorization/decoding and inverse arithmetic free. Postquantized exact factor unavailable in1MiB via current streamed construction. Static diagnostic, not adaptive success."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "prior_controls": [
+        {
+          "iterations": 42,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.0339609444211055e-09,
+          "analytical_entries": 183501772,
+          "entry_components": {
+            "FPS": 1228800,
+            "factor": 180300,
+            "actions": 176160768,
+            "boundary_cross": 1737600,
+            "final_verification": 4194304
+          },
+          "method": "float32",
+          "core": 600,
+          "factor_payload_bytes": 721200
+        },
+        {
+          "iterations": 384,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.938465397410897e-09,
+          "analytical_entries": 1618829555,
+          "entry_components": {
+            "FPS": 1675264,
+            "factor": 334971,
+            "actions": 1610612736,
+            "boundary_cross": 2012280,
+            "final_verification": 4194304
+          },
+          "method": "int16",
+          "core": 818,
+          "factor_payload_bytes": 720442
+        },
+        {
+          "iterations": 27,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.207712784176641e-09,
+          "analytical_entries": 121463027,
+          "entry_components": {
+            "FPS": 1675264,
+            "factor": 334971,
+            "actions": 113246208,
+            "boundary_cross": 2012280,
+            "final_verification": 4194304
+          },
+          "method": "exact",
+          "core": 818,
+          "factor_payload_bytes": 2679768
+        },
+        {
+          "method": "streamed_int16",
+          "status": "nonpositive_factor_pivot",
+          "converged": false,
+          "failed_pivot": 728,
+          "value": -0.00012013183134795824
+        }
+      ],
+      "runs": [
+        {
+          "method": "refined_transform",
+          "status": "converged",
+          "iterations": 36,
+          "original_relative_residual": 6.401837998252526e-09,
+          "extra_core_products": 74,
+          "analytical_entries": 208726939
+        },
+        {
+          "method": "exact_transform_oracle",
+          "status": "converged",
+          "iterations": 34,
+          "original_relative_residual": 8.046662024494802e-09,
+          "extra_core_products": 0,
+          "analytical_entries": 150823155
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "prior_controls": [
+        {
+          "iterations": 40,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.146231880022853e-09,
+          "analytical_entries": 175113164,
+          "entry_components": {
+            "FPS": 1228800,
+            "factor": 180300,
+            "actions": 167772160,
+            "boundary_cross": 1737600,
+            "final_verification": 4194304
+          },
+          "method": "float32",
+          "core": 600,
+          "factor_payload_bytes": 721200
+        },
+        {
+          "iterations": 382,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.120493169608418e-09,
+          "analytical_entries": 1610440947,
+          "entry_components": {
+            "FPS": 1675264,
+            "factor": 334971,
+            "actions": 1602224128,
+            "boundary_cross": 2012280,
+            "final_verification": 4194304
+          },
+          "method": "int16",
+          "core": 818,
+          "factor_payload_bytes": 720442
+        },
+        {
+          "iterations": 24,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 5.788007237785428e-09,
+          "analytical_entries": 108880115,
+          "entry_components": {
+            "FPS": 1675264,
+            "factor": 334971,
+            "actions": 100663296,
+            "boundary_cross": 2012280,
+            "final_verification": 4194304
+          },
+          "method": "exact",
+          "core": 818,
+          "factor_payload_bytes": 2679768
+        },
+        {
+          "method": "streamed_int16",
+          "status": "nonpositive_factor_pivot",
+          "converged": false,
+          "failed_pivot": 728,
+          "value": -0.00012013183134795824
+        }
+      ],
+      "runs": [
+        {
+          "method": "refined_transform",
+          "status": "converged",
+          "iterations": 34,
+          "original_relative_residual": 8.799927286168446e-09,
+          "extra_core_products": 70,
+          "analytical_entries": 197661835
+        },
+        {
+          "method": "exact_transform_oracle",
+          "status": "converged",
+          "iterations": 31,
+          "original_relative_residual": 5.585280084207976e-09,
+          "extra_core_products": 0,
+          "analytical_entries": 138240243
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "prior_controls": [
+        {
+          "iterations": 18,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 4.899669055332535e-09,
+          "analytical_entries": 13844044,
+          "entry_components": {
+            "FPS": 494400,
+            "factor": 180300,
+            "actions": 12221568,
+            "boundary_cross": 268800,
+            "final_verification": 678976
+          },
+          "method": "float32",
+          "core": 600,
+          "factor_payload_bytes": 721200
+        },
+        {
+          "iterations": 30,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.075014681946371e-10,
+          "analytical_entries": 22067075,
+          "entry_components": {
+            "FPS": 674032,
+            "factor": 334971,
+            "actions": 20369280,
+            "boundary_cross": 9816,
+            "final_verification": 678976
+          },
+          "method": "int16",
+          "core": 818,
+          "factor_payload_bytes": 720442
+        },
+        {
+          "iterations": 6,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 1.424787845275787e-10,
+          "analytical_entries": 5771651,
+          "entry_components": {
+            "FPS": 674032,
+            "factor": 334971,
+            "actions": 4073856,
+            "boundary_cross": 9816,
+            "final_verification": 678976
+          },
+          "method": "exact",
+          "core": 818,
+          "factor_payload_bytes": 2679768
+        },
+        {
+          "method": "streamed_int16",
+          "status": "nonpositive_factor_pivot",
+          "converged": false,
+          "failed_pivot": 403,
+          "value": -1.9129331139344785e-05
+        }
+      ],
+      "runs": [
+        {
+          "method": "refined_transform",
+          "status": "converged",
+          "iterations": 11,
+          "original_relative_residual": 1.2567310291098793e-09,
+          "extra_core_products": 24,
+          "analytical_entries": 25225507
+        },
+        {
+          "method": "exact_transform_oracle",
+          "status": "converged",
+          "iterations": 9,
+          "original_relative_residual": 7.445341156368465e-10,
+          "extra_core_products": 0,
+          "analytical_entries": 7808579
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "prior_controls": [
+        {
+          "iterations": 23,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 4.469196890564323e-09,
+          "analytical_entries": 36299196,
+          "entry_components": {
+            "FPS": 721200,
+            "factor": 180300,
+            "actions": 33230492,
+            "boundary_cross": 722400,
+            "final_verification": 1444804
+          },
+          "method": "float32",
+          "core": 600,
+          "factor_payload_bytes": 721200
+        },
+        {
+          "iterations": 336,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.172517750492861e-09,
+          "analytical_entries": 488845379,
+          "entry_components": {
+            "FPS": 983236,
+            "factor": 334971,
+            "actions": 485454144,
+            "boundary_cross": 628224,
+            "final_verification": 1444804
+          },
+          "method": "int16",
+          "core": 818,
+          "factor_payload_bytes": 720442
+        },
+        {
+          "iterations": 15,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 6.851196875698592e-09,
+          "analytical_entries": 25063295,
+          "entry_components": {
+            "FPS": 983236,
+            "factor": 334971,
+            "actions": 21672060,
+            "boundary_cross": 628224,
+            "final_verification": 1444804
+          },
+          "method": "exact",
+          "core": 818,
+          "factor_payload_bytes": 2679768
+        },
+        {
+          "method": "streamed_int16",
+          "status": "nonpositive_factor_pivot",
+          "converged": false,
+          "failed_pivot": 227,
+          "value": -2.521508902475489e-05
+        }
+      ],
+      "runs": [
+        {
+          "method": "refined_transform",
+          "status": "converged",
+          "iterations": 30,
+          "original_relative_residual": 5.4932296267900444e-09,
+          "extra_core_products": 62,
+          "analytical_entries": 88221043
+        },
+        {
+          "method": "exact_transform_oracle",
+          "status": "converged",
+          "iterations": 20,
+          "original_relative_residual": 5.152195594669051e-09,
+          "extra_core_products": 0,
+          "analytical_entries": 32287315
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 2.6609176190104336,
+  "elapsed_cpu_seconds": 2.5166542000000005
+}

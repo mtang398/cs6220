@@ -1,0 +1,1549 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_complementary_core_full_history.py": "0d5271cafaf36e3c9dc5bb459d86e7516ea5eaa25bc4e1a8f20e3e223f6873fd",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "protocol": {
+    "question": "Can complementary principal cores benefit from current-residual Galerkin combination and one shared kernel traversal?",
+    "cores": "Two disjoint272 cores from alternating first544 FPS indices. Single384 uses FPS prefix384.",
+    "methods": [
+      "MPCGfull"
+    ],
+    "factor_storage": "Dual exact packedFP64 factors594048B versus single384591360B; full allocation untested.",
+    "direction": "Form H1r,H2r; two-pass A-orthogonalization against ALL prior direction blocks. Normalize columns; retain small-Gram eigenvalues>1e-12 lambda_max; Galerkin step. Complete retained history and all reorthogonalization granted free.",
+    "work": "One n\u00b2 kernel pass per block regardlessofrank; dual crosspasses granted symmetry-fused4mn-6m\u00b2 queries, not implemented streaming. Extra diagnostic true-residual products free except final1. Dense setup/products and extra block arithmetic not runtime.",
+    "scope": "Dense full-history capacity oracle for established MPCG; no memoryfeasibility/native/novelty claim. Resolves effectofh=1truncation only. Literal original1e-8 target,2000steps,4CPU per solve,80CPU command."
+  },
+  "tiny_check": {
+    "block_inverse_identity_relative_error": 2.7604150842668717e-14
+  },
+  "runs": [
+    {
+      "retained_history_bytes": 6815744,
+      "full_history_A_orthogonality": 1.6577812173944717e-09,
+      "method": "MPCGfull",
+      "status": "converged",
+      "converged": true,
+      "steps": 104,
+      "direction_count": 208,
+      "rank_drops": 0,
+      "original_relative_residual": 9.719726253221392e-09,
+      "history": [
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0291598222551657
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0324856439425476
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0128456740071836
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.9459423209474634
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.9335668765706087
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.9004252811020238
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.7962505546858216
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.7313898949691178
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.6785763855873921
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.6160185386535355
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.554506094777799
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.4821897763665396
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.4322084557858881
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.37251970877978985
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.33243812405866485
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.29670674092284
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.2611508652778443
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.22347366825689238
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.20101743657470006
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.1836155484358844
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.15814944222352711
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.13981469682251782
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.1200887188295637
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.09854460266190875
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.08380731624543303
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.07024032206960096
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0596493319613577
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.05506906340922551
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.04656868172419383
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.03956614040917092
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.035000213075212984
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.029556938378071766
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.02459502873155115
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.020586422720734878
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.01854585923525945
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.01620641384565803
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.013325751011570415
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.011153994887629469
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.010628250766715705
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.009226975718559446
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.008050585096541793
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.006569924174639997
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0057390981441422335
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.004524725211787234
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.003940082922056645
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.003330666520702093
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0028086711358448926
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0024964385810057744
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0020313878483092366
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0016046527596383516
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.001378451110783436
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0012393927394115801
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0009944838406412396
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0008878262632618073
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0008130672624446333
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0006386841500311861
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0005067404697699261
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0004066882868537955
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0003386713336449067
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00025862317728520456
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0002231257848116219
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00016796854396547588
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00014087752916005155
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00011608659057211797
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.238243031375675e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 7.525153174382217e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 6.108680767923421e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 5.099450960413066e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.04158997856909e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.214571229647639e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.650290918080975e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.2454001938022627e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.8170674750188314e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.441215603032948e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.2488621707059216e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.892638781770907e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 8.230491138309197e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 7.012994376705683e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 5.921617518079709e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.632767625506372e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.430930134996949e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.7593947340903856e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.2090388856698416e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.7920835125222169e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.442318816220531e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.1589062912950937e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.163528518403943e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 7.259513710789118e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 5.568465472831034e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.3906065316281334e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.28089620559278e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.6455177989774345e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.9468067526582118e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.541428949792783e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.2003439311801937e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.79576661925148e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 7.301033265200757e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 5.604552642621672e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.3738421991796367e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.049645444996902e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.355894329449453e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.7622748788598977e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.2762921492097379e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.752045815486887e-09
+        }
+      ],
+      "optimistic_Gaussian_entry_components": {
+        "FPS": 1114112,
+        "factor_columns": 74256,
+        "batched_operator": 436207616,
+        "preconditioner_cross_optimistic": 185569280,
+        "final_verification": 4194304
+      },
+      "optimistic_Gaussian_entries": 627159568,
+      "diagnostic_wall_seconds": 0.93374266900355,
+      "diagnostic_cpu_seconds": 1.0159129,
+      "dataset": "smooth",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "retained_history_bytes": 7208960,
+      "full_history_A_orthogonality": 1.6696820687521206e-09,
+      "method": "MPCGfull",
+      "status": "converged",
+      "converged": true,
+      "steps": 110,
+      "direction_count": 220,
+      "rank_drops": 0,
+      "original_relative_residual": 9.04204468094289e-09,
+      "history": [
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.3794152256148489
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.1633274564847145
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.070292347132841
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0392328213533033
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0398714685697226
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.9828192537013529
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.9721200693431676
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.9588906742936665
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.9299172006872143
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.9045464677790859
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.8742389954293354
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.8080687239702791
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.7919926660205227
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.7278411498849174
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.6804568609961098
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.6312106251275306
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.6001289222825179
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.5520289587202477
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.5068910210749515
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.452315314897462
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.4088178096500739
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.37017521968461853
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.32519091743366246
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.2931290631123235
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.26030175251387905
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.23535864065077183
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.20641253421413985
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.18187237565017994
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.1648082842004081
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.14131750407176472
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.11923495200430242
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.10699347760685474
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.09345557806082046
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.08101424531705168
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.07029248261674954
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.06105270255313203
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.05268043630947401
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0438845581400989
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.03614303446498197
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.03130646232740672
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.02681638068085164
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.022754403034078084
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0195704845690443
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.01668408701604676
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.014091160464323644
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.012189234714168622
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.010254597573273875
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.008641818162920839
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.007413035868870324
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.006136098990071157
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.005229107735627856
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00437335116212071
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0038073163220320384
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.003148069496510845
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.002745169460021847
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0022998160253333037
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.001896013772034033
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0016048234928780609
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0013945003866899655
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.001174340528395275
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0009832744458815042
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.000814995564577475
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0006797595018123556
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0005475805028852404
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0004708989713995036
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0003945081770034681
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00032580751240575434
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0002618888707803413
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0002146910232282701
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0001783031373463574
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00013968557982652768
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00011336378350062478
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 8.918471249312162e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 7.120594244539848e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 5.840207922609032e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.521725932019891e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.472917410254551e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.7449026483850375e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.21001112002669e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.8032605023797277e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.4477922946408222e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.1463992039980862e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.260730754917418e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 7.080681073036579e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 5.529050727920173e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.4308203751991255e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.51848650852467e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.818877127565688e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.2209010950417867e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.7567890814163581e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.3710838003882687e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0290272662488494e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 8.033863766292347e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 6.206712058110159e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 5.010549776627063e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.86855064155924e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.0571697946467085e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.4676976377891553e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.8785972336369397e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.416650510864862e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0999854188350124e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 8.21844498988091e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 6.307054173707742e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.736994706030678e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.464193602887483e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.732090324735162e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.0752143930009746e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.608608667768092e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.2261609481760716e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.042094583505335e-09
+        }
+      ],
+      "optimistic_Gaussian_entry_components": {
+        "FPS": 1114112,
+        "factor_columns": 74256,
+        "batched_operator": 461373440,
+        "preconditioner_cross_optimistic": 196275200,
+        "final_verification": 4194304
+      },
+      "optimistic_Gaussian_entries": 663031312,
+      "diagnostic_wall_seconds": 0.8439648009953089,
+      "diagnostic_cpu_seconds": 0.9078418000000008,
+      "dataset": "mixed",
+      "n": 2048,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56"
+    },
+    {
+      "retained_history_bytes": 2425856,
+      "full_history_A_orthogonality": 1.7132410850170374e-09,
+      "method": "MPCGfull",
+      "status": "converged",
+      "converged": true,
+      "steps": 92,
+      "direction_count": 184,
+      "rank_drops": 0,
+      "original_relative_residual": 6.356901784851056e-09,
+      "history": [
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.52757774441777
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.5282658708011443
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.489627499718741
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.6928599380035327
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.6335271686415702
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.6042403692178644
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.6955474125912013
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.6137836945354405
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.526987086990384
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.4334781518019495
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.493115314831172
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.3713177155291845
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.2124183999869833
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.1650335314906548
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0482221853925473
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0026661375025483
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.8944490033786374
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.8033262624145924
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.7759643118668147
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.6701583868982512
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.609088565495534
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.4869092204608813
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.47282894336629294
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.3989327619327071
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.39480017781203053
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.3424954309032793
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.27380697783252284
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.278266229760145
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.22670517785950967
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.187426878907854
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.15676313568105973
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.12165830694620662
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.11282678331181571
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.10190388386495085
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.09170827696330734
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.06788609493492194
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0637789545917253
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.05354624861704053
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.044861729024141525
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.038002653150163455
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.027093166343488618
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0232862678912316
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.018598936065071178
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.01482752211889418
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.013623529568787169
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.011925832475066348
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.008894252616331292
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.006784690503807753
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.005071232875318842
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.005125789623250414
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0031573565829628525
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00220294362893289
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0017570680399351943
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0016016086272174022
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0013926502249135674
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0013014317401624923
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0010681076801168515
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0007124998456391344
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0005267828039141011
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0004407003764243739
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0004018121019015746
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00028534794255005366
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.000250899819007029
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00017928900975266936
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00011086712386807058
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 8.126985398225177e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 6.836971631493245e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.940677509196583e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.519120855870198e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.6825792134253968e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.4247278876090683e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0864836329854067e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 7.11845730096405e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 6.043456095507344e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.603009382135074e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.0113766782903637e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.317725997749813e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.603959505894053e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.2336037005282125e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.860322833280093e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 7.02665327599576e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.157510667448143e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.838212049712599e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.8653906433957047e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.2891916135135617e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.159687681059908e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.95680200399023e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.9210931131167188e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.1056421431505902e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.3785496862345758e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0065228996469848e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 6.3607660505769425e-09
+        }
+      ],
+      "optimistic_Gaussian_entry_components": {
+        "FPS": 448256,
+        "factor_columns": 74256,
+        "batched_operator": 62465792,
+        "preconditioner_cross_optimistic": 41639936,
+        "final_verification": 678976
+      },
+      "optimistic_Gaussian_entries": 105307216,
+      "diagnostic_wall_seconds": 0.16476140398299322,
+      "diagnostic_cpu_seconds": 0.17292690000000022,
+      "dataset": "Concrete",
+      "n": 824,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb"
+    },
+    {
+      "retained_history_bytes": 1884736,
+      "full_history_A_orthogonality": 1.86113599372344e-09,
+      "method": "MPCGfull",
+      "status": "converged",
+      "converged": true,
+      "steps": 49,
+      "direction_count": 98,
+      "rank_drops": 0,
+      "original_relative_residual": 6.153423411854628e-09,
+      "history": [
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.0784369635852595
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.421544932606219
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.072442113611348
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.2761402384725313
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.019377933163425
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.0130760562240635
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.6415172363984885
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.44204687613757
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.4351188249843676
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.6950693058777627
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.5763176051925428
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.39736126239109715
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.24819887400577886
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.21196109698288004
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.17667677880704954
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.12014545904141614
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0668701657692646
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.04467845142350151
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.033300828742030934
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.029885443537466513
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.01690732690845128
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.011419017170407837
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.007937340838560639
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.004626853798789863
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0033833494400661262
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0018772366028283428
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0019159424333507074
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0011694868411944812
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.0006008840738715608
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00039830171693204725
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00020274983426886073
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 0.00013856074198533884
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 6.560443930629944e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.7019159704433074e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.7142509780810364e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.4321341338210834e-05
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.05396330620398e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 5.312308003093069e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.2246780416862577e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.1774870587613515e-06
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.126001317197479e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 5.752667257401002e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 3.4564292358848173e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.0197184410126855e-07
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 9.615670831637255e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 4.3645840683666915e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 2.1548464524059034e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 1.0617649400906168e-08
+        },
+        {
+          "rank": 2,
+          "recursive_relative_residual": 6.139201006535881e-09
+        }
+      ],
+      "optimistic_Gaussian_entry_components": {
+        "FPS": 653888,
+        "factor_columns": 74256,
+        "batched_operator": 70795396,
+        "preconditioner_cross_optimistic": 42329728,
+        "final_verification": 1444804
+      },
+      "optimistic_Gaussian_entries": 115298072,
+      "diagnostic_wall_seconds": 0.14239727501990274,
+      "diagnostic_cpu_seconds": 0.16211929999999963,
+      "dataset": "Airfoil",
+      "n": 1202,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a"
+    }
+  ],
+  "elapsed_wall_seconds": 2.8243109290488064,
+  "elapsed_cpu_seconds": 2.6299534999999996
+}

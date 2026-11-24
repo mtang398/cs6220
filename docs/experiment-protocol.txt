@@ -1,0 +1,150 @@
+Initial execution protocol — 2026-11-23
+
+Research question
+Can the current residual guide kernel-column replacements that reduce the total
+time to reach a prescribed solution accuracy, while keeping the number of
+retained columns fixed?
+
+Scope
+The submitted proposal and docs/research-plan.txt define the full project.
+This execution implements the initial method and its planned controls, checks
+numerical correctness, then runs a bounded diagnostic and an initial performance
+comparison. The first configurations are subsets of the full rank,
+regularization, target, and checkpoint study; their evidence does not replace it.
+The method can change in response to observed results. Keep the research question
+and the complete cost comparison when revising the mechanism.
+
+Numerical method
+K_ij = exp(-||x_i-x_j||^2/(2h^2)); A = K + lambda I.
+S has exactly k unique indices. C = K[:,S], W = K[S,S].
+M = C W^dagger C^T + lambda I.
+RPCholesky selects the initial S using its residual diagonal.
+At a checkpoint, r = y - A alpha is explicitly recomputed. For each of four
+sequential candidates, sample an unselected index proportionally to r_j^2;
+consider removing each index from S union {j}, including the no-op removal of j.
+Accept only a stable decrease greater than 1e-12 relative in q(S;r)=r^T M^-1 r.
+Keep r fixed throughout that checkpoint's sequential exchanges.
+Restart once if at least one exchange is accepted; otherwise continue PCG.
+No iteration changes the system matrix, target, or solution being sought.
+
+The small all-removal identity uses a cached C^T C and costs O(nk+k^3) per
+candidate. The first cache construction costs O(nk^2) and is charged to the first
+exchange update; fixed and matched-restart methods never construct this cache.
+Accepted preconditioners are rebuilt in O(nk^2+k^3). Singular or
+unreliable scoring systems fall back to direct stable evaluation of all removals;
+this slower path costs O(nk^3+k^4) and is counted in numerical_fallbacks.
+Small eigenvalues are truncated according to the threshold in numerics.py.
+Exactly k columns are retained even when their numerical rank is smaller.
+
+Data and pairing
+Concrete Compressive Strength: 1030 observations, 8 features, UCI.
+Airfoil Self-Noise: 1503 observations, 5 features, UCI.
+Official archives, member names, licenses, and hashes are in data/manifest.json.
+Synthetic: 640 observations, 8 features, four Gaussian clusters with probabilities
+0.50, 0.25, 0.15, 0.10; center standard deviation 1.5, within-cluster 0.45.
+Smooth y = sin(x_0) + 0.3 x_1^2 - 0.2 x_2 + 0.05 Gaussian noise.
+Random y is independent standard Gaussian noise. All synthetic targets use the
+same inputs and train/test split for each seed. The mixed target combines two
+orthogonal bands of the training-kernel eigenvectors: descending zero-based
+indices 1:9 and max(16,n_train//8):max(16,n_train//8)+8. Each component has zero
+training mean and squared norm n_train/2. Independent seeded coefficients are
+projected onto the zero-mean subspace of each band and normalized. Held-out
+targets extend the same kernel eigenfunctions from training inputs. Held-out
+inputs do not determine the bands, coefficients, scaling, or bandwidth.
+The eigendecomposition constructs synthetic data offline; no eigenvectors are
+stored in the solver input. The saved target_construction metadata identifies
+the bands and coefficient seed. Development seeds0/1 have been prepared; the
+revision's confirmation seeds5--9 remain unused.
+Use 80% training, 20% held-out data. Fit feature and target standardization only
+on training observations. h is the median training pairwise distance.
+lambda is the coefficient in K + lambda I, with no hidden multiplication by n.
+Seeds 0 through 4 independently control data/split, initial pivots, and candidate
+draws via separate SeedSequence streams. All Nyström methods use the same initial
+selected indices for a given case and rank.
+
+Methods implemented
+cg: unpreconditioned conjugate gradients.
+fixed: PCG with the initial RPCholesky Nyström preconditioner.
+residual_exchange: the submitted residual-guided exchange method.
+matched_restart: the fixed preconditioner, restarted at adaptive accepted-update
+iterations that occur before this control itself converges.
+target_exchange: y supplies both sampling probabilities and exchange scores.
+uniform_exchange: uniform candidates with the current residual supplying scores.
+periodic_rebuild: recompute a rank-k RPCholesky preconditioner at each checkpoint.
+lbfgs: inverse L-BFGS with at most floor(k/2) block secant pairs (s, A s).
+Pairs and the inverse are frozen within each PCG block; a valid pair is added at
+the checkpoint, followed by restart. Initial scale is 1/(1+lambda); subsequent
+two-loop scaling is s^T A s / ||A s||^2. This specifies the comparator completely.
+The secant-pair vector count is controlled; its total storage is not exactly equal
+to the Nyström implementation, which also retains its orthonormal factor basis.
+Dense Cholesky supplies an independent accuracy reference outside timed workers.
+
+Correctness before timing
+Compare inverse applications and all-removal scores with independent dense
+calculations, including dependent columns. Check SPD solver solutions against
+direct solves, verify restart rules, and check L-BFGS against explicit inverse
+BFGS updates. Numerical tests validate implementation, not research performance.
+
+Mechanism diagnostic
+configs/diagnostic.json fixes five seeds, two targets, lambda in {1e-3,1e-5},
+k=16, checkpoint=20, four candidates, and at most the first three accepted
+checkpoints per solve. From exactly the same alpha, restart separate old-M and
+new-M branches and freeze each preconditioner for 5, 10, and 20 steps.
+Measure q_new/q_old, actual A-energy error, true residual, and coefficient error
+against a Cholesky solution. If a branch stops at its numerical floor before the
+horizon, record its actual step count. These diagnostic runs are excluded from
+performance measurements. Bound wall time at 300 seconds, checking between cases.
+Checkpoint observations within a solve are dependent; do not treat them as
+independent samples in significance tests.
+
+Performance measurements
+Use float64, CPU only, one BLAS thread, and identical 128-row blockwise kernel
+matvecs. Timed workers never form a dense n-by-n kernel. Every method verifies
+the true relative residual at each checkpoint and before accepting convergence.
+Tolerance 1e-8, maximum 2000 iterations. A failed solve remains a failed solve.
+Total solve time includes RPCholesky setup, preconditioner application, candidate
+selection, fallback scoring, accepted factor rebuilds, recurrence restarts,
+kernel matvecs, and residual verification. Separate phase times and operation
+counts accompany each result. Downloading, preprocessing, bandwidth selection,
+dense reference preparation, process startup, and post-solve accuracy checks are
+outside this common timing boundary.
+An untimed adaptive calibration records the matched-restart schedule for each
+case/rank. Timed methods are shuffled per repetition. Timed adaptive runs must
+reproduce the calibrated schedule exactly. Calibration work is recorded apart
+from the solver times. Timing repetitions use the same random choices; distinct
+seeds provide distinct cases. Use the median of three repeats in the first
+multi-seed comparison. One-repeat pilot measurements are execution/cost checks.
+Store process peak RSS through the end of the solve, including interpreter,
+libraries, and inputs. The separate max_preconditioner_state_bytes is the largest
+single retained state, not peak temporary workspace. Accepted exchanges may
+temporarily hold both states; actual process RSS includes those allocations.
+Peak RSS increments can be zero when imports already established a larger peak.
+Store solution difference, prediction difference, and held-out RMSE after timing.
+
+Execution limits and records
+The pilot allows 300 wall seconds and 60 seconds per worker. The initial campaign
+uses configs/initial.json: four workloads, five seeds, k=16, lambda=1e-3,
+three timing repeats, and cg/fixed/residual_exchange/matched_restart. Its maximum
+wall time is 900 seconds with 60 seconds per worker. It preserves every completed
+record if it exhausts that limit. The other four implemented variants are run
+in the one-seed pilot; their multi-seed comparison remains part of the full plan.
+No GPU use, cloud jobs, external publishing, or
+unbounded search. Source hashes and all settings are saved for every run group.
+Campaign outputs are immutable: reruns use new directories. Do not edit source
+during a timing campaign. Keep timeouts, nonconvergence, and failures in the
+records; compare time-to-accuracy only when the paired methods both converge.
+In summary.csv, median_seconds is the duration of all attempts, including
+nonconverged ones; median_time_to_accuracy_seconds is populated only when every
+repetition converged. Use the latter for successful solve-time comparisons.
+
+Interpretation and next steps
+A smaller q at an unchanged alpha does not reduce the actual error. The paired
+branch diagnostic tests whether the next iterations benefit. If branches improve
+but total time worsens, inspect update cost and restart frequency. If branches do
+not improve, revisit the score or retention strategy before optimizing updates.
+Uniform and y-based controls distinguish candidate sampling from dependence on
+the current solve. Matched restarts distinguish column changes from restarting.
+Do not select only successful datasets or relabel a narrower setting as the
+project's contribution. Preserve the original question and report all cases.
+After this initial evidence, select the next mechanism experiment, then extend
+the planned rank/regularization/frequency and target studies.

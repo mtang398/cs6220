@@ -1,0 +1,238 @@
+{
+  "scope": "Accounting correction only; original numerical script/results unchanged",
+  "original_result_sha256": "a163efd0c72eb52d9fd390d1768df9520048eb4b847ca1167b5eb99efdbddc30",
+  "reason": "Original eight-vector scalar workspace omitted inverse-application scratch; original block small-array bound omitted rank-by-width inverse scratch. Use the conservative corrected bounds here.",
+  "conventions": "Float64 ndarray source bounds, including RHS and inverse/QR work; process/library internals and common kernel tile are separate. Matched ranks are largest fitting these bounds.",
+  "cases": [
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "n": 512,
+      "scalar32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 28800,
+        "solver_live_array_bound_bytes": 47488,
+        "factor_plus_persistent_array_bound_bytes": 160128,
+        "factor_plus_live_array_bound_bytes": 178816
+      },
+      "block32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 41984,
+        "solver_live_array_bound_bytes": 78080,
+        "factor_plus_persistent_array_bound_bytes": 173312,
+        "factor_plus_live_array_bound_bytes": 209408
+      },
+      "matched_scalar_ranks": {
+        "retained": 35,
+        "live": 39
+      }
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "n": 512,
+      "scalar32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 28800,
+        "solver_live_array_bound_bytes": 47488,
+        "factor_plus_persistent_array_bound_bytes": 160128,
+        "factor_plus_live_array_bound_bytes": 178816
+      },
+      "block32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 41984,
+        "solver_live_array_bound_bytes": 78080,
+        "factor_plus_persistent_array_bound_bytes": 173312,
+        "factor_plus_live_array_bound_bytes": 209408
+      },
+      "matched_scalar_ranks": {
+        "retained": 35,
+        "live": 39
+      }
+    },
+    {
+      "dataset": "synthetic-n640-random",
+      "regularization": 0.001,
+      "n": 512,
+      "scalar32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 28800,
+        "solver_live_array_bound_bytes": 47488,
+        "factor_plus_persistent_array_bound_bytes": 160128,
+        "factor_plus_live_array_bound_bytes": 178816
+      },
+      "block32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 41984,
+        "solver_live_array_bound_bytes": 78080,
+        "factor_plus_persistent_array_bound_bytes": 173312,
+        "factor_plus_live_array_bound_bytes": 209408
+      },
+      "matched_scalar_ranks": {
+        "retained": 35,
+        "live": 39
+      }
+    },
+    {
+      "dataset": "synthetic-n640-random",
+      "regularization": 1e-05,
+      "n": 512,
+      "scalar32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 28800,
+        "solver_live_array_bound_bytes": 47488,
+        "factor_plus_persistent_array_bound_bytes": 160128,
+        "factor_plus_live_array_bound_bytes": 178816
+      },
+      "block32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 41984,
+        "solver_live_array_bound_bytes": 78080,
+        "factor_plus_persistent_array_bound_bytes": 173312,
+        "factor_plus_live_array_bound_bytes": 209408
+      },
+      "matched_scalar_ranks": {
+        "retained": 35,
+        "live": 39
+      }
+    },
+    {
+      "dataset": "synthetic-n640-mixed",
+      "regularization": 0.001,
+      "n": 512,
+      "scalar32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 28800,
+        "solver_live_array_bound_bytes": 47488,
+        "factor_plus_persistent_array_bound_bytes": 160128,
+        "factor_plus_live_array_bound_bytes": 178816
+      },
+      "block32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 41984,
+        "solver_live_array_bound_bytes": 78080,
+        "factor_plus_persistent_array_bound_bytes": 173312,
+        "factor_plus_live_array_bound_bytes": 209408
+      },
+      "matched_scalar_ranks": {
+        "retained": 35,
+        "live": 39
+      }
+    },
+    {
+      "dataset": "synthetic-n640-mixed",
+      "regularization": 1e-05,
+      "n": 512,
+      "scalar32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 28800,
+        "solver_live_array_bound_bytes": 47488,
+        "factor_plus_persistent_array_bound_bytes": 160128,
+        "factor_plus_live_array_bound_bytes": 178816
+      },
+      "block32": {
+        "factor_bytes": 131328,
+        "solver_persistent_array_bound_bytes": 41984,
+        "solver_live_array_bound_bytes": 78080,
+        "factor_plus_persistent_array_bound_bytes": 173312,
+        "factor_plus_live_array_bound_bytes": 209408
+      },
+      "matched_scalar_ranks": {
+        "retained": 35,
+        "live": 39
+      }
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "n": 824,
+      "scalar32": {
+        "factor_bytes": 211200,
+        "solver_persistent_array_bound_bytes": 46272,
+        "solver_live_array_bound_bytes": 74944,
+        "factor_plus_persistent_array_bound_bytes": 257472,
+        "factor_plus_live_array_bound_bytes": 286144
+      },
+      "block32": {
+        "factor_bytes": 211200,
+        "solver_persistent_array_bound_bytes": 66944,
+        "solver_live_array_bound_bytes": 123008,
+        "factor_plus_persistent_array_bound_bytes": 278144,
+        "factor_plus_live_array_bound_bytes": 334208
+      },
+      "matched_scalar_ranks": {
+        "retained": 35,
+        "live": 39
+      }
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "n": 824,
+      "scalar32": {
+        "factor_bytes": 211200,
+        "solver_persistent_array_bound_bytes": 46272,
+        "solver_live_array_bound_bytes": 74944,
+        "factor_plus_persistent_array_bound_bytes": 257472,
+        "factor_plus_live_array_bound_bytes": 286144
+      },
+      "block32": {
+        "factor_bytes": 211200,
+        "solver_persistent_array_bound_bytes": 66944,
+        "solver_live_array_bound_bytes": 123008,
+        "factor_plus_persistent_array_bound_bytes": 278144,
+        "factor_plus_live_array_bound_bytes": 334208
+      },
+      "matched_scalar_ranks": {
+        "retained": 35,
+        "live": 39
+      }
+    },
+    {
+      "dataset": "airfoil-observed",
+      "regularization": 0.001,
+      "n": 1202,
+      "scalar32": {
+        "factor_bytes": 307968,
+        "solver_persistent_array_bound_bytes": 67440,
+        "solver_live_array_bound_bytes": 108208,
+        "factor_plus_persistent_array_bound_bytes": 375408,
+        "factor_plus_live_array_bound_bytes": 416176
+      },
+      "block32": {
+        "factor_bytes": 307968,
+        "solver_persistent_array_bound_bytes": 97184,
+        "solver_live_array_bound_bytes": 177440,
+        "factor_plus_persistent_array_bound_bytes": 405152,
+        "factor_plus_live_array_bound_bytes": 485408
+      },
+      "matched_scalar_ranks": {
+        "retained": 35,
+        "live": 39
+      }
+    },
+    {
+      "dataset": "airfoil-observed",
+      "regularization": 1e-05,
+      "n": 1202,
+      "scalar32": {
+        "factor_bytes": 307968,
+        "solver_persistent_array_bound_bytes": 67440,
+        "solver_live_array_bound_bytes": 108208,
+        "factor_plus_persistent_array_bound_bytes": 375408,
+        "factor_plus_live_array_bound_bytes": 416176
+      },
+      "block32": {
+        "factor_bytes": 307968,
+        "solver_persistent_array_bound_bytes": 97184,
+        "solver_live_array_bound_bytes": 177440,
+        "factor_plus_persistent_array_bound_bytes": 405152,
+        "factor_plus_live_array_bound_bytes": 485408
+      },
+      "matched_scalar_ranks": {
+        "retained": 35,
+        "live": 39
+      }
+    }
+  ]
+}

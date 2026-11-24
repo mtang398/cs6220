@@ -1,0 +1,170 @@
+{
+  "purpose": "untimed fixed-factor history-compression mechanism diagnostic",
+  "created_utc": "2026-11-23T02:06:54.195939+00:00",
+  "input": "data/prepared/synthetic-n640-smooth-s0-lambda0.001.npz",
+  "input_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+  "source_sha256": {
+    "scripts/ritz_compression_probe.py": "11175ab5cf5ea761c4971606f359388174faab9b88275740c8f7aefa223a72d9",
+    "src/nystrom_project/__init__.py": "160f59e9dc27f2624dd9467757579e986251bd3804b7278e98355a9910564967",
+    "src/nystrom_project/benchmark.py": "7db234a0d6f0e1c3dab88b0fe4b66f19247220c612e9f5d0f86af0ae667df43d",
+    "src/nystrom_project/curvature.py": "d9a768371a2555746bd6fad6105299833fb5a438b05d4fac01dd53b42492c71d",
+    "src/nystrom_project/datasets.py": "c5bce3d8b80f4535c161f064e16250d77654276fb153bafb17c2791feefdb803",
+    "src/nystrom_project/diagnostics.py": "04080c2dfa3dfdf833f6003527dc23cf8ec686fbfad097fbd8aeebd306e1ff92",
+    "src/nystrom_project/exchange.py": "a75af2a4063e7d82cb76af036889fcabd77ad572603198b241908ca49e9868ca",
+    "src/nystrom_project/flexible.py": "96f496589036216bb2fa2d6dba27d81af57ec36c018b5cc0a4d7fbc542d59337",
+    "src/nystrom_project/numerics.py": "27015a3d96632e4547c6faaaa736eb387308cf98ad6020ee6c6d4ffe6f937a0d",
+    "src/nystrom_project/preconditioners.py": "ead09c64373296d4d485494e4adfe295587f0157188d5505e7f2099da8b59638",
+    "src/nystrom_project/revisions.py": "804cb37df519cc7d478f3c18403049f7c6a9db8a60eb3217451a9674ee931713",
+    "src/nystrom_project/solvers.py": "8e4f7c6b0ce9df20f4dedba3abd6f3f721ddd0b6398febb70869e9b5ec73274f",
+    "src/nystrom_project/sweep.py": "c41281181b31358910ec7c1b7386b0c349d7fabbcb3dfe100e6d1773850e175a",
+    "src/nystrom_project/worker.py": "03156abd8fd35015a63f063803228acf3097673b8f66fbca629f10bc2996120a"
+  },
+  "python": "3.13.12",
+  "numpy": "2.4.2",
+  "scipy": "1.17.1",
+  "settings": {
+    "rank": 16,
+    "regularization": 0.001,
+    "history_size": 8,
+    "checkpoint": 20,
+    "rtol": 1e-08,
+    "maxiter": 1000,
+    "seed": 0
+  },
+  "initial_in_memory_observation": [
+    {
+      "ritz": 0,
+      "recent_old": 0,
+      "iterations": 138
+    },
+    {
+      "ritz": 2,
+      "recent_old": 0,
+      "iterations": 185
+    },
+    {
+      "ritz": 3,
+      "recent_old": 0,
+      "iterations": 192
+    },
+    {
+      "ritz": 4,
+      "recent_old": 0,
+      "iterations": 187
+    }
+  ],
+  "runs": [
+    {
+      "ritz": 0,
+      "recent_old": 0,
+      "newest_direction_preserved": true,
+      "iterations": 138,
+      "converged": true,
+      "true_relative_residual": 9.619984998802015e-09,
+      "breakdown": null,
+      "direction_matvecs": 138,
+      "verification_matvecs": 7,
+      "compressions": 0,
+      "max_history_gram_error": 0.0
+    },
+    {
+      "ritz": 2,
+      "recent_old": 0,
+      "newest_direction_preserved": true,
+      "iterations": 185,
+      "converged": true,
+      "true_relative_residual": 9.241615416315807e-09,
+      "breakdown": null,
+      "direction_matvecs": 185,
+      "verification_matvecs": 10,
+      "compressions": 30,
+      "max_history_gram_error": 6.152353368938466e-14
+    },
+    {
+      "ritz": 3,
+      "recent_old": 0,
+      "newest_direction_preserved": true,
+      "iterations": 192,
+      "converged": true,
+      "true_relative_residual": 9.24139081651991e-09,
+      "breakdown": null,
+      "direction_matvecs": 192,
+      "verification_matvecs": 10,
+      "compressions": 37,
+      "max_history_gram_error": 4.7149558347095754e-14
+    },
+    {
+      "ritz": 4,
+      "recent_old": 0,
+      "newest_direction_preserved": true,
+      "iterations": 187,
+      "converged": true,
+      "true_relative_residual": 9.953125408120156e-09,
+      "breakdown": null,
+      "direction_matvecs": 187,
+      "verification_matvecs": 10,
+      "compressions": 45,
+      "max_history_gram_error": 4.029415573842402e-14
+    },
+    {
+      "ritz": 2,
+      "recent_old": 2,
+      "newest_direction_preserved": true,
+      "iterations": 186,
+      "converged": true,
+      "true_relative_residual": 9.601610557147131e-09,
+      "breakdown": null,
+      "direction_matvecs": 186,
+      "verification_matvecs": 10,
+      "compressions": 45,
+      "max_history_gram_error": 7.655605482060518e-14
+    },
+    {
+      "ritz": 2,
+      "recent_old": 4,
+      "newest_direction_preserved": true,
+      "iterations": 197,
+      "converged": true,
+      "true_relative_residual": 8.83068927396495e-09,
+      "breakdown": null,
+      "direction_matvecs": 197,
+      "verification_matvecs": 10,
+      "compressions": 95,
+      "max_history_gram_error": 8.72269768746051e-14
+    },
+    {
+      "ritz": 3,
+      "recent_old": 2,
+      "newest_direction_preserved": true,
+      "iterations": 231,
+      "converged": true,
+      "true_relative_residual": 9.205905674056646e-09,
+      "breakdown": null,
+      "direction_matvecs": 231,
+      "verification_matvecs": 12,
+      "compressions": 75,
+      "max_history_gram_error": 9.522619194174612e-14
+    },
+    {
+      "ritz": 1,
+      "recent_old": 4,
+      "newest_direction_preserved": true,
+      "iterations": 167,
+      "converged": true,
+      "true_relative_residual": 7.866241579574217e-09,
+      "breakdown": null,
+      "direction_matvecs": 167,
+      "verification_matvecs": 9,
+      "compressions": 53,
+      "max_history_gram_error": 1.6113741243642423e-13
+    }
+  ],
+  "threadpools": {
+    "threadpoolctl": "unavailable",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "diagnostic_wall_seconds": 4.4146888199902605,
+  "timing_warning": "Shared-process diagnostic with extra Gram checks; no speed claim.",
+  "status": "complete"
+}

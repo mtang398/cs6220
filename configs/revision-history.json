@@ -1,0 +1,73 @@
+{
+  "purpose": "Diagnose frequent updates versus loss of old A-conjugacy; long-history cases are mechanism diagnostics, not fixed-storage performance claims.",
+  "workloads": [
+    {
+      "dataset": "synthetic",
+      "target": "smooth"
+    }
+  ],
+  "synthetic_n": 640,
+  "seeds": [
+    0
+  ],
+  "regularization": [
+    0.001
+  ],
+  "repetitions": 1,
+  "solver_defaults": {
+    "rank": 16,
+    "checkpoint": 20
+  },
+  "variants": [
+    {
+      "id": "fixed_h1",
+      "method": "flex_fixed",
+      "history_size": 1
+    },
+    {
+      "id": "energy_h1_once",
+      "method": "flex_energy",
+      "history_size": 1,
+      "candidate_count": 1,
+      "update_limit": 1
+    },
+    {
+      "id": "energy_h8_once",
+      "method": "flex_energy",
+      "history_size": 8,
+      "candidate_count": 1,
+      "update_limit": 1
+    },
+    {
+      "id": "direction_h8_once",
+      "method": "flex_direction_energy",
+      "history_size": 8,
+      "candidate_count": 1,
+      "update_limit": 1
+    },
+    {
+      "id": "fixed_h64",
+      "method": "flex_fixed",
+      "history_size": 64
+    },
+    {
+      "id": "energy_h64",
+      "method": "flex_energy",
+      "history_size": 64,
+      "candidate_count": 1
+    },
+    {
+      "id": "fixed_full",
+      "method": "flex_fixed",
+      "history_size": 512
+    },
+    {
+      "id": "energy_full",
+      "method": "flex_energy",
+      "history_size": 512,
+      "candidate_count": 1
+    }
+  ],
+  "max_wall_seconds": 300,
+  "run_timeout_seconds": 90
+}

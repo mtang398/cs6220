@@ -1,0 +1,375 @@
+{
+  "status": "validated",
+  "source_sha256": {
+    "scripts/check_packed_shared_schur_race.py": "69afaa6fccc09b7e027b4e6a5d75e8620ca0e0cd4404b7fd6b1b35204d8f5348",
+    "scripts/check_shared_schur_race.py": "aa3802aed7ccc08fc9ccfe10c4819cb8afc184c6a5cce5ea89ac110db95cdc9b",
+    "scripts/check_shared_schur_action.py": "00d1d2ccae0c17c391c3d4ed6f8e76cf7856c060fb2d0c2d032b2c1154db4b2b",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959",
+    "scripts/check_packed_schur_feasibility.py": "7b853198fd2476504a40cfeb7dc9d9a3f68e5e5b2a66454580e3119ab1c519ac"
+  },
+  "protocol": {
+    "purpose": "Packed implementation correctness and memory feasibility only; no native full-race timing",
+    "budget_bytes": 262144,
+    "reserve_bytes": 65536,
+    "allocation_core_sizes": [
+      128,
+      160
+    ],
+    "allocation_shapes": [
+      "synthetic-n640-smooth",
+      "concrete-observed"
+    ],
+    "candidates": "[0,M]",
+    "packing": "upper; m-prefix is first m*(m+1)//2 entries",
+    "prefix_solve": "dpptrs directly on contiguous prefix and one-column RHS view",
+    "core_product": "dtpmv trans0 followed by trans1, full maximum packed factor",
+    "numerical_regularizations": [
+      0.001,
+      1e-05
+    ],
+    "allocation_regularization": 1e-05,
+    "blas_threads": 1,
+    "cpu_cap_seconds": 10,
+    "lock": "/tmp/cs6220-project-benchmark.lock"
+  },
+  "allocation_checks": [
+    {
+      "mode": "race",
+      "memory": {
+        "named_peak_bytes": 192400,
+        "peak_with_reserve_bytes": 257936,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 9216,
+          "packed_core_assembly": 80384,
+          "packed_cholesky": 75264,
+          "packed_full_core_product": 113152,
+          "packed_prefix_solve": 105984,
+          "shared_initial_rhs": 192352,
+          "initial_rhs_copy": 91648,
+          "shared_top_cross": 192400,
+          "shared_bottom_lifted": 189424,
+          "shared_final_arrays": 113152,
+          "CG_vector_update": 108032,
+          "verification_reconstruction_cross": 192400,
+          "literal_original_kernel_verification": 191552,
+          "original_residual_vector_update": 116224
+        },
+        "phase_row_sizes": {
+          "shared_initial_rhs": [
+            94
+          ],
+          "shared_top_cross": [
+            69
+          ],
+          "shared_bottom_lifted": [
+            19
+          ],
+          "verification_reconstruction_cross": [
+            69
+          ],
+          "literal_original_kernel_verification": [
+            20
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 206136,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8170031657921879,
+        0.17902434556662206
+      ],
+      "status": "feasible",
+      "dataset": "synthetic-n640-smooth",
+      "n": 512,
+      "maximum": 128,
+      "packed_core_bytes": 66048,
+      "dense_core_bytes": 131072
+    },
+    {
+      "mode": "race",
+      "memory": {
+        "named_peak_bytes": 192320,
+        "peak_with_reserve_bytes": 257856,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 9472,
+          "packed_core_assembly": 119936,
+          "packed_cholesky": 112512,
+          "packed_full_core_product": 149632,
+          "packed_prefix_solve": 142720,
+          "shared_initial_rhs": 192320,
+          "initial_rhs_copy": 128896,
+          "shared_top_cross": 192192,
+          "shared_bottom_lifted": 188576,
+          "shared_final_arrays": 149632,
+          "CG_vector_update": 144256,
+          "verification_reconstruction_cross": 192192,
+          "literal_original_kernel_verification": 190192,
+          "original_residual_vector_update": 152448
+        },
+        "phase_row_sizes": {
+          "shared_initial_rhs": [
+            60,
+            128
+          ],
+          "shared_top_cross": [
+            36,
+            49
+          ],
+          "shared_bottom_lifted": [
+            10
+          ],
+          "verification_reconstruction_cross": [
+            36,
+            49
+          ],
+          "literal_original_kernel_verification": [
+            11
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 200952,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8170031657921881,
+        0.15234624765290314
+      ],
+      "status": "feasible",
+      "dataset": "synthetic-n640-smooth",
+      "n": 512,
+      "maximum": 160,
+      "packed_core_bytes": 103040,
+      "dense_core_bytes": 204800
+    },
+    {
+      "mode": "race",
+      "memory": {
+        "named_peak_bytes": 192400,
+        "peak_with_reserve_bytes": 257936,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 14208,
+          "packed_core_assembly": 82880,
+          "packed_cholesky": 77760,
+          "packed_full_core_product": 140608,
+          "packed_prefix_solve": 128448,
+          "shared_initial_rhs": 192112,
+          "initial_rhs_copy": 106624,
+          "shared_top_cross": 192400,
+          "shared_bottom_lifted": 190912,
+          "shared_final_arrays": 143104,
+          "CG_vector_update": 135488,
+          "verification_reconstruction_cross": 192400,
+          "literal_original_kernel_verification": 188864,
+          "original_residual_vector_update": 148672
+        },
+        "phase_row_sizes": {
+          "shared_initial_rhs": [
+            87
+          ],
+          "shared_top_cross": [
+            44,
+            101
+          ],
+          "shared_bottom_lifted": [
+            8
+          ],
+          "verification_reconstruction_cross": [
+            44,
+            101
+          ],
+          "literal_original_kernel_verification": [
+            8
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 203400,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        1.2457372384100465,
+        0.7172990856895228
+      ],
+      "status": "feasible",
+      "dataset": "concrete-observed",
+      "n": 824,
+      "maximum": 128,
+      "packed_core_bytes": 66048,
+      "dense_core_bytes": 131072
+    },
+    {
+      "mode": "race",
+      "memory": {
+        "named_peak_bytes": 192288,
+        "peak_with_reserve_bytes": 257824,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 14464,
+          "packed_core_assembly": 122432,
+          "packed_cholesky": 115008,
+          "packed_full_core_product": 177088,
+          "packed_prefix_solve": 165184,
+          "shared_initial_rhs": 192080,
+          "initial_rhs_copy": 143872,
+          "shared_top_cross": 192288,
+          "shared_bottom_lifted": 187616,
+          "shared_final_arrays": 179584,
+          "CG_vector_update": 171712,
+          "verification_reconstruction_cross": 192288,
+          "literal_original_kernel_verification": 191728,
+          "original_residual_vector_update": 184896
+        },
+        "phase_row_sizes": {
+          "shared_initial_rhs": [
+            53,
+            128
+          ],
+          "shared_top_cross": [
+            11,
+            70
+          ],
+          "shared_bottom_lifted": [
+            2
+          ],
+          "verification_reconstruction_cross": [
+            11,
+            70
+          ],
+          "literal_original_kernel_verification": [
+            3
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 201976,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        1.2457372384100467,
+        0.6412465183049306
+      ],
+      "status": "feasible",
+      "dataset": "concrete-observed",
+      "n": 824,
+      "maximum": 160,
+      "packed_core_bytes": 103040,
+      "dense_core_bytes": 204800
+    }
+  ],
+  "independent_operator_checks": [
+    {
+      "regularization": 0.001,
+      "prefix_solve_relative_errors": [
+        1.7113455043456957e-16,
+        1.3158584901035855e-16,
+        3.2016363029928234e-16
+      ],
+      "core_product_relative_error": 2.873200456586622e-16,
+      "Schur_action_relative_errors": [
+        4.222394966853544e-16,
+        3.417415881423365e-16,
+        5.273293290053411e-16
+      ],
+      "reduced_rhs_relative_errors": [
+        0.0,
+        1.195766386079069e-16,
+        2.2308346567682307e-16
+      ],
+      "literal_residual_relative_errors": [
+        9.045038273612024e-16,
+        5.106012064664283e-16,
+        5.323812720138107e-16
+      ],
+      "selected_constraint_relative_residuals": [
+        0.0,
+        1.3023400113338313e-16,
+        2.5306781186339086e-16
+      ],
+      "reconstruction_relative_errors": [
+        0.0,
+        9.787100509758772e-17,
+        3.0174429249069875e-16
+      ],
+      "all_buffer_aliases": true,
+      "factor_alias": true,
+      "queried_entries_per_joint_action": 1920,
+      "formula_entries": 1920
+    },
+    {
+      "regularization": 1e-05,
+      "prefix_solve_relative_errors": [
+        1.189142378438956e-16,
+        1.3458065713159744e-16,
+        2.7144852829908925e-16
+      ],
+      "core_product_relative_error": 2.513888721371227e-16,
+      "Schur_action_relative_errors": [
+        3.4030974925225945e-16,
+        3.5909084365101835e-16,
+        8.557165782566061e-16
+      ],
+      "reduced_rhs_relative_errors": [
+        0.0,
+        1.7149796124341617e-16,
+        2.501755158089435e-16
+      ],
+      "literal_residual_relative_errors": [
+        5.017033096946405e-16,
+        4.365399343100616e-16,
+        4.755658742028223e-16
+      ],
+      "selected_constraint_relative_residuals": [
+        0.0,
+        1.7418291925302529e-16,
+        2.4523113639390375e-16
+      ],
+      "reconstruction_relative_errors": [
+        0.0,
+        1.5219466445327508e-16,
+        2.882657661953956e-16
+      ],
+      "all_buffer_aliases": true,
+      "factor_alias": true,
+      "queried_entries_per_joint_action": 1920,
+      "formula_entries": 1920
+    }
+  ],
+  "independent_full_race_check": {
+    "n": 37,
+    "maximum": 9,
+    "checks": [
+      {
+        "iteration": 20,
+        "candidate_size": 0,
+        "original_relative_residual": 0.008691966488328382,
+        "literal_residual_relative_error": 6.258122445572792e-15
+      },
+      {
+        "iteration": 20,
+        "candidate_size": 9,
+        "original_relative_residual": 0.002418712796429612,
+        "literal_residual_relative_error": 5.75819744965172e-15
+      },
+      {
+        "iteration": 31,
+        "candidate_size": 9,
+        "original_relative_residual": 2.0516351358057344e-10,
+        "literal_residual_relative_error": 3.3619741686564623e-15
+      }
+    ],
+    "winner_size": 9,
+    "iterations": 31,
+    "independent_branch_iterations": [
+      45,
+      31
+    ],
+    "solution_relative_error": 9.112509362554258e-12,
+    "true_relative_residual": 2.0516343020892666e-10,
+    "all_core_buffer_aliases": true
+  },
+  "elapsed_cpu_seconds": 0.2335274,
+  "elapsed_wall_seconds": 0.419757663999917,
+  "process_peak_rss_kib": 69764
+}

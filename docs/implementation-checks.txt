@@ -1,0 +1,57 @@
+Implementation checks — 2026-11-23
+
+Executed:
+OPENBLAS_NUM_THREADS=1 project/.venv/bin/python -m pytest -q project/tests
+Observed: 19 passed, 16 subtests passed, 16.44 seconds.
+
+This run followed the lazy Gram-cache change and all solver fixes listed below.
+The tests compare numerical quantities with independent dense calculations;
+they do not establish a convergence or runtime advantage for adaptive exchanges.
+
+Coverage
+- Blockwise kernel operations and operation counters.
+- Nyström inverse against a dense SPD inverse.
+- All-removal scores against directly constructed replacements.
+- Dependent columns, stable acceptance, and exactly k unique retained indices.
+- All eight solver methods against an independent dense solve.
+- Shared initial selected indices across all Nyström variants.
+- Fixed-PCG recurrence preserved when exchanges are rejected.
+- Matched restart schedules, including convergence before a later checkpoint.
+- L-BFGS two-loop application against explicit inverse BFGS with pair eviction.
+- True residuals, final verification matvec counts, and zero right-hand sides.
+- Timed solver code never calls the dense kernel constructor.
+
+Independent code audit and fixes
+A separate agent inspected the numerical core and tests; another inspected the
+solver/worker/data/benchmark comparison. Root integrated the following fixes:
+1. Complete zero-RHS metrics schema and finite zero-RHS reference residual.
+2. Release the previous preconditioner after an exchange/callback.
+3. Avoid repeating the already-current final residual matvec at maxiter.
+4. Calibrate restart schedules separately and randomize every timed method.
+5. Construct the exchange-only Gram cache lazily; fixed baselines do not pay for it.
+6. Separate dense solve-reference time from prediction/reference preparation time.
+7. Distinguish total attempt durations from time to the requested accuracy.
+8. Include synthetic data size in prepared-case names.
+
+Diagnostic-001 ran before the lazy Gram-cache and reference-reporting changes;
+its exact source is archived in results/diagnostic-001-source.zip. Those changes
+do not alter its mathematical branches. Subsequent timing campaigns archive
+their own source, dependency versions, and protocol before execution.
+
+Completed-run audit and output handling
+results/verification.json records checks of all 240 completed comparison runs:
+true residual tolerance, one BLAS thread, fixed column budget, matvec accounting,
+accepted score decreases, restart schedules, and matching execution source.
+The original 900-second batch stopped after 237 complete records and interrupted
+one worker's output. The remaining three records were completed separately with
+the original source; the incomplete file and timeout record are preserved.
+
+After collecting and auditing all measurements, worker.py was changed to publish
+JSON through a temporary file and atomic rename. benchmark.py now records any
+old incomplete JSON without failing during summary generation, and identifies a
+timeout caused by the campaign allowance as budget_exhausted. These changes
+affect output/error handling, not numerical results. The archived sources retain
+the code actually used in the experiments.
+A focused integration check passed: a one-iteration nonconverged worker produced
+valid JSON with no remaining temporary file; summary generation reported an
+intentionally empty record and left time-to-accuracy empty for the failed solve.

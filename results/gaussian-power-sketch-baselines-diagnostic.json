@@ -1,0 +1,1421 @@
+{
+  "status": "complete",
+  "scope": "One-seed dense offline solver comparison; no CPU or end-to-end performance claims",
+  "protocol": {
+    "ranks": [
+      16,
+      32
+    ],
+    "regularization": [
+      0.001,
+      1e-05
+    ],
+    "seed_sequence": [
+      0,
+      6220,
+      3
+    ],
+    "gaussian_entries": "independent N(0,1)",
+    "paired_sketch_across_lambda_and_methods": true,
+    "subspace_iterations": 1,
+    "setup_kernel_matmat_calls": 2,
+    "construction": "Y1=K Omega;Q=qr(Y1);Y2=K Q;W=Q.T Y2",
+    "retained_Omega": false,
+    "recurrence": "exact fixed FCG-history1 loop from compression prototype",
+    "rtol": 1e-08,
+    "maxiter": 2500,
+    "blas_threads": 1,
+    "cpu_limit_seconds": 55
+  },
+  "source_sha256": {
+    "scripts/check_probe_compression.py": "6a9d2ae65fbef2046d71fae488e9c1a7c904afd17ef6f4ce3cad595ff0026f8e",
+    "scripts/check_gaussian_power_baselines.py": "b332ba92afc8a8f843aca793af1be40f78d40c1d80bafad1da86e2e20f1a9a17",
+    "src/nystrom_project/numerics.py": "c409d1df5bb84c666a26cd2f460d58267bf3a6f426e3511d79a0b59e3aaebdf2"
+  },
+  "comparison_sources": {
+    "probe-compression-restart-diagnostic.json": {
+      "sha256": "3424ef7ec34bab358271c85a34ccffc9a58ad14826ed9c4a0adfa8d91f6c50e9",
+      "prototype_source_sha256": "6adec0a492809aaba25be2094289bb5ca52c00c64301fa982e1ed293431fa280"
+    },
+    "sketch-column-selection-diagnostic.json": {
+      "sha256": "7fd6414735a9ca5a78eef4ecdb231f43157f1a44e11fe09ba9939012aecf2ce7",
+      "prototype_source_sha256": "a416e7dfeeef2b606d5d809a7bbc9472e81e68510929ea34dd928e9a5ced0b4d"
+    }
+  },
+  "one_pass_source": {
+    "path": "results/gaussian-sketch-baselines-diagnostic.json",
+    "sha256": "efeba9c6ad0e6fd1f90591836ad5e8375698052ae39c4a5b80374e89ea53a189"
+  },
+  "runs": [
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "rank": 16,
+      "n": 512,
+      "prepared_feature_source": "data/prepared/synthetic-n640-smooth-s0-lambda0.001.npz",
+      "prepared_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "dataset_sha256": "5455e8a127bfb36e514dc62b82f37ead6779b86ad473b8be8541643d1bbdb1a9",
+      "train_indices_sha256": "b1dc82426735e634156b2c210eba321d138bdd9ff6a1eebb7ef7b0e59040fa24",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 0.001,
+      "sketch": {
+        "effective_rank": 16,
+        "core_eigenvalue_min": 0.5504414150399273,
+        "core_eigenvalue_max": 341.12381153929846,
+        "core_threshold": 3.8781287405447353e-11,
+        "trace_approximation": 503.8229894282174,
+        "minimum_eigenvalue_K_minus_FFt": -1.3304613352493307e-13,
+        "sketch_sha256": "8bcb161898d6026423d1fe9205cb978836f31aea3e27da570c134b4aaaabe6f9",
+        "selected_actual_indices": [
+          150,
+          84,
+          361,
+          481,
+          244,
+          377,
+          15,
+          389,
+          218,
+          1,
+          310,
+          89,
+          248,
+          381,
+          509,
+          107
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 133,
+        "relative_residual": 7.883781453300999e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 139,
+        "relative_residual": 8.373787177055662e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 147,
+        "relative_residual": 9.19092876798764e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 139,
+        "relative_residual": 8.294608045944748e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 145,
+        "true_relative_residual": 8.934859731089494e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": {
+        "iterations": 139,
+        "true_relative_residual": 9.25301271908004e-09,
+        "converged": true,
+        "source": "probe-compression-restart-diagnostic.json"
+      }
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "rank": 16,
+      "n": 512,
+      "prepared_feature_source": "data/prepared/synthetic-n640-smooth-s0-lambda0.001.npz",
+      "prepared_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "dataset_sha256": "5455e8a127bfb36e514dc62b82f37ead6779b86ad473b8be8541643d1bbdb1a9",
+      "train_indices_sha256": "b1dc82426735e634156b2c210eba321d138bdd9ff6a1eebb7ef7b0e59040fa24",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 1e-05,
+      "sketch": {
+        "effective_rank": 16,
+        "core_eigenvalue_min": 0.5504414150399273,
+        "core_eigenvalue_max": 341.12381153929846,
+        "core_threshold": 3.8781287405447353e-11,
+        "trace_approximation": 503.8229894282174,
+        "minimum_eigenvalue_K_minus_FFt": -1.3304613352493307e-13,
+        "sketch_sha256": "8bcb161898d6026423d1fe9205cb978836f31aea3e27da570c134b4aaaabe6f9",
+        "selected_actual_indices": [
+          150,
+          84,
+          361,
+          481,
+          244,
+          377,
+          15,
+          389,
+          218,
+          1,
+          310,
+          89,
+          248,
+          381,
+          509,
+          107
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 1151,
+        "relative_residual": 9.727082091503227e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 1188,
+        "relative_residual": 9.297641487189091e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 1246,
+        "relative_residual": 9.806214225240415e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 1174,
+        "relative_residual": 9.18280981133851e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 1245,
+        "true_relative_residual": 9.754953504530479e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": {
+        "iterations": 1165,
+        "true_relative_residual": 9.603837852131117e-09,
+        "converged": true,
+        "source": "probe-compression-restart-diagnostic.json"
+      }
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "rank": 32,
+      "n": 512,
+      "prepared_feature_source": "data/prepared/synthetic-n640-smooth-s0-lambda0.001.npz",
+      "prepared_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "dataset_sha256": "5455e8a127bfb36e514dc62b82f37ead6779b86ad473b8be8541643d1bbdb1a9",
+      "train_indices_sha256": "b1dc82426735e634156b2c210eba321d138bdd9ff6a1eebb7ef7b0e59040fa24",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 0.001,
+      "sketch": {
+        "effective_rank": 32,
+        "core_eigenvalue_min": 0.06568568282935439,
+        "core_eigenvalue_max": 341.12460210515144,
+        "core_threshold": 7.756275456475838e-11,
+        "trace_approximation": 509.99322711183135,
+        "minimum_eigenvalue_K_minus_FFt": -2.339670808350072e-13,
+        "sketch_sha256": "80a7bb856e9ac3886a50bb15b1a4a8072c94f0275e65eac2a1fffa2760ea3eea",
+        "selected_actual_indices": [
+          390,
+          451,
+          434,
+          246,
+          377,
+          248,
+          164,
+          259,
+          152,
+          313,
+          474,
+          1,
+          308,
+          213,
+          422,
+          492,
+          181,
+          333,
+          249,
+          94,
+          371,
+          449,
+          396,
+          418,
+          118,
+          218,
+          238,
+          60,
+          487,
+          216,
+          86,
+          83
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 73,
+        "relative_residual": 9.956418203806612e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 80,
+        "relative_residual": 7.167851035492092e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 85,
+        "relative_residual": 6.807972848695467e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 83,
+        "relative_residual": 6.6076412875744636e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 85,
+        "true_relative_residual": 7.449771869937064e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": {
+        "iterations": 82,
+        "true_relative_residual": 8.774198043762245e-09,
+        "converged": true,
+        "source": "probe-compression-restart-diagnostic.json"
+      }
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "rank": 32,
+      "n": 512,
+      "prepared_feature_source": "data/prepared/synthetic-n640-smooth-s0-lambda0.001.npz",
+      "prepared_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "dataset_sha256": "5455e8a127bfb36e514dc62b82f37ead6779b86ad473b8be8541643d1bbdb1a9",
+      "train_indices_sha256": "b1dc82426735e634156b2c210eba321d138bdd9ff6a1eebb7ef7b0e59040fa24",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 1e-05,
+      "sketch": {
+        "effective_rank": 32,
+        "core_eigenvalue_min": 0.06568568282935439,
+        "core_eigenvalue_max": 341.12460210515144,
+        "core_threshold": 7.756275456475838e-11,
+        "trace_approximation": 509.99322711183135,
+        "minimum_eigenvalue_K_minus_FFt": -2.339670808350072e-13,
+        "sketch_sha256": "80a7bb856e9ac3886a50bb15b1a4a8072c94f0275e65eac2a1fffa2760ea3eea",
+        "selected_actual_indices": [
+          390,
+          451,
+          434,
+          246,
+          377,
+          248,
+          164,
+          259,
+          152,
+          313,
+          474,
+          1,
+          308,
+          213,
+          422,
+          492,
+          181,
+          333,
+          249,
+          94,
+          371,
+          449,
+          396,
+          418,
+          118,
+          218,
+          238,
+          60,
+          487,
+          216,
+          86,
+          83
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 619,
+        "relative_residual": 9.59778047869942e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 667,
+        "relative_residual": 9.232982969015193e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 701,
+        "relative_residual": 9.994552386243423e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 683,
+        "relative_residual": 9.735599513877141e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 700,
+        "true_relative_residual": 9.870436700888867e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": {
+        "iterations": 647,
+        "true_relative_residual": 8.384847863637534e-09,
+        "converged": true,
+        "source": "probe-compression-restart-diagnostic.json"
+      }
+    },
+    {
+      "dataset": "synthetic-n640-random",
+      "regularization": 0.001,
+      "rank": 16,
+      "n": 512,
+      "prepared_feature_source": "data/prepared/synthetic-n640-random-s0-lambda0.001.npz",
+      "prepared_sha256": "6ea5cd0ea4113f7a40248ca87a458646c2b1a229e8b5de608c6b9c8edcc7f31a",
+      "dataset_sha256": "4fbe08aeb7c8d3b4b8fa3945e113de4364dfee1c8cd7e501878a3ab210714fca",
+      "train_indices_sha256": "b1dc82426735e634156b2c210eba321d138bdd9ff6a1eebb7ef7b0e59040fa24",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 0.001,
+      "sketch": {
+        "effective_rank": 16,
+        "core_eigenvalue_min": 0.5504414150399273,
+        "core_eigenvalue_max": 341.12381153929846,
+        "core_threshold": 3.8781287405447353e-11,
+        "trace_approximation": 503.8229894282174,
+        "minimum_eigenvalue_K_minus_FFt": -1.3304613352493307e-13,
+        "sketch_sha256": "8bcb161898d6026423d1fe9205cb978836f31aea3e27da570c134b4aaaabe6f9",
+        "selected_actual_indices": [
+          150,
+          84,
+          361,
+          481,
+          244,
+          377,
+          15,
+          389,
+          218,
+          1,
+          310,
+          89,
+          248,
+          381,
+          509,
+          107
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 140,
+        "relative_residual": 7.509795190513582e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 146,
+        "relative_residual": 6.5520234608062476e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 155,
+        "relative_residual": 6.411252590007125e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 145,
+        "relative_residual": 9.62605080790621e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 149,
+        "true_relative_residual": 8.377194814173212e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": null
+    },
+    {
+      "dataset": "synthetic-n640-random",
+      "regularization": 1e-05,
+      "rank": 16,
+      "n": 512,
+      "prepared_feature_source": "data/prepared/synthetic-n640-random-s0-lambda0.001.npz",
+      "prepared_sha256": "6ea5cd0ea4113f7a40248ca87a458646c2b1a229e8b5de608c6b9c8edcc7f31a",
+      "dataset_sha256": "4fbe08aeb7c8d3b4b8fa3945e113de4364dfee1c8cd7e501878a3ab210714fca",
+      "train_indices_sha256": "b1dc82426735e634156b2c210eba321d138bdd9ff6a1eebb7ef7b0e59040fa24",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 1e-05,
+      "sketch": {
+        "effective_rank": 16,
+        "core_eigenvalue_min": 0.5504414150399273,
+        "core_eigenvalue_max": 341.12381153929846,
+        "core_threshold": 3.8781287405447353e-11,
+        "trace_approximation": 503.8229894282174,
+        "minimum_eigenvalue_K_minus_FFt": -1.3304613352493307e-13,
+        "sketch_sha256": "8bcb161898d6026423d1fe9205cb978836f31aea3e27da570c134b4aaaabe6f9",
+        "selected_actual_indices": [
+          150,
+          84,
+          361,
+          481,
+          244,
+          377,
+          15,
+          389,
+          218,
+          1,
+          310,
+          89,
+          248,
+          381,
+          509,
+          107
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 1185,
+        "relative_residual": 6.87689184149244e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 1223,
+        "relative_residual": 8.498239296426128e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 1335,
+        "relative_residual": 8.641673983817711e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 1240,
+        "relative_residual": 9.451532428334724e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 1289,
+        "true_relative_residual": 9.855367214945632e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": null
+    },
+    {
+      "dataset": "synthetic-n640-random",
+      "regularization": 0.001,
+      "rank": 32,
+      "n": 512,
+      "prepared_feature_source": "data/prepared/synthetic-n640-random-s0-lambda0.001.npz",
+      "prepared_sha256": "6ea5cd0ea4113f7a40248ca87a458646c2b1a229e8b5de608c6b9c8edcc7f31a",
+      "dataset_sha256": "4fbe08aeb7c8d3b4b8fa3945e113de4364dfee1c8cd7e501878a3ab210714fca",
+      "train_indices_sha256": "b1dc82426735e634156b2c210eba321d138bdd9ff6a1eebb7ef7b0e59040fa24",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 0.001,
+      "sketch": {
+        "effective_rank": 32,
+        "core_eigenvalue_min": 0.06568568282935439,
+        "core_eigenvalue_max": 341.12460210515144,
+        "core_threshold": 7.756275456475838e-11,
+        "trace_approximation": 509.99322711183135,
+        "minimum_eigenvalue_K_minus_FFt": -2.339670808350072e-13,
+        "sketch_sha256": "80a7bb856e9ac3886a50bb15b1a4a8072c94f0275e65eac2a1fffa2760ea3eea",
+        "selected_actual_indices": [
+          390,
+          451,
+          434,
+          246,
+          377,
+          248,
+          164,
+          259,
+          152,
+          313,
+          474,
+          1,
+          308,
+          213,
+          422,
+          492,
+          181,
+          333,
+          249,
+          94,
+          371,
+          449,
+          396,
+          418,
+          118,
+          218,
+          238,
+          60,
+          487,
+          216,
+          86,
+          83
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 76,
+        "relative_residual": 6.153628070957774e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 82,
+        "relative_residual": 9.314557206817876e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 88,
+        "relative_residual": 6.764369009258265e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 84,
+        "relative_residual": 9.316215243689355e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 87,
+        "true_relative_residual": 5.853978709311805e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": null
+    },
+    {
+      "dataset": "synthetic-n640-random",
+      "regularization": 1e-05,
+      "rank": 32,
+      "n": 512,
+      "prepared_feature_source": "data/prepared/synthetic-n640-random-s0-lambda0.001.npz",
+      "prepared_sha256": "6ea5cd0ea4113f7a40248ca87a458646c2b1a229e8b5de608c6b9c8edcc7f31a",
+      "dataset_sha256": "4fbe08aeb7c8d3b4b8fa3945e113de4364dfee1c8cd7e501878a3ab210714fca",
+      "train_indices_sha256": "b1dc82426735e634156b2c210eba321d138bdd9ff6a1eebb7ef7b0e59040fa24",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 1e-05,
+      "sketch": {
+        "effective_rank": 32,
+        "core_eigenvalue_min": 0.06568568282935439,
+        "core_eigenvalue_max": 341.12460210515144,
+        "core_threshold": 7.756275456475838e-11,
+        "trace_approximation": 509.99322711183135,
+        "minimum_eigenvalue_K_minus_FFt": -2.339670808350072e-13,
+        "sketch_sha256": "80a7bb856e9ac3886a50bb15b1a4a8072c94f0275e65eac2a1fffa2760ea3eea",
+        "selected_actual_indices": [
+          390,
+          451,
+          434,
+          246,
+          377,
+          248,
+          164,
+          259,
+          152,
+          313,
+          474,
+          1,
+          308,
+          213,
+          422,
+          492,
+          181,
+          333,
+          249,
+          94,
+          371,
+          449,
+          396,
+          418,
+          118,
+          218,
+          238,
+          60,
+          487,
+          216,
+          86,
+          83
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 636,
+        "relative_residual": 9.966864468318575e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 697,
+        "relative_residual": 7.597836738612935e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 740,
+        "relative_residual": 8.016303729848051e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 716,
+        "relative_residual": 9.405704914071357e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 738,
+        "true_relative_residual": 9.654865907012602e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": null
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "rank": 16,
+      "n": 824,
+      "prepared_feature_source": "data/prepared/concrete-observed-s0-lambda0.001.npz",
+      "prepared_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "dataset_sha256": "8b9a7af0366e0f437ad04cfba6bb729ec0c3ea76fa780ff3d3f4d057356b6af6",
+      "train_indices_sha256": "89c8f9d071683d785dd69e8f923ee4feb6f23ecdad490f7c367b43b805296727",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 0.001,
+      "sketch": {
+        "effective_rank": 16,
+        "core_eigenvalue_min": 1.7393530052021429,
+        "core_eigenvalue_max": 504.14554206562536,
+        "core_threshold": 5.73147124288909e-11,
+        "trace_approximation": 784.952475224045,
+        "minimum_eigenvalue_K_minus_FFt": -1.15833456916472e-13,
+        "sketch_sha256": "285353f0ecc1b496f8533703c93484b93ff5e68a0478cf99ba8da16031205ed4",
+        "selected_actual_indices": [
+          525,
+          186,
+          787,
+          361,
+          603,
+          268,
+          215,
+          399,
+          251,
+          410,
+          506,
+          738,
+          92,
+          377,
+          304,
+          555
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 271,
+        "relative_residual": 7.916469269936005e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 283,
+        "relative_residual": 6.536193905253334e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 293,
+        "relative_residual": 6.867213103136478e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 290,
+        "relative_residual": 8.608318681120626e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 285,
+        "true_relative_residual": 7.785691507142961e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": {
+        "iterations": 274,
+        "true_relative_residual": 9.972508728716941e-09,
+        "converged": true,
+        "source": "probe-compression-restart-diagnostic.json"
+      }
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "rank": 16,
+      "n": 824,
+      "prepared_feature_source": "data/prepared/concrete-observed-s0-lambda0.001.npz",
+      "prepared_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "dataset_sha256": "8b9a7af0366e0f437ad04cfba6bb729ec0c3ea76fa780ff3d3f4d057356b6af6",
+      "train_indices_sha256": "89c8f9d071683d785dd69e8f923ee4feb6f23ecdad490f7c367b43b805296727",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 1e-05,
+      "sketch": {
+        "effective_rank": 16,
+        "core_eigenvalue_min": 1.7393530052021429,
+        "core_eigenvalue_max": 504.14554206562536,
+        "core_threshold": 5.73147124288909e-11,
+        "trace_approximation": 784.952475224045,
+        "minimum_eigenvalue_K_minus_FFt": -1.15833456916472e-13,
+        "sketch_sha256": "285353f0ecc1b496f8533703c93484b93ff5e68a0478cf99ba8da16031205ed4",
+        "selected_actual_indices": [
+          525,
+          186,
+          787,
+          361,
+          603,
+          268,
+          215,
+          399,
+          251,
+          410,
+          506,
+          738,
+          92,
+          377,
+          304,
+          555
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 2312,
+        "relative_residual": 8.87783982717585e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 2436,
+        "relative_residual": 8.582253832965866e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 2500,
+        "relative_residual": 2.4022466594693128e-08,
+        "updates": 0,
+        "skipped": 0,
+        "converged": false
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 2500,
+        "relative_residual": 6.13962554973599e-08,
+        "updates": 0,
+        "skipped": 0,
+        "converged": false
+      },
+      "fixed_rp": {
+        "iterations": 2451,
+        "true_relative_residual": 7.04536557951197e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": {
+        "iterations": 2325,
+        "true_relative_residual": 8.364737652002085e-09,
+        "converged": true,
+        "source": "probe-compression-restart-diagnostic.json"
+      }
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "rank": 32,
+      "n": 824,
+      "prepared_feature_source": "data/prepared/concrete-observed-s0-lambda0.001.npz",
+      "prepared_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "dataset_sha256": "8b9a7af0366e0f437ad04cfba6bb729ec0c3ea76fa780ff3d3f4d057356b6af6",
+      "train_indices_sha256": "89c8f9d071683d785dd69e8f923ee4feb6f23ecdad490f7c367b43b805296727",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 0.001,
+      "sketch": {
+        "effective_rank": 32,
+        "core_eigenvalue_min": 0.35450550974887535,
+        "core_eigenvalue_max": 504.15727879823373,
+        "core_threshold": 1.1463209348181266e-10,
+        "trace_approximation": 812.7388174007099,
+        "minimum_eigenvalue_K_minus_FFt": -1.4675354190476673e-13,
+        "sketch_sha256": "2859587bdbc08ff2eb863ccb86757ee3346586c3dba6c1be339061696cc29ad1",
+        "selected_actual_indices": [
+          238,
+          789,
+          176,
+          674,
+          666,
+          795,
+          96,
+          215,
+          513,
+          488,
+          748,
+          224,
+          738,
+          399,
+          324,
+          168,
+          548,
+          377,
+          529,
+          763,
+          555,
+          106,
+          91,
+          23,
+          128,
+          636,
+          436,
+          248,
+          320,
+          594,
+          440,
+          722
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 157,
+        "relative_residual": 9.148510441060117e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 170,
+        "relative_residual": 7.754778887002982e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 176,
+        "relative_residual": 8.803752463037839e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 172,
+        "relative_residual": 9.624026510980926e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 177,
+        "true_relative_residual": 7.457509046811266e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": {
+        "iterations": 168,
+        "true_relative_residual": 5.973485555027169e-09,
+        "converged": true,
+        "source": "probe-compression-restart-diagnostic.json"
+      }
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "rank": 32,
+      "n": 824,
+      "prepared_feature_source": "data/prepared/concrete-observed-s0-lambda0.001.npz",
+      "prepared_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "dataset_sha256": "8b9a7af0366e0f437ad04cfba6bb729ec0c3ea76fa780ff3d3f4d057356b6af6",
+      "train_indices_sha256": "89c8f9d071683d785dd69e8f923ee4feb6f23ecdad490f7c367b43b805296727",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 1e-05,
+      "sketch": {
+        "effective_rank": 32,
+        "core_eigenvalue_min": 0.35450550974887535,
+        "core_eigenvalue_max": 504.15727879823373,
+        "core_threshold": 1.1463209348181266e-10,
+        "trace_approximation": 812.7388174007099,
+        "minimum_eigenvalue_K_minus_FFt": -1.4675354190476673e-13,
+        "sketch_sha256": "2859587bdbc08ff2eb863ccb86757ee3346586c3dba6c1be339061696cc29ad1",
+        "selected_actual_indices": [
+          238,
+          789,
+          176,
+          674,
+          666,
+          795,
+          96,
+          215,
+          513,
+          488,
+          748,
+          224,
+          738,
+          399,
+          324,
+          168,
+          548,
+          377,
+          529,
+          763,
+          555,
+          106,
+          91,
+          23,
+          128,
+          636,
+          436,
+          248,
+          320,
+          594,
+          440,
+          722
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 1340,
+        "relative_residual": 9.562247110162123e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 1458,
+        "relative_residual": 8.104240814058264e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 1551,
+        "relative_residual": 8.122874146833379e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 1479,
+        "relative_residual": 7.650983473595973e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 1517,
+        "true_relative_residual": 5.895962176384356e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": {
+        "iterations": 1371,
+        "true_relative_residual": 8.331265599432012e-09,
+        "converged": true,
+        "source": "probe-compression-restart-diagnostic.json"
+      }
+    },
+    {
+      "dataset": "airfoil-observed",
+      "regularization": 0.001,
+      "rank": 16,
+      "n": 1202,
+      "prepared_feature_source": "data/prepared/airfoil-observed-s0-lambda0.001.npz",
+      "prepared_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "dataset_sha256": "11fab2c660f61031935f9995d27929df39a175d3551271b397c8aa254b19b6b6",
+      "train_indices_sha256": "7902aca2d28fad7da0f931b73467102fa40a2fc9dcc9c1a9f0da6e1c8bd974c6",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 0.001,
+      "sketch": {
+        "effective_rank": 16,
+        "core_eigenvalue_min": 1.3777371219570926,
+        "core_eigenvalue_max": 733.0162988464208,
+        "core_threshold": 8.333430501425264e-11,
+        "trace_approximation": 1182.0612619657488,
+        "minimum_eigenvalue_K_minus_FFt": -1.6936930217739725e-13,
+        "sketch_sha256": "4953063848b3096bc98b6cd906d14bba1e14a5e2be1fbd960f5087207affd027",
+        "selected_actual_indices": [
+          45,
+          449,
+          929,
+          73,
+          363,
+          841,
+          991,
+          461,
+          1137,
+          82,
+          192,
+          120,
+          465,
+          1069,
+          411,
+          353
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 183,
+        "relative_residual": 5.0799680246195085e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 186,
+        "relative_residual": 8.514698280046425e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 192,
+        "relative_residual": 9.46291733094266e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 186,
+        "relative_residual": 6.610485027313401e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 202,
+        "true_relative_residual": 3.3834251496468016e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": null
+    },
+    {
+      "dataset": "airfoil-observed",
+      "regularization": 1e-05,
+      "rank": 16,
+      "n": 1202,
+      "prepared_feature_source": "data/prepared/airfoil-observed-s0-lambda0.001.npz",
+      "prepared_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "dataset_sha256": "11fab2c660f61031935f9995d27929df39a175d3551271b397c8aa254b19b6b6",
+      "train_indices_sha256": "7902aca2d28fad7da0f931b73467102fa40a2fc9dcc9c1a9f0da6e1c8bd974c6",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 1e-05,
+      "sketch": {
+        "effective_rank": 16,
+        "core_eigenvalue_min": 1.3777371219570926,
+        "core_eigenvalue_max": 733.0162988464208,
+        "core_threshold": 8.333430501425264e-11,
+        "trace_approximation": 1182.0612619657488,
+        "minimum_eigenvalue_K_minus_FFt": -1.6936930217739725e-13,
+        "sketch_sha256": "4953063848b3096bc98b6cd906d14bba1e14a5e2be1fbd960f5087207affd027",
+        "selected_actual_indices": [
+          45,
+          449,
+          929,
+          73,
+          363,
+          841,
+          991,
+          461,
+          1137,
+          82,
+          192,
+          120,
+          465,
+          1069,
+          411,
+          353
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 1394,
+        "relative_residual": 4.448407355856202e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 1448,
+        "relative_residual": 3.898540672615224e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 1535,
+        "relative_residual": 5.169408838580718e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 1449,
+        "relative_residual": 8.873206711991825e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 1539,
+        "true_relative_residual": 8.223039662278193e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": null
+    },
+    {
+      "dataset": "airfoil-observed",
+      "regularization": 0.001,
+      "rank": 32,
+      "n": 1202,
+      "prepared_feature_source": "data/prepared/airfoil-observed-s0-lambda0.001.npz",
+      "prepared_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "dataset_sha256": "11fab2c660f61031935f9995d27929df39a175d3551271b397c8aa254b19b6b6",
+      "train_indices_sha256": "7902aca2d28fad7da0f931b73467102fa40a2fc9dcc9c1a9f0da6e1c8bd974c6",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 0.001,
+      "sketch": {
+        "effective_rank": 32,
+        "core_eigenvalue_min": 0.18748312648776788,
+        "core_eigenvalue_max": 733.0210243739912,
+        "core_threshold": 1.6666968448907736e-10,
+        "trace_approximation": 1198.9549745304928,
+        "minimum_eigenvalue_K_minus_FFt": -2.2158589149085885e-13,
+        "sketch_sha256": "b9c579cc411b4a7df18ec689a21795c1090bd6ed0719ad1a648e15c6476b4169",
+        "selected_actual_indices": [
+          962,
+          984,
+          355,
+          710,
+          1043,
+          403,
+          34,
+          873,
+          991,
+          1168,
+          841,
+          146,
+          1068,
+          135,
+          1137,
+          481,
+          1135,
+          139,
+          995,
+          718,
+          935,
+          1014,
+          434,
+          193,
+          171,
+          120,
+          898,
+          901,
+          626,
+          801,
+          762,
+          1180
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 87,
+        "relative_residual": 6.786596171188438e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 96,
+        "relative_residual": 7.506664341616611e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 101,
+        "relative_residual": 7.984971152240845e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 98,
+        "relative_residual": 4.982148718488251e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 103,
+        "true_relative_residual": 6.229701470930799e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": null
+    },
+    {
+      "dataset": "airfoil-observed",
+      "regularization": 1e-05,
+      "rank": 32,
+      "n": 1202,
+      "prepared_feature_source": "data/prepared/airfoil-observed-s0-lambda0.001.npz",
+      "prepared_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "dataset_sha256": "11fab2c660f61031935f9995d27929df39a175d3551271b397c8aa254b19b6b6",
+      "train_indices_sha256": "7902aca2d28fad7da0f931b73467102fa40a2fc9dcc9c1a9f0da6e1c8bd974c6",
+      "source_preparation_regularization": 0.001,
+      "source_reference_ignored": true,
+      "actual_operator_regularization": 1e-05,
+      "sketch": {
+        "effective_rank": 32,
+        "core_eigenvalue_min": 0.18748312648776788,
+        "core_eigenvalue_max": 733.0210243739912,
+        "core_threshold": 1.6666968448907736e-10,
+        "trace_approximation": 1198.9549745304928,
+        "minimum_eigenvalue_K_minus_FFt": -2.2158589149085885e-13,
+        "sketch_sha256": "b9c579cc411b4a7df18ec689a21795c1090bd6ed0719ad1a648e15c6476b4169",
+        "selected_actual_indices": [
+          962,
+          984,
+          355,
+          710,
+          1043,
+          403,
+          34,
+          873,
+          991,
+          1168,
+          841,
+          146,
+          1068,
+          135,
+          1137,
+          481,
+          1135,
+          139,
+          995,
+          718,
+          935,
+          1014,
+          434,
+          193,
+          171,
+          120,
+          898,
+          901,
+          626,
+          801,
+          762,
+          1180
+        ]
+      },
+      "power_gaussian_nystrom": {
+        "iterations": 670,
+        "relative_residual": 7.799490369412464e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "power_gaussian_qrcp_actual_columns": {
+        "iterations": 720,
+        "relative_residual": 8.558258493376706e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_nystrom": {
+        "iterations": 774,
+        "relative_residual": 9.248997058734215e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "one_pass_gaussian_qrcp_actual_columns": {
+        "iterations": 724,
+        "relative_residual": 7.0283270336776935e-09,
+        "updates": 0,
+        "skipped": 0,
+        "converged": true
+      },
+      "fixed_rp": {
+        "iterations": 761,
+        "true_relative_residual": 7.40236354740983e-09,
+        "converged": true,
+        "source": "sketch-column-selection-diagnostic.json"
+      },
+      "compressed_freeze10": null
+    }
+  ],
+  "elapsed_wall_seconds": 5.470269370009191,
+  "elapsed_cpu_seconds": 5.0476111999999995
+}

@@ -1,0 +1,88 @@
+{
+  "purpose": "Fair fixed-column selection controls: RPCholesky, deterministic pivoted Cholesky, farthest-point sampling.",
+  "workloads": [
+    {
+      "dataset": "synthetic",
+      "target": "smooth"
+    },
+    {
+      "dataset": "synthetic",
+      "target": "random"
+    },
+    {
+      "dataset": "concrete"
+    },
+    {
+      "dataset": "airfoil"
+    }
+  ],
+  "synthetic_n": 640,
+  "seeds": [
+    0
+  ],
+  "regularization": [
+    0.001
+  ],
+  "repetitions": 1,
+  "solver_defaults": {
+    "checkpoint": 20
+  },
+  "variants": [
+    {
+      "id": "flex_fixed_k16",
+      "method": "flex_fixed",
+      "rank": 16,
+      "history_size": 1
+    },
+    {
+      "id": "flex_greedy_k16",
+      "method": "flex_greedy",
+      "rank": 16,
+      "history_size": 1
+    },
+    {
+      "id": "flex_fps_k16",
+      "method": "flex_fps",
+      "rank": 16,
+      "history_size": 1
+    },
+    {
+      "id": "flex_fixed_k32",
+      "method": "flex_fixed",
+      "rank": 32,
+      "history_size": 1
+    },
+    {
+      "id": "flex_greedy_k32",
+      "method": "flex_greedy",
+      "rank": 32,
+      "history_size": 1
+    },
+    {
+      "id": "flex_fps_k32",
+      "method": "flex_fps",
+      "rank": 32,
+      "history_size": 1
+    },
+    {
+      "id": "flex_fixed_k64",
+      "method": "flex_fixed",
+      "rank": 64,
+      "history_size": 1
+    },
+    {
+      "id": "flex_greedy_k64",
+      "method": "flex_greedy",
+      "rank": 64,
+      "history_size": 1
+    },
+    {
+      "id": "flex_fps_k64",
+      "method": "flex_fps",
+      "rank": 64,
+      "history_size": 1
+    }
+  ],
+  "max_wall_seconds": 175,
+  "run_timeout_seconds": 30
+}

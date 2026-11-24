@@ -1,0 +1,836 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_phase_direction_repair.py": "7a406609524a89f2a3616b48965fbfa0cd57644e6b1b7756b233a950a8aa1409",
+    "scripts/check_core_direction_repair.py": "021a62e1b187ccd67545aca57b106b28a0222f76c068556a51cc07a2392bd07d",
+    "results/core-direction-repair.json": "ffbf3c684c6b5f82032f04ccaaa4a926efd257eddf9549032c9a6ec384cfcbf5",
+    "scripts/check_core_precision_allocation.py": "ce97909f61de27d880812330a31bacc6d4427fdcccc466811050282c77371f7e",
+    "scripts/check_fused_congruence_core.py": "33b205bc01549d9ba49a7646abd2a53db5fc86fb1b8688591af5d8f548e2c1ac",
+    "results/mixed_column_factor_first8.so": "943741be07c35b2e1fb85cc2116dd9367a171ac20ee3a1e23c6293478f8d277a"
+  },
+  "protocol": {
+    "mechanism": "At existing refresh, gd=r_start-r after exact Es correction, repair along whole phase displacement and conjugate next direction against gd. Reset phase and residual start after correction.",
+    "cost": "Same optimistic analytical kernel-entry accounting as prior gate. Two extra n-vectors free; dense construction, reference stopping, history and additional arithmetic free. Fixed-memory native feasibility unproven.",
+    "controls": "Unchanged FR, last-direction repair, whole-phase repair with periodic8 and terminal triggers. No threshold search. CPU4 per solve,80/85 process,120wall/flock,BLAS1."
+  },
+  "tiny": {
+    "image_relative_error": 2.3786590933596834e-17,
+    "line_orthogonality": 7.075076237399834e-16,
+    "projected_conjugacy": 4.768652459901679e-17
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "runs": [
+        {
+          "method": "periodic_fr",
+          "status": "converged",
+          "iterations": 43,
+          "original_relative_residual": 9.85177024599189e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32,
+            40
+          ],
+          "repair_checks": [],
+          "analytical_entries": 178653352
+        },
+        {
+          "method": "periodic_repair",
+          "status": "converged",
+          "iterations": 43,
+          "original_relative_residual": 9.825752954349294e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32,
+            40
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 2.422308043407522e-18,
+              "last_conjugacy": 5.753137043228003e-17
+            },
+            {
+              "residual_orthogonality": 9.20286121552132e-19,
+              "last_conjugacy": 4.1181939212507485e-17
+            },
+            {
+              "residual_orthogonality": 0.0,
+              "last_conjugacy": 1.063750760274874e-17
+            },
+            {
+              "residual_orthogonality": 7.810058251523205e-18,
+              "last_conjugacy": 3.873158207937583e-17
+            },
+            {
+              "residual_orthogonality": 8.482062846303743e-18,
+              "last_conjugacy": 1.2775001717452105e-16
+            }
+          ],
+          "analytical_entries": 178653352
+        },
+        {
+          "method": "periodic_phase",
+          "status": "converged",
+          "iterations": 53,
+          "original_relative_residual": 7.420257609381936e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32,
+            40,
+            48
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": 3.717319647774217e-06,
+              "curvature": 985151.6168044403,
+              "correction_norm": 1.0100673614341897,
+              "residual_norm_before": 0.7332534556569112,
+              "residual_norm_after": 0.733170719112823,
+              "residual_orthogonality": 1.540807585421764e-17,
+              "phase_conjugacy": 4.765821318647402e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.0011297179139726106,
+              "curvature": 2104.6795560788746,
+              "correction_norm": 11.161201462243142,
+              "residual_norm_before": 0.06338492928780722,
+              "residual_norm_after": 0.0627402941542997,
+              "residual_orthogonality": 6.806225660000598e-18,
+              "phase_conjugacy": 7.471763842253501e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.003390132725822792,
+              "curvature": 6.508160262904146,
+              "correction_norm": 2.085419334420363,
+              "residual_norm_before": 0.004008848358350427,
+              "residual_norm_after": 0.0038273208368227465,
+              "residual_orthogonality": 7.368153956159749e-19,
+              "phase_conjugacy": 1.3001997961513555e-17
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.004696408840406386,
+              "curvature": 0.030012433182447416,
+              "correction_norm": 0.17293497410625697,
+              "residual_norm_before": 0.00032556517645595536,
+              "residual_norm_after": 0.0003106550787193244,
+              "residual_orthogonality": 4.738980079667583e-18,
+              "phase_conjugacy": 1.6232646242189536e-17
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.006259556108524112,
+              "curvature": 0.00013715477763260713,
+              "correction_norm": 0.017285438071640312,
+              "residual_norm_before": 1.9118505210730095e-05,
+              "residual_norm_after": 1.7409189639587642e-05,
+              "residual_orthogonality": 1.1562565606569375e-17,
+              "phase_conjugacy": 6.040356879137037e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.007659532731605706,
+              "curvature": 5.029002513770039e-07,
+              "correction_norm": 0.0012053242077310258,
+              "residual_norm_before": 1.2916951807931402e-06,
+              "residual_norm_after": 1.1765526104340336e-06,
+              "residual_orthogonality": 3.3508011505247447e-18,
+              "phase_conjugacy": 1.1615318423713388e-17
+            }
+          ],
+          "analytical_entries": 218304168
+        },
+        {
+          "method": "terminal_fr",
+          "status": "cpu_cap",
+          "iterations": 846,
+          "original_relative_residual": 1.3121070642067742e-05,
+          "refresh_steps": [
+            43
+          ],
+          "repair_checks": [],
+          "analytical_entries": 3260407208
+        },
+        {
+          "method": "terminal_repair",
+          "status": "converged",
+          "iterations": 68,
+          "original_relative_residual": 8.037927997288197e-09,
+          "refresh_steps": [
+            43,
+            64
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 3.9210424324970285e-18,
+              "last_conjugacy": 8.005688142398646e-18
+            },
+            {
+              "residual_orthogonality": 1.3383869369848741e-17,
+              "last_conjugacy": 1.478181266514824e-17
+            }
+          ],
+          "analytical_entries": 271112104
+        },
+        {
+          "method": "terminal_phase",
+          "status": "converged",
+          "iterations": 70,
+          "original_relative_residual": 7.119838719141791e-09,
+          "refresh_steps": [
+            43,
+            66
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": 3.6683593065780427e-06,
+              "curvature": 987267.7068147936,
+              "correction_norm": 1.0000944461303596,
+              "residual_norm_before": 0.0007452808579634291,
+              "residual_norm_after": 0.0007455479958346525,
+              "residual_orthogonality": 1.0924346583639511e-18,
+              "phase_conjugacy": 2.419758528646882e-17
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.000662828424666882,
+              "curvature": 0.011345299775107395,
+              "correction_norm": 0.015730144196061814,
+              "residual_norm_before": 7.965701745224776e-07,
+              "residual_norm_after": 7.026679556793278e-07,
+              "residual_orthogonality": 7.619208087107921e-17,
+              "phase_conjugacy": 6.19730989922245e-18
+            }
+          ],
+          "analytical_entries": 278799784
+        }
+      ],
+      "replay_checks": [
+        {
+          "method": "periodic_fr",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        },
+        {
+          "method": "periodic_repair",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        },
+        {
+          "method": "terminal_repair",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "runs": [
+        {
+          "method": "periodic_fr",
+          "status": "converged",
+          "iterations": 38,
+          "original_relative_residual": 9.142998041109208e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32
+          ],
+          "repair_checks": [],
+          "analytical_entries": 158221736
+        },
+        {
+          "method": "periodic_repair",
+          "status": "converged",
+          "iterations": 38,
+          "original_relative_residual": 9.053136091120779e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 1.8902856416685733e-17,
+              "last_conjugacy": 9.389322220812709e-18
+            },
+            {
+              "residual_orthogonality": 7.39356054403178e-18,
+              "last_conjugacy": 6.205014886923406e-17
+            },
+            {
+              "residual_orthogonality": 1.7895407321901477e-17,
+              "last_conjugacy": 4.974663130326003e-17
+            },
+            {
+              "residual_orthogonality": 3.779475066620753e-18,
+              "last_conjugacy": 8.774819550738721e-17
+            }
+          ],
+          "analytical_entries": 158221736
+        },
+        {
+          "method": "periodic_phase",
+          "status": "converged",
+          "iterations": 48,
+          "original_relative_residual": 7.172991705176756e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32,
+            40,
+            48
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": -4.0866320731511155e-07,
+              "curvature": 1918254.2355748382,
+              "correction_norm": 0.04208249789586955,
+              "residual_norm_before": 0.15634702380353185,
+              "residual_norm_after": 0.15634877248807594,
+              "residual_orthogonality": 1.0812493042965327e-17,
+              "phase_conjugacy": 3.652117137241286e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.00010567569003037101,
+              "curvature": 370.004810099388,
+              "correction_norm": 0.36359611805841063,
+              "residual_norm_before": 0.005750192019717526,
+              "residual_norm_after": 0.0057497130362704416,
+              "residual_orthogonality": 4.209021825743316e-18,
+              "phase_conjugacy": 2.5227688258190926e-17
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.0011530420637097469,
+              "curvature": 0.4595497810114393,
+              "correction_norm": 0.1589593652906332,
+              "residual_norm_before": 0.00044910883193679895,
+              "residual_norm_after": 0.00044720205435794035,
+              "residual_orthogonality": 1.2310155932092982e-17,
+              "phase_conjugacy": 8.683231284756063e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.0032348305594495416,
+              "curvature": 0.0014113349538535953,
+              "correction_norm": 0.022342364644261994,
+              "residual_norm_before": 3.9115278061454146e-05,
+              "residual_norm_after": 3.8300254225691296e-05,
+              "residual_orthogonality": 1.2007492284272877e-18,
+              "phase_conjugacy": 1.521385730432607e-17
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.006137690782253868,
+              "curvature": 7.271354087834519e-06,
+              "correction_norm": 0.0025198419062105446,
+              "residual_norm_before": 3.1677113015227095e-06,
+              "residual_norm_after": 3.0203770053967268e-06,
+              "residual_orthogonality": 2.368095733320695e-17,
+              "phase_conjugacy": 7.788245373436064e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.009644181979094096,
+              "curvature": 4.279668847236096e-08,
+              "correction_norm": 0.00030351313319199134,
+              "residual_norm_before": 2.515583679694292e-07,
+              "residual_norm_after": 2.3204097934575444e-07,
+              "residual_orthogonality": 7.52198601782633e-18,
+              "phase_conjugacy": 6.990180110620169e-18
+            }
+          ],
+          "analytical_entries": 199084968
+        },
+        {
+          "method": "terminal_fr",
+          "status": "cpu_cap",
+          "iterations": 965,
+          "original_relative_residual": 9.044118299716977e-06,
+          "refresh_steps": [
+            38
+          ],
+          "repair_checks": [],
+          "analytical_entries": 3717824168
+        },
+        {
+          "method": "terminal_repair",
+          "status": "converged",
+          "iterations": 56,
+          "original_relative_residual": 9.023267043133771e-09,
+          "refresh_steps": [
+            38
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 3.3241357266319202e-18,
+              "last_conjugacy": 5.305070171192972e-18
+            }
+          ],
+          "analytical_entries": 223773608
+        },
+        {
+          "method": "terminal_phase",
+          "status": "converged",
+          "iterations": 56,
+          "original_relative_residual": 9.421900308509819e-09,
+          "refresh_steps": [
+            38
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": -4.1343455187496466e-07,
+              "curvature": 1918624.7971026625,
+              "correction_norm": 0.04234141852681632,
+              "residual_norm_before": 0.0004033481669466249,
+              "residual_norm_after": 0.00040419193067874824,
+              "residual_orthogonality": 1.072812802242831e-17,
+              "phase_conjugacy": 1.4202273739965707e-18
+            }
+          ],
+          "analytical_entries": 223773608
+        }
+      ],
+      "replay_checks": [
+        {
+          "method": "periodic_fr",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        },
+        {
+          "method": "periodic_repair",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        },
+        {
+          "method": "terminal_repair",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "runs": [
+        {
+          "method": "periodic_fr",
+          "status": "converged",
+          "iterations": 21,
+          "original_relative_residual": 7.0598425239678985e-09,
+          "refresh_steps": [
+            8,
+            16
+          ],
+          "repair_checks": [],
+          "analytical_entries": 9491368
+        },
+        {
+          "method": "periodic_repair",
+          "status": "converged",
+          "iterations": 21,
+          "original_relative_residual": 6.621727284863395e-09,
+          "refresh_steps": [
+            8,
+            16
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 9.906625868624024e-18,
+              "last_conjugacy": 7.233615934229814e-17
+            },
+            {
+              "residual_orthogonality": 1.0563518706934512e-17,
+              "last_conjugacy": 1.5790739396671605e-16
+            }
+          ],
+          "analytical_entries": 9491368
+        },
+        {
+          "method": "periodic_phase",
+          "status": "converged",
+          "iterations": 21,
+          "original_relative_residual": 3.6423529346579967e-09,
+          "refresh_steps": [
+            8,
+            16
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": -1.6069152213764584e-05,
+              "curvature": 1998181.7758354135,
+              "correction_norm": 5.981850522159978,
+              "residual_norm_before": 0.00435013457659218,
+              "residual_norm_after": 0.004508668216576712,
+              "residual_orthogonality": 2.1167488798427034e-18,
+              "phase_conjugacy": 0.0
+            },
+            {
+              "guard": "passed",
+              "gamma": -7.688705091627463e-05,
+              "curvature": 0.6152427211212265,
+              "correction_norm": 0.014612391997523832,
+              "residual_norm_before": 5.159245624226631e-06,
+              "residual_norm_after": 5.291910156972883e-06,
+              "residual_orthogonality": 1.6844174269322375e-17,
+              "phase_conjugacy": 1.3669730857238123e-17
+            }
+          ],
+          "analytical_entries": 9491368
+        },
+        {
+          "method": "terminal_fr",
+          "status": "maxiter",
+          "iterations": 2000,
+          "original_relative_residual": 7.131911466524693e-05,
+          "refresh_steps": [
+            18
+          ],
+          "repair_checks": [],
+          "analytical_entries": 659128808
+        },
+        {
+          "method": "terminal_repair",
+          "status": "converged",
+          "iterations": 33,
+          "original_relative_residual": 3.070452350831661e-09,
+          "refresh_steps": [
+            18,
+            29,
+            33
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 5.169257201404539e-18,
+              "last_conjugacy": 6.0898797943596306e-18
+            },
+            {
+              "residual_orthogonality": 1.5989954186485872e-18,
+              "last_conjugacy": 9.119214310396164e-18
+            },
+            {
+              "residual_orthogonality": 1.4782915471350667e-17,
+              "last_conjugacy": 1.036392268921958e-16
+            }
+          ],
+          "analytical_entries": 13921320
+        },
+        {
+          "method": "terminal_phase",
+          "status": "converged",
+          "iterations": 34,
+          "original_relative_residual": 3.0917376120915913e-09,
+          "refresh_steps": [
+            18,
+            30,
+            34
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": -1.6062652269054913e-05,
+              "curvature": 1998182.285826685,
+              "correction_norm": 5.979332634389114,
+              "residual_norm_before": 0.002254087867753295,
+              "residual_norm_after": 0.0022363568299572597,
+              "residual_orthogonality": 1.867074763515435e-18,
+              "phase_conjugacy": 1.040701522069953e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": -0.0007291689458247,
+              "curvature": 0.07931356458971998,
+              "correction_norm": 0.052427209406459986,
+              "residual_norm_before": 2.765945792694237e-06,
+              "residual_norm_after": 2.748660621901489e-06,
+              "residual_orthogonality": 9.188079472458258e-17,
+              "phase_conjugacy": 2.5458563319732944e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 1.2825803313421942e-05,
+              "curvature": 1.877755337082769e-07,
+              "correction_norm": 1.4860760742618247e-06,
+              "residual_norm_before": 8.458985854084057e-08,
+              "residual_norm_after": 8.457992540355146e-08,
+              "residual_orthogonality": 4.533559453348111e-18,
+              "phase_conjugacy": 1.6559376051155273e-17
+            }
+          ],
+          "analytical_entries": 14249832
+        }
+      ],
+      "replay_checks": [
+        {
+          "method": "periodic_fr",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        },
+        {
+          "method": "periodic_repair",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        },
+        {
+          "method": "terminal_repair",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "runs": [
+        {
+          "method": "periodic_fr",
+          "status": "converged",
+          "iterations": 24,
+          "original_relative_residual": 7.471768195753466e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24
+          ],
+          "repair_checks": [],
+          "analytical_entries": 31453068
+        },
+        {
+          "method": "periodic_repair",
+          "status": "converged",
+          "iterations": 24,
+          "original_relative_residual": 7.851503002229196e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 3.269915016409076e-18,
+              "last_conjugacy": 5.464863333016943e-17
+            },
+            {
+              "residual_orthogonality": 2.719425871579823e-17,
+              "last_conjugacy": 5.875481086470734e-17
+            },
+            {
+              "residual_orthogonality": 1.2914793999716104e-17,
+              "last_conjugacy": 1.4951678808587357e-17
+            }
+          ],
+          "analytical_entries": 31453068
+        },
+        {
+          "method": "periodic_phase",
+          "status": "converged",
+          "iterations": 25,
+          "original_relative_residual": 7.841741363764837e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": 2.9826935530290817e-06,
+              "curvature": 10862222.585620191,
+              "correction_norm": 2.77230042952417,
+              "residual_norm_before": 0.03283754322220844,
+              "residual_norm_after": 0.032803311776153685,
+              "residual_orthogonality": 7.457458301622962e-18,
+              "phase_conjugacy": 9.787521979637581e-19
+            },
+            {
+              "guard": "passed",
+              "gamma": 3.6505904925831064e-05,
+              "curvature": 32.588342096244865,
+              "correction_norm": 0.04904941435220067,
+              "residual_norm_before": 0.00012246451177690604,
+              "residual_norm_after": 0.00012203713374571761,
+              "residual_orthogonality": 2.4237934089363108e-17,
+              "phase_conjugacy": 1.658541095516243e-19
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.0002736243180799682,
+              "curvature": 0.00024175841150016344,
+              "correction_norm": 0.001091406129978856,
+              "residual_norm_before": 3.493661412546325e-07,
+              "residual_norm_after": 3.3436871251098113e-07,
+              "residual_orthogonality": 2.6824345194999983e-17,
+              "phase_conjugacy": 8.764477628101398e-18
+            }
+          ],
+          "analytical_entries": 32547408
+        },
+        {
+          "method": "terminal_fr",
+          "status": "maxiter",
+          "iterations": 2000,
+          "original_relative_residual": 0.00012667561689004822,
+          "refresh_steps": [
+            22
+          ],
+          "repair_checks": [],
+          "analytical_entries": 2192445740
+        },
+        {
+          "method": "terminal_repair",
+          "status": "converged",
+          "iterations": 41,
+          "original_relative_residual": 8.14291911930879e-09,
+          "refresh_steps": [
+            22,
+            35
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 2.6675610985902383e-18,
+              "last_conjugacy": 1.4372133431974337e-18
+            },
+            {
+              "residual_orthogonality": 1.4939035778623697e-17,
+              "last_conjugacy": 2.2451950477803798e-18
+            }
+          ],
+          "analytical_entries": 49345264
+        },
+        {
+          "method": "terminal_phase",
+          "status": "converged",
+          "iterations": 43,
+          "original_relative_residual": 6.438019930026627e-09,
+          "refresh_steps": [
+            22,
+            36,
+            43
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": 2.9423591012352043e-06,
+              "curvature": 10862254.903013796,
+              "correction_norm": 2.73475070170055,
+              "residual_norm_before": 0.006234757400441603,
+              "residual_norm_after": 0.00621887891488277,
+              "residual_orthogonality": 3.995208018451847e-18,
+              "phase_conjugacy": 2.2779605048803204e-17
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.0017550729621006803,
+              "curvature": 1.1455830314615794,
+              "correction_norm": 0.4887535898702377,
+              "residual_norm_before": 3.239087339940674e-05,
+              "residual_norm_after": 2.7078837648948448e-05,
+              "residual_orthogonality": 1.1996284400485215e-16,
+              "phase_conjugacy": 8.734552939562523e-17
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.0006144658277279082,
+              "curvature": 1.537744421288032e-05,
+              "correction_norm": 0.0005108504831840834,
+              "residual_norm_before": 2.290990843499636e-07,
+              "residual_norm_after": 2.2404989655078277e-07,
+              "residual_orthogonality": 1.5334577891920922e-17,
+              "phase_conjugacy": 5.752093650365345e-18
+            }
+          ],
+          "analytical_entries": 52245528
+        }
+      ],
+      "replay_checks": [
+        {
+          "method": "periodic_fr",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        },
+        {
+          "method": "periodic_repair",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        },
+        {
+          "method": "terminal_repair",
+          "checks": {
+            "iterations": true,
+            "original_relative_residual": true,
+            "refresh_steps": true,
+            "analytical_entries": true
+          }
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 17.299330476031173,
+  "elapsed_cpu_seconds": 17.0217598,
+  "sources_unchanged": true
+}

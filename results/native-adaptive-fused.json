@@ -1,0 +1,1482 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_adaptive_fused_pilot.py": "a2b98fd4d5901d9a260a432a95020845c487f5c9aba1f724641be73f8644de76",
+    "scripts/check_native_adaptive_fused.py": "0fbffcfe2e3e58fddd72aa42608a29d70c6df9226416b959573c2da2c2ecb571",
+    "scripts/check_factor_product_cost.py": "ebba94a57536a5a4a0b110addc3e07bd6047ed5bcd301309e141ebf03ea5659c",
+    "scripts/first8_factor_product.c": "aa578cc68ae3ed87eb96962d2f72dfd66aed351f78d1210a73aeede002bb5ed1",
+    "results/first8_factor_product.so": "ae791d74c6b29fbc2eaaab2bdec33caeafdf6fa793a8117f91a3fb44b72dd0d1",
+    "scripts/check_native_first8_schur.py": "ba770aee8fcd1c469b54b37c729a4e33c2594f15e5f5e4eaa8c2c498d087847d",
+    "scripts/check_compressed_core_schur.py": "a4e8e154e8748296a55f7afe1e81375da2cd1f6ad2817e7c8c3eaf5e32979910",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959",
+    "results/mixed_column_factor_first8.so": "943741be07c35b2e1fb85cc2116dd9367a171ac20ee3a1e23c6293478f8d277a"
+  },
+  "protocol": {
+    "repeats": 2,
+    "seed": 0,
+    "core": 592,
+    "shift": 1e-05,
+    "update": "Current-direction core omission; streamed defect estimate; cumulative truncation allowance .25e-8||b||. Cheap trials always charged; actual alpha rechecked.",
+    "controls": "Repaired fresh-Hr recurrence, identical stop and original acceptance. Alternate method order by case and repetition.",
+    "scope": "Native adaptive vs exact fused gate with full costs. Original 1e-8 acceptance. No broad success claim; exact416 comparison follows only if mechanism improves."
+  },
+  "audits": [
+    {
+      "dataset": "smooth",
+      "traced_peak_bytes": 991292,
+      "metrics": {
+        "method": "adaptive_core",
+        "status": "converged",
+        "converged": true,
+        "iterations": 43,
+        "original_relative_residual": 5.288118846855649e-09,
+        "error": null,
+        "total_seconds": 2.9238084859680384,
+        "total_cpu_seconds": 3.0393211000000004,
+        "memory": {
+          "named_peak_bytes": 976712,
+          "peak_with_reserve_bytes": 1042248,
+          "reserve_bytes": 65536,
+          "phase_named_peaks": {
+            "selection": 37504,
+            "mixed_stream_setup": 778368,
+            "mixed_stream_column": 783104,
+            "mixed_permutation": 761088,
+            "mixed_triangular_solve": 822400,
+            "fused_rhs": 976712,
+            "initial_direction_copy": 808192,
+            "fused_first_pass": 971312,
+            "fused_reorder": 824576,
+            "fused_q": 817664,
+            "factor_product": 822400,
+            "fused_core": 975752,
+            "fused_core_shift": 822400,
+            "fused_second_direction": 822400,
+            "fused_second_pass": 975824,
+            "fused_tail_shift": 819840,
+            "fused_iterate_update": 824576,
+            "fused_direction_update": 824576,
+            "fused_reconstruction": 976432,
+            "fused_reconstruction_update": 817664,
+            "full_verification": 972104,
+            "fused_original_residual": 840960
+          },
+          "phase_row_sizes": {
+            "fused_rhs": [
+              33
+            ],
+            "fused_first_pass": [
+              6
+            ],
+            "fused_core": [
+              25
+            ],
+            "fused_second_pass": [
+              26
+            ],
+            "fused_reconstruction": [
+              6
+            ],
+            "full_verification": [
+              9
+            ]
+          }
+        },
+        "kernel_stats": {
+          "column_queries": 592,
+          "entry_evaluations": 186259368,
+          "entry_blocks": 19606,
+          "full_matvecs": 1
+        },
+        "actions": 43,
+        "verifications": 1,
+        "core_solve_calls": 132,
+        "core_solve_seconds": 0.03567081561777741,
+        "setup_seconds": 0.14453572797356173,
+        "omitted": 4,
+        "rejected": 0,
+        "trials": 43,
+        "truncation_bound_used": 1.1296792560688086e-07,
+        "core_error_bound": 1.3635993018357403e-07
+      }
+    },
+    {
+      "dataset": "Airfoil",
+      "traced_peak_bytes": 990908,
+      "metrics": {
+        "method": "adaptive_core",
+        "status": "converged",
+        "converged": true,
+        "iterations": 22,
+        "original_relative_residual": 3.716678643334367e-09,
+        "error": null,
+        "total_seconds": 0.5003490400267765,
+        "total_cpu_seconds": 0.5305843000000001,
+        "memory": {
+          "named_peak_bytes": 976448,
+          "peak_with_reserve_bytes": 1041984,
+          "reserve_bytes": 65536,
+          "phase_named_peaks": {
+            "selection": 23968,
+            "mixed_stream_setup": 764160,
+            "mixed_stream_column": 768896,
+            "mixed_permutation": 746706,
+            "mixed_triangular_solve": 788560,
+            "fused_rhs": 974896,
+            "initial_direction_copy": 774352,
+            "fused_first_pass": 974720,
+            "fused_reorder": 783968,
+            "fused_q": 783824,
+            "factor_product": 788560,
+            "fused_core": 974944,
+            "fused_core_shift": 788560,
+            "fused_second_direction": 788560,
+            "fused_second_pass": 974992,
+            "fused_tail_shift": 779232,
+            "fused_iterate_update": 783968,
+            "fused_direction_update": 783968,
+            "fused_reconstruction": 975968,
+            "fused_reconstruction_update": 783824,
+            "full_verification": 976448,
+            "fused_original_residual": 793584
+          },
+          "phase_row_sizes": {
+            "fused_rhs": [
+              40
+            ],
+            "fused_first_pass": [
+              36
+            ],
+            "fused_core": [
+              35
+            ],
+            "fused_second_pass": [
+              36
+            ],
+            "fused_reconstruction": [
+              35
+            ],
+            "full_verification": [
+              20
+            ]
+          }
+        },
+        "kernel_stats": {
+          "column_queries": 592,
+          "entry_evaluations": 33788452,
+          "entry_blocks": 2723,
+          "full_matvecs": 1
+        },
+        "actions": 22,
+        "verifications": 1,
+        "core_solve_calls": 69,
+        "core_solve_seconds": 0.016398274106904864,
+        "setup_seconds": 0.12605287501355633,
+        "omitted": 3,
+        "rejected": 0,
+        "trials": 22,
+        "truncation_bound_used": 8.392135893857815e-08,
+        "core_error_bound": 2.405845256938929e-07
+      }
+    }
+  ],
+  "runs": [
+    {
+      "method": "exact_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 43,
+      "original_relative_residual": 5.23109426111295e-09,
+      "error": null,
+      "total_seconds": 1.857523038983345,
+      "total_cpu_seconds": 1.990166499999999,
+      "memory": {
+        "named_peak_bytes": 976712,
+        "peak_with_reserve_bytes": 1042248,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 37504,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 761088,
+          "mixed_triangular_solve": 822400,
+          "fused_rhs": 976712,
+          "initial_direction_copy": 808192,
+          "fused_first_pass": 971312,
+          "fused_reorder": 824576,
+          "fused_q": 817664,
+          "fused_core": 975752,
+          "fused_core_shift": 822400,
+          "fused_second_direction": 822400,
+          "fused_second_pass": 975824,
+          "fused_tail_shift": 819840,
+          "fused_iterate_update": 824576,
+          "fused_direction_update": 824576,
+          "fused_reconstruction": 976432,
+          "fused_reconstruction_update": 817664,
+          "full_verification": 972104,
+          "fused_original_residual": 840960
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            33
+          ],
+          "fused_first_pass": [
+            6
+          ],
+          "fused_core": [
+            25
+          ],
+          "fused_second_pass": [
+            26
+          ],
+          "fused_reconstruction": [
+            6
+          ],
+          "full_verification": [
+            9
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 187661224,
+        "entry_blocks": 19702,
+        "full_matvecs": 1
+      },
+      "actions": 43,
+      "verifications": 1,
+      "core_solve_calls": 132,
+      "core_solve_seconds": 0.02597675012657419,
+      "setup_seconds": 0.07558675395557657,
+      "omitted": 0,
+      "rejected": 0,
+      "trials": 0,
+      "truncation_bound_used": 0.0,
+      "core_error_bound": 1.3635993018357403e-07,
+      "dataset": "smooth",
+      "repeat": 0,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "method": "adaptive_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 43,
+      "original_relative_residual": 5.288118846855649e-09,
+      "error": null,
+      "total_seconds": 1.8550886519951746,
+      "total_cpu_seconds": 1.9928989000000001,
+      "memory": {
+        "named_peak_bytes": 976712,
+        "peak_with_reserve_bytes": 1042248,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 37504,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 761088,
+          "mixed_triangular_solve": 822400,
+          "fused_rhs": 976712,
+          "initial_direction_copy": 808192,
+          "fused_first_pass": 971312,
+          "fused_reorder": 824576,
+          "fused_q": 817664,
+          "factor_product": 822400,
+          "fused_core": 975752,
+          "fused_core_shift": 822400,
+          "fused_second_direction": 822400,
+          "fused_second_pass": 975824,
+          "fused_tail_shift": 819840,
+          "fused_iterate_update": 824576,
+          "fused_direction_update": 824576,
+          "fused_reconstruction": 976432,
+          "fused_reconstruction_update": 817664,
+          "full_verification": 972104,
+          "fused_original_residual": 840960
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            33
+          ],
+          "fused_first_pass": [
+            6
+          ],
+          "fused_core": [
+            25
+          ],
+          "fused_second_pass": [
+            26
+          ],
+          "fused_reconstruction": [
+            6
+          ],
+          "full_verification": [
+            9
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 186259368,
+        "entry_blocks": 19606,
+        "full_matvecs": 1
+      },
+      "actions": 43,
+      "verifications": 1,
+      "core_solve_calls": 132,
+      "core_solve_seconds": 0.02618380868807435,
+      "setup_seconds": 0.06409145699581131,
+      "omitted": 4,
+      "rejected": 0,
+      "trials": 43,
+      "truncation_bound_used": 1.1296792560688086e-07,
+      "core_error_bound": 1.3635993018357403e-07,
+      "dataset": "smooth",
+      "repeat": 0,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "method": "adaptive_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 39,
+      "original_relative_residual": 3.8453973683601215e-09,
+      "error": null,
+      "total_seconds": 1.6907234039972536,
+      "total_cpu_seconds": 1.8151098,
+      "memory": {
+        "named_peak_bytes": 976712,
+        "peak_with_reserve_bytes": 1042248,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 37504,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 761088,
+          "mixed_triangular_solve": 822400,
+          "fused_rhs": 976712,
+          "initial_direction_copy": 808192,
+          "fused_first_pass": 971312,
+          "fused_reorder": 824576,
+          "fused_q": 817664,
+          "factor_product": 822400,
+          "fused_core": 975752,
+          "fused_core_shift": 822400,
+          "fused_second_direction": 822400,
+          "fused_second_pass": 975824,
+          "fused_tail_shift": 819840,
+          "fused_iterate_update": 824576,
+          "fused_direction_update": 824576,
+          "fused_reconstruction": 976432,
+          "fused_reconstruction_update": 817664,
+          "full_verification": 972104,
+          "fused_original_residual": 840960
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            33
+          ],
+          "fused_first_pass": [
+            6
+          ],
+          "fused_core": [
+            25
+          ],
+          "fused_second_pass": [
+            26
+          ],
+          "fused_reconstruction": [
+            6
+          ],
+          "full_verification": [
+            9
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 169832616,
+        "entry_blocks": 17942,
+        "full_matvecs": 1
+      },
+      "actions": 39,
+      "verifications": 1,
+      "core_solve_calls": 120,
+      "core_solve_seconds": 0.0232614369597286,
+      "setup_seconds": 0.07090264902217314,
+      "omitted": 3,
+      "rejected": 0,
+      "trials": 39,
+      "truncation_bound_used": 1.1267947513212073e-07,
+      "core_error_bound": 1.3635993018357403e-07,
+      "dataset": "mixed",
+      "repeat": 0,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56"
+    },
+    {
+      "method": "exact_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 38,
+      "original_relative_residual": 4.6694923556774585e-09,
+      "error": null,
+      "total_seconds": 1.6455438009579666,
+      "total_cpu_seconds": 1.7556208000000009,
+      "memory": {
+        "named_peak_bytes": 976712,
+        "peak_with_reserve_bytes": 1042248,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 37504,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 761088,
+          "mixed_triangular_solve": 822400,
+          "fused_rhs": 976712,
+          "initial_direction_copy": 808192,
+          "fused_first_pass": 971312,
+          "fused_reorder": 824576,
+          "fused_q": 817664,
+          "fused_core": 975752,
+          "fused_core_shift": 822400,
+          "fused_second_direction": 822400,
+          "fused_second_pass": 975824,
+          "fused_tail_shift": 819840,
+          "fused_iterate_update": 824576,
+          "fused_direction_update": 824576,
+          "fused_reconstruction": 976432,
+          "fused_reconstruction_update": 817664,
+          "full_verification": 972104,
+          "fused_original_residual": 840960
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            33
+          ],
+          "fused_first_pass": [
+            6
+          ],
+          "fused_core": [
+            25
+          ],
+          "fused_second_pass": [
+            26
+          ],
+          "fused_reconstruction": [
+            6
+          ],
+          "full_verification": [
+            9
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 166689704,
+        "entry_blocks": 17592,
+        "full_matvecs": 1
+      },
+      "actions": 38,
+      "verifications": 1,
+      "core_solve_calls": 117,
+      "core_solve_seconds": 0.022507857414893806,
+      "setup_seconds": 0.05989058897830546,
+      "omitted": 0,
+      "rejected": 0,
+      "trials": 0,
+      "truncation_bound_used": 0.0,
+      "core_error_bound": 1.3635993018357403e-07,
+      "dataset": "mixed",
+      "repeat": 0,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56"
+    },
+    {
+      "method": "exact_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 18,
+      "original_relative_residual": 3.5451269616584622e-09,
+      "error": null,
+      "total_seconds": 0.1886909329914488,
+      "total_cpu_seconds": 0.1895648000000012,
+      "memory": {
+        "named_peak_bytes": 977400,
+        "peak_with_reserve_bytes": 1042936,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 17920,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 740280,
+          "mixed_triangular_solve": 773440,
+          "fused_rhs": 976184,
+          "initial_direction_copy": 759232,
+          "fused_first_pass": 977256,
+          "fused_reorder": 765824,
+          "fused_q": 768704,
+          "fused_core": 974872,
+          "fused_core_shift": 773440,
+          "fused_second_direction": 773440,
+          "fused_second_pass": 974944,
+          "fused_tail_shift": 761088,
+          "fused_iterate_update": 765824,
+          "fused_direction_update": 765824,
+          "fused_reconstruction": 977400,
+          "fused_reconstruction_update": 768704,
+          "full_verification": 977024,
+          "fused_original_residual": 772416
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            39
+          ],
+          "fused_first_pass": [
+            109
+          ],
+          "fused_core": [
+            35
+          ],
+          "fused_second_pass": [
+            36
+          ],
+          "fused_reconstruction": [
+            103
+          ],
+          "full_verification": [
+            32
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 13838568,
+        "entry_blocks": 1798,
+        "full_matvecs": 1
+      },
+      "actions": 18,
+      "verifications": 1,
+      "core_solve_calls": 57,
+      "core_solve_seconds": 0.010212939232587814,
+      "setup_seconds": 0.058209344977512956,
+      "omitted": 0,
+      "rejected": 0,
+      "trials": 0,
+      "truncation_bound_used": 0.0,
+      "core_error_bound": 3.1700492106796937e-07,
+      "dataset": "Concrete",
+      "repeat": 0,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb"
+    },
+    {
+      "method": "adaptive_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 18,
+      "original_relative_residual": 3.5525623035429394e-09,
+      "error": null,
+      "total_seconds": 0.19043092196807265,
+      "total_cpu_seconds": 0.19518710000000006,
+      "memory": {
+        "named_peak_bytes": 977400,
+        "peak_with_reserve_bytes": 1042936,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 17920,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 740280,
+          "mixed_triangular_solve": 773440,
+          "fused_rhs": 976184,
+          "initial_direction_copy": 759232,
+          "fused_first_pass": 977256,
+          "fused_reorder": 765824,
+          "fused_q": 768704,
+          "factor_product": 773440,
+          "fused_core": 974872,
+          "fused_core_shift": 773440,
+          "fused_second_direction": 773440,
+          "fused_second_pass": 974944,
+          "fused_tail_shift": 761088,
+          "fused_iterate_update": 765824,
+          "fused_direction_update": 765824,
+          "fused_reconstruction": 977400,
+          "fused_reconstruction_update": 768704,
+          "full_verification": 977024,
+          "fused_original_residual": 772416
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            39
+          ],
+          "fused_first_pass": [
+            109
+          ],
+          "fused_core": [
+            35
+          ],
+          "fused_second_pass": [
+            36
+          ],
+          "fused_reconstruction": [
+            103
+          ],
+          "full_verification": [
+            32
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 13488104,
+        "entry_blocks": 1781,
+        "full_matvecs": 1
+      },
+      "actions": 18,
+      "verifications": 1,
+      "core_solve_calls": 57,
+      "core_solve_seconds": 0.010512187902349979,
+      "setup_seconds": 0.0555315789533779,
+      "omitted": 1,
+      "rejected": 0,
+      "trials": 18,
+      "truncation_bound_used": 6.867963704959507e-08,
+      "core_error_bound": 3.1700492106796937e-07,
+      "dataset": "Concrete",
+      "repeat": 0,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb"
+    },
+    {
+      "method": "adaptive_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 22,
+      "original_relative_residual": 3.716678643334367e-09,
+      "error": null,
+      "total_seconds": 0.3292268329532817,
+      "total_cpu_seconds": 0.3417627000000003,
+      "memory": {
+        "named_peak_bytes": 976448,
+        "peak_with_reserve_bytes": 1041984,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 23968,
+          "mixed_stream_setup": 764160,
+          "mixed_stream_column": 768896,
+          "mixed_permutation": 746706,
+          "mixed_triangular_solve": 788560,
+          "fused_rhs": 974896,
+          "initial_direction_copy": 774352,
+          "fused_first_pass": 974720,
+          "fused_reorder": 783968,
+          "fused_q": 783824,
+          "factor_product": 788560,
+          "fused_core": 974944,
+          "fused_core_shift": 788560,
+          "fused_second_direction": 788560,
+          "fused_second_pass": 974992,
+          "fused_tail_shift": 779232,
+          "fused_iterate_update": 783968,
+          "fused_direction_update": 783968,
+          "fused_reconstruction": 975968,
+          "fused_reconstruction_update": 783824,
+          "full_verification": 976448,
+          "fused_original_residual": 793584
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            40
+          ],
+          "fused_first_pass": [
+            36
+          ],
+          "fused_core": [
+            35
+          ],
+          "fused_second_pass": [
+            36
+          ],
+          "fused_reconstruction": [
+            35
+          ],
+          "full_verification": [
+            20
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 33788452,
+        "entry_blocks": 2723,
+        "full_matvecs": 1
+      },
+      "actions": 22,
+      "verifications": 1,
+      "core_solve_calls": 69,
+      "core_solve_seconds": 0.01228219922631979,
+      "setup_seconds": 0.04796173394424841,
+      "omitted": 3,
+      "rejected": 0,
+      "trials": 22,
+      "truncation_bound_used": 8.392135893857815e-08,
+      "core_error_bound": 2.405845256938929e-07,
+      "dataset": "Airfoil",
+      "repeat": 0,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a"
+    },
+    {
+      "method": "exact_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 22,
+      "original_relative_residual": 3.584223612529547e-09,
+      "error": null,
+      "total_seconds": 0.32855287595884874,
+      "total_cpu_seconds": 0.3450273999999993,
+      "memory": {
+        "named_peak_bytes": 976448,
+        "peak_with_reserve_bytes": 1041984,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 23968,
+          "mixed_stream_setup": 764160,
+          "mixed_stream_column": 768896,
+          "mixed_permutation": 746706,
+          "mixed_triangular_solve": 788560,
+          "fused_rhs": 974896,
+          "initial_direction_copy": 774352,
+          "fused_first_pass": 974720,
+          "fused_reorder": 783968,
+          "fused_q": 783824,
+          "fused_core": 974944,
+          "fused_core_shift": 788560,
+          "fused_second_direction": 788560,
+          "fused_second_pass": 974992,
+          "fused_tail_shift": 779232,
+          "fused_iterate_update": 783968,
+          "fused_direction_update": 783968,
+          "fused_reconstruction": 975968,
+          "fused_reconstruction_update": 783824,
+          "full_verification": 976448,
+          "fused_original_residual": 793584
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            40
+          ],
+          "fused_first_pass": [
+            36
+          ],
+          "fused_core": [
+            35
+          ],
+          "fused_second_pass": [
+            36
+          ],
+          "fused_reconstruction": [
+            35
+          ],
+          "full_verification": [
+            20
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 34839844,
+        "entry_blocks": 2774,
+        "full_matvecs": 1
+      },
+      "actions": 22,
+      "verifications": 1,
+      "core_solve_calls": 69,
+      "core_solve_seconds": 0.012191391841042787,
+      "setup_seconds": 0.0473797699669376,
+      "omitted": 0,
+      "rejected": 0,
+      "trials": 0,
+      "truncation_bound_used": 0.0,
+      "core_error_bound": 2.405845256938929e-07,
+      "dataset": "Airfoil",
+      "repeat": 0,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a"
+    },
+    {
+      "method": "adaptive_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 43,
+      "original_relative_residual": 5.288118846855649e-09,
+      "error": null,
+      "total_seconds": 1.8695172909647226,
+      "total_cpu_seconds": 1.979565100000002,
+      "memory": {
+        "named_peak_bytes": 976712,
+        "peak_with_reserve_bytes": 1042248,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 37504,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 761088,
+          "mixed_triangular_solve": 822400,
+          "fused_rhs": 976712,
+          "initial_direction_copy": 808192,
+          "fused_first_pass": 971312,
+          "fused_reorder": 824576,
+          "fused_q": 817664,
+          "factor_product": 822400,
+          "fused_core": 975752,
+          "fused_core_shift": 822400,
+          "fused_second_direction": 822400,
+          "fused_second_pass": 975824,
+          "fused_tail_shift": 819840,
+          "fused_iterate_update": 824576,
+          "fused_direction_update": 824576,
+          "fused_reconstruction": 976432,
+          "fused_reconstruction_update": 817664,
+          "full_verification": 972104,
+          "fused_original_residual": 840960
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            33
+          ],
+          "fused_first_pass": [
+            6
+          ],
+          "fused_core": [
+            25
+          ],
+          "fused_second_pass": [
+            26
+          ],
+          "fused_reconstruction": [
+            6
+          ],
+          "full_verification": [
+            9
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 186259368,
+        "entry_blocks": 19606,
+        "full_matvecs": 1
+      },
+      "actions": 43,
+      "verifications": 1,
+      "core_solve_calls": 132,
+      "core_solve_seconds": 0.026044535916298628,
+      "setup_seconds": 0.06974996696226299,
+      "omitted": 4,
+      "rejected": 0,
+      "trials": 43,
+      "truncation_bound_used": 1.1296792560688086e-07,
+      "core_error_bound": 1.3635993018357403e-07,
+      "dataset": "smooth",
+      "repeat": 1,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "method": "exact_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 43,
+      "original_relative_residual": 5.23109426111295e-09,
+      "error": null,
+      "total_seconds": 1.8580008579883724,
+      "total_cpu_seconds": 1.965754399999998,
+      "memory": {
+        "named_peak_bytes": 976712,
+        "peak_with_reserve_bytes": 1042248,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 37504,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 761088,
+          "mixed_triangular_solve": 822400,
+          "fused_rhs": 976712,
+          "initial_direction_copy": 808192,
+          "fused_first_pass": 971312,
+          "fused_reorder": 824576,
+          "fused_q": 817664,
+          "fused_core": 975752,
+          "fused_core_shift": 822400,
+          "fused_second_direction": 822400,
+          "fused_second_pass": 975824,
+          "fused_tail_shift": 819840,
+          "fused_iterate_update": 824576,
+          "fused_direction_update": 824576,
+          "fused_reconstruction": 976432,
+          "fused_reconstruction_update": 817664,
+          "full_verification": 972104,
+          "fused_original_residual": 840960
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            33
+          ],
+          "fused_first_pass": [
+            6
+          ],
+          "fused_core": [
+            25
+          ],
+          "fused_second_pass": [
+            26
+          ],
+          "fused_reconstruction": [
+            6
+          ],
+          "full_verification": [
+            9
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 187661224,
+        "entry_blocks": 19702,
+        "full_matvecs": 1
+      },
+      "actions": 43,
+      "verifications": 1,
+      "core_solve_calls": 132,
+      "core_solve_seconds": 0.02615913812769577,
+      "setup_seconds": 0.06770116399275139,
+      "omitted": 0,
+      "rejected": 0,
+      "trials": 0,
+      "truncation_bound_used": 0.0,
+      "core_error_bound": 1.3635993018357403e-07,
+      "dataset": "smooth",
+      "repeat": 1,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "method": "exact_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 38,
+      "original_relative_residual": 4.6694923556774585e-09,
+      "error": null,
+      "total_seconds": 1.6721583070466295,
+      "total_cpu_seconds": 1.7723699999999987,
+      "memory": {
+        "named_peak_bytes": 976712,
+        "peak_with_reserve_bytes": 1042248,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 37504,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 761088,
+          "mixed_triangular_solve": 822400,
+          "fused_rhs": 976712,
+          "initial_direction_copy": 808192,
+          "fused_first_pass": 971312,
+          "fused_reorder": 824576,
+          "fused_q": 817664,
+          "fused_core": 975752,
+          "fused_core_shift": 822400,
+          "fused_second_direction": 822400,
+          "fused_second_pass": 975824,
+          "fused_tail_shift": 819840,
+          "fused_iterate_update": 824576,
+          "fused_direction_update": 824576,
+          "fused_reconstruction": 976432,
+          "fused_reconstruction_update": 817664,
+          "full_verification": 972104,
+          "fused_original_residual": 840960
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            33
+          ],
+          "fused_first_pass": [
+            6
+          ],
+          "fused_core": [
+            25
+          ],
+          "fused_second_pass": [
+            26
+          ],
+          "fused_reconstruction": [
+            6
+          ],
+          "full_verification": [
+            9
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 166689704,
+        "entry_blocks": 17592,
+        "full_matvecs": 1
+      },
+      "actions": 38,
+      "verifications": 1,
+      "core_solve_calls": 117,
+      "core_solve_seconds": 0.023481893178541213,
+      "setup_seconds": 0.07712681300472468,
+      "omitted": 0,
+      "rejected": 0,
+      "trials": 0,
+      "truncation_bound_used": 0.0,
+      "core_error_bound": 1.3635993018357403e-07,
+      "dataset": "mixed",
+      "repeat": 1,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56"
+    },
+    {
+      "method": "adaptive_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 39,
+      "original_relative_residual": 3.8453973683601215e-09,
+      "error": null,
+      "total_seconds": 1.7291018139803782,
+      "total_cpu_seconds": 1.823504400000001,
+      "memory": {
+        "named_peak_bytes": 976712,
+        "peak_with_reserve_bytes": 1042248,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 37504,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 761088,
+          "mixed_triangular_solve": 822400,
+          "fused_rhs": 976712,
+          "initial_direction_copy": 808192,
+          "fused_first_pass": 971312,
+          "fused_reorder": 824576,
+          "fused_q": 817664,
+          "factor_product": 822400,
+          "fused_core": 975752,
+          "fused_core_shift": 822400,
+          "fused_second_direction": 822400,
+          "fused_second_pass": 975824,
+          "fused_tail_shift": 819840,
+          "fused_iterate_update": 824576,
+          "fused_direction_update": 824576,
+          "fused_reconstruction": 976432,
+          "fused_reconstruction_update": 817664,
+          "full_verification": 972104,
+          "fused_original_residual": 840960
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            33
+          ],
+          "fused_first_pass": [
+            6
+          ],
+          "fused_core": [
+            25
+          ],
+          "fused_second_pass": [
+            26
+          ],
+          "fused_reconstruction": [
+            6
+          ],
+          "full_verification": [
+            9
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 169832616,
+        "entry_blocks": 17942,
+        "full_matvecs": 1
+      },
+      "actions": 39,
+      "verifications": 1,
+      "core_solve_calls": 120,
+      "core_solve_seconds": 0.02472014381783083,
+      "setup_seconds": 0.06312085699755698,
+      "omitted": 3,
+      "rejected": 0,
+      "trials": 39,
+      "truncation_bound_used": 1.1267947513212073e-07,
+      "core_error_bound": 1.3635993018357403e-07,
+      "dataset": "mixed",
+      "repeat": 1,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56"
+    },
+    {
+      "method": "adaptive_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 18,
+      "original_relative_residual": 3.5525623035429394e-09,
+      "error": null,
+      "total_seconds": 0.19181443797424436,
+      "total_cpu_seconds": 0.19685249999999854,
+      "memory": {
+        "named_peak_bytes": 977400,
+        "peak_with_reserve_bytes": 1042936,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 17920,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 740280,
+          "mixed_triangular_solve": 773440,
+          "fused_rhs": 976184,
+          "initial_direction_copy": 759232,
+          "fused_first_pass": 977256,
+          "fused_reorder": 765824,
+          "fused_q": 768704,
+          "factor_product": 773440,
+          "fused_core": 974872,
+          "fused_core_shift": 773440,
+          "fused_second_direction": 773440,
+          "fused_second_pass": 974944,
+          "fused_tail_shift": 761088,
+          "fused_iterate_update": 765824,
+          "fused_direction_update": 765824,
+          "fused_reconstruction": 977400,
+          "fused_reconstruction_update": 768704,
+          "full_verification": 977024,
+          "fused_original_residual": 772416
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            39
+          ],
+          "fused_first_pass": [
+            109
+          ],
+          "fused_core": [
+            35
+          ],
+          "fused_second_pass": [
+            36
+          ],
+          "fused_reconstruction": [
+            103
+          ],
+          "full_verification": [
+            32
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 13488104,
+        "entry_blocks": 1781,
+        "full_matvecs": 1
+      },
+      "actions": 18,
+      "verifications": 1,
+      "core_solve_calls": 57,
+      "core_solve_seconds": 0.01005861401790753,
+      "setup_seconds": 0.05911750299856067,
+      "omitted": 1,
+      "rejected": 0,
+      "trials": 18,
+      "truncation_bound_used": 6.867963704959507e-08,
+      "core_error_bound": 3.1700492106796937e-07,
+      "dataset": "Concrete",
+      "repeat": 1,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb"
+    },
+    {
+      "method": "exact_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 18,
+      "original_relative_residual": 3.5451269616584622e-09,
+      "error": null,
+      "total_seconds": 0.17768667999189347,
+      "total_cpu_seconds": 0.17713119999999805,
+      "memory": {
+        "named_peak_bytes": 977400,
+        "peak_with_reserve_bytes": 1042936,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 17920,
+          "mixed_stream_setup": 778368,
+          "mixed_stream_column": 783104,
+          "mixed_permutation": 740280,
+          "mixed_triangular_solve": 773440,
+          "fused_rhs": 976184,
+          "initial_direction_copy": 759232,
+          "fused_first_pass": 977256,
+          "fused_reorder": 765824,
+          "fused_q": 768704,
+          "fused_core": 974872,
+          "fused_core_shift": 773440,
+          "fused_second_direction": 773440,
+          "fused_second_pass": 974944,
+          "fused_tail_shift": 761088,
+          "fused_iterate_update": 765824,
+          "fused_direction_update": 765824,
+          "fused_reconstruction": 977400,
+          "fused_reconstruction_update": 768704,
+          "full_verification": 977024,
+          "fused_original_residual": 772416
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            39
+          ],
+          "fused_first_pass": [
+            109
+          ],
+          "fused_core": [
+            35
+          ],
+          "fused_second_pass": [
+            36
+          ],
+          "fused_reconstruction": [
+            103
+          ],
+          "full_verification": [
+            32
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 13838568,
+        "entry_blocks": 1798,
+        "full_matvecs": 1
+      },
+      "actions": 18,
+      "verifications": 1,
+      "core_solve_calls": 57,
+      "core_solve_seconds": 0.010605238960124552,
+      "setup_seconds": 0.043181665998417884,
+      "omitted": 0,
+      "rejected": 0,
+      "trials": 0,
+      "truncation_bound_used": 0.0,
+      "core_error_bound": 3.1700492106796937e-07,
+      "dataset": "Concrete",
+      "repeat": 1,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb"
+    },
+    {
+      "method": "exact_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 22,
+      "original_relative_residual": 3.584223612529547e-09,
+      "error": null,
+      "total_seconds": 0.3404986659879796,
+      "total_cpu_seconds": 0.3518846999999994,
+      "memory": {
+        "named_peak_bytes": 976448,
+        "peak_with_reserve_bytes": 1041984,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 23968,
+          "mixed_stream_setup": 764160,
+          "mixed_stream_column": 768896,
+          "mixed_permutation": 746706,
+          "mixed_triangular_solve": 788560,
+          "fused_rhs": 974896,
+          "initial_direction_copy": 774352,
+          "fused_first_pass": 974720,
+          "fused_reorder": 783968,
+          "fused_q": 783824,
+          "fused_core": 974944,
+          "fused_core_shift": 788560,
+          "fused_second_direction": 788560,
+          "fused_second_pass": 974992,
+          "fused_tail_shift": 779232,
+          "fused_iterate_update": 783968,
+          "fused_direction_update": 783968,
+          "fused_reconstruction": 975968,
+          "fused_reconstruction_update": 783824,
+          "full_verification": 976448,
+          "fused_original_residual": 793584
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            40
+          ],
+          "fused_first_pass": [
+            36
+          ],
+          "fused_core": [
+            35
+          ],
+          "fused_second_pass": [
+            36
+          ],
+          "fused_reconstruction": [
+            35
+          ],
+          "full_verification": [
+            20
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 34839844,
+        "entry_blocks": 2774,
+        "full_matvecs": 1
+      },
+      "actions": 22,
+      "verifications": 1,
+      "core_solve_calls": 69,
+      "core_solve_seconds": 0.013013423245865852,
+      "setup_seconds": 0.04914160200860351,
+      "omitted": 0,
+      "rejected": 0,
+      "trials": 0,
+      "truncation_bound_used": 0.0,
+      "core_error_bound": 2.405845256938929e-07,
+      "dataset": "Airfoil",
+      "repeat": 1,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a"
+    },
+    {
+      "method": "adaptive_core",
+      "status": "converged",
+      "converged": true,
+      "iterations": 22,
+      "original_relative_residual": 3.716678643334367e-09,
+      "error": null,
+      "total_seconds": 0.3498623499763198,
+      "total_cpu_seconds": 0.3534658999999998,
+      "memory": {
+        "named_peak_bytes": 976448,
+        "peak_with_reserve_bytes": 1041984,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 23968,
+          "mixed_stream_setup": 764160,
+          "mixed_stream_column": 768896,
+          "mixed_permutation": 746706,
+          "mixed_triangular_solve": 788560,
+          "fused_rhs": 974896,
+          "initial_direction_copy": 774352,
+          "fused_first_pass": 974720,
+          "fused_reorder": 783968,
+          "fused_q": 783824,
+          "factor_product": 788560,
+          "fused_core": 974944,
+          "fused_core_shift": 788560,
+          "fused_second_direction": 788560,
+          "fused_second_pass": 974992,
+          "fused_tail_shift": 779232,
+          "fused_iterate_update": 783968,
+          "fused_direction_update": 783968,
+          "fused_reconstruction": 975968,
+          "fused_reconstruction_update": 783824,
+          "full_verification": 976448,
+          "fused_original_residual": 793584
+        },
+        "phase_row_sizes": {
+          "fused_rhs": [
+            40
+          ],
+          "fused_first_pass": [
+            36
+          ],
+          "fused_core": [
+            35
+          ],
+          "fused_second_pass": [
+            36
+          ],
+          "fused_reconstruction": [
+            35
+          ],
+          "full_verification": [
+            20
+          ]
+        }
+      },
+      "kernel_stats": {
+        "column_queries": 592,
+        "entry_evaluations": 33788452,
+        "entry_blocks": 2723,
+        "full_matvecs": 1
+      },
+      "actions": 22,
+      "verifications": 1,
+      "core_solve_calls": 69,
+      "core_solve_seconds": 0.013131732703186572,
+      "setup_seconds": 0.048636814986821264,
+      "omitted": 3,
+      "rejected": 0,
+      "trials": 22,
+      "truncation_bound_used": 8.392135893857815e-08,
+      "core_error_bound": 2.405845256938929e-07,
+      "dataset": "Airfoil",
+      "repeat": 1,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a"
+    }
+  ],
+  "terminal_check": {
+    "method": "adaptive_core",
+    "status": "cpu_cap",
+    "converged": false,
+    "iterations": 0,
+    "original_relative_residual": 1.0,
+    "error": null,
+    "total_seconds": 0.08071684499736875,
+    "total_cpu_seconds": 0.07956669999999999,
+    "memory": {
+      "named_peak_bytes": 976448,
+      "peak_with_reserve_bytes": 1041984,
+      "reserve_bytes": 65536,
+      "phase_named_peaks": {
+        "selection": 23968,
+        "mixed_stream_setup": 764160,
+        "mixed_stream_column": 768896,
+        "mixed_permutation": 746706,
+        "mixed_triangular_solve": 783824,
+        "fused_rhs": 974896,
+        "initial_direction_copy": 774352,
+        "fused_reconstruction": 975968,
+        "fused_reconstruction_update": 783824,
+        "full_verification": 976448,
+        "fused_original_residual": 793584
+      },
+      "phase_row_sizes": {
+        "fused_rhs": [
+          40
+        ],
+        "fused_reconstruction": [
+          35
+        ],
+        "full_verification": [
+          20
+        ]
+      }
+    },
+    "kernel_stats": {
+      "column_queries": 592,
+      "entry_evaluations": 3054156,
+      "entry_blocks": 1278,
+      "full_matvecs": 1
+    },
+    "actions": 0,
+    "verifications": 1,
+    "core_solve_calls": 3,
+    "core_solve_seconds": 0.0006076619611121714,
+    "setup_seconds": 0.06205023603979498,
+    "omitted": 0,
+    "rejected": 0,
+    "trials": 0,
+    "truncation_bound_used": 0.0,
+    "core_error_bound": 2.405845256938929e-07
+  },
+  "elapsed_wall_seconds": 20.603170885995496,
+  "elapsed_cpu_seconds": 21.0736107
+}

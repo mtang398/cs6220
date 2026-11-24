@@ -1,0 +1,272 @@
+IterativeCUR and the CS 6220 project
+Reading date: 2026-11-23
+
+Source and scope
+
+Nathaniel Pritchard, Taejun Park, Yuji Nakatsukasa, and Per-Gunnar Martinsson,
+IterativeCUR: Large Rank-Adaptive Approximation From a Small Recycled Sketch.
+arXiv:2509.21963, first submitted 2025-09-26; version 2 dated 2026-09-22.
+This is an arXiv preprint; no journal acceptance is asserted here.
+Paper type: method, with analysis and numerical experiments.
+Version-specific record: https://arxiv.org/abs/2509.21963v2
+PDF: https://arxiv.org/pdf/2509.21963v2
+HTML: https://arxiv.org/html/2509.21963v2
+Local source: project/literature/iterativecur-2509.21963v2.pdf and .txt.
+
+Read all 27 printed PDF pages: Sections 1-6, Algorithms/Theorems, numerical
+experiments, and references. Page, equation, and theorem numbers below follow
+the PDF, since the experimental HTML renumbers some statements and references.
+The proposal and project/docs/research-plan.txt were read for comparison.
+This note records source findings and proposed experiments, not executed results.
+
+Main implication for our project
+
+Keep the submitted research question: use the changing linear-system residual
+to replace kernel columns while retaining exactly k columns, and test total
+solution time. IterativeCUR supplies useful machinery for residual-based matrix
+approximation and reuse of expensive matrix information. It does not establish
+that our inverse-quadratic-form exchange score predicts faster PCG convergence.
+The first experiment should therefore measure that prediction directly, before
+adding a new sketch-based selector or optimizing factor updates.
+
+What IterativeCUR actually computes
+
+1. Objective and residual (Sections 1.1, 2.2, 3.1; pp. 3-6).
+   For a general m-by-n matrix B, choose row indices I and column indices J to
+   form Bhat = B[:,J] B[I,J]^dagger B[I,:]. The paper calls the input A; B is
+   used here to distinguish it from our system matrix A_sys = K + lambda I.
+   Its residual S = B - Bhat is an m-by-n matrix. The intended stopping target
+   is relative Frobenius approximation error ||S||_F / ||B||_F < epsilon.
+   The economical cross core B[I,J]^dagger differs from the more expensive
+   best core C^dagger B R^dagger. The selected rows and columns are coupled
+   to avoid an ill-conditioned or singular intersection (Section 3.2, p. 6).
+
+2. Algorithm 3.1 (p. 7; explanation in Sections 3.1-3.2, pp. 6-10).
+   Generate a single Gaussian G with c=floor(1.1b) rows and cache Y=GB.
+   At an iteration with approximation C U R:
+     - Select b new columns by pivoting on the small residual Y-GCUR.
+     - Form the actual residual columns B[:,J_new]-CUR[:,J_new].
+     - Select b new rows from these columns.
+     - Append both index sets, update the intersection factorization, and
+       recompute the sketched residual using the cached Y and GC=Y[:,J].
+   LUPP is the practical default; QRCP and Osinsky selection are alternatives.
+   Previously selected rows/columns have zero residual in exact arithmetic
+   when the square cross matrix is invertible. This is why only the newest
+   residual columns are needed for row selection (Section 3.2.2, pp. 9-10).
+
+3. Rank and memory (Sections 1.1 and 3.4; pp. 3-4, 11-13).
+   After t full iterations, t*b row indices and t*b column indices are kept.
+   No old column is removed. A small, fixed sketch does not mean a fixed-size
+   approximation: dense C and R require O((m+n)r) entries at attained rank r,
+   in addition to the core and O(b(m+n)) residual/sketch workspace.
+   With b treated as constant and suitable core-factor updates, the stated
+   arithmetic cost is O(mn+(m+n)r^2). The initial Gaussian sketch costs
+   O(bmn); it accesses the whole matrix, unlike a kernel-column-only oracle.
+   Recomputing the growing core factorization at every step can have O(r^4)
+   aggregate cost. Section 3.4 discusses QR updates but reports that full QR
+   can still be faster at practical sizes because of optimized LAPACK.
+
+4. Recycled-sketch interpretation (Section 3.2.1; pp. 7-9).
+   Pivoting on the current approximation residual can identify directions
+   missed earlier. The paper's small example explains how a previously
+   invisible direction can reappear in a CUR residual sketch. This is an
+   intuition/example for its method, not a universal guarantee for arbitrary
+   adaptive reuse of a sketch. Its correction occurs by adding columns.
+   Our fixed-budget deletion step can reintroduce previously captured
+   directions; this behavior is absent from the growing-rank algorithm.
+
+5. Stopping and analysis (Section 3.3, pp. 10-11; Section 4, pp. 12-16).
+   Algorithm 3.1 uses ||G(B-Bhat)||_F/||GB||_F as a cheap estimate.
+   The controlled-probability variant separates independent Gaussian test
+   vectors from selection, uses ||B||_F in the denominator, and adjusts the
+   stopping threshold. Repeated tests require a failure-probability budget
+   across iterations. The simple reused selection sketch alone is not the
+   full independent-validation guarantee described in Section 3.3.
+   Theorem 4.4 uses Osinsky selection, not the default LUPP implementation.
+   Its product bound depends on the residual subspace errors. Remark 4.5's
+   comparison to the best rank-t*b approximation is explicitly heuristic,
+   including an ignored sketch-dependence assumption. These results concern
+   matrix approximation, not PCG convergence or fixed-budget replacements.
+
+Precise relationship to the submitted method
+
+Residual meaning:
+  IterativeCUR uses B-Bhat, a global error matrix independent of a prediction
+  target or a current iterate. Our residual is r_t=y-(K+lambda I)alpha_t, one
+  vector depending on y and the current solve. RPCholesky initialization uses
+  the diagonal of K-Khat, a third distinct quantity. Section 4.1 (pp. 12-13)
+  connects IterativeCUR to adaptive matrix-residual sampling and RPCholesky;
+  it does not identify either residual with a linear-system residual.
+
+Selection objective:
+  IterativeCUR seeks pivots explaining remaining matrix approximation error.
+  We sample candidate j with probability proportional to r_t[j]^2, then score
+  all removals by q(S';r_t)=r_t^T M_S'^{-1} r_t. The target is a useful
+  preconditioner for the current solve, subject to fixed retained storage.
+  A reduction of this bound changes neither alpha_t nor its true error at
+  the checkpoint. Only subsequent iterations can show a solver benefit.
+
+Structure needed by PCG:
+  General CUR permits different row/column sets I and J and need not yield
+  a symmetric positive-semidefinite approximation. It cannot simply replace
+  our Nyström Khat=C W^dagger C^T inside PCG. The latter preserves PSD
+  ordering, and lambda I makes M positive definite. The paper does not give
+  a theorem that a small Frobenius error implies a good preconditioner for
+  every right-hand side. Preserve fixed SPD M inside each PCG block and the
+  existing restart policy when it changes.
+
+Sketching that could be reused later (our inference, not the paper's method)
+
+For a small fixed test/selection matrix Omega and Nyström Khat=C W^dagger C^T,
+cache Y=Omega K. Then
+
+  Omega(K-Khat) = Y - Y[:,S] W^dagger C^T.
+
+This is the direct analogue of Algorithm 3.1's cached residual sketch.
+A column exchange changes only the low-rank correction to Y. A pivoting
+routine on this small residual could generate candidate indices; applying
+the existing current-residual score to those candidates would isolate the
+candidate generator from the acceptance rule. Such a comparator should be
+called a matrix-residual sketch candidate variant, not IterativeCUR itself.
+It needs its own accuracy and timing measurements. Forming Y costs full
+kernel applications, and retaining it costs O(n*rows(Omega)) extra storage.
+Both must be charged against the intended memory/time budget. It is premature
+to add this expense before testing whether the existing exchange score works.
+
+Lemma 4.2 (p. 14, Eq. 4.3) gives an exact addition identity: the enlarged CUR
+equals the old CUR plus a cross approximation of its residual, under the
+stated disjoint-index and invertibility assumptions. For our symmetric PSD
+case, its one-column specialization is the familiar Schur update. If W is
+invertible, define
+
+  u = K[:,j] - C W^{-1} K[S,j],
+  d = K[j,j] - K[j,S] W^{-1} K[S,j].
+
+When d>0, Khat_(S union {j}) = Khat_S + u u^T/d. This explains the reusable
+addition structure. An exchange also removes an old column; the lemma does
+not supply the fixed-budget removal criterion or guarantee that removal is
+beneficial. Use solves, dependence checks, and the actual retained numerical
+rank. Our cached C^T C and the small removal-score system are a separate
+implementation of reuse already specified in the research plan.
+
+Section 5 findings that matter for experiment design
+
+The paper measures approximation error, achieved rank, runtime, and FLOP
+counts/rates; it contains no PCG or kernel-ridge solver experiment. Its main
+runs use MATLAB 2025a on a 48-core Xeon Gold 6442Y with 2 TB RAM (p. 16).
+
+  - Section 5.1 (pp. 17-18) separates stopping-at-tolerance behavior from
+    fixed-rank comparisons. Ten runs use a dense 30,000-square exact-rank-2000
+    matrix and sparse c-67 of size 57,975. Reported median times are 12/15/85
+    seconds for IterativeCUR/s-LUPP/SVDSketch on the former, and 2.6/3.9/41
+    on c-67. These are paper results, not measurements of our project.
+  - Section 5.2 (pp. 18-21) compares five runs at ranks 500 through 4000 on
+    Low-Rank PD, G7Jac200, and Bayer01. FLOPs and wall time tell different
+    stories because the methods differ in data movement and BLAS efficiency.
+    This supports charging all replacement work in our CPU timings.
+  - Section 5.3 (pp. 20-22) finds no universally best pivot rule across its
+    Lehmer and low-rank tests. The Osinsky experiment uses Osinsky columns
+    and QRCP rows, and does not time an optimized Osinsky implementation.
+  - Section 5.4 (pp. 22-23) varies block sizes 5, 50, 100, 500. Accuracy and
+    speed depend differently on matrix type; larger blocks can improve
+    throughput, while smaller blocks can improve adaptive selection. This
+    motivates our existing checkpoint/candidate-count study, not importing
+    its block sizes as PCG checkpoint recommendations.
+  - Section 5.5 (pp. 23-24) uses a sparse 18,571,154-square network matrix,
+    one run per rank, and a 12-hour termination rule. Its memory advantage
+    depends partly on selected C and R retaining sparsity. Dense Gaussian
+    kernels do not inherit that advantage. The reported large speedups are
+    not predictions for our n<=2048 kernel experiments.
+
+Concrete first experiment
+
+Use the existing clustered synthetic generator with a fixed K, initially
+n=512, k=16, lambda=1e-3, checkpoint interval 20, and four sequential
+candidates. Use five paired seeds and the already planned smooth, random,
+and mixed-eigenspace target variants. Offline eigenvectors may construct
+controlled targets but must not enter selection. If the initial solve
+finishes before a checkpoint, record that outcome and use the preplanned
+smaller-lambda case to expose an unresolved solve; do not force exchanges
+after convergence. These are starting settings, not changes to the full
+dataset, budget, regularization, or baseline scope.
+
+At each accepted checkpoint:
+  1. Save the same alpha_t, true r_t, old set, and proposed new set. Verify
+     both scores with the stable factor-based M^{-1} application. The score
+     comparison must use exactly the factor that each solver branch uses.
+  2. Restart two diagnostic PCG branches from alpha_t, one with old M and
+     one with new M, each frozen for up to 20 steps. Record behavior after
+     5, 10, and 20 steps, stopping earlier if verified convergence occurs.
+  3. Use a dense Cholesky reference to evaluate actual A_sys-energy error,
+     direct relative residual, and coefficient error. Record q_new/q_old
+     alongside the old/new energy-error contraction. This directly tests
+     whether the surrogate's preferred exchange yields subsequent progress.
+  4. Retain the production comparisons to fixed RPCholesky without restart
+     and with matched restarts. Track selected/rejected candidates, true
+     residual matvecs, column acquisition, scoring, factorization time,
+     preconditioner applications, and total runtime. Exclude diagnostic
+     branches and reference factorizations from production solver timing.
+
+Keep y-based sampling/scoring and uniform sampling with r_t-based scoring
+as planned controls on representative cases. Later complete periodic
+reconstruction, limited-memory BFGS, unpreconditioned CG, real datasets,
+budget/regularization/frequency sensitivity, prediction checks, and memory
+accounting. This first diagnostic is an ordering of the work, not a reduced
+project objective.
+
+Decision rules after the first experiment
+
+If stable q decreases correlate with better matched-restart error reduction,
+continue to end-to-end runs and optimize observed update costs. If q decreases
+but branch progress does not improve, revisit the score or retention strategy
+before accelerating it. If progress improves but total time worsens, adjust
+frequency, candidate count, or factor maintenance. IterativeCUR supports
+investigating cached updates and blocked work, but its theorem and reported
+speedups do not justify replacing the initial method before this evidence.
+If targets change with K fixed, changes in selected exchanges are evidence
+of task dependence; they alone are not evidence of faster convergence.
+
+Verified public code and reference links
+
+Paper Section 5 footnote 3 (p. 16) links to
+https://github.com/nathanielpritchard/IterativeCUR_code
+The repository is public and uses the MIT License. Its inspected main tree
+has SHA 847cdff7eed5968ebd499d14da68bdc2b91cd6de on the reading date. Read
+README.md, LICENSE, src/curers/IterativeCUR.m, src/error_methods/approx_error.m,
+src/index_selection/idx_LU.m, and relevant calls in src/rigorous_test.m.
+No external code was copied into or executed in the project.
+
+Implementation details to preserve if we later reproduce it:
+  - IterativeCUR.m uses ceil(1.1b), while Algorithm 3.1 states floor(1.1b).
+  - The function has ten arguments; the README's shorter list is incomplete.
+  - Returned U,T are QR factors of the core, not the paper's pseudoinverse
+    U. The approximation is C*(T\(U'*R)).
+  - approx_error.m refactorizes QR: its updateQR branch is disabled.
+    It estimates the residual using ||Res*S2||_F with a second right sketch
+    of width 10; this is not Algorithm 3.1's literal Frobenius residual norm.
+  - rigorous_test.m sets the absolute threshold to epsilon*||B||_F. The
+    IterativeCUR function itself does not divide the returned error by ||B||.
+  - The default iteration cap is floor(min(m,n)/(3*(b+oversampling))). A
+    specified iteration count controls fixed-rank runs. Neither a default
+    cap nor the returned error list proves the requested tolerance was met.
+  - The inspected default code is not a literal implementation of the
+    independent held-out risk-control variant in Section 3.3. Preserve a
+    directly evaluated residual when checking a reproduction.
+
+References appearing in the paper that connect directly to our work:
+  PDF [5]: Chen et al., Randomly pivoted Cholesky (2025).
+  https://doi.org/10.1002/cpa.22234
+  Publisher title/authors and algorithm page verified; already in proposal.
+  PDF [14]: Dong and Martinsson, Simpler is better: a comparative study of
+  randomized pivoting algorithms for CUR and interpolative decompositions
+  (2023). https://doi.org/10.1007/s10444-023-10061-z
+  PDF [33]: Park and Nakatsukasa, Accuracy and Stability of CUR Decompositions
+  with Oversampling (2025). https://doi.org/10.1137/24M1660346
+  PDF [34]: Pearce et al., Adaptive Parallelizable Algorithms for Interpolative
+  Decompositions via Partially Pivoted LU (2025).
+  https://doi.org/10.1002/nla.70002
+The last three DOI/title pairs were independently matched in Crossref when
+publisher retrieval was unavailable. Their full texts were not read for
+this note, and no additional theorem from them is asserted. This targeted
+reading establishes specific overlap with IterativeCUR, not a broad novelty
+or priority claim about all adaptive preconditioners.

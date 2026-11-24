@@ -1,0 +1,103 @@
+{
+  "protocol": {
+    "purpose": "Test multi-direction curvature fitting as a distinct replacement criterion, preserving column and history budgets.",
+    "workloads": [
+      {
+        "dataset": "synthetic",
+        "target": "smooth"
+      }
+    ],
+    "synthetic_n": 640,
+    "seeds": [
+      0
+    ],
+    "regularization": [
+      0.001
+    ],
+    "repetitions": 1,
+    "solver_defaults": {
+      "rank": 16,
+      "checkpoint": 20
+    },
+    "variants": [
+      {
+        "id": "pcg16",
+        "method": "fixed"
+      },
+      {
+        "id": "pcg24",
+        "method": "fixed",
+        "rank": 24
+      },
+      {
+        "id": "fcg_fixed",
+        "method": "flex_fixed",
+        "history_size": 8
+      },
+      {
+        "id": "curvature1",
+        "method": "flex_curvature",
+        "history_size": 8,
+        "candidate_count": 1
+      },
+      {
+        "id": "curvature4",
+        "method": "flex_curvature",
+        "history_size": 8,
+        "candidate_count": 4
+      },
+      {
+        "id": "curvature4once",
+        "method": "flex_curvature",
+        "history_size": 8,
+        "candidate_count": 4,
+        "update_limit": 1
+      },
+      {
+        "id": "uniform_curvature4",
+        "method": "flex_uniform_curvature",
+        "history_size": 8,
+        "candidate_count": 4
+      },
+      {
+        "id": "residual_curvature4",
+        "method": "flex_residual_curvature",
+        "history_size": 8,
+        "candidate_count": 4
+      }
+    ],
+    "max_wall_seconds": 300,
+    "run_timeout_seconds": 90
+  },
+  "status": "complete",
+  "source_sha256": {
+    "src/nystrom_project/__init__.py": "160f59e9dc27f2624dd9467757579e986251bd3804b7278e98355a9910564967",
+    "src/nystrom_project/benchmark.py": "7db234a0d6f0e1c3dab88b0fe4b66f19247220c612e9f5d0f86af0ae667df43d",
+    "src/nystrom_project/curvature.py": "d9a768371a2555746bd6fad6105299833fb5a438b05d4fac01dd53b42492c71d",
+    "src/nystrom_project/datasets.py": "c5bce3d8b80f4535c161f064e16250d77654276fb153bafb17c2791feefdb803",
+    "src/nystrom_project/diagnostics.py": "04080c2dfa3dfdf833f6003527dc23cf8ec686fbfad097fbd8aeebd306e1ff92",
+    "src/nystrom_project/exchange.py": "a75af2a4063e7d82cb76af036889fcabd77ad572603198b241908ca49e9868ca",
+    "src/nystrom_project/flexible.py": "96f496589036216bb2fa2d6dba27d81af57ec36c018b5cc0a4d7fbc542d59337",
+    "src/nystrom_project/numerics.py": "27015a3d96632e4547c6faaaa736eb387308cf98ad6020ee6c6d4ffe6f937a0d",
+    "src/nystrom_project/revisions.py": "1979988488c39c396bae28db48aa8613278b8fb771090b6592be50282f2d5d87",
+    "src/nystrom_project/solvers.py": "8e4f7c6b0ce9df20f4dedba3abd6f3f721ddd0b6398febb70869e9b5ec73274f",
+    "src/nystrom_project/sweep.py": "c41281181b31358910ec7c1b7386b0c349d7fabbcb3dfe100e6d1773850e175a",
+    "src/nystrom_project/worker.py": "03156abd8fd35015a63f063803228acf3097673b8f66fbca629f10bc2996120a"
+  },
+  "completed_runs": 8,
+  "python": "3.13.12 (main, Feb  4 2026, 09:25:39) [GCC 13.3.0]",
+  "platform": "Linux-5.15.167.4-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "order": [
+    "synthetic-n640-smooth-s0-lambda0.001-fcg_fixed-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-curvature4-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-curvature1-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-uniform_curvature4-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-curvature4once-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-pcg16-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-pcg24-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-residual_curvature4-r0"
+  ],
+  "failures": [],
+  "timing": "All setup, updates, kernel products and verification are inside worker solve time. Parent references and worker startup are outside.",
+  "elapsed_wall_seconds": 17.074028581992025
+}

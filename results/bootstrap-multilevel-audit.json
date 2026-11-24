@@ -1,0 +1,28 @@
+{
+  "raw_result_sha256": "a0eb143e0bec5f9f1e584d3aff5f441f76a53cce783351a5b0b696a434196fff",
+  "executed_source_sha256": "fdb6b7805ad36c8cfbd4a8353f0b95c75e6090c11b7cef2536afcd2242df7199",
+  "accounting": "total_scalar_rhs_products is an incomplete optimistic proxy: its assembly=1 term counts one kernel-entry traversal, NOT one scalar RHS equivalent of arithmetic. Forming the coarse operators uses additional products/accumulation involving sparse P1/P2 (up to eight local basis values per row), which were free and omitted. No native construction or total-working-memory feasibility is established.",
+  "interpretation": "All16 rows are censored by CPU or iteration caps, not converged cost measurements. Analytical entries describe work reached before censoring and cannot support completed-solve runtime or speedup comparisons. The architecture closure uses severe convergence failure.",
+  "max_component_planner_bytes": 867488,
+  "leaf_partition_source": "scripts/check_full_aggregation_schur.py: partition uses k//2 groups left, floor(n*left/k) points left, then recurses; induction gives each leaf floor(n/k) or ceil(n/k), hence at most32 for k=ceil(n/32).",
+  "leaf_size_recurrence_checks": {
+    "2048": {
+      "group_count": 64,
+      "minimum_leaf_size": 32,
+      "maximum_leaf_size": 32,
+      "sum": 2048
+    },
+    "824": {
+      "group_count": 26,
+      "minimum_leaf_size": 31,
+      "maximum_leaf_size": 32,
+      "sum": 824
+    },
+    "1202": {
+      "group_count": 38,
+      "minimum_leaf_size": 31,
+      "maximum_leaf_size": 32,
+      "sum": 1202
+    }
+  }
+}

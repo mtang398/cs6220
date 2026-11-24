@@ -1,0 +1,21 @@
+{
+  "purpose": "Discriminate preserved conjugacy, projected energy selection, and direction-based candidates on a development case before broad timings.",
+  "workloads": [{"dataset": "synthetic", "target": "smooth"}],
+  "synthetic_n": 640,
+  "seeds": [0],
+  "regularization": [0.001],
+  "repetitions": 1,
+  "solver_defaults": {"rank": 16, "checkpoint": 20},
+  "variants": [
+    {"id":"pcg16", "method":"fixed"},
+    {"id":"pcg24", "method":"fixed", "rank":24},
+    {"id":"fcg_fixed", "method":"flex_fixed", "history_size":8},
+    {"id":"fcg_q1", "method":"flex_q", "history_size":8, "candidate_count":1},
+    {"id":"fcg_energy1", "method":"flex_energy", "history_size":8, "candidate_count":1},
+    {"id":"fcg_energy4", "method":"flex_energy", "history_size":8, "candidate_count":4},
+    {"id":"fcg_direction1", "method":"flex_direction_energy", "history_size":8, "candidate_count":1},
+    {"id":"fcg_direction4", "method":"flex_direction_energy", "history_size":8, "candidate_count":4}
+  ],
+  "max_wall_seconds": 300,
+  "run_timeout_seconds": 90
+}

@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cs6220-nystrom-project"
+version = "0.1.0"
+description = "CPU experiments for residual-guided Nyström preconditioner updates"
+requires-python = ">=3.11"
+dependencies = ["numpy>=2.0", "scipy>=1.14", "xlrd>=2.0", "PyYAML>=6.0", "threadpoolctl>=3.0", "psutil>=6.0"]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+

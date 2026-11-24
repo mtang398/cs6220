@@ -1,0 +1,2372 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_symmetric_kernel_precision.py": "5d1a2d397f1b7fb1a5d334993509910117524f8df896fd3ab8ad842ef29dfb9a",
+    "scripts/check_kernel_precision_cost.py": "795cdaa90abe044b4d4ba92c32901dab6dda4e8831796f7441ad72bfbec5c2ee",
+    "scripts/check_kernel_mixed_accumulation.py": "427acdbf2e018968ba5fd50a4b4d854e5ffe01fd5cd4570cb3cfab5180ad5441"
+  },
+  "protocol": {
+    "modes": [
+      "cdist64",
+      "gram32_acc64",
+      "cdist64_exp32_acc64",
+      "direct32_acc64"
+    ],
+    "tile_and_conversion_byte_allowance": 131072,
+    "repeats": 5,
+    "order": "Cyclic across four modes by repetition and case; one untimed full product first",
+    "direct32_arithmetic": "Round features once to FP32; fixed increasing feature loop subtract/square/add in FP32; multiply FP32 coefficient and exp in FP32; promote tile then FP64 dot with original vector",
+    "baseline_arithmetic": "Reproduces existing cdist64, Gram32-acc64 and cdist64-exp32-acc64 formulas; same per-mode8/12-byte tile budgeting.",
+    "accumulation": "FP64 for all four methods",
+    "timing_vector": "prepared alpha_reference atlambda.001",
+    "regularizations": [
+      0.001,
+      1e-05
+    ],
+    "blas_threads": 1,
+    "cpu_cap_seconds": 112,
+    "lock": "/tmp/cs6220-project-benchmark.lock",
+    "interpretation": "Operator consistency, dense stability oracle and standalone product cost only; no inner/full solver, total-memory or efficiency claim."
+  },
+  "consistency_checks": [
+    {
+      "dataset": "small37",
+      "mode": "cdist64",
+      "n": 37,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "row_shape_checks": [
+        {
+          "rows_per_tile": 1,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 7,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 31,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      ],
+      "query_checks": {
+        "full_vs_canonical": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "transpose": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "split_3_by_5": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "scalar_subset": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      },
+      "all_tested_entries_consistent_and_symmetric": true,
+      "diagonal_max_deviation": 0.0,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 106,
+        "kernel_blocks": 152,
+        "entry_evaluations": 8933,
+        "kernel_generation_seconds": 0.00079317283234559
+      }
+    },
+    {
+      "dataset": "small37",
+      "mode": "gram32_acc64",
+      "n": 37,
+      "symmetry": {
+        "bitwise_equal": false,
+        "differing_entries": 178,
+        "max_absolute_difference": 5.960464477539063e-08,
+        "relative_frobenius_difference": 3.135100020102194e-08
+      },
+      "row_shape_checks": [
+        {
+          "rows_per_tile": 1,
+          "bitwise_equal": false,
+          "differing_entries": 232,
+          "max_absolute_difference": 1.1920928955078125e-07,
+          "relative_frobenius_difference": 5.237054138362022e-08
+        },
+        {
+          "rows_per_tile": 7,
+          "bitwise_equal": false,
+          "differing_entries": 100,
+          "max_absolute_difference": 1.1920928955078125e-07,
+          "relative_frobenius_difference": 3.4363253487323736e-08
+        },
+        {
+          "rows_per_tile": 31,
+          "bitwise_equal": false,
+          "differing_entries": 62,
+          "max_absolute_difference": 1.1920928955078125e-07,
+          "relative_frobenius_difference": 2.5169063508752458e-08
+        }
+      ],
+      "query_checks": {
+        "full_vs_canonical": {
+          "bitwise_equal": false,
+          "differing_entries": 53,
+          "max_absolute_difference": 5.960464477539063e-08,
+          "relative_frobenius_difference": 2.5313128587495194e-08
+        },
+        "transpose": {
+          "bitwise_equal": false,
+          "differing_entries": 197,
+          "max_absolute_difference": 5.960464477539063e-08,
+          "relative_frobenius_difference": 4.060457188056538e-08
+        },
+        "split_3_by_5": {
+          "bitwise_equal": false,
+          "differing_entries": 59,
+          "max_absolute_difference": 5.960464477539063e-08,
+          "relative_frobenius_difference": 2.698076658778754e-08
+        },
+        "scalar_subset": {
+          "bitwise_equal": false,
+          "differing_entries": 2,
+          "max_absolute_difference": 2.2351741790771484e-08,
+          "relative_frobenius_difference": 2.4930589478350847e-08
+        }
+      },
+      "all_tested_entries_consistent_and_symmetric": false,
+      "diagonal_max_deviation": 0.0,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 106,
+        "kernel_blocks": 152,
+        "entry_evaluations": 8933,
+        "kernel_generation_seconds": 0.004595717182382941
+      }
+    },
+    {
+      "dataset": "small37",
+      "mode": "cdist64_exp32_acc64",
+      "n": 37,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "row_shape_checks": [
+        {
+          "rows_per_tile": 1,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 7,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 31,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      ],
+      "query_checks": {
+        "full_vs_canonical": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "transpose": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "split_3_by_5": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "scalar_subset": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      },
+      "all_tested_entries_consistent_and_symmetric": true,
+      "diagonal_max_deviation": 0.0,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 106,
+        "kernel_blocks": 152,
+        "entry_evaluations": 8933,
+        "kernel_generation_seconds": 0.0006976011209189892
+      }
+    },
+    {
+      "dataset": "small37",
+      "mode": "direct32_acc64",
+      "n": 37,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "row_shape_checks": [
+        {
+          "rows_per_tile": 1,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 7,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 31,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      ],
+      "query_checks": {
+        "full_vs_canonical": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "transpose": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "split_3_by_5": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "scalar_subset": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      },
+      "all_tested_entries_consistent_and_symmetric": true,
+      "diagonal_max_deviation": 0.0,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 106,
+        "kernel_blocks": 152,
+        "entry_evaluations": 8933,
+        "kernel_generation_seconds": 0.0027025708986911923
+      }
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "cdist64",
+      "n": 512,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "row_shape_checks": [
+        {
+          "rows_per_tile": 1,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 7,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 31,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      ],
+      "query_checks": {
+        "full_vs_canonical": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "transpose": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "split_3_by_5": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "scalar_subset": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      },
+      "all_tested_entries_consistent_and_symmetric": true,
+      "diagonal_max_deviation": 0.0,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 117,
+        "kernel_blocks": 736,
+        "entry_evaluations": 1052591,
+        "kernel_generation_seconds": 0.010184450482483953
+      }
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "gram32_acc64",
+      "n": 512,
+      "symmetry": {
+        "bitwise_equal": false,
+        "differing_entries": 26874,
+        "max_absolute_difference": 2.384185791015625e-07,
+        "relative_frobenius_difference": 2.798340937044147e-08
+      },
+      "row_shape_checks": [
+        {
+          "rows_per_tile": 1,
+          "bitwise_equal": false,
+          "differing_entries": 26718,
+          "max_absolute_difference": 2.384185791015625e-07,
+          "relative_frobenius_difference": 3.2267583320705035e-08
+        },
+        {
+          "rows_per_tile": 7,
+          "bitwise_equal": false,
+          "differing_entries": 14231,
+          "max_absolute_difference": 2.980232238769531e-07,
+          "relative_frobenius_difference": 2.361592929228676e-08
+        },
+        {
+          "rows_per_tile": 31,
+          "bitwise_equal": false,
+          "differing_entries": 7221,
+          "max_absolute_difference": 2.980232238769531e-07,
+          "relative_frobenius_difference": 1.6979138643957255e-08
+        }
+      ],
+      "query_checks": {
+        "full_vs_canonical": {
+          "bitwise_equal": false,
+          "differing_entries": 36,
+          "max_absolute_difference": 2.384185791015625e-07,
+          "relative_frobenius_difference": 2.1629905038954743e-08
+        },
+        "transpose": {
+          "bitwise_equal": false,
+          "differing_entries": 135,
+          "max_absolute_difference": 1.7881393432617188e-07,
+          "relative_frobenius_difference": 2.9019562796888286e-08
+        },
+        "split_3_by_5": {
+          "bitwise_equal": false,
+          "differing_entries": 36,
+          "max_absolute_difference": 2.384185791015625e-07,
+          "relative_frobenius_difference": 2.1128961764841715e-08
+        },
+        "scalar_subset": {
+          "bitwise_equal": false,
+          "differing_entries": 1,
+          "max_absolute_difference": 1.1920928955078125e-07,
+          "relative_frobenius_difference": 3.914338786641474e-08
+        }
+      },
+      "all_tested_entries_consistent_and_symmetric": false,
+      "diagonal_max_deviation": 0.0,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 117,
+        "kernel_blocks": 745,
+        "entry_evaluations": 1052591,
+        "kernel_generation_seconds": 0.00938563683303073
+      }
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "cdist64_exp32_acc64",
+      "n": 512,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "row_shape_checks": [
+        {
+          "rows_per_tile": 1,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 7,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 31,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      ],
+      "query_checks": {
+        "full_vs_canonical": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "transpose": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "split_3_by_5": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "scalar_subset": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      },
+      "all_tested_entries_consistent_and_symmetric": true,
+      "diagonal_max_deviation": 0.0,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 117,
+        "kernel_blocks": 745,
+        "entry_evaluations": 1052591,
+        "kernel_generation_seconds": 0.007577445852803066
+      }
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "direct32_acc64",
+      "n": 512,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "row_shape_checks": [
+        {
+          "rows_per_tile": 1,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 7,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        {
+          "rows_per_tile": 31,
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      ],
+      "query_checks": {
+        "full_vs_canonical": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "transpose": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "split_3_by_5": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        },
+        "scalar_subset": {
+          "bitwise_equal": true,
+          "differing_entries": 0,
+          "max_absolute_difference": 0.0,
+          "relative_frobenius_difference": 0.0
+        }
+      },
+      "all_tested_entries_consistent_and_symmetric": true,
+      "diagonal_max_deviation": 0.0,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 117,
+        "kernel_blocks": 745,
+        "entry_evaluations": 1052591,
+        "kernel_generation_seconds": 0.02127510993159376
+      }
+    }
+  ],
+  "stability_checks": [
+    {
+      "dataset": "smooth512",
+      "mode": "cdist64",
+      "n": 512,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.00250756400055252,
+              "cpu_seconds": 0.009058200000000016,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.032197995136584466
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0013023780193179846,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0033231135772079264
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 2097152,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.012680835992796347,
+      "total_cpu_seconds": 0.009058200000000016,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 16,
+        "entry_evaluations": 262144,
+        "kernel_generation_seconds": 0.0020635669643525034
+      },
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "gram32_acc64",
+      "n": 512,
+      "symmetry": {
+        "bitwise_equal": false,
+        "differing_entries": 26874,
+        "max_absolute_difference": 2.384185791015625e-07,
+        "relative_frobenius_difference": 2.798340937044147e-08
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0018939000146929175,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03219755140657194
+            },
+            {
+              "triangle": "upper",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0017474119958933443,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03219767769052897
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": false
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0012270649895071983,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0033106750778358575
+            },
+            {
+              "triangle": "upper",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0016331509978044778,
+              "cpu_seconds": 0.010392000000000012,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0033128369632796665
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": false
+        }
+      ],
+      "dense_kernel_bytes": 2097152,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.02884915698086843,
+      "total_cpu_seconds": 0.02906260000000005,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 25,
+        "entry_evaluations": 262144,
+        "kernel_generation_seconds": 0.004079343867488205
+      },
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "cdist64_exp32_acc64",
+      "n": 512,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.006660682003712282,
+              "cpu_seconds": 0.010379399999999928,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.032197426176859084
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0032186250027734786,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0033113560687742694
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 2097152,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.06055693200323731,
+      "total_cpu_seconds": 0.055574999999999986,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 25,
+        "entry_evaluations": 262144,
+        "kernel_generation_seconds": 0.008461590885417536
+      },
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "direct32_acc64",
+      "n": 512,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0017351180140394717,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03219755514800944
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0017354820156469941,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0033116542738843946
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 2097152,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.031207988009555265,
+      "total_cpu_seconds": 0.025848199999999988,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 25,
+        "entry_evaluations": 262144,
+        "kernel_generation_seconds": 0.010742780024884269
+      },
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "cdist64",
+      "n": 824,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.006736681010806933,
+              "cpu_seconds": 0.010345099999999996,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03247168792023805
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.005275925010209903,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.003345662871926113
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 5431808,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.03946755500510335,
+      "total_cpu_seconds": 0.030972999999999917,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 44,
+        "entry_evaluations": 678976,
+        "kernel_generation_seconds": 0.00884400011273101
+      },
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "gram32_acc64",
+      "n": 824,
+      "symmetry": {
+        "bitwise_equal": false,
+        "differing_entries": 52170,
+        "max_absolute_difference": 1.7881393432617188e-07,
+        "relative_frobenius_difference": 2.5011032142049075e-08
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0098433310049586,
+              "cpu_seconds": 0.01039049999999997,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.032471700314657605
+            },
+            {
+              "triangle": "upper",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0061957720026839525,
+              "cpu_seconds": 0.010390700000000086,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03247170389897784
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": false
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.004991257999790832,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0033258845654476382
+            },
+            {
+              "triangle": "upper",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.005558498989557847,
+              "cpu_seconds": 0.010394899999999985,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0033260122395280794
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": false
+        }
+      ],
+      "dense_kernel_bytes": 5431808,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.053736727975774556,
+      "total_cpu_seconds": 0.05288520000000008,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 64,
+        "entry_evaluations": 678976,
+        "kernel_generation_seconds": 0.007832209841581061
+      },
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "cdist64_exp32_acc64",
+      "n": 824,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.005801338003948331,
+              "cpu_seconds": 0.010391499999999998,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03247183913323599
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0049401510041207075,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0033366883494598556
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 5431808,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.03998969099484384,
+      "total_cpu_seconds": 0.03228439999999999,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 64,
+        "entry_evaluations": 678976,
+        "kernel_generation_seconds": 0.012934574013343081
+      },
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "direct32_acc64",
+      "n": 824,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.005440050998004153,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03247181410689449
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.004942550003761426,
+              "cpu_seconds": 0.0,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.00333650217587034
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 5431808,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.0369306179927662,
+      "total_cpu_seconds": 0.03341919999999998,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 64,
+        "entry_evaluations": 678976,
+        "kernel_generation_seconds": 0.01670373199158348
+      },
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "cdist64",
+      "n": 1202,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.01746959998854436,
+              "cpu_seconds": 0.020800400000000163,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0319991383313086
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.014786376996198669,
+              "cpu_seconds": 0.010375199999999918,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.003241697725698964
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 11558432,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.08844062499701977,
+      "total_cpu_seconds": 0.08202229999999999,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 93,
+        "entry_evaluations": 1444804,
+        "kernel_generation_seconds": 0.01532430198858492
+      },
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384"
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "gram32_acc64",
+      "n": 1202,
+      "symmetry": {
+        "bitwise_equal": false,
+        "differing_entries": 131590,
+        "max_absolute_difference": 1.7881393432617188e-07,
+        "relative_frobenius_difference": 2.384195931491681e-08
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.014519766002194956,
+              "cpu_seconds": 0.010394900000000096,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03199897728333188
+            },
+            {
+              "triangle": "upper",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.015598509984556586,
+              "cpu_seconds": 0.010393600000000003,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.031998949685912374
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": false
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.014506816020002589,
+              "cpu_seconds": 0.020790099999999923,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0032256032759181543
+            },
+            {
+              "triangle": "upper",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.01595828600693494,
+              "cpu_seconds": 0.020789600000000075,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0032257482366090068
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": false
+        }
+      ],
+      "dense_kernel_bytes": 11558432,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.09044498202274553,
+      "total_cpu_seconds": 0.09339920000000013,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 134,
+        "entry_evaluations": 1444804,
+        "kernel_generation_seconds": 0.004820394213311374
+      },
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384"
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "cdist64_exp32_acc64",
+      "n": 1202,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.014564249984687194,
+              "cpu_seconds": 0.0207885000000001,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03199908707437751
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.014372548001119867,
+              "cpu_seconds": 0.010395399999999944,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.003220607109843821
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 11558432,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.05480491800699383,
+      "total_cpu_seconds": 0.048646200000000084,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 134,
+        "entry_evaluations": 1444804,
+        "kernel_generation_seconds": 0.006621450127568096
+      },
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384"
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "direct32_acc64",
+      "n": 1202,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.01476929901400581,
+              "cpu_seconds": 0.02079209999999998,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03199916048813927
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.01498790699406527,
+              "cpu_seconds": 0.010396099999999908,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0032199666458379533
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 11558432,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.06148866901639849,
+      "total_cpu_seconds": 0.055323199999999906,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 134,
+        "entry_evaluations": 1444804,
+        "kernel_generation_seconds": 0.011550245952093974
+      },
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384"
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "cdist64",
+      "n": 2048,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.07418607998988591,
+              "cpu_seconds": 0.07276480000000007,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03174698422351257
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.0957366410002578,
+              "cpu_seconds": 0.10394170000000003,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.003190198129531498
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 33554432,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.5353524650272448,
+      "total_cpu_seconds": 0.5512655000000002,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 256,
+        "entry_evaluations": 4194304,
+        "kernel_generation_seconds": 0.035060019872616976
+      },
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "gram32_acc64",
+      "n": 2048,
+      "symmetry": {
+        "bitwise_equal": false,
+        "differing_entries": 415500,
+        "max_absolute_difference": 2.980232238769531e-07,
+        "relative_frobenius_difference": 2.7587650021834146e-08
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.07546092101256363,
+              "cpu_seconds": 0.08315790000000023,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.031747248357373616
+            },
+            {
+              "triangle": "upper",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.09514223202131689,
+              "cpu_seconds": 0.10393570000000008,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.031747205760839614
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": false
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.06910941199748777,
+              "cpu_seconds": 0.07276409999999967,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0031608915409022096
+            },
+            {
+              "triangle": "upper",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.07822942899656482,
+              "cpu_seconds": 0.08315699999999993,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0031622814770831094
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": false
+        }
+      ],
+      "dense_kernel_bytes": 33554432,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.8956514460151084,
+      "total_cpu_seconds": 0.9267313000000001,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 410,
+        "entry_evaluations": 4194304,
+        "kernel_generation_seconds": 0.02892897804849781
+      },
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "cdist64_exp32_acc64",
+      "n": 2048,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.07607142598135397,
+              "cpu_seconds": 0.08316180000000006,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03174708954015907
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.08794122299877927,
+              "cpu_seconds": 0.09352559999999999,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0031625832803583685
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 33554432,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.7310374150110874,
+      "total_cpu_seconds": 0.7540211000000001,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 410,
+        "entry_evaluations": 4194304,
+        "kernel_generation_seconds": 0.02958578203106299
+      },
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "direct32_acc64",
+      "n": 2048,
+      "symmetry": {
+        "bitwise_equal": true,
+        "differing_entries": 0,
+        "max_absolute_difference": 0.0,
+        "relative_frobenius_difference": 0.0
+      },
+      "regularizations": [
+        {
+          "regularization": 0.001,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.07102697601658292,
+              "cpu_seconds": 0.0727594999999992,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.03174709554191761
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        },
+        {
+          "regularization": 1e-05,
+          "cholesky_tests": [
+            {
+              "triangle": "lower",
+              "info": 0,
+              "succeeded": true,
+              "seconds": 0.08334175901836716,
+              "cpu_seconds": 0.08314950000000021,
+              "factor_alias": true,
+              "minimum_factor_diagonal": 0.0031601464932289386
+            }
+          ],
+          "symmetric_operator_passes_Cholesky": true
+        }
+      ],
+      "dense_kernel_bytes": 33554432,
+      "oracle_scope": "Dense kernel and dense Cholesky workspaces excluded from candidate memory; no symmetrization, diagonal repair or extra shift.",
+      "total_seconds": 0.7078417989832815,
+      "total_cpu_seconds": 0.7310286000000001,
+      "stats": {
+        "product_calls": 0,
+        "entry_query_calls": 0,
+        "kernel_blocks": 410,
+        "entry_evaluations": 4194304,
+        "kernel_generation_seconds": 0.05696764116873965
+      },
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    }
+  ],
+  "timings": [
+    {
+      "dataset": "smooth512",
+      "mode": "cdist64",
+      "n": 512,
+      "dimension": 8,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "setup_seconds": 2.4726003175601363e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 0,
+      "rows_per_tile": 32,
+      "per_entry_tile_conversion_allowance": 8,
+      "maximum_tile_conversion_bytes": 131072,
+      "output_vector_bytes": 4096,
+      "common_immutable_feature_and_input_bytes": 36864,
+      "error_over_rhs_norm": 0.0,
+      "relative_product_error": 0.0,
+      "error_over_input_norm": 0.0,
+      "seconds": [
+        0.003251939982874319,
+        0.0018249799904879183,
+        0.0018092459940817207,
+        0.001804717001505196,
+        0.0018473299860488623
+      ],
+      "cpu_seconds": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.010394500000000084
+      ],
+      "median_seconds": 0.0018249799904879183,
+      "median_cpu_seconds": 0.0,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 96,
+        "entry_evaluations": 1572864,
+        "kernel_generation_seconds": 0.012951758952112868
+      },
+      "named_context_and_action_peak_bytes": 135424,
+      "phase_named_peaks": {
+        "context": 0,
+        "generated_tile": 135168,
+        "product_promotion": 135168,
+        "FP64_dot": 135424
+      },
+      "traced_context_and_action_peak_bytes": 137076,
+      "audited_tile_conversion_peak_bytes": 131072,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "gram32_acc64",
+      "n": 512,
+      "dimension": 8,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "setup_seconds": 3.622099757194519e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 18432,
+      "rows_per_tile": 21,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 129024,
+      "output_vector_bytes": 4096,
+      "common_immutable_feature_and_input_bytes": 36864,
+      "error_over_rhs_norm": 7.87244550192145e-05,
+      "relative_product_error": 7.985860916916954e-05,
+      "error_over_input_norm": 7.928530009423217e-07,
+      "seconds": [
+        0.001427579001756385,
+        0.00174653300200589,
+        0.0009738140215631574,
+        0.0009571429982315749,
+        0.0009616799943614751
+      ],
+      "cpu_seconds": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "median_seconds": 0.0009738140215631574,
+      "median_cpu_seconds": 0.0,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 150,
+        "entry_evaluations": 1572864,
+        "kernel_generation_seconds": 0.005833115050336346
+      },
+      "named_context_and_action_peak_bytes": 151552,
+      "phase_named_peaks": {
+        "context": 18432,
+        "Gram_diagonal_indices": 65872,
+        "generated_tile": 65536,
+        "product_promotion": 151552,
+        "FP64_dot": 108712
+      },
+      "traced_context_and_action_peak_bytes": 153740,
+      "audited_tile_conversion_peak_bytes": 129024,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "cdist64_exp32_acc64",
+      "n": 512,
+      "dimension": 8,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "setup_seconds": 8.14601662568748e-06,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 0,
+      "rows_per_tile": 21,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 129024,
+      "output_vector_bytes": 4096,
+      "common_immutable_feature_and_input_bytes": 36864,
+      "error_over_rhs_norm": 7.644092552951035e-05,
+      "relative_product_error": 7.754218171343107e-05,
+      "error_over_input_norm": 7.698550239069732e-07,
+      "seconds": [
+        0.0017770720005501062,
+        0.0023591679928358644,
+        0.001270986977033317,
+        0.0012628860131371766,
+        0.0012780450051650405
+      ],
+      "cpu_seconds": [
+        0.0,
+        0.01038400000000006,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "median_seconds": 0.0012780450051650405,
+      "median_cpu_seconds": 0.0,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 150,
+        "entry_evaluations": 1572864,
+        "kernel_generation_seconds": 0.008003747061593458
+      },
+      "named_context_and_action_peak_bytes": 133120,
+      "phase_named_peaks": {
+        "context": 0,
+        "distance_conversion": 133120,
+        "generated_tile": 47104,
+        "product_promotion": 133120,
+        "FP64_dot": 90280
+      },
+      "traced_context_and_action_peak_bytes": 134928,
+      "audited_tile_conversion_peak_bytes": 129024,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "smooth512",
+      "mode": "direct32_acc64",
+      "n": 512,
+      "dimension": 8,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717",
+      "setup_seconds": 6.462010787799954e-06,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 16384,
+      "rows_per_tile": 21,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 129024,
+      "output_vector_bytes": 4096,
+      "common_immutable_feature_and_input_bytes": 36864,
+      "error_over_rhs_norm": 8.402232460048925e-05,
+      "relative_product_error": 8.523280320096041e-05,
+      "error_over_input_norm": 8.462091250982717e-07,
+      "seconds": [
+        0.006692607013974339,
+        0.003621902986196801,
+        0.0027488369960337877,
+        0.0027282020018901676,
+        0.002714100992307067
+      ],
+      "cpu_seconds": [
+        0.010303199999999957,
+        0.0,
+        0.010392899999999927,
+        0.0,
+        0.0
+      ],
+      "median_seconds": 0.0027488369960337877,
+      "median_cpu_seconds": 0.0,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 150,
+        "entry_evaluations": 1572864,
+        "kernel_generation_seconds": 0.021117253054399043
+      },
+      "named_context_and_action_peak_bytes": 149504,
+      "phase_named_peaks": {
+        "context": 16384,
+        "direct_distance": 106496,
+        "generated_tile": 63488,
+        "product_promotion": 149504,
+        "FP64_dot": 106664
+      },
+      "traced_context_and_action_peak_bytes": 174836,
+      "audited_tile_conversion_peak_bytes": 129024,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "cdist64",
+      "n": 824,
+      "dimension": 8,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "setup_seconds": 1.3584998669102788e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 0,
+      "rows_per_tile": 19,
+      "per_entry_tile_conversion_allowance": 8,
+      "maximum_tile_conversion_bytes": 125248,
+      "output_vector_bytes": 6592,
+      "common_immutable_feature_and_input_bytes": 59328,
+      "error_over_rhs_norm": 0.0,
+      "relative_product_error": 0.0,
+      "error_over_input_norm": 0.0,
+      "seconds": [
+        0.00468019099207595,
+        0.00481171699357219,
+        0.004893526987871155,
+        0.004981398000381887,
+        0.004750031017465517
+      ],
+      "cpu_seconds": [
+        0.010394100000000073,
+        0.01033419999999996,
+        0.0,
+        0.0,
+        0.010394400000000026
+      ],
+      "median_seconds": 0.00481171699357219,
+      "median_cpu_seconds": 0.01033419999999996,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 264,
+        "entry_evaluations": 4073856,
+        "kernel_generation_seconds": 0.027959495084360242
+      },
+      "named_context_and_action_peak_bytes": 131992,
+      "phase_named_peaks": {
+        "context": 0,
+        "generated_tile": 131840,
+        "product_promotion": 131840,
+        "FP64_dot": 131992
+      },
+      "traced_context_and_action_peak_bytes": 133644,
+      "audited_tile_conversion_peak_bytes": 125248,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "gram32_acc64",
+      "n": 824,
+      "dimension": 8,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "setup_seconds": 4.2494008084759116e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 29664,
+      "rows_per_tile": 13,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 128544,
+      "output_vector_bytes": 6592,
+      "common_immutable_feature_and_input_bytes": 59328,
+      "error_over_rhs_norm": 0.00023565812860178878,
+      "relative_product_error": 0.00024497708582123,
+      "error_over_input_norm": 1.0424211407039799e-06,
+      "seconds": [
+        0.002927222987636924,
+        0.0027741309895645827,
+        0.0024850930203683674,
+        0.002711584005737677,
+        0.0026237249840050936
+      ],
+      "cpu_seconds": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "median_seconds": 0.002711584005737677,
+      "median_cpu_seconds": 0.0,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 384,
+        "entry_evaluations": 4073856,
+        "kernel_generation_seconds": 0.013181325019104406
+      },
+      "named_context_and_action_peak_bytes": 164800,
+      "phase_named_peaks": {
+        "context": 29664,
+        "Gram_diagonal_indices": 79312,
+        "generated_tile": 79104,
+        "product_promotion": 164800,
+        "FP64_dot": 122056
+      },
+      "traced_context_and_action_peak_bytes": 166988,
+      "audited_tile_conversion_peak_bytes": 128544,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "cdist64_exp32_acc64",
+      "n": 824,
+      "dimension": 8,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "setup_seconds": 1.0854011634364724e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 0,
+      "rows_per_tile": 13,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 128544,
+      "output_vector_bytes": 6592,
+      "common_immutable_feature_and_input_bytes": 59328,
+      "error_over_rhs_norm": 0.0001955992795531093,
+      "relative_product_error": 0.00020333413397601385,
+      "error_over_input_norm": 8.652229622733292e-07,
+      "seconds": [
+        0.003397624008357525,
+        0.003236415999708697,
+        0.0033523199963383377,
+        0.0033379780070390552,
+        0.003399192006327212
+      ],
+      "cpu_seconds": [
+        0.010392599999999974,
+        0.0,
+        0.01037789999999994,
+        0.010394800000000037,
+        0.0
+      ],
+      "median_seconds": 0.0033523199963383377,
+      "median_cpu_seconds": 0.01037789999999994,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 384,
+        "entry_evaluations": 4073856,
+        "kernel_generation_seconds": 0.01774364270386286
+      },
+      "named_context_and_action_peak_bytes": 135136,
+      "phase_named_peaks": {
+        "context": 0,
+        "distance_conversion": 135136,
+        "generated_tile": 49440,
+        "product_promotion": 135136,
+        "FP64_dot": 92392
+      },
+      "traced_context_and_action_peak_bytes": 136944,
+      "audited_tile_conversion_peak_bytes": 128544,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "Concrete824",
+      "mode": "direct32_acc64",
+      "n": 824,
+      "dimension": 8,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2",
+      "setup_seconds": 2.1432002540677786e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 26368,
+      "rows_per_tile": 13,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 128544,
+      "output_vector_bytes": 6592,
+      "common_immutable_feature_and_input_bytes": 59328,
+      "error_over_rhs_norm": 0.00024157373732624525,
+      "relative_product_error": 0.0002511266236910856,
+      "error_over_input_norm": 1.0685885198268384e-06,
+      "seconds": [
+        0.007125149015337229,
+        0.00816885000676848,
+        0.008318061009049416,
+        0.007897701027104631,
+        0.008292353013530374
+      ],
+      "cpu_seconds": [
+        0.0,
+        0.010456699999999985,
+        0.01041190000000003,
+        0.010393399999999997,
+        0.010395500000000002
+      ],
+      "median_seconds": 0.00816885000676848,
+      "median_cpu_seconds": 0.010395500000000002,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 384,
+        "entry_evaluations": 4073856,
+        "kernel_generation_seconds": 0.04782572595286183
+      },
+      "named_context_and_action_peak_bytes": 161504,
+      "phase_named_peaks": {
+        "context": 26368,
+        "direct_distance": 118656,
+        "generated_tile": 75808,
+        "product_promotion": 161504,
+        "FP64_dot": 118760
+      },
+      "traced_context_and_action_peak_bytes": 180788,
+      "audited_tile_conversion_peak_bytes": 128544,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "cdist64",
+      "n": 1202,
+      "dimension": 5,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "setup_seconds": 2.2158987121656537e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 0,
+      "rows_per_tile": 13,
+      "per_entry_tile_conversion_allowance": 8,
+      "maximum_tile_conversion_bytes": 125008,
+      "output_vector_bytes": 9616,
+      "common_immutable_feature_and_input_bytes": 57696,
+      "error_over_rhs_norm": 0.0,
+      "relative_product_error": 0.0,
+      "error_over_input_norm": 0.0,
+      "seconds": [
+        0.008958263002568856,
+        0.00894214297295548,
+        0.008876556996256113,
+        0.00909284601220861,
+        0.008876885985955596
+      ],
+      "cpu_seconds": [
+        0.0,
+        0.010394900000000096,
+        0.010394499999999862,
+        0.010394100000000073,
+        0.010394999999999932
+      ],
+      "median_seconds": 0.00894214297295548,
+      "median_cpu_seconds": 0.010394499999999862,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 558,
+        "entry_evaluations": 8668824,
+        "kernel_generation_seconds": 0.05175123567460105
+      },
+      "named_context_and_action_peak_bytes": 134728,
+      "phase_named_peaks": {
+        "context": 0,
+        "generated_tile": 134624,
+        "product_promotion": 134624,
+        "FP64_dot": 134728
+      },
+      "traced_context_and_action_peak_bytes": 136380,
+      "audited_tile_conversion_peak_bytes": 125008,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "gram32_acc64",
+      "n": 1202,
+      "dimension": 5,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "setup_seconds": 5.2682007662951946e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 28848,
+      "rows_per_tile": 9,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 129816,
+      "output_vector_bytes": 9616,
+      "common_immutable_feature_and_input_bytes": 57696,
+      "error_over_rhs_norm": 0.0004162640424206189,
+      "relative_product_error": 0.0004559680930348257,
+      "error_over_input_norm": 1.140376971166872e-06,
+      "seconds": [
+        0.0050432409916538745,
+        0.004931192001095042,
+        0.005016556999180466,
+        0.005211391020566225,
+        0.005140458000823855
+      ],
+      "cpu_seconds": [
+        0.010394400000000026,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "median_seconds": 0.0050432409916538745,
+      "median_cpu_seconds": 0.0,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 804,
+        "entry_evaluations": 8668824,
+        "kernel_generation_seconds": 0.02473143840325065
+      },
+      "named_context_and_action_peak_bytes": 168280,
+      "phase_named_peaks": {
+        "context": 28848,
+        "Gram_diagonal_indices": 81880,
+        "generated_tile": 81736,
+        "product_promotion": 168280,
+        "FP64_dot": 125080
+      },
+      "traced_context_and_action_peak_bytes": 170468,
+      "audited_tile_conversion_peak_bytes": 129816,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "cdist64_exp32_acc64",
+      "n": 1202,
+      "dimension": 5,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "setup_seconds": 9.475013939663768e-06,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 0,
+      "rows_per_tile": 9,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 129816,
+      "output_vector_bytes": 9616,
+      "common_immutable_feature_and_input_bytes": 57696,
+      "error_over_rhs_norm": 0.0003731174580337845,
+      "relative_product_error": 0.00040870610593301453,
+      "error_over_input_norm": 1.0221746615627772e-06,
+      "seconds": [
+        0.005828110006405041,
+        0.005830932990647852,
+        0.005807342997286469,
+        0.006034235004335642,
+        0.005926308978814632
+      ],
+      "cpu_seconds": [
+        0.010393899999999956,
+        0.010394699999999979,
+        0.010396400000000083,
+        0.010395000000000154,
+        0.010393899999999956
+      ],
+      "median_seconds": 0.005830932990647852,
+      "median_cpu_seconds": 0.010394699999999979,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 804,
+        "entry_evaluations": 8668824,
+        "kernel_generation_seconds": 0.029812519234837964
+      },
+      "named_context_and_action_peak_bytes": 139432,
+      "phase_named_peaks": {
+        "context": 0,
+        "distance_conversion": 139432,
+        "generated_tile": 52888,
+        "product_promotion": 139432,
+        "FP64_dot": 96232
+      },
+      "traced_context_and_action_peak_bytes": 141240,
+      "audited_tile_conversion_peak_bytes": 129816,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "Airfoil1202",
+      "mode": "direct32_acc64",
+      "n": 1202,
+      "dimension": 5,
+      "data_sha256": "73d1a5e1209f200d7c2dee1ca461b29b217b3d1bbdb32494fa63e10e507ed384",
+      "setup_seconds": 1.4618999557569623e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 24040,
+      "rows_per_tile": 9,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 129816,
+      "output_vector_bytes": 9616,
+      "common_immutable_feature_and_input_bytes": 57696,
+      "error_over_rhs_norm": 0.000490767621596682,
+      "relative_product_error": 0.0005375779643166022,
+      "error_over_input_norm": 1.3444833971455038e-06,
+      "seconds": [
+        0.010015183012001216,
+        0.010078689025249332,
+        0.0102112420136109,
+        0.010270747006870806,
+        0.01025077499798499
+      ],
+      "cpu_seconds": [
+        0.010394500000000084,
+        0.010394699999999979,
+        0.01039459999999992,
+        0.010394999999999932,
+        0.010395200000000049
+      ],
+      "median_seconds": 0.0102112420136109,
+      "median_cpu_seconds": 0.010394699999999979,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 804,
+        "entry_evaluations": 8668824,
+        "kernel_generation_seconds": 0.05506741636781953
+      },
+      "named_context_and_action_peak_bytes": 163472,
+      "phase_named_peaks": {
+        "context": 24040,
+        "direct_distance": 120200,
+        "generated_tile": 76928,
+        "product_promotion": 163472,
+        "FP64_dot": 120272
+      },
+      "traced_context_and_action_peak_bytes": 180700,
+      "audited_tile_conversion_peak_bytes": 129816,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "cdist64",
+      "n": 2048,
+      "dimension": 8,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "setup_seconds": 1.7838989151641726e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 0,
+      "rows_per_tile": 8,
+      "per_entry_tile_conversion_allowance": 8,
+      "maximum_tile_conversion_bytes": 131072,
+      "output_vector_bytes": 16384,
+      "common_immutable_feature_and_input_bytes": 147456,
+      "error_over_rhs_norm": 0.0,
+      "relative_product_error": 0.0,
+      "error_over_input_norm": 0.0,
+      "seconds": [
+        0.029063082009088248,
+        0.02925637600128539,
+        0.02967761902255006,
+        0.02949677998549305,
+        0.029763386002741754
+      ],
+      "cpu_seconds": [
+        0.031183999999999656,
+        0.031184000000000545,
+        0.031184099999999937,
+        0.031184300000000498,
+        0.03118339999999975
+      ],
+      "median_seconds": 0.02949677998549305,
+      "median_cpu_seconds": 0.031184000000000545,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 1536,
+        "entry_evaluations": 25165824,
+        "kernel_generation_seconds": 0.16835910905501805
+      },
+      "named_context_and_action_peak_bytes": 147520,
+      "phase_named_peaks": {
+        "context": 0,
+        "generated_tile": 147456,
+        "product_promotion": 147456,
+        "FP64_dot": 147520
+      },
+      "traced_context_and_action_peak_bytes": 149172,
+      "audited_tile_conversion_peak_bytes": 131072,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "gram32_acc64",
+      "n": 2048,
+      "dimension": 8,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "setup_seconds": 5.3230003686621785e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 73728,
+      "rows_per_tile": 5,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 122880,
+      "output_vector_bytes": 16384,
+      "common_immutable_feature_and_input_bytes": 147456,
+      "error_over_rhs_norm": 0.0001542811539981521,
+      "relative_product_error": 0.0001557985970109416,
+      "error_over_input_norm": 1.7001349176991223e-06,
+      "seconds": [
+        0.017071427981136367,
+        0.01731230498990044,
+        0.017334903008304536,
+        0.01769375998992473,
+        0.01750824198825285
+      ],
+      "cpu_seconds": [
+        0.02078980000000019,
+        0.010396199999999745,
+        0.010394999999999932,
+        0.020790299999999817,
+        0.02078749999999996
+      ],
+      "median_seconds": 0.017334903008304536,
+      "median_cpu_seconds": 0.02078749999999996,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 2460,
+        "entry_evaluations": 25165824,
+        "kernel_generation_seconds": 0.08710032791714184
+      },
+      "named_context_and_action_peak_bytes": 212992,
+      "phase_named_peaks": {
+        "context": 73728,
+        "Gram_diagonal_indices": 131152,
+        "generated_tile": 131072,
+        "product_promotion": 212992,
+        "FP64_dot": 172072
+      },
+      "traced_context_and_action_peak_bytes": 215212,
+      "audited_tile_conversion_peak_bytes": 122880,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "cdist64_exp32_acc64",
+      "n": 2048,
+      "dimension": 8,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "setup_seconds": 2.504501026123762e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 0,
+      "rows_per_tile": 5,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 122880,
+      "output_vector_bytes": 16384,
+      "common_immutable_feature_and_input_bytes": 147456,
+      "error_over_rhs_norm": 0.0001443930508680758,
+      "relative_product_error": 0.00014581323875529983,
+      "error_over_input_norm": 1.5911708027336996e-06,
+      "seconds": [
+        0.020644269010517746,
+        0.02130626401049085,
+        0.02102688400191255,
+        0.021023665001848713,
+        0.021024497982580215
+      ],
+      "cpu_seconds": [
+        0.020789299999999677,
+        0.020791000000000004,
+        0.020789300000000566,
+        0.020790200000000425,
+        0.020789399999999958
+      ],
+      "median_seconds": 0.021024497982580215,
+      "median_cpu_seconds": 0.020789399999999958,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 2460,
+        "entry_evaluations": 25165824,
+        "kernel_generation_seconds": 0.10856641668942757
+      },
+      "named_context_and_action_peak_bytes": 139264,
+      "phase_named_peaks": {
+        "context": 0,
+        "distance_conversion": 139264,
+        "generated_tile": 57344,
+        "product_promotion": 139264,
+        "FP64_dot": 98344
+      },
+      "traced_context_and_action_peak_bytes": 141104,
+      "audited_tile_conversion_peak_bytes": 122880,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    },
+    {
+      "dataset": "smooth2048",
+      "mode": "direct32_acc64",
+      "n": 2048,
+      "dimension": 8,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "setup_seconds": 2.428400330245495e-05,
+      "setup_cpu_seconds": 0.0,
+      "additional_retained_feature_and_norm_bytes": 65536,
+      "rows_per_tile": 5,
+      "per_entry_tile_conversion_allowance": 12,
+      "maximum_tile_conversion_bytes": 122880,
+      "output_vector_bytes": 16384,
+      "common_immutable_feature_and_input_bytes": 147456,
+      "error_over_rhs_norm": 0.00015778770873823555,
+      "relative_product_error": 0.000159339640713879,
+      "error_over_input_norm": 1.7387761645393596e-06,
+      "seconds": [
+        0.04678864200832322,
+        0.0514028969919309,
+        0.05325473699485883,
+        0.05129063400090672,
+        0.051677405019290745
+      ],
+      "cpu_seconds": [
+        0.051974500000000035,
+        0.062366299999999875,
+        0.06180649999999943,
+        0.05197379999999985,
+        0.051976400000000034
+      ],
+      "median_seconds": 0.0514028969919309,
+      "median_cpu_seconds": 0.051976400000000034,
+      "measured_context_stats": {
+        "product_calls": 6,
+        "entry_query_calls": 0,
+        "kernel_blocks": 2460,
+        "entry_evaluations": 25165824,
+        "kernel_generation_seconds": 0.2825193659227807
+      },
+      "named_context_and_action_peak_bytes": 204800,
+      "phase_named_peaks": {
+        "context": 65536,
+        "direct_distance": 163840,
+        "generated_tile": 122880,
+        "product_promotion": 204800,
+        "FP64_dot": 163880
+      },
+      "traced_context_and_action_peak_bytes": 232212,
+      "audited_tile_conversion_peak_bytes": 122880,
+      "audit_scope": "Separate untimed context creation plus one full product. Common original FP64 X/v allocated before trace. FP32 features/norms, one scratch distance tile, conversions, diagonal indices, output and dot-result arrays are included."
+    }
+  ],
+  "elapsed_wall_seconds": 6.103906155010918,
+  "elapsed_cpu_seconds": 5.3400322000000005,
+  "process_peak_rss_kib": 175400
+}

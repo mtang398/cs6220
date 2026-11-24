@@ -1,0 +1,206 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_streamed_block_jacobi_headroom.py": "ad67ce31badbed952d2e2c5d0a6d54a02ff0c5ac5d270444c2575e32bb97a5ae",
+    "scripts/check_full_aggregation_schur.py": "20e3b7042973b897d98f53d348b1340e6f70c9b0fb2e2f5b7fbfc21a15d016d0",
+    "scripts/check_pair_rotation_schur.py": "1235c9fc3bbc2da817f988ec7845adfb49350fce8c1ce233b02611159c2fb77b",
+    "scripts/check_large_core_exchange_oracle.py": "7857a8472a94ea6429787b059477a29956ff2e7b546c2b2530c50ad5c75b37d6",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "protocol": {
+    "question": "Can large blocks, enabled by sequential factor recomputation, beat a retained exact principal core even when all factor work is free?",
+    "blocks": "Balanced geometric partition with each block at most320. Exact inverse of original A diagonal blocks.",
+    "memory_planner": "One dense320x320 FP64 buffer + six n-vectors +64KiB reserve, at most1015808B for n2048. Diagnostic caches all factors and A; native peak memory not audited.",
+    "cost": "Candidate construction, factor work, and verification during iterations free. Charge one n-squared operator per step plus final verification. Compare exact416 Schur core with FPS, factor, boundary, iteration, final entries. Entry counts are not timings.",
+    "scope": "Static headroom gate only. Original relative residual1e-8;2000iterations;6CPU per solve. Does not implement BLOKS or adaptive block selection."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "group_sizes": [
+        292,
+        292,
+        293,
+        292,
+        293,
+        293,
+        293
+      ],
+      "candidate": {
+        "iterations": 1503,
+        "status": "cpu_cap",
+        "converged": false,
+        "original_relative_residual": 0.021285143449301144,
+        "free_factor_kernel_entries": 6308233216
+      },
+      "control": {
+        "iterations": 73,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 8.760237032279325e-09,
+        "exact_reduced_relative_residual": 8.757462850268787e-09,
+        "recursive_reduced_relative_residual": 8.757462853739984e-09,
+        "core_original_relative_residual": 8.70988782007102e-11,
+        "reduced_vs_transformed_original_residual_difference": 2.1164676923610186e-10,
+        "original_verification_products": 74,
+        "diagnostic_core_reconstructions": 74,
+        "diagnostic_Schur_products": 75,
+        "transition": {
+          "initial_original_relative_residual": 1.0,
+          "after_coarse_correction_relative_residual": 0.11801120282739867,
+          "correction_norm": 39885.57929907322,
+          "correction_energy": 31046.3467391658,
+          "correction_objective_decrease": 31046.346739493736,
+          "new_core_relative_residual": 6.697437400760414e-12,
+          "retained_transformed_tail_max_change": 0.0
+        },
+        "solution_sha256": "b2cf993b6164869b5413bd63d5beefc9203d16d4b0c15052a7503d05db722576",
+        "diagnostic_wall_seconds": 0.23885198397329077,
+        "diagnostic_cpu_seconds": 0.2506225999999998,
+        "Gaussian_entries": 300041936
+      },
+      "free_factor_entry_ratio": 21.02450510784599
+    },
+    {
+      "dataset": "mixed",
+      "n": 2048,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "group_sizes": [
+        292,
+        292,
+        293,
+        292,
+        293,
+        293,
+        293
+      ],
+      "candidate": {
+        "iterations": 1339,
+        "status": "cpu_cap",
+        "converged": false,
+        "original_relative_residual": 0.0154600133561038,
+        "free_factor_kernel_entries": 5620367360
+      },
+      "control": {
+        "iterations": 66,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 8.31823717496506e-09,
+        "exact_reduced_relative_residual": 8.318891157652704e-09,
+        "recursive_reduced_relative_residual": 8.318891147870848e-09,
+        "core_original_relative_residual": 1.5869707454886776e-11,
+        "reduced_vs_transformed_original_residual_difference": 4.826218085982253e-11,
+        "original_verification_products": 67,
+        "diagnostic_core_reconstructions": 67,
+        "diagnostic_Schur_products": 68,
+        "transition": {
+          "initial_original_relative_residual": 1.0,
+          "after_coarse_correction_relative_residual": 0.2244425303786328,
+          "correction_norm": 109630.43860723653,
+          "correction_energy": 810218.3776309938,
+          "correction_objective_decrease": 810218.3776313694,
+          "new_core_relative_residual": 1.6400511275604444e-11,
+          "retained_transformed_tail_max_change": 0.0
+        },
+        "solution_sha256": "ae9ea27deae6253aa834ae58d6f3f3124f9ab5a8fd7be60ddc3333c2e5a587f6",
+        "diagnostic_wall_seconds": 0.1992738189874217,
+        "diagnostic_cpu_seconds": 0.2083808999999981,
+        "Gaussian_entries": 271893200
+      },
+      "free_factor_entry_ratio": 20.671231792483226
+    },
+    {
+      "dataset": "Concrete",
+      "n": 824,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "group_sizes": [
+        274,
+        275,
+        275
+      ],
+      "candidate": {
+        "iterations": 2000,
+        "status": "maxiter",
+        "converged": false,
+        "original_relative_residual": 0.012015928455654544,
+        "free_factor_kernel_entries": 1358630976
+      },
+      "control": {
+        "iterations": 38,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 6.952623794004226e-09,
+        "exact_reduced_relative_residual": 6.955326058783201e-09,
+        "recursive_reduced_relative_residual": 6.955326079937627e-09,
+        "core_original_relative_residual": 9.650103503667725e-11,
+        "reduced_vs_transformed_original_residual_difference": 1.3982519251795743e-10,
+        "original_verification_products": 39,
+        "diagnostic_core_reconstructions": 39,
+        "diagnostic_Schur_products": 40,
+        "transition": {
+          "initial_original_relative_residual": 1.0,
+          "after_coarse_correction_relative_residual": 0.22020004416812572,
+          "correction_norm": 149445.85568298315,
+          "correction_energy": 213738.80603221327,
+          "correction_objective_decrease": 213738.80603282456,
+          "new_core_relative_residual": 3.506077811170276e-11,
+          "retained_transformed_tail_max_change": 0.0
+        },
+        "solution_sha256": "3458d89af4ccfe24b03c5e21d22c7e3469e311648da9c62c33029da72ce013c7",
+        "diagnostic_wall_seconds": 0.02306403301190585,
+        "diagnostic_cpu_seconds": 0.020839299999998673,
+        "Gaussian_entries": 20672912
+      },
+      "free_factor_entry_ratio": 65.72034825088986
+    },
+    {
+      "dataset": "Airfoil",
+      "n": 1202,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "group_sizes": [
+        300,
+        301,
+        300,
+        301
+      ],
+      "candidate": {
+        "iterations": 2000,
+        "status": "maxiter",
+        "converged": false,
+        "original_relative_residual": 0.12250796859698804,
+        "free_factor_kernel_entries": 2891052804
+      },
+      "control": {
+        "iterations": 27,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 9.456159477548889e-09,
+        "exact_reduced_relative_residual": 9.391246542311379e-09,
+        "recursive_reduced_relative_residual": 9.391246551563257e-09,
+        "core_original_relative_residual": 2.4080486187967905e-10,
+        "reduced_vs_transformed_original_residual_difference": 4.2519743588204646e-10,
+        "original_verification_products": 28,
+        "diagnostic_core_reconstructions": 28,
+        "diagnostic_Schur_products": 29,
+        "transition": {
+          "initial_original_relative_residual": 1.0,
+          "after_coarse_correction_relative_residual": 0.37801516090542353,
+          "correction_norm": 382923.4522475476,
+          "correction_energy": 982933.0441672306,
+          "correction_objective_decrease": 982933.0441327493,
+          "new_core_relative_residual": 6.353214545822857e-11,
+          "retained_transformed_tail_max_change": 0.0
+        },
+        "solution_sha256": "666109a5a12b4a88a3a0956c12e7a333c44c5ead3869548f4187344b31bde6cb",
+        "diagnostic_wall_seconds": 0.030590854003094137,
+        "diagnostic_cpu_seconds": 0.03126059999999953,
+        "Gaussian_entries": 37022720
+      },
+      "free_factor_entry_ratio": 78.08861164171623
+    }
+  ],
+  "elapsed_wall_seconds": 17.057021644024644,
+  "elapsed_cpu_seconds": 17.4284314
+}

@@ -1,0 +1,75 @@
+{
+  "status": "complete",
+  "protocol": {
+    "dataset": "smooth2048",
+    "regularization": 0.001,
+    "m": 416,
+    "blas_threads": 1,
+    "lock": "/tmp/cs6220-project-benchmark.lock",
+    "invocation": "benchmark.base.InplaceSchur = benchmark.UpperPacked; benchmark.base.allocation_audit(X,b,bw,416,.001)",
+    "scope": "One separate allocation audit only; no convergence or CPU benchmark rerun. Common immutable inputs loaded before tracing."
+  },
+  "sources": {
+    "scripts/benchmark_mixed_precision_refinement.py": "188fe76e3a2a1c90596a913f5c3d0c2aaca4f7ad36d6f01ae17824f0724bd12e",
+    "scripts/check_mixed_precision_refinement.py": "cbea0cf7ffb62b69a831fe6ed044967277168b68a13bc065a88fbdc888a1d647",
+    "scripts/check_packed_schur_feasibility.py": "7b853198fd2476504a40cfeb7dc9d9a3f68e5e5b2a66454580e3119ab1c519ac",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+  "audit": {
+    "named": {
+      "named_peak_bytes": 978288,
+      "peak_with_reserve_bytes": 1043824,
+      "reserve_bytes": 65536,
+      "phase_named_peaks": {
+        "selection": 36096,
+        "packed_core_assembly": 743552,
+        "packed_cholesky": 714368,
+        "packed_rhs_solve": 786304,
+        "reduced_rhs": 977680,
+        "Schur_first_pass": 974776,
+        "Schur_vector_update": 808320,
+        "Schur_second_pass": 978288,
+        "reconstruct_cross": 975296,
+        "reconstruct_vector": 782208,
+        "full_verification": 975576
+      },
+      "phase_row_sizes": {
+        "reduced_rhs": [
+          66
+        ],
+        "Schur_first_pass": [
+          7
+        ],
+        "Schur_second_pass": [
+          46
+        ],
+        "reconstruct_cross": [
+          8
+        ],
+        "full_verification": [
+          11
+        ]
+      }
+    },
+    "tracemalloc_current_bytes": 813242,
+    "tracemalloc_peak_bytes": 997906,
+    "factor_trace": {
+      "earlier_peak": 758766,
+      "traced_before": 727798,
+      "traced_after": 727894,
+      "peak_extra_during_factorization": 560
+    },
+    "factor_alias": true,
+    "factor_same_object": true,
+    "core_rhs_alias": true,
+    "common_input_excluded_bytes": 147456,
+    "trace_within_1MiB": true,
+    "audit_scope": "Separate untimed setup+one Schur product+one reconstruction/full verification with steady CG vectors; common X/b allocated before trace. Native allocator/library allocations outside tracemalloc are not claimed measured."
+  },
+  "elapsed_wall_seconds": 0.17262547102291137,
+  "elapsed_cpu_seconds": 0.1764193,
+  "process_peak_rss_kib": 62180,
+  "tracemalloc_stopped": true,
+  "sources_unchanged_after_audit": true
+}

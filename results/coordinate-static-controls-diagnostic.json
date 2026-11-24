@@ -1,0 +1,1887 @@
+{
+  "status": "complete",
+  "scope": "Dense exploratory mechanism/memory controls, no production speed claim",
+  "protocol": {
+    "regularization": 0.001,
+    "landmarks": 16,
+    "block_size": 16,
+    "history_pairs": [
+      0,
+      8,
+      16
+    ],
+    "withinblock_pairs": 16,
+    "selection": "exact projected scalar greedy",
+    "projection": "cached first projection plus one reorthogonalization",
+    "retention": "combined block step",
+    "rtol": 1e-08,
+    "max_blocks": 10000,
+    "verification_interval": 50,
+    "query_budget": "ordinary fixed RP16 operator_applications*n; includes full verification cost",
+    "memory_rank_rule": "ceil(target_bytes/(8*n)); targets retained-only and retained+withinblock pairs",
+    "memory_scope": "actual static factor bytes recorded; static setup workspaces and ordinary work vectors not peak-matched",
+    "blas_threads": 1,
+    "cpu_limit_seconds": 67
+  },
+  "source_sha256": {
+    "scripts/check_coordinate_static_controls.py": "c52978f164f06f683a1c1c70e2ee8871d15c3017878eccff033084f8d0de8900",
+    "scripts/check_projected_coordinate_geometry.py": "c88c32848711008c6d6e826ccfd42bd2e912673137125b265192627871a0c47a",
+    "scripts/check_schur_fsai.py": "79a0e88ee4130901e9cb926c1450f6d6c65dc1b63a05b97a4dc0768d50c4e69c",
+    "scripts/check_projected_balancing.py": "e50b2c628939e456a05b6565d1a18b5da17676d56205b27bdb04d8cf0f5c7e28",
+    "src/nystrom_project/preconditioners.py": "86da13326a40c7f8c2aefdce86bfc8c655abd3ee4da76dcc8c511e2f413527a9",
+    "src/nystrom_project/numerics.py": "53022a2afffbb65fb01ff24b8a7ee3be1f16881455b641baccd4f1da2a2f1d23"
+  },
+  "cases": [
+    {
+      "dataset": "synthetic-n640-smooth",
+      "n": 512,
+      "fixed_rp16": {
+        "iterations": 149,
+        "converged": true,
+        "true_relative_residual": 5.265274710835817e-09,
+        "residual_replacements": 0,
+        "operator_applications": 157,
+        "breakdown": null
+      },
+      "sequential": [
+        {
+          "history_pairs": 0,
+          "block_size": 16,
+          "retention": "none_GBCD",
+          "blocks": 482,
+          "converged": true,
+          "true_relative_residual": 9.854880632077466e-09,
+          "stop_reason": "converged",
+          "column_queries": 7712,
+          "verification_matvecs": 10,
+          "column_equivalent_work": 12832,
+          "equivalent_full_entry_passes": 25.0625,
+          "query_budget": 80384,
+          "retained_coarse_and_history_bytes": 69632,
+          "temporary_withinblock_history_bytes": 131072,
+          "coarse_history_withinblock_target_bytes": 200704,
+          "retained_matched_rank": 17,
+          "peak_target_matched_rank": 49,
+          "additional_major_vector_workspace_bytes": 47616,
+          "max_projected_score_relative_error": 8.920245909665987e-15,
+          "residual_replacements": 0,
+          "exploratory_dense_wall_seconds": 0.6878505519998726,
+          "exploratory_cpu_seconds": 0.690857,
+          "timing_breakdown": {
+            "score_seconds": 0.2555289164884016,
+            "old_projection_seconds": 0.0,
+            "withinblock_projection_seconds": 0.14382571482565254,
+            "history_update_seconds": 0.10827227431582287,
+            "verification_seconds": 0.0024613499408587813
+          },
+          "progress": [
+            {
+              "block": 50,
+              "column_queries": 800,
+              "verification_matvecs": 1,
+              "true_relative_residual": 0.025493021213649623,
+              "recursive_gap": 3.5352808105967673e-13
+            },
+            {
+              "block": 100,
+              "column_queries": 1600,
+              "verification_matvecs": 2,
+              "true_relative_residual": 0.005976781266608859,
+              "recursive_gap": 4.5242537939714636e-13
+            },
+            {
+              "block": 150,
+              "column_queries": 2400,
+              "verification_matvecs": 3,
+              "true_relative_residual": 0.0009238753410775428,
+              "recursive_gap": 4.0819881849078903e-13
+            },
+            {
+              "block": 200,
+              "column_queries": 3200,
+              "verification_matvecs": 4,
+              "true_relative_residual": 0.00019155659785001898,
+              "recursive_gap": 4.795163882876676e-13
+            },
+            {
+              "block": 250,
+              "column_queries": 4000,
+              "verification_matvecs": 5,
+              "true_relative_residual": 3.413528578891291e-05,
+              "recursive_gap": 4.0613468134957554e-13
+            },
+            {
+              "block": 300,
+              "column_queries": 4800,
+              "verification_matvecs": 6,
+              "true_relative_residual": 5.9966348788898886e-06,
+              "recursive_gap": 4.1704173115049775e-13
+            },
+            {
+              "block": 350,
+              "column_queries": 5600,
+              "verification_matvecs": 7,
+              "true_relative_residual": 1.2838294686355867e-06,
+              "recursive_gap": 4.4971589068400213e-13
+            },
+            {
+              "block": 400,
+              "column_queries": 6400,
+              "verification_matvecs": 8,
+              "true_relative_residual": 1.96954577718766e-07,
+              "recursive_gap": 4.3530022735198786e-13
+            },
+            {
+              "block": 450,
+              "column_queries": 7200,
+              "verification_matvecs": 9,
+              "true_relative_residual": 3.445371418101569e-08,
+              "recursive_gap": 4.0329812316090506e-13
+            },
+            {
+              "block": 482,
+              "column_queries": 7712,
+              "verification_matvecs": 10,
+              "true_relative_residual": 9.854880632077466e-09,
+              "recursive_gap": 4.165559741387788e-13
+            }
+          ]
+        },
+        {
+          "history_pairs": 8,
+          "block_size": 16,
+          "retention": "combined_block_step",
+          "blocks": 408,
+          "converged": true,
+          "true_relative_residual": 8.286984348089351e-09,
+          "stop_reason": "converged",
+          "column_queries": 6528,
+          "verification_matvecs": 9,
+          "column_equivalent_work": 11136,
+          "equivalent_full_entry_passes": 21.75,
+          "query_budget": 80384,
+          "retained_coarse_and_history_bytes": 137152,
+          "temporary_withinblock_history_bytes": 131072,
+          "coarse_history_withinblock_target_bytes": 268224,
+          "retained_matched_rank": 34,
+          "peak_target_matched_rank": 66,
+          "additional_major_vector_workspace_bytes": 47616,
+          "max_projected_score_relative_error": 1.1673724736740869e-14,
+          "residual_replacements": 0,
+          "exploratory_dense_wall_seconds": 0.6719198729842901,
+          "exploratory_cpu_seconds": 0.6669252000000001,
+          "timing_breakdown": {
+            "score_seconds": 0.2384918030584231,
+            "old_projection_seconds": 0.1097958875761833,
+            "withinblock_projection_seconds": 0.10143334322492592,
+            "history_update_seconds": 0.0864861067966558,
+            "verification_seconds": 0.0023883210378699005
+          },
+          "progress": [
+            {
+              "block": 50,
+              "column_queries": 800,
+              "verification_matvecs": 1,
+              "true_relative_residual": 0.030336518213415258,
+              "recursive_gap": 4.586369640544898e-13
+            },
+            {
+              "block": 100,
+              "column_queries": 1600,
+              "verification_matvecs": 2,
+              "true_relative_residual": 0.003682903375889278,
+              "recursive_gap": 4.188708123236749e-13
+            },
+            {
+              "block": 150,
+              "column_queries": 2400,
+              "verification_matvecs": 3,
+              "true_relative_residual": 0.00043564533650492827,
+              "recursive_gap": 4.1801745117554645e-13
+            },
+            {
+              "block": 200,
+              "column_queries": 3200,
+              "verification_matvecs": 4,
+              "true_relative_residual": 6.56131473086815e-05,
+              "recursive_gap": 3.9250734157139296e-13
+            },
+            {
+              "block": 250,
+              "column_queries": 4000,
+              "verification_matvecs": 5,
+              "true_relative_residual": 8.999158729014177e-06,
+              "recursive_gap": 5.540894940948329e-13
+            },
+            {
+              "block": 300,
+              "column_queries": 4800,
+              "verification_matvecs": 6,
+              "true_relative_residual": 9.715240089032941e-07,
+              "recursive_gap": 3.9532068317246106e-13
+            },
+            {
+              "block": 350,
+              "column_queries": 5600,
+              "verification_matvecs": 7,
+              "true_relative_residual": 1.356398128753555e-07,
+              "recursive_gap": 4.322830448840248e-13
+            },
+            {
+              "block": 400,
+              "column_queries": 6400,
+              "verification_matvecs": 8,
+              "true_relative_residual": 1.3469843901711773e-08,
+              "recursive_gap": 4.0909434875353597e-13
+            },
+            {
+              "block": 408,
+              "column_queries": 6528,
+              "verification_matvecs": 9,
+              "true_relative_residual": 8.286984348089351e-09,
+              "recursive_gap": 4.841252924543625e-13
+            }
+          ]
+        },
+        {
+          "history_pairs": 16,
+          "block_size": 16,
+          "retention": "combined_block_step",
+          "blocks": 390,
+          "converged": true,
+          "true_relative_residual": 9.757019937469651e-09,
+          "stop_reason": "converged",
+          "column_queries": 6240,
+          "verification_matvecs": 8,
+          "column_equivalent_work": 10336,
+          "equivalent_full_entry_passes": 20.1875,
+          "query_budget": 80384,
+          "retained_coarse_and_history_bytes": 200704,
+          "temporary_withinblock_history_bytes": 131072,
+          "coarse_history_withinblock_target_bytes": 331776,
+          "retained_matched_rank": 49,
+          "peak_target_matched_rank": 81,
+          "additional_major_vector_workspace_bytes": 47616,
+          "max_projected_score_relative_error": 1.6014314166434e-14,
+          "residual_replacements": 0,
+          "exploratory_dense_wall_seconds": 0.7104533569945488,
+          "exploratory_cpu_seconds": 0.7060260999999999,
+          "timing_breakdown": {
+            "score_seconds": 0.24913256260333583,
+            "old_projection_seconds": 0.12626627914141864,
+            "withinblock_projection_seconds": 0.10018581568147056,
+            "history_update_seconds": 0.0877052883442957,
+            "verification_seconds": 0.0018790570029523224
+          },
+          "progress": [
+            {
+              "block": 50,
+              "column_queries": 800,
+              "verification_matvecs": 1,
+              "true_relative_residual": 0.02144470660236965,
+              "recursive_gap": 5.391347548281981e-13
+            },
+            {
+              "block": 100,
+              "column_queries": 1600,
+              "verification_matvecs": 2,
+              "true_relative_residual": 0.00361267731562869,
+              "recursive_gap": 4.2941926677495057e-13
+            },
+            {
+              "block": 150,
+              "column_queries": 2400,
+              "verification_matvecs": 3,
+              "true_relative_residual": 0.0003901864948378403,
+              "recursive_gap": 4.5172627451025617e-13
+            },
+            {
+              "block": 200,
+              "column_queries": 3200,
+              "verification_matvecs": 4,
+              "true_relative_residual": 3.516093884058987e-05,
+              "recursive_gap": 5.340909821232269e-13
+            },
+            {
+              "block": 250,
+              "column_queries": 4000,
+              "verification_matvecs": 5,
+              "true_relative_residual": 4.103630942440283e-06,
+              "recursive_gap": 6.19485805797909e-13
+            },
+            {
+              "block": 300,
+              "column_queries": 4800,
+              "verification_matvecs": 6,
+              "true_relative_residual": 4.778339967049455e-07,
+              "recursive_gap": 4.3661478001411525e-13
+            },
+            {
+              "block": 350,
+              "column_queries": 5600,
+              "verification_matvecs": 7,
+              "true_relative_residual": 6.990976806964407e-08,
+              "recursive_gap": 4.0826415678703827e-13
+            },
+            {
+              "block": 390,
+              "column_queries": 6240,
+              "verification_matvecs": 8,
+              "true_relative_residual": 9.757019937469651e-09,
+              "recursive_gap": 5.562488387390768e-13
+            }
+          ]
+        }
+      ],
+      "static_controls": [
+        {
+          "kind": "compact_rp",
+          "requested_rank": 17,
+          "effective_rank": 17,
+          "iterations": 141,
+          "converged": true,
+          "true_relative_residual": 9.702100917753593e-09,
+          "residual_replacements": 0,
+          "operator_applications": 149,
+          "breakdown": null,
+          "retained_factor_bytes": 69904,
+          "setup_kernel_column_queries": 17,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 149.033203125,
+          "exploratory_dense_solve_seconds": 0.022216540994122624,
+          "exploratory_solve_cpu_seconds": 0.01622279999999998,
+          "offline_setup_seconds": 0.003395945008378476,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 17,
+          "effective_rank": 17,
+          "iterations": 130,
+          "converged": true,
+          "true_relative_residual": 8.672476679906805e-09,
+          "residual_replacements": 0,
+          "operator_applications": 137,
+          "breakdown": null,
+          "retained_factor_bytes": 69768,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 139.0,
+          "exploratory_dense_solve_seconds": 0.02601085798232816,
+          "exploratory_solve_cpu_seconds": 0.029984800000000256,
+          "offline_setup_seconds": 0.011283297993941233,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 34,
+          "effective_rank": 34,
+          "iterations": 78,
+          "converged": true,
+          "true_relative_residual": 8.712099514271568e-09,
+          "residual_replacements": 0,
+          "operator_applications": 82,
+          "breakdown": null,
+          "retained_factor_bytes": 139808,
+          "setup_kernel_column_queries": 34,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 82.06640625,
+          "exploratory_dense_solve_seconds": 0.027981346007436514,
+          "exploratory_solve_cpu_seconds": 0.030037699999999834,
+          "offline_setup_seconds": 0.019837108004139736,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 34,
+          "effective_rank": 34,
+          "iterations": 71,
+          "converged": true,
+          "true_relative_residual": 7.729198842081945e-09,
+          "residual_replacements": 0,
+          "operator_applications": 75,
+          "breakdown": null,
+          "retained_factor_bytes": 139536,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 77.0,
+          "exploratory_dense_solve_seconds": 0.035886953002773225,
+          "exploratory_solve_cpu_seconds": 0.04012860000000007,
+          "offline_setup_seconds": 0.020422131987288594,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 49,
+          "effective_rank": 49,
+          "iterations": 55,
+          "converged": true,
+          "true_relative_residual": 9.921591501277077e-09,
+          "residual_replacements": 0,
+          "operator_applications": 58,
+          "breakdown": null,
+          "retained_factor_bytes": 201488,
+          "setup_kernel_column_queries": 49,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 58.095703125,
+          "exploratory_dense_solve_seconds": 0.035536473005777225,
+          "exploratory_solve_cpu_seconds": 0.04009060000000009,
+          "offline_setup_seconds": 0.01670841799932532,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 49,
+          "effective_rank": 49,
+          "iterations": 48,
+          "converged": true,
+          "true_relative_residual": 8.918569296243786e-09,
+          "residual_replacements": 0,
+          "operator_applications": 51,
+          "breakdown": null,
+          "retained_factor_bytes": 201096,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 53.0,
+          "exploratory_dense_solve_seconds": 0.007595647999551147,
+          "exploratory_solve_cpu_seconds": 0.0,
+          "offline_setup_seconds": 0.006755266978871077,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 66,
+          "effective_rank": 66,
+          "iterations": 40,
+          "converged": true,
+          "true_relative_residual": 8.442579461628823e-09,
+          "residual_replacements": 0,
+          "operator_applications": 42,
+          "breakdown": null,
+          "retained_factor_bytes": 271392,
+          "setup_kernel_column_queries": 66,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 42.12890625,
+          "exploratory_dense_solve_seconds": 0.013735593995079398,
+          "exploratory_solve_cpu_seconds": 0.020068499999999823,
+          "offline_setup_seconds": 0.026067565981065854,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 66,
+          "effective_rank": 66,
+          "iterations": 34,
+          "converged": true,
+          "true_relative_residual": 5.086366286189648e-09,
+          "residual_replacements": 0,
+          "operator_applications": 36,
+          "breakdown": null,
+          "retained_factor_bytes": 270864,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 38.0,
+          "exploratory_dense_solve_seconds": 0.026258864003466442,
+          "exploratory_solve_cpu_seconds": 0.020074600000000054,
+          "offline_setup_seconds": 0.04076545100542717,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 81,
+          "effective_rank": 81,
+          "iterations": 32,
+          "converged": true,
+          "true_relative_residual": 4.445327369385083e-09,
+          "residual_replacements": 0,
+          "operator_applications": 34,
+          "breakdown": null,
+          "retained_factor_bytes": 333072,
+          "setup_kernel_column_queries": 81,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 34.158203125,
+          "exploratory_dense_solve_seconds": 0.005733022000640631,
+          "exploratory_solve_cpu_seconds": 0.0,
+          "offline_setup_seconds": 0.04546977102290839,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 81,
+          "effective_rank": 81,
+          "iterations": 26,
+          "converged": true,
+          "true_relative_residual": 4.5932502333253984e-09,
+          "residual_replacements": 0,
+          "operator_applications": 28,
+          "breakdown": null,
+          "retained_factor_bytes": 332424,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 30.0,
+          "exploratory_dense_solve_seconds": 0.004097358003491536,
+          "exploratory_solve_cpu_seconds": 0.0,
+          "offline_setup_seconds": 0.011500888009322807,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        }
+      ]
+    },
+    {
+      "dataset": "concrete-observed",
+      "n": 824,
+      "fixed_rp16": {
+        "iterations": 291,
+        "converged": true,
+        "true_relative_residual": 6.329996164346407e-09,
+        "residual_replacements": 0,
+        "operator_applications": 306,
+        "breakdown": null
+      },
+      "sequential": [
+        {
+          "history_pairs": 0,
+          "block_size": 16,
+          "retention": "none_GBCD",
+          "blocks": 1046,
+          "converged": true,
+          "true_relative_residual": 9.004252260707262e-09,
+          "stop_reason": "converged",
+          "column_queries": 16736,
+          "verification_matvecs": 21,
+          "column_equivalent_work": 34040,
+          "equivalent_full_entry_passes": 41.310679611650485,
+          "query_budget": 252144,
+          "retained_coarse_and_history_bytes": 112064,
+          "temporary_withinblock_history_bytes": 213440,
+          "coarse_history_withinblock_target_bytes": 325504,
+          "retained_matched_rank": 17,
+          "peak_target_matched_rank": 50,
+          "additional_major_vector_workspace_bytes": 77568,
+          "max_projected_score_relative_error": 5.340867407736918e-14,
+          "residual_replacements": 0,
+          "exploratory_dense_wall_seconds": 1.6905298920173664,
+          "exploratory_cpu_seconds": 1.6973447,
+          "timing_breakdown": {
+            "score_seconds": 0.62187523097964,
+            "old_projection_seconds": 0.0,
+            "withinblock_projection_seconds": 0.36781583802076057,
+            "history_update_seconds": 0.2683431111217942,
+            "verification_seconds": 0.010159805009607226
+          },
+          "progress": [
+            {
+              "block": 50,
+              "column_queries": 800,
+              "verification_matvecs": 1,
+              "true_relative_residual": 0.20032730036227778,
+              "recursive_gap": 1.4346257698753167e-12
+            },
+            {
+              "block": 100,
+              "column_queries": 1600,
+              "verification_matvecs": 2,
+              "true_relative_residual": 0.07608247813974,
+              "recursive_gap": 1.6911112883738458e-12
+            },
+            {
+              "block": 150,
+              "column_queries": 2400,
+              "verification_matvecs": 3,
+              "true_relative_residual": 0.04037336700127002,
+              "recursive_gap": 1.7357241424901403e-12
+            },
+            {
+              "block": 200,
+              "column_queries": 3200,
+              "verification_matvecs": 4,
+              "true_relative_residual": 0.012822863865411302,
+              "recursive_gap": 1.8206186800475526e-12
+            },
+            {
+              "block": 250,
+              "column_queries": 4000,
+              "verification_matvecs": 5,
+              "true_relative_residual": 0.0051813636126904206,
+              "recursive_gap": 1.8510976575804333e-12
+            },
+            {
+              "block": 300,
+              "column_queries": 4800,
+              "verification_matvecs": 6,
+              "true_relative_residual": 0.0015482461396688217,
+              "recursive_gap": 1.773705934532406e-12
+            },
+            {
+              "block": 350,
+              "column_queries": 5600,
+              "verification_matvecs": 7,
+              "true_relative_residual": 0.0009317210183088685,
+              "recursive_gap": 2.2999237303351157e-12
+            },
+            {
+              "block": 400,
+              "column_queries": 6400,
+              "verification_matvecs": 8,
+              "true_relative_residual": 0.0003825461867533742,
+              "recursive_gap": 1.7805045895179872e-12
+            },
+            {
+              "block": 450,
+              "column_queries": 7200,
+              "verification_matvecs": 9,
+              "true_relative_residual": 0.00014223033784063155,
+              "recursive_gap": 1.766504522822641e-12
+            },
+            {
+              "block": 500,
+              "column_queries": 8000,
+              "verification_matvecs": 10,
+              "true_relative_residual": 7.020412776881477e-05,
+              "recursive_gap": 1.8567025700073913e-12
+            },
+            {
+              "block": 550,
+              "column_queries": 8800,
+              "verification_matvecs": 11,
+              "true_relative_residual": 2.547772028501544e-05,
+              "recursive_gap": 1.792207682725163e-12
+            },
+            {
+              "block": 600,
+              "column_queries": 9600,
+              "verification_matvecs": 12,
+              "true_relative_residual": 1.21726114934775e-05,
+              "recursive_gap": 1.8411325759848463e-12
+            },
+            {
+              "block": 650,
+              "column_queries": 10400,
+              "verification_matvecs": 13,
+              "true_relative_residual": 7.339909127343376e-06,
+              "recursive_gap": 1.7199453904955386e-12
+            },
+            {
+              "block": 700,
+              "column_queries": 11200,
+              "verification_matvecs": 14,
+              "true_relative_residual": 2.7501438391267983e-06,
+              "recursive_gap": 1.919924226698754e-12
+            },
+            {
+              "block": 750,
+              "column_queries": 12000,
+              "verification_matvecs": 15,
+              "true_relative_residual": 1.340901024145869e-06,
+              "recursive_gap": 1.787286420509691e-12
+            },
+            {
+              "block": 800,
+              "column_queries": 12800,
+              "verification_matvecs": 16,
+              "true_relative_residual": 4.719498199262887e-07,
+              "recursive_gap": 1.742681219998851e-12
+            },
+            {
+              "block": 850,
+              "column_queries": 13600,
+              "verification_matvecs": 17,
+              "true_relative_residual": 3.0838216246418927e-07,
+              "recursive_gap": 1.7905579938939777e-12
+            },
+            {
+              "block": 900,
+              "column_queries": 14400,
+              "verification_matvecs": 18,
+              "true_relative_residual": 1.0554199435218612e-07,
+              "recursive_gap": 1.716966993209841e-12
+            },
+            {
+              "block": 950,
+              "column_queries": 15200,
+              "verification_matvecs": 19,
+              "true_relative_residual": 5.9120335219507146e-08,
+              "recursive_gap": 2.003790033557858e-12
+            },
+            {
+              "block": 1000,
+              "column_queries": 16000,
+              "verification_matvecs": 20,
+              "true_relative_residual": 2.253822570765741e-08,
+              "recursive_gap": 1.8003089145873994e-12
+            },
+            {
+              "block": 1046,
+              "column_queries": 16736,
+              "verification_matvecs": 21,
+              "true_relative_residual": 9.004252260707262e-09,
+              "recursive_gap": 1.6520246590229089e-12
+            }
+          ]
+        },
+        {
+          "history_pairs": 8,
+          "block_size": 16,
+          "retention": "combined_block_step",
+          "blocks": 826,
+          "converged": true,
+          "true_relative_residual": 9.98582807564759e-09,
+          "stop_reason": "converged",
+          "column_queries": 13216,
+          "verification_matvecs": 17,
+          "column_equivalent_work": 27224,
+          "equivalent_full_entry_passes": 33.03883495145631,
+          "query_budget": 252144,
+          "retained_coarse_and_history_bytes": 222016,
+          "temporary_withinblock_history_bytes": 213440,
+          "coarse_history_withinblock_target_bytes": 435456,
+          "retained_matched_rank": 34,
+          "peak_target_matched_rank": 67,
+          "additional_major_vector_workspace_bytes": 77568,
+          "max_projected_score_relative_error": 2.4286241655131775e-13,
+          "residual_replacements": 0,
+          "exploratory_dense_wall_seconds": 1.6515574720106088,
+          "exploratory_cpu_seconds": 1.6542015,
+          "timing_breakdown": {
+            "score_seconds": 0.5766224082617555,
+            "old_projection_seconds": 0.26546171665540896,
+            "withinblock_projection_seconds": 0.25193582515930757,
+            "history_update_seconds": 0.212084824743215,
+            "verification_seconds": 0.00725588106433861
+          },
+          "progress": [
+            {
+              "block": 50,
+              "column_queries": 800,
+              "verification_matvecs": 1,
+              "true_relative_residual": 0.2747421002838637,
+              "recursive_gap": 1.5693860129538242e-12
+            },
+            {
+              "block": 100,
+              "column_queries": 1600,
+              "verification_matvecs": 2,
+              "true_relative_residual": 0.0611521945184591,
+              "recursive_gap": 1.6612923766628639e-12
+            },
+            {
+              "block": 150,
+              "column_queries": 2400,
+              "verification_matvecs": 3,
+              "true_relative_residual": 0.02545328655366939,
+              "recursive_gap": 1.8737925549267577e-12
+            },
+            {
+              "block": 200,
+              "column_queries": 3200,
+              "verification_matvecs": 4,
+              "true_relative_residual": 0.007656776873438752,
+              "recursive_gap": 1.7907018382939168e-12
+            },
+            {
+              "block": 250,
+              "column_queries": 4000,
+              "verification_matvecs": 5,
+              "true_relative_residual": 0.002473288732911778,
+              "recursive_gap": 1.9700429714645615e-12
+            },
+            {
+              "block": 300,
+              "column_queries": 4800,
+              "verification_matvecs": 6,
+              "true_relative_residual": 0.0006498770169679397,
+              "recursive_gap": 2.1667617847428137e-12
+            },
+            {
+              "block": 350,
+              "column_queries": 5600,
+              "verification_matvecs": 7,
+              "true_relative_residual": 0.00032243089475751354,
+              "recursive_gap": 1.7990689397248145e-12
+            },
+            {
+              "block": 400,
+              "column_queries": 6400,
+              "verification_matvecs": 8,
+              "true_relative_residual": 8.555559907552683e-05,
+              "recursive_gap": 1.8404833231570014e-12
+            },
+            {
+              "block": 450,
+              "column_queries": 7200,
+              "verification_matvecs": 9,
+              "true_relative_residual": 3.0420255063325116e-05,
+              "recursive_gap": 2.335358493402105e-12
+            },
+            {
+              "block": 500,
+              "column_queries": 8000,
+              "verification_matvecs": 10,
+              "true_relative_residual": 7.735697603037524e-06,
+              "recursive_gap": 1.8420011061217257e-12
+            },
+            {
+              "block": 550,
+              "column_queries": 8800,
+              "verification_matvecs": 11,
+              "true_relative_residual": 3.2976306686647534e-06,
+              "recursive_gap": 1.8074526787577273e-12
+            },
+            {
+              "block": 600,
+              "column_queries": 9600,
+              "verification_matvecs": 12,
+              "true_relative_residual": 1.0914820416399372e-06,
+              "recursive_gap": 1.821666837573784e-12
+            },
+            {
+              "block": 650,
+              "column_queries": 10400,
+              "verification_matvecs": 13,
+              "true_relative_residual": 3.359557718048475e-07,
+              "recursive_gap": 1.9790359184456172e-12
+            },
+            {
+              "block": 700,
+              "column_queries": 11200,
+              "verification_matvecs": 14,
+              "true_relative_residual": 1.2812291188848985e-07,
+              "recursive_gap": 2.0398416807818823e-12
+            },
+            {
+              "block": 750,
+              "column_queries": 12000,
+              "verification_matvecs": 15,
+              "true_relative_residual": 5.773489291824186e-08,
+              "recursive_gap": 1.9039291705539663e-12
+            },
+            {
+              "block": 800,
+              "column_queries": 12800,
+              "verification_matvecs": 16,
+              "true_relative_residual": 1.5516520296258907e-08,
+              "recursive_gap": 1.7027497311125138e-12
+            },
+            {
+              "block": 826,
+              "column_queries": 13216,
+              "verification_matvecs": 17,
+              "true_relative_residual": 9.98582807564759e-09,
+              "recursive_gap": 1.852828321129043e-12
+            }
+          ]
+        },
+        {
+          "history_pairs": 16,
+          "block_size": 16,
+          "retention": "combined_block_step",
+          "blocks": 781,
+          "converged": true,
+          "true_relative_residual": 9.965079692056706e-09,
+          "stop_reason": "converged",
+          "column_queries": 12496,
+          "verification_matvecs": 16,
+          "column_equivalent_work": 25680,
+          "equivalent_full_entry_passes": 31.16504854368932,
+          "query_budget": 252144,
+          "retained_coarse_and_history_bytes": 325504,
+          "temporary_withinblock_history_bytes": 213440,
+          "coarse_history_withinblock_target_bytes": 538944,
+          "retained_matched_rank": 50,
+          "peak_target_matched_rank": 82,
+          "additional_major_vector_workspace_bytes": 77568,
+          "max_projected_score_relative_error": 2.648485161544629e-13,
+          "residual_replacements": 0,
+          "exploratory_dense_wall_seconds": 1.7390383110032417,
+          "exploratory_cpu_seconds": 1.7491472999999997,
+          "timing_breakdown": {
+            "score_seconds": 0.6095954243792221,
+            "old_projection_seconds": 0.3279101536318194,
+            "withinblock_projection_seconds": 0.2539771331648808,
+            "history_update_seconds": 0.21166976625681855,
+            "verification_seconds": 0.00799236906459555
+          },
+          "progress": [
+            {
+              "block": 50,
+              "column_queries": 800,
+              "verification_matvecs": 1,
+              "true_relative_residual": 0.26501913811374117,
+              "recursive_gap": 1.2668717451547672e-12
+            },
+            {
+              "block": 100,
+              "column_queries": 1600,
+              "verification_matvecs": 2,
+              "true_relative_residual": 0.09877049299457163,
+              "recursive_gap": 1.663538548680444e-12
+            },
+            {
+              "block": 150,
+              "column_queries": 2400,
+              "verification_matvecs": 3,
+              "true_relative_residual": 0.020321111298740945,
+              "recursive_gap": 1.929610188880409e-12
+            },
+            {
+              "block": 200,
+              "column_queries": 3200,
+              "verification_matvecs": 4,
+              "true_relative_residual": 0.007508155700407135,
+              "recursive_gap": 1.929004794559223e-12
+            },
+            {
+              "block": 250,
+              "column_queries": 4000,
+              "verification_matvecs": 5,
+              "true_relative_residual": 0.0021770195282737282,
+              "recursive_gap": 1.8428280751296935e-12
+            },
+            {
+              "block": 300,
+              "column_queries": 4800,
+              "verification_matvecs": 6,
+              "true_relative_residual": 0.00071711232270201,
+              "recursive_gap": 1.7997895922619381e-12
+            },
+            {
+              "block": 350,
+              "column_queries": 5600,
+              "verification_matvecs": 7,
+              "true_relative_residual": 0.00023258964077395205,
+              "recursive_gap": 1.8914639075603693e-12
+            },
+            {
+              "block": 400,
+              "column_queries": 6400,
+              "verification_matvecs": 8,
+              "true_relative_residual": 6.780503657357601e-05,
+              "recursive_gap": 1.8182772003255028e-12
+            },
+            {
+              "block": 450,
+              "column_queries": 7200,
+              "verification_matvecs": 9,
+              "true_relative_residual": 2.077733343799724e-05,
+              "recursive_gap": 1.96549259850943e-12
+            },
+            {
+              "block": 500,
+              "column_queries": 8000,
+              "verification_matvecs": 10,
+              "true_relative_residual": 5.227361535940117e-06,
+              "recursive_gap": 1.896240279364105e-12
+            },
+            {
+              "block": 550,
+              "column_queries": 8800,
+              "verification_matvecs": 11,
+              "true_relative_residual": 2.3857882453660806e-06,
+              "recursive_gap": 2.338720216707015e-12
+            },
+            {
+              "block": 600,
+              "column_queries": 9600,
+              "verification_matvecs": 12,
+              "true_relative_residual": 7.547270148838284e-07,
+              "recursive_gap": 2.4236510162392044e-12
+            },
+            {
+              "block": 650,
+              "column_queries": 10400,
+              "verification_matvecs": 13,
+              "true_relative_residual": 2.131735988888138e-07,
+              "recursive_gap": 2.0928738439736665e-12
+            },
+            {
+              "block": 700,
+              "column_queries": 11200,
+              "verification_matvecs": 14,
+              "true_relative_residual": 9.137297206667784e-08,
+              "recursive_gap": 2.3824018975294295e-12
+            },
+            {
+              "block": 750,
+              "column_queries": 12000,
+              "verification_matvecs": 15,
+              "true_relative_residual": 2.731329362624421e-08,
+              "recursive_gap": 2.012194931510062e-12
+            },
+            {
+              "block": 781,
+              "column_queries": 12496,
+              "verification_matvecs": 16,
+              "true_relative_residual": 9.965079692056706e-09,
+              "recursive_gap": 2.245837884427455e-12
+            }
+          ]
+        }
+      ],
+      "static_controls": [
+        {
+          "kind": "compact_rp",
+          "requested_rank": 17,
+          "effective_rank": 17,
+          "iterations": 274,
+          "converged": true,
+          "true_relative_residual": 7.872430642461263e-09,
+          "residual_replacements": 0,
+          "operator_applications": 288,
+          "breakdown": null,
+          "retained_factor_bytes": 112336,
+          "setup_kernel_column_queries": 17,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 288.0206310679612,
+          "exploratory_dense_solve_seconds": 0.07792657701065764,
+          "exploratory_solve_cpu_seconds": 0.07446079999999888,
+          "offline_setup_seconds": 0.003041236021090299,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 17,
+          "effective_rank": 17,
+          "iterations": 267,
+          "converged": true,
+          "true_relative_residual": 8.741727048440291e-09,
+          "residual_replacements": 0,
+          "operator_applications": 281,
+          "breakdown": null,
+          "retained_factor_bytes": 112200,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 283.0,
+          "exploratory_dense_solve_seconds": 0.07779900101013482,
+          "exploratory_solve_cpu_seconds": 0.0805290000000003,
+          "offline_setup_seconds": 0.008719231991562992,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 34,
+          "effective_rank": 34,
+          "iterations": 171,
+          "converged": true,
+          "true_relative_residual": 9.778797326542604e-09,
+          "residual_replacements": 0,
+          "operator_applications": 180,
+          "breakdown": null,
+          "retained_factor_bytes": 224672,
+          "setup_kernel_column_queries": 34,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 180.04126213592232,
+          "exploratory_dense_solve_seconds": 0.052772407012525946,
+          "exploratory_solve_cpu_seconds": 0.06039249999999896,
+          "offline_setup_seconds": 0.012969825998879969,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 34,
+          "effective_rank": 34,
+          "iterations": 146,
+          "converged": true,
+          "true_relative_residual": 9.633326665408036e-09,
+          "residual_replacements": 0,
+          "operator_applications": 154,
+          "breakdown": null,
+          "retained_factor_bytes": 224400,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 156.0,
+          "exploratory_dense_solve_seconds": 0.04335447199991904,
+          "exploratory_solve_cpu_seconds": 0.040260500000000476,
+          "offline_setup_seconds": 0.021498305024579167,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 50,
+          "effective_rank": 50,
+          "iterations": 118,
+          "converged": true,
+          "true_relative_residual": 9.680689317069222e-09,
+          "residual_replacements": 0,
+          "operator_applications": 124,
+          "breakdown": null,
+          "retained_factor_bytes": 330400,
+          "setup_kernel_column_queries": 50,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 124.06067961165049,
+          "exploratory_dense_solve_seconds": 0.04036466000252403,
+          "exploratory_solve_cpu_seconds": 0.04026249999999898,
+          "offline_setup_seconds": 0.007862194994231686,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 50,
+          "effective_rank": 50,
+          "iterations": 100,
+          "converged": true,
+          "true_relative_residual": 9.436716535912592e-09,
+          "residual_replacements": 0,
+          "operator_applications": 105,
+          "breakdown": null,
+          "retained_factor_bytes": 330000,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 107.0,
+          "exploratory_dense_solve_seconds": 0.037557560979621485,
+          "exploratory_solve_cpu_seconds": 0.04026849999999982,
+          "offline_setup_seconds": 0.039649688987992704,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 67,
+          "effective_rank": 67,
+          "iterations": 84,
+          "converged": true,
+          "true_relative_residual": 8.632780053241442e-09,
+          "residual_replacements": 0,
+          "operator_applications": 89,
+          "breakdown": null,
+          "retained_factor_bytes": 442736,
+          "setup_kernel_column_queries": 67,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 89.08131067961165,
+          "exploratory_dense_solve_seconds": 0.024695416999747977,
+          "exploratory_solve_cpu_seconds": 0.020131700000000308,
+          "offline_setup_seconds": 0.046105934015940875,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 67,
+          "effective_rank": 67,
+          "iterations": 72,
+          "converged": true,
+          "true_relative_residual": 9.420231070594682e-09,
+          "residual_replacements": 0,
+          "operator_applications": 76,
+          "breakdown": null,
+          "retained_factor_bytes": 442200,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 78.0,
+          "exploratory_dense_solve_seconds": 0.03207750499132089,
+          "exploratory_solve_cpu_seconds": 0.0402629000000001,
+          "offline_setup_seconds": 0.037900144001469016,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 82,
+          "effective_rank": 82,
+          "iterations": 66,
+          "converged": true,
+          "true_relative_residual": 9.469235206562418e-09,
+          "residual_replacements": 0,
+          "operator_applications": 70,
+          "breakdown": null,
+          "retained_factor_bytes": 541856,
+          "setup_kernel_column_queries": 82,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 70.0995145631068,
+          "exploratory_dense_solve_seconds": 0.019939332007197663,
+          "exploratory_solve_cpu_seconds": 0.02013700000000007,
+          "offline_setup_seconds": 0.026089905004482716,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 82,
+          "effective_rank": 82,
+          "iterations": 54,
+          "converged": true,
+          "true_relative_residual": 9.063254283619072e-09,
+          "residual_replacements": 0,
+          "operator_applications": 57,
+          "breakdown": null,
+          "retained_factor_bytes": 541200,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 59.0,
+          "exploratory_dense_solve_seconds": 0.02032040699850768,
+          "exploratory_solve_cpu_seconds": 0.020142299999999835,
+          "offline_setup_seconds": 0.03205493901623413,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        }
+      ]
+    },
+    {
+      "dataset": "airfoil-observed",
+      "n": 1202,
+      "fixed_rp16": {
+        "iterations": 206,
+        "converged": true,
+        "true_relative_residual": 9.416942946639736e-09,
+        "residual_replacements": 0,
+        "operator_applications": 217,
+        "breakdown": null
+      },
+      "sequential": [
+        {
+          "history_pairs": 0,
+          "block_size": 16,
+          "retention": "none_GBCD",
+          "blocks": 882,
+          "converged": true,
+          "true_relative_residual": 9.074619792560142e-09,
+          "stop_reason": "converged",
+          "column_queries": 14112,
+          "verification_matvecs": 18,
+          "column_equivalent_work": 35748,
+          "equivalent_full_entry_passes": 29.740432612312812,
+          "query_budget": 260834,
+          "retained_coarse_and_history_bytes": 163472,
+          "temporary_withinblock_history_bytes": 313232,
+          "coarse_history_withinblock_target_bytes": 476704,
+          "retained_matched_rank": 17,
+          "peak_target_matched_rank": 50,
+          "additional_major_vector_workspace_bytes": 113856,
+          "max_projected_score_relative_error": 3.965907841539577e-14,
+          "residual_replacements": 0,
+          "exploratory_dense_wall_seconds": 1.571604702010518,
+          "exploratory_cpu_seconds": 1.5812609000000002,
+          "timing_breakdown": {
+            "score_seconds": 0.5634362137934659,
+            "old_projection_seconds": 0.0,
+            "withinblock_projection_seconds": 0.3486035717651248,
+            "history_update_seconds": 0.23449862728011794,
+            "verification_seconds": 0.012562450981931761
+          },
+          "progress": [
+            {
+              "block": 50,
+              "column_queries": 800,
+              "verification_matvecs": 1,
+              "true_relative_residual": 0.3135021683969055,
+              "recursive_gap": 3.1776499887834405e-12
+            },
+            {
+              "block": 100,
+              "column_queries": 1600,
+              "verification_matvecs": 2,
+              "true_relative_residual": 0.07491550432140373,
+              "recursive_gap": 4.738019252489761e-12
+            },
+            {
+              "block": 150,
+              "column_queries": 2400,
+              "verification_matvecs": 3,
+              "true_relative_residual": 0.030330977605586666,
+              "recursive_gap": 4.515389302907377e-12
+            },
+            {
+              "block": 200,
+              "column_queries": 3200,
+              "verification_matvecs": 4,
+              "true_relative_residual": 0.010477642623785508,
+              "recursive_gap": 6.7689264536482885e-12
+            },
+            {
+              "block": 250,
+              "column_queries": 4000,
+              "verification_matvecs": 5,
+              "true_relative_residual": 0.0036102319491424163,
+              "recursive_gap": 4.426669054538171e-12
+            },
+            {
+              "block": 300,
+              "column_queries": 4800,
+              "verification_matvecs": 6,
+              "true_relative_residual": 0.0010103589568853264,
+              "recursive_gap": 5.893433939600698e-12
+            },
+            {
+              "block": 350,
+              "column_queries": 5600,
+              "verification_matvecs": 7,
+              "true_relative_residual": 0.0003418398749281207,
+              "recursive_gap": 4.72467197336414e-12
+            },
+            {
+              "block": 400,
+              "column_queries": 6400,
+              "verification_matvecs": 8,
+              "true_relative_residual": 0.00017182629927890998,
+              "recursive_gap": 5.098800339303321e-12
+            },
+            {
+              "block": 450,
+              "column_queries": 7200,
+              "verification_matvecs": 9,
+              "true_relative_residual": 5.245547480743161e-05,
+              "recursive_gap": 5.500569012542726e-12
+            },
+            {
+              "block": 500,
+              "column_queries": 8000,
+              "verification_matvecs": 10,
+              "true_relative_residual": 2.7379007536759262e-05,
+              "recursive_gap": 4.546280112403553e-12
+            },
+            {
+              "block": 550,
+              "column_queries": 8800,
+              "verification_matvecs": 11,
+              "true_relative_residual": 8.02479958197144e-06,
+              "recursive_gap": 6.837128709301655e-12
+            },
+            {
+              "block": 600,
+              "column_queries": 9600,
+              "verification_matvecs": 12,
+              "true_relative_residual": 3.559606020644808e-06,
+              "recursive_gap": 4.6291870120616515e-12
+            },
+            {
+              "block": 650,
+              "column_queries": 10400,
+              "verification_matvecs": 13,
+              "true_relative_residual": 1.0812467074480582e-06,
+              "recursive_gap": 4.827812742549728e-12
+            },
+            {
+              "block": 700,
+              "column_queries": 11200,
+              "verification_matvecs": 14,
+              "true_relative_residual": 3.7909019380652127e-07,
+              "recursive_gap": 4.502967774777387e-12
+            },
+            {
+              "block": 750,
+              "column_queries": 12000,
+              "verification_matvecs": 15,
+              "true_relative_residual": 1.492389187277211e-07,
+              "recursive_gap": 4.727861761219421e-12
+            },
+            {
+              "block": 800,
+              "column_queries": 12800,
+              "verification_matvecs": 16,
+              "true_relative_residual": 5.5935100558857075e-08,
+              "recursive_gap": 5.30247154316997e-12
+            },
+            {
+              "block": 850,
+              "column_queries": 13600,
+              "verification_matvecs": 17,
+              "true_relative_residual": 2.0857919416760024e-08,
+              "recursive_gap": 4.400874407732855e-12
+            },
+            {
+              "block": 882,
+              "column_queries": 14112,
+              "verification_matvecs": 18,
+              "true_relative_residual": 9.074619792560142e-09,
+              "recursive_gap": 4.664853992126429e-12
+            }
+          ]
+        },
+        {
+          "history_pairs": 8,
+          "block_size": 16,
+          "retention": "combined_block_step",
+          "blocks": 841,
+          "converged": true,
+          "true_relative_residual": 9.473725463744883e-09,
+          "stop_reason": "converged",
+          "column_queries": 13456,
+          "verification_matvecs": 17,
+          "column_equivalent_work": 33890,
+          "equivalent_full_entry_passes": 28.19467554076539,
+          "query_budget": 260834,
+          "retained_coarse_and_history_bytes": 324832,
+          "temporary_withinblock_history_bytes": 313232,
+          "coarse_history_withinblock_target_bytes": 638064,
+          "retained_matched_rank": 34,
+          "peak_target_matched_rank": 67,
+          "additional_major_vector_workspace_bytes": 113856,
+          "max_projected_score_relative_error": 8.160949959880389e-14,
+          "residual_replacements": 0,
+          "exploratory_dense_wall_seconds": 1.973741389985662,
+          "exploratory_cpu_seconds": 1.9795553000000012,
+          "timing_breakdown": {
+            "score_seconds": 0.677011746331118,
+            "old_projection_seconds": 0.32517458067741245,
+            "withinblock_projection_seconds": 0.30183503741864115,
+            "history_update_seconds": 0.24010114461998455,
+            "verification_seconds": 0.011593408999033272
+          },
+          "progress": [
+            {
+              "block": 50,
+              "column_queries": 800,
+              "verification_matvecs": 1,
+              "true_relative_residual": 0.1983024538155038,
+              "recursive_gap": 6.9188936265394315e-12
+            },
+            {
+              "block": 100,
+              "column_queries": 1600,
+              "verification_matvecs": 2,
+              "true_relative_residual": 0.10251829068337896,
+              "recursive_gap": 4.6981766791531856e-12
+            },
+            {
+              "block": 150,
+              "column_queries": 2400,
+              "verification_matvecs": 3,
+              "true_relative_residual": 0.02997471793857188,
+              "recursive_gap": 4.568224723527231e-12
+            },
+            {
+              "block": 200,
+              "column_queries": 3200,
+              "verification_matvecs": 4,
+              "true_relative_residual": 0.007325427076727938,
+              "recursive_gap": 7.359179832172228e-12
+            },
+            {
+              "block": 250,
+              "column_queries": 4000,
+              "verification_matvecs": 5,
+              "true_relative_residual": 0.003407213701792385,
+              "recursive_gap": 5.97957920317715e-12
+            },
+            {
+              "block": 300,
+              "column_queries": 4800,
+              "verification_matvecs": 6,
+              "true_relative_residual": 0.0011575354147911842,
+              "recursive_gap": 5.125497158508839e-12
+            },
+            {
+              "block": 350,
+              "column_queries": 5600,
+              "verification_matvecs": 7,
+              "true_relative_residual": 0.0003870076557674548,
+              "recursive_gap": 4.765418903757436e-12
+            },
+            {
+              "block": 400,
+              "column_queries": 6400,
+              "verification_matvecs": 8,
+              "true_relative_residual": 0.00018098607922792807,
+              "recursive_gap": 4.672084532124948e-12
+            },
+            {
+              "block": 450,
+              "column_queries": 7200,
+              "verification_matvecs": 9,
+              "true_relative_residual": 5.376367089505566e-05,
+              "recursive_gap": 4.549663246605887e-12
+            },
+            {
+              "block": 500,
+              "column_queries": 8000,
+              "verification_matvecs": 10,
+              "true_relative_residual": 1.2649377246941024e-05,
+              "recursive_gap": 4.673763223202472e-12
+            },
+            {
+              "block": 550,
+              "column_queries": 8800,
+              "verification_matvecs": 11,
+              "true_relative_residual": 4.101428136367699e-06,
+              "recursive_gap": 5.381450678802338e-12
+            },
+            {
+              "block": 600,
+              "column_queries": 9600,
+              "verification_matvecs": 12,
+              "true_relative_residual": 1.7523627548946118e-06,
+              "recursive_gap": 4.77118243849362e-12
+            },
+            {
+              "block": 650,
+              "column_queries": 10400,
+              "verification_matvecs": 13,
+              "true_relative_residual": 5.756301060601287e-07,
+              "recursive_gap": 5.092759462749251e-12
+            },
+            {
+              "block": 700,
+              "column_queries": 11200,
+              "verification_matvecs": 14,
+              "true_relative_residual": 2.585197073933056e-07,
+              "recursive_gap": 4.470240112856135e-12
+            },
+            {
+              "block": 750,
+              "column_queries": 12000,
+              "verification_matvecs": 15,
+              "true_relative_residual": 1.1494329614147322e-07,
+              "recursive_gap": 5.662076464714723e-12
+            },
+            {
+              "block": 800,
+              "column_queries": 12800,
+              "verification_matvecs": 16,
+              "true_relative_residual": 2.7441309301943214e-08,
+              "recursive_gap": 5.0932034571374504e-12
+            },
+            {
+              "block": 841,
+              "column_queries": 13456,
+              "verification_matvecs": 17,
+              "true_relative_residual": 9.473725463744883e-09,
+              "recursive_gap": 4.44750762504015e-12
+            }
+          ]
+        },
+        {
+          "history_pairs": 16,
+          "block_size": 16,
+          "retention": "combined_block_step",
+          "blocks": 821,
+          "converged": true,
+          "true_relative_residual": 9.552216953844748e-09,
+          "stop_reason": "converged",
+          "column_queries": 13136,
+          "verification_matvecs": 17,
+          "column_equivalent_work": 33570,
+          "equivalent_full_entry_passes": 27.92845257903494,
+          "query_budget": 260834,
+          "retained_coarse_and_history_bytes": 476704,
+          "temporary_withinblock_history_bytes": 313232,
+          "coarse_history_withinblock_target_bytes": 789936,
+          "retained_matched_rank": 50,
+          "peak_target_matched_rank": 83,
+          "additional_major_vector_workspace_bytes": 113856,
+          "max_projected_score_relative_error": 1.3808157106719197e-13,
+          "residual_replacements": 0,
+          "exploratory_dense_wall_seconds": 2.1780944250058383,
+          "exploratory_cpu_seconds": 2.1948179999999997,
+          "timing_breakdown": {
+            "score_seconds": 0.7487686890526675,
+            "old_projection_seconds": 0.4249506602063775,
+            "withinblock_projection_seconds": 0.3085750141181052,
+            "history_update_seconds": 0.250750021165004,
+            "verification_seconds": 0.012249958061147481
+          },
+          "progress": [
+            {
+              "block": 50,
+              "column_queries": 800,
+              "verification_matvecs": 1,
+              "true_relative_residual": 0.19931078512093703,
+              "recursive_gap": 3.398873596902375e-12
+            },
+            {
+              "block": 100,
+              "column_queries": 1600,
+              "verification_matvecs": 2,
+              "true_relative_residual": 0.07036053754629548,
+              "recursive_gap": 5.504250214600879e-12
+            },
+            {
+              "block": 150,
+              "column_queries": 2400,
+              "verification_matvecs": 3,
+              "true_relative_residual": 0.030667234197292278,
+              "recursive_gap": 7.498832677435414e-12
+            },
+            {
+              "block": 200,
+              "column_queries": 3200,
+              "verification_matvecs": 4,
+              "true_relative_residual": 0.005558643466789659,
+              "recursive_gap": 4.393029469371734e-12
+            },
+            {
+              "block": 250,
+              "column_queries": 4000,
+              "verification_matvecs": 5,
+              "true_relative_residual": 0.0034168610972819804,
+              "recursive_gap": 4.772603799738902e-12
+            },
+            {
+              "block": 300,
+              "column_queries": 4800,
+              "verification_matvecs": 6,
+              "true_relative_residual": 0.0008571820116836715,
+              "recursive_gap": 4.678767627919531e-12
+            },
+            {
+              "block": 350,
+              "column_queries": 5600,
+              "verification_matvecs": 7,
+              "true_relative_residual": 0.0003254780576674619,
+              "recursive_gap": 5.140126120586417e-12
+            },
+            {
+              "block": 400,
+              "column_queries": 6400,
+              "verification_matvecs": 8,
+              "true_relative_residual": 8.991365372621074e-05,
+              "recursive_gap": 4.8299671558341184e-12
+            },
+            {
+              "block": 450,
+              "column_queries": 7200,
+              "verification_matvecs": 9,
+              "true_relative_residual": 4.013796403413371e-05,
+              "recursive_gap": 5.944696887580881e-12
+            },
+            {
+              "block": 500,
+              "column_queries": 8000,
+              "verification_matvecs": 10,
+              "true_relative_residual": 1.1870520682760808e-05,
+              "recursive_gap": 6.3511895022796074e-12
+            },
+            {
+              "block": 550,
+              "column_queries": 8800,
+              "verification_matvecs": 11,
+              "true_relative_residual": 4.087654955988427e-06,
+              "recursive_gap": 4.539555354565284e-12
+            },
+            {
+              "block": 600,
+              "column_queries": 9600,
+              "verification_matvecs": 12,
+              "true_relative_residual": 1.8623421840249505e-06,
+              "recursive_gap": 4.471787915479394e-12
+            },
+            {
+              "block": 650,
+              "column_queries": 10400,
+              "verification_matvecs": 13,
+              "true_relative_residual": 5.55773245437075e-07,
+              "recursive_gap": 5.00445116584584e-12
+            },
+            {
+              "block": 700,
+              "column_queries": 11200,
+              "verification_matvecs": 14,
+              "true_relative_residual": 1.6237491746579569e-07,
+              "recursive_gap": 7.776599099288149e-12
+            },
+            {
+              "block": 750,
+              "column_queries": 12000,
+              "verification_matvecs": 15,
+              "true_relative_residual": 4.775992266803982e-08,
+              "recursive_gap": 4.720877816951498e-12
+            },
+            {
+              "block": 800,
+              "column_queries": 12800,
+              "verification_matvecs": 16,
+              "true_relative_residual": 1.9025234682491128e-08,
+              "recursive_gap": 5.162328721360013e-12
+            },
+            {
+              "block": 821,
+              "column_queries": 13136,
+              "verification_matvecs": 17,
+              "true_relative_residual": 9.552216953844748e-09,
+              "recursive_gap": 4.716963635766061e-12
+            }
+          ]
+        }
+      ],
+      "static_controls": [
+        {
+          "kind": "compact_rp",
+          "requested_rank": 17,
+          "effective_rank": 17,
+          "iterations": 189,
+          "converged": true,
+          "true_relative_residual": 8.85576058963003e-09,
+          "residual_replacements": 0,
+          "operator_applications": 199,
+          "breakdown": null,
+          "retained_factor_bytes": 163744,
+          "setup_kernel_column_queries": 17,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 199.01414309484193,
+          "exploratory_dense_solve_seconds": 0.10395368098397739,
+          "exploratory_solve_cpu_seconds": 0.10083799999999954,
+          "offline_setup_seconds": 0.0033959330176003277,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 17,
+          "effective_rank": 17,
+          "iterations": 175,
+          "converged": true,
+          "true_relative_residual": 8.53608384919591e-09,
+          "residual_replacements": 0,
+          "operator_applications": 184,
+          "breakdown": null,
+          "retained_factor_bytes": 163608,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 186.0,
+          "exploratory_dense_solve_seconds": 0.08776877497439273,
+          "exploratory_solve_cpu_seconds": 0.08066089999999981,
+          "offline_setup_seconds": 0.011165000003529713,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 34,
+          "effective_rank": 34,
+          "iterations": 93,
+          "converged": true,
+          "true_relative_residual": 8.691192055780658e-09,
+          "residual_replacements": 0,
+          "operator_applications": 98,
+          "breakdown": null,
+          "retained_factor_bytes": 327488,
+          "setup_kernel_column_queries": 34,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 98.02828618968385,
+          "exploratory_dense_solve_seconds": 0.0507567239983473,
+          "exploratory_solve_cpu_seconds": 0.05042059999999893,
+          "offline_setup_seconds": 0.007474424026440829,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 34,
+          "effective_rank": 34,
+          "iterations": 86,
+          "converged": true,
+          "true_relative_residual": 6.425419510684509e-09,
+          "residual_replacements": 0,
+          "operator_applications": 91,
+          "breakdown": null,
+          "retained_factor_bytes": 327216,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 93.0,
+          "exploratory_dense_solve_seconds": 0.05252959099016152,
+          "exploratory_solve_cpu_seconds": 0.05040879999999959,
+          "offline_setup_seconds": 0.0355702789966017,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 50,
+          "effective_rank": 50,
+          "iterations": 57,
+          "converged": true,
+          "true_relative_residual": 7.001404271463766e-09,
+          "residual_replacements": 0,
+          "operator_applications": 60,
+          "breakdown": null,
+          "retained_factor_bytes": 481600,
+          "setup_kernel_column_queries": 50,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 60.04159733777038,
+          "exploratory_dense_solve_seconds": 0.043688647012459114,
+          "exploratory_solve_cpu_seconds": 0.04033580000000114,
+          "offline_setup_seconds": 0.03256353200413287,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 50,
+          "effective_rank": 50,
+          "iterations": 49,
+          "converged": true,
+          "true_relative_residual": 5.681118709633977e-09,
+          "residual_replacements": 0,
+          "operator_applications": 52,
+          "breakdown": null,
+          "retained_factor_bytes": 481200,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 54.0,
+          "exploratory_dense_solve_seconds": 0.026346586004365236,
+          "exploratory_solve_cpu_seconds": 0.02018939999999958,
+          "offline_setup_seconds": 0.03031034200103022,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 67,
+          "effective_rank": 67,
+          "iterations": 36,
+          "converged": true,
+          "true_relative_residual": 5.436051709277385e-09,
+          "residual_replacements": 0,
+          "operator_applications": 38,
+          "breakdown": null,
+          "retained_factor_bytes": 645344,
+          "setup_kernel_column_queries": 67,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 38.05574043261231,
+          "exploratory_dense_solve_seconds": 0.023993619019165635,
+          "exploratory_solve_cpu_seconds": 0.020163999999999405,
+          "offline_setup_seconds": 0.02526583700091578,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 67,
+          "effective_rank": 67,
+          "iterations": 29,
+          "converged": true,
+          "true_relative_residual": 5.221893953249395e-09,
+          "residual_replacements": 0,
+          "operator_applications": 31,
+          "breakdown": null,
+          "retained_factor_bytes": 644808,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 33.0,
+          "exploratory_dense_solve_seconds": 0.01870249499916099,
+          "exploratory_solve_cpu_seconds": 0.02017260000000043,
+          "offline_setup_seconds": 0.04831002600258216,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "compact_rp",
+          "requested_rank": 83,
+          "effective_rank": 83,
+          "iterations": 23,
+          "converged": true,
+          "true_relative_residual": 8.675688246306407e-09,
+          "residual_replacements": 0,
+          "operator_applications": 25,
+          "breakdown": null,
+          "retained_factor_bytes": 799456,
+          "setup_kernel_column_queries": 83,
+          "setup_full_kernel_matmat_passes": 0,
+          "equivalent_full_entry_passes": 25.069051580698837,
+          "exploratory_dense_solve_seconds": 0.016053978994023055,
+          "exploratory_solve_cpu_seconds": 0.020170500000000757,
+          "offline_setup_seconds": 0.0397345410019625,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        },
+        {
+          "kind": "power_gaussian",
+          "requested_rank": 83,
+          "effective_rank": 83,
+          "iterations": 19,
+          "converged": true,
+          "true_relative_residual": 9.050173962799894e-09,
+          "residual_replacements": 0,
+          "operator_applications": 20,
+          "breakdown": null,
+          "retained_factor_bytes": 798792,
+          "setup_kernel_column_queries": 0,
+          "setup_full_kernel_matmat_passes": 2,
+          "equivalent_full_entry_passes": 22.0,
+          "exploratory_dense_solve_seconds": 0.011736837011994794,
+          "exploratory_solve_cpu_seconds": 0.01008679999999984,
+          "offline_setup_seconds": 0.044110063987318426,
+          "setup_note": "RP initialization uses real kernel columns; Gaussian power products use cached dense K; setup times are not production-comparable"
+        }
+      ]
+    }
+  ],
+  "score_check": {
+    "projected_scalar_score_max_relative_error": 3.1198733247477327e-16
+  },
+  "elapsed_wall_seconds": 16.61638696398586,
+  "elapsed_cpu_seconds": 15.1700185
+}

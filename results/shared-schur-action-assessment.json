@@ -1,0 +1,137 @@
+{
+  "scope": "Algebra, eight-step independent trajectory validation, and one-step resource feasibility only; no full race and no useful-method claim.",
+  "result_sha256": "476208e07a7c6273cee7b577a991c3712310266ff3a4afdce41d0d5d1ca70037",
+  "source_sha256": {
+    "scripts/check_shared_schur_action.py": "00d1d2ccae0c17c391c3d4ed6f8e76cf7856c060fb2d0c2d032b2c1154db4b2b",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "exact_schedule": [
+    "Order points as Smax followed by its complement Rmax. Each smaller selected set is a prefix S_m of Smax.",
+    "For every candidate, extend its tail direction by zeros on S_m. Form top F=L(L^T P_top)+K[Smax,Rmax]P_bottom using one shared cross-kernel pass; use the complete Fortran factor and full triangular BLAS.",
+    "Solve q_m=A[S_m,S_m]^-1 F[:m] with a full-length padded RHS: forward solve L, zero the tail after m, backward solve L^T. This produces the desired leading inverse and an exactly zero tail in exact arithmetic.",
+    "Form lifted D=P-E_Sm q_m. One shared K[Rmax,:]D pass plus lambda*P_bottom gives all bottom outputs. The top/middle outputs are F-L(L^T qpad_m); discard the selected prefix.",
+    "Each candidate then performs its ordinary independent scalar CG alpha/beta update. No mixing of search directions, delayed start, restart, or forecast pruning is required."
+  ],
+  "queried_entries_per_action": "M*(n-M)+n*(n-M)=n^2-M^2, independent of candidate count. This is equality of freshly generated kernel entries, not equality of CPU cost.",
+  "writer_schedule_relation": "The earlier n^2-m_min*M schedule is valid but regenerates M*(M-m_min) entries represented by the retained maximum core. The implemented schedule uses that core for the entire top-block action.",
+  "fair_controls": "A smaller-core or plain-CG singleton can use the same Lmax matrix-product representation and kernel schedule. The recorded singleton controls charge the maximum-core setup; natural-core controls also remain. Any future race must compare both.",
+  "prefix_validation": {
+    "generic_SPD_padded_solve_relative_errors": [
+      0.0,
+      1.192550808850333e-16,
+      6.829489696993896e-15,
+      2.47555933002412e-16
+    ],
+    "padded_tail_norms": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "padded_buffer_aliases": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "kernel_checks": [
+      {
+        "regularization": 0.001,
+        "action_relative_error": 1.836898376895162e-15,
+        "reduced_rhs_relative_error": 1.507904886594127e-15,
+        "prefix8_relative_errors": [
+          2.6014013856949125e-15,
+          2.411272425319324e-15,
+          6.61937835118377e-15,
+          8.03088362995685e-15,
+          8.787040507175552e-15,
+          1.5638253875600878e-14,
+          2.9044486381396404e-13,
+          3.1000600756369336e-12
+        ],
+        "queried_entries_per_joint_action": 1357,
+        "formula_entries": 1357,
+        "all_full_factor_BLAS_and_solve_buffers_alias": true
+      },
+      {
+        "regularization": 1e-05,
+        "action_relative_error": 2.9144116641324156e-15,
+        "reduced_rhs_relative_error": 8.156436866509324e-16,
+        "prefix8_relative_errors": [
+          9.30168804170842e-16,
+          1.921031268038451e-15,
+          5.41032058605358e-15,
+          9.897271470315795e-15,
+          1.423975188730111e-14,
+          9.57835267103253e-14,
+          1.3681587149198498e-12,
+          2.4438747673650743e-11
+        ],
+        "queried_entries_per_joint_action": 1357,
+        "formula_entries": 1357,
+        "all_full_factor_BLAS_and_solve_buffers_alias": true
+      }
+    ]
+  },
+  "native_pairs": [
+    {
+      "dataset": "synthetic-n640-smooth",
+      "candidates": [
+        256,
+        320
+      ],
+      "joint_step_seconds": 0.0019460380135569721,
+      "separate_shared_representation_step_seconds": 0.0034681420074775815,
+      "joint_entry_count": 159744,
+      "separate_entry_count": 319488,
+      "max_relative_difference_in_state_norms": 5.055955654142963e-13
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "candidates": [
+        0,
+        320
+      ],
+      "joint_step_seconds": 0.002217686007497832,
+      "separate_shared_representation_step_seconds": 0.0032607410103082657,
+      "joint_entry_count": 159744,
+      "separate_entry_count": 319488,
+      "max_relative_difference_in_state_norms": 7.212008767965017e-13
+    },
+    {
+      "dataset": "concrete-observed",
+      "candidates": [
+        256,
+        320
+      ],
+      "joint_step_seconds": 0.006038774008629844,
+      "separate_shared_representation_step_seconds": 0.022878651012433693,
+      "joint_entry_count": 576576,
+      "separate_entry_count": 1153152,
+      "max_relative_difference_in_state_norms": 6.899735582225768e-13
+    },
+    {
+      "dataset": "concrete-observed",
+      "candidates": [
+        0,
+        320
+      ],
+      "joint_step_seconds": 0.006010575976688415,
+      "separate_shared_representation_step_seconds": 0.012420568993547931,
+      "joint_entry_count": 576576,
+      "separate_entry_count": 1153152,
+      "max_relative_difference_in_state_norms": 3.971081582931535e-13
+    }
+  ],
+  "allocation": {
+    "max_named_peak_plus_reserve": 1044288,
+    "max_separate_tracemalloc_peak": 988778,
+    "all_traces_under_cap": true,
+    "all_core_buffers_alias": true,
+    "counted_objects": "One maximum Cholesky core, one permutation, ragged x/r/p for every branch, full stacked action/lifted buffers, padded core RHSs, packed feature rows/columns, one kernel tile, expression guards and64KiB reserve. Shared immutable X/b are separate; RSS is recorded but is not the1MiB array allowance.",
+    "limitation": "Only setup and one CG step were allocation-traced. A full race must separately validate reconstruction and literal original-kernel true-residual checks, with work arrays released or reused; no full-solve memory claim is made here."
+  },
+  "implementation_recommendation": "Keep the full maximum factor Fortran-contiguous. Use dtrmv on complete L with trans flags and solve_triangular on complete L with padded RHS; never pass strided leading factors to LAPACK. Batch only kernel tiles, preserve independent scalar CG states, expose maximum size and memory cap as runtime parameters. The existing SharedAction class already takes maximum as an argument; the frozen native wrapper intentionally uses320 and the inherited1MiB budget.",
+  "interpretation": "Kernel generation can be shared and the specified two branches fit the one-step1MiB allowance. Single observations contain timing noise and establish no solve speedup. The parent full-scope static comparison reports m320 strictly fewer iterations than either m256 or plain CG in all15 cases, so these portfolios have no observed first-completion selection headroom at1MiB. No full race is warranted on those cases.",
+  "elapsed_cpu_seconds": 0.7791871000000001
+}

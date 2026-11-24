@@ -1,0 +1,90 @@
+version: 0.4.0
+project:
+  title: Updating Nyström Preconditioners with Solver Residuals
+  short_name: cs6220-nystrom
+  root: .
+  success_condition: Reproducible end-to-end improvement from solve-adaptive fixed-total-memory
+    preconditioning over fair strong baselines, with mechanism evidence and multiple
+    budgets/regularization settings across synthetic and real datasets. No completion
+    for setup, code, or negative findings alone.
+target_venue:
+  name: Cornell CS 6220 course project
+  year: '2026'
+  mode: course_project
+stage:
+  current: method_revision
+  gate: 'ACTIVE: useful scientific result not yet achieved; initial implementation
+    and negative experiments are prerequisites only'
+  updated_at: '2026-11-24'
+artifacts:
+  proposal: proposal/proposal.tex
+  proposal_pdf: proposal/proposal.pdf
+  bibliography: proposal/references.bib
+  instructor_feedback: docs/instructor-feedback.txt
+  research_plan: docs/research-plan.txt
+  literature_notes: docs/iterativecur-notes.txt
+  experiment_protocol: docs/experiment-protocol.txt
+  implementation: src/nystrom_project/
+  tests: tests/
+  experiments: results/
+  implementation_checks: docs/implementation-checks.txt
+  results_report: docs/initial-results.tex
+  results_pdf: docs/initial-results.pdf
+  paired_analysis: results/initial-analysis.json
+  run_verification: results/verification.json
+  branch_verification: docs/branch-verification.txt
+  method_revision: docs/method-revision.json
+  coupling_diagnostic_note: docs/hierarchical-preconditioner-hypothesis.tex
+claims:
+- id: initial-time-comparison
+  statement: At k=16, lambda=1e-3, checkpoint 20, four candidates, residual exchanges
+    were slower than fixed PCG in all 20 paired workload-seed cases.
+  evidence: results/initial-analysis.json
+- id: initial-score-diagnostic
+  statement: All 60 inspected checkpoints reduced q; new-preconditioner branches had
+    larger squared energy errors at 5 and 10 iterations.
+  evidence: results/diagnostic-001.json
+experiments:
+- id: diagnostic-001
+  config: configs/diagnostic.json
+  status: complete
+  output: results/diagnostic-001.json
+- id: pilot-001
+  config: configs/pilot.json
+  status: complete
+  output: results/pilot-001/
+- id: initial-001
+  config: configs/initial.json
+  status: interrupted_at_wall_time_limit
+  output: results/initial-001/
+  completed_runs: 237
+  reason: 900-second batch allowance; one incomplete record preserved
+- id: initial-001-continuation
+  status: complete
+  completed_runs: 3
+  output: results/initial-001-continuation/
+  max_wall_seconds: 120
+- id: initial-comparison
+  status: complete
+  completed_runs: 240
+  config: configs/initial.json
+  output: results/initial-analysis.json
+  sources:
+  - results/initial-001/
+  - results/initial-001-continuation/
+reviews:
+- type: implementation and comparison audit
+  status: fixed and tested
+  artifact: docs/implementation-checks.txt
+- type: independent diagnostic check
+  status: complete
+  artifact: docs/branch-verification.txt
+- type: results report alignment and PDF layout
+  status: complete
+  artifact: docs/initial-results.pdf
+revision_ledger:
+  status: active
+  record: docs/method-revision.json
+  scientific_success_achieved: false
+submission_checks:
+  status: not_requested

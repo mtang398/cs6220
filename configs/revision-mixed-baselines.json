@@ -1,0 +1,24 @@
+{
+  "purpose": "Execution and baseline coverage for the originally planned mixed-eigenspace workload; exploratory single-repeat timings.",
+  "workloads": [{"dataset": "synthetic", "target": "mixed"}],
+  "synthetic_n": 640,
+  "seeds": [0],
+  "regularization": [0.1, 0.001, 0.00001],
+  "repetitions": 1,
+  "solver_defaults": {
+    "history_size": 1,
+    "checkpoint": 20,
+    "maxiter": 2500,
+    "rtol": 1e-8
+  },
+  "variants": [
+    {"id": "compact16", "method": "flex_compact", "rank": 16},
+    {"id": "compact32", "method": "flex_compact", "rank": 32},
+    {"id": "compact64", "method": "flex_compact", "rank": 64},
+    {"id": "power16", "method": "flex_power", "rank": 16},
+    {"id": "power32", "method": "flex_power", "rank": 32},
+    {"id": "power64", "method": "flex_power", "rank": 64}
+  ],
+  "max_wall_seconds": 175,
+  "run_timeout_seconds": 45
+}

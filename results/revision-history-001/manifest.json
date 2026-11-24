@@ -1,0 +1,105 @@
+{
+  "protocol": {
+    "purpose": "Diagnose frequent updates versus loss of old A-conjugacy; long-history cases are mechanism diagnostics, not fixed-storage performance claims.",
+    "workloads": [
+      {
+        "dataset": "synthetic",
+        "target": "smooth"
+      }
+    ],
+    "synthetic_n": 640,
+    "seeds": [
+      0
+    ],
+    "regularization": [
+      0.001
+    ],
+    "repetitions": 1,
+    "solver_defaults": {
+      "rank": 16,
+      "checkpoint": 20
+    },
+    "variants": [
+      {
+        "id": "fixed_h1",
+        "method": "flex_fixed",
+        "history_size": 1
+      },
+      {
+        "id": "energy_h1_once",
+        "method": "flex_energy",
+        "history_size": 1,
+        "candidate_count": 1,
+        "update_limit": 1
+      },
+      {
+        "id": "energy_h8_once",
+        "method": "flex_energy",
+        "history_size": 8,
+        "candidate_count": 1,
+        "update_limit": 1
+      },
+      {
+        "id": "direction_h8_once",
+        "method": "flex_direction_energy",
+        "history_size": 8,
+        "candidate_count": 1,
+        "update_limit": 1
+      },
+      {
+        "id": "fixed_h64",
+        "method": "flex_fixed",
+        "history_size": 64
+      },
+      {
+        "id": "energy_h64",
+        "method": "flex_energy",
+        "history_size": 64,
+        "candidate_count": 1
+      },
+      {
+        "id": "fixed_full",
+        "method": "flex_fixed",
+        "history_size": 512
+      },
+      {
+        "id": "energy_full",
+        "method": "flex_energy",
+        "history_size": 512,
+        "candidate_count": 1
+      }
+    ],
+    "max_wall_seconds": 300,
+    "run_timeout_seconds": 90
+  },
+  "status": "complete",
+  "source_sha256": {
+    "src/nystrom_project/__init__.py": "160f59e9dc27f2624dd9467757579e986251bd3804b7278e98355a9910564967",
+    "src/nystrom_project/benchmark.py": "7db234a0d6f0e1c3dab88b0fe4b66f19247220c612e9f5d0f86af0ae667df43d",
+    "src/nystrom_project/datasets.py": "c5bce3d8b80f4535c161f064e16250d77654276fb153bafb17c2791feefdb803",
+    "src/nystrom_project/diagnostics.py": "04080c2dfa3dfdf833f6003527dc23cf8ec686fbfad097fbd8aeebd306e1ff92",
+    "src/nystrom_project/exchange.py": "a75af2a4063e7d82cb76af036889fcabd77ad572603198b241908ca49e9868ca",
+    "src/nystrom_project/flexible.py": "96f496589036216bb2fa2d6dba27d81af57ec36c018b5cc0a4d7fbc542d59337",
+    "src/nystrom_project/numerics.py": "27015a3d96632e4547c6faaaa736eb387308cf98ad6020ee6c6d4ffe6f937a0d",
+    "src/nystrom_project/revisions.py": "921e2bca030aaba9f31ecb2c50eb4e465816e4746765b328aebe11f4fada1349",
+    "src/nystrom_project/solvers.py": "8e4f7c6b0ce9df20f4dedba3abd6f3f721ddd0b6398febb70869e9b5ec73274f",
+    "src/nystrom_project/sweep.py": "c41281181b31358910ec7c1b7386b0c349d7fabbcb3dfe100e6d1773850e175a",
+    "src/nystrom_project/worker.py": "03156abd8fd35015a63f063803228acf3097673b8f66fbca629f10bc2996120a"
+  },
+  "completed_runs": 8,
+  "python": "3.13.12 (main, Feb  4 2026, 09:25:39) [GCC 13.3.0]",
+  "platform": "Linux-5.15.167.4-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "order": [
+    "synthetic-n640-smooth-s0-lambda0.001-energy_h8_once-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-fixed_h64-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-direction_h8_once-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-fixed_full-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-energy_h64-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-fixed_h1-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-energy_h1_once-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-energy_full-r0"
+  ],
+  "failures": [],
+  "timing": "All setup, updates, kernel products and verification are inside worker solve time. Parent references and worker startup are outside.",
+  "elapsed_wall_seconds": 11.191784146998543
+}

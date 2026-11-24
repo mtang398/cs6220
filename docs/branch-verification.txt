@@ -1,0 +1,132 @@
+Branch diagnostic verification and interpretation
+2026-11-23
+
+Scope and evidence
+
+This is a bounded correctness/interpretation check of results/diagnostic-001.json,
+not a runtime experiment or a replacement for the timing campaign. No solver,
+numerical-core, result, or benchmark source was changed. Two small in-memory
+checks used one BLAS thread and the isolated cs6220-project-venv environment;
+the successful checks together took less than two seconds of command wall time.
+
+The recorded diagnostic contains 20 synthetic solves: smooth/random targets,
+five seeds, lambda in {1e-3, 1e-5}, 640 total examples, 512 training examples,
+k=16, checkpoints every 20 iterations, four sequential candidates, and at most
+three accepted checkpoints per solve. Branches start from the same iterate and
+both restart PCG with their respective fixed preconditioner. Diagnostic timing
+and dense references are excluded from production timing.
+
+Reading the actual results confirms:
+
+Horizon   Checkpoints   New energy lower   New energy higher   Median new/old
+5         60            0                  60                  1.0302935079
+10        60            0                  60                  1.0497617656
+20        60            24                 36                  1.0010963531
+
+These are ratios of squared A-norm errors, e^T A e, not ratios of A-norms.
+Checkpoints within one solve are dependent; the 60 checkpoints are not 60
+independent experimental replicates.
+
+Representative replay
+
+Case: synthetic, smooth target, seed 0, lambda=1e-3, first checkpoint at
+iteration 20. Prepared input:
+data/prepared/synthetic-n640-smooth-s0-lambda0.001.npz.
+The old and new index sets were read from the recorded checkpoint and also
+matched the sets produced by replaying initialization and the first exchange.
+Both preconditioners have numerical rank 16.
+
+Initial squared energy error: 655.0537407510336.
+
+Quantity                  Old preconditioner       New preconditioner
+q = r^T M^{-1} r           11132.406636334694        10796.329320180736
+Energy after 5 steps       385.8841017026084         440.5708373568058
+Energy after 10 steps      192.07789713099993        267.57811055673113
+Energy after 20 steps      72.2990050822016          53.86243860596029
+
+Replaying the stored PCG branch routine with the reproduced checkpoint states
+matched all six recorded energies exactly. The current solvers.py hash equals
+the diagnostic snapshot hash. numerics.py and diagnostics.py have changed since
+that snapshot (the original source ZIP remains preserved), but the reproduced
+indices, scores, and branch energies for this checkpoint are unchanged.
+
+Independent checks
+
+1. An independently assembled dense Gaussian kernel and direct Cholesky solve
+   reproduced the saved reference solution exactly in this check.
+2. Dense preconditioners formed from the represented basis/eigenvalues and
+   independently factored by Cholesky reproduced M^{-1}r with relative errors
+   5.92e-12 (old) and 5.99e-12 (new). This checks the inverse actually used by
+   the solver rather than a differently truncated pseudoinverse.
+3. A separate dense PCG calculation, with preconditioners constructed directly
+   as C solve(W,C^T)+lambda I, reproduced the short-horizon ordering: at 5 steps
+   old/new energies were 384.9453/440.5709, and at 10 steps 192.0665/267.5781.
+   At 20 steps they were 72.2427/49.1784, retaining this checkpoint's new-better
+   ordering but differing from the exact replay values. Algebraically equivalent
+   inverse/residual arithmetic changes finite-precision Krylov trajectories.
+   Thus this independent calculation verifies the qualitative mismatch, not
+   bitwise equality of long branch trajectories. The recorded source version
+   remains the definition of the reported measurements.
+4. The first restarted-PCG step has direction z=M^{-1}r and step length
+   alpha=(r^T z)/(z^T A z). Its exact squared-energy decrease is
+
+       Delta(M;r) = (r^T z)^2 / (z^T A z).
+
+   At this checkpoint, Delta_old=76.4474464033972 and
+   Delta_new=73.24543360706842. Directly measuring the energy changes after
+   one implemented step gives 76.44744640323358 and 73.24543360715359.
+   The decrease formula and measured changes agree to about 2e-10 absolute.
+
+Interpretation
+
+No branch-sign, restart-asymmetry, energy-definition, or inverse-application bug
+was found in the representative check. The new preconditioner tightens q while
+giving a worse first PCG step and worse 5-/10-step errors. This is direct evidence
+against using smaller q alone as a reliable short-horizon convergence criterion
+on these development cases. The existing 20-step results are mixed and the total
+time objective remains to be measured by the timing campaign.
+
+The inverse-ordering inequality is intact: q bounds the current squared energy
+error. Changing the preconditioner changes that bound, but does not change the
+current iterate or its true error. Subsequent improvement depends on the direction
+M^{-1}r and its A-curvature. Delta contains both the numerator q^2 and denominator
+z^T A z, whereas minimizing q alone does not control their ratio. Delta is also
+invariant under a positive scalar rescaling of the inverse preconditioner.
+
+The current diagnostic already controls restart loss when comparing the two
+preconditioners: both branches restart from the same x. Restart loss therefore
+cannot explain their difference. It can still contribute separately to an
+adaptive solver's total cost relative to uninterrupted fixed-preconditioner PCG.
+
+Smallest next discriminating diagnostic
+
+Keep the same dataset, seeds, column budget, tolerances, and accepted checkpoint
+locations. At each checkpoint, preserve the OLD PCG recurrence immediately
+before applying the proposed update, including x, recursive r, p, rho, and the
+fixed old preconditioner. Run three diagnostic branches for the existing
+5-/10-/20-step horizons:
+
+A. Continue the old recurrence without restarting or changing M.
+B. Restart from x using the old M and the directly checked residual.
+C. Restart from x using the proposed new M and the same checked residual.
+
+B versus C measures the effect of replacing columns conditional on restart;
+A versus B measures the cost of discarding the old recurrence. Record the true
+residual and squared energy error on all branches. These branches remain outside
+production timings. The current callback exposes x and preconditioners but not
+p/rho, so continuation requires a diagnostic-only recurrence snapshot rather
+than reconstructing or inventing the omitted state from x alone.
+
+Also record Delta_old and Delta_new at those checkpoints. This requires one
+additional A*z product per preconditioner being checked and no exact solution.
+Its agreement with first-step energy reduction is an algebraic identity; its
+ability to predict 5-/10-/20-step progress is a separate empirical question.
+
+If a later controlled selection experiment is warranted, a bounded option is to
+compare the existing q-selected candidate with the no-op using Delta before
+acceptance, while charging both additional A*z products. This tests whether
+requiring a larger first-step energy decrease repairs the observed mismatch. It is not a claim of a new
+method, and a better first step would not establish better multi-step convergence
+or lower total runtime. Scoring all k removals with additional full kernel
+matvecs would have a different cost and should not be called an inexpensive
+small-matrix exchange without measuring that work.

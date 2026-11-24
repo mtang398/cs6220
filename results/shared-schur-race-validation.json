@@ -1,0 +1,546 @@
+{
+  "status": "validated",
+  "source_sha256": {
+    "scripts/check_shared_schur_race.py": "aa3802aed7ccc08fc9ccfe10c4819cb8afc184c6a5cce5ea89ac110db95cdc9b",
+    "scripts/check_shared_schur_action.py": "00d1d2ccae0c17c391c3d4ed6f8e76cf7856c060fb2d0c2d032b2c1154db4b2b",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "protocol": {
+    "budget_bytes": 262144,
+    "reserve_bytes": 65536,
+    "maximum": 96,
+    "candidates": [
+      0,
+      96
+    ],
+    "datasets": [
+      "smooth",
+      "mixed",
+      "Concrete"
+    ],
+    "regularizations": [
+      0.001,
+      1e-05
+    ],
+    "seed": 0,
+    "repeats": 1,
+    "rtol": 1e-08,
+    "maxiter": 2500,
+    "per_run_cpu_cap": 8.0,
+    "terminal_verification_reserve_seconds": 0.2,
+    "global_cpu_cap": 90,
+    "blas_threads": 1,
+    "true_checks": "Every20steps for all branches and at own suspected convergence; literal original kernel entries. First certified branch wins, candidate order breaks simultaneous ties.",
+    "failure_policy": "Only a false suspected stop replaces that branch residual/direction. No pruning or other restarts.",
+    "controls": [
+      "natural_plain",
+      "natural_schur",
+      "shared_plain",
+      "shared_schur"
+    ],
+    "shared_cross_feature_column_chunk": 128,
+    "immutable_inputs": "Shared X/b additional to algorithm-owned arrays; temporary feature packs counted.",
+    "lock": "/tmp/cs6220-project-benchmark.lock",
+    "interpretation": "One native pilot, no confirmation seeds or novelty claim"
+  },
+  "runs": [],
+  "allocation_audits": [
+    {
+      "mode": "race",
+      "memory": {
+        "named_peak_bytes": 192064,
+        "peak_with_reserve_bytes": 257600,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 121344,
+          "full_factor_padded_leading_solve": 113920,
+          "shared_initial_rhs": 192064,
+          "initial_rhs_copy": 99072,
+          "shared_top_cross": 192016,
+          "shared_bottom_lifted": 189008,
+          "shared_final_arrays": 121344,
+          "CG_vector_update": 116480,
+          "verification_reconstruction_cross": 192016,
+          "literal_original_kernel_verification": 191648,
+          "original_residual_vector_update": 124672
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            116
+          ],
+          "shared_top_cross": [
+            61,
+            128
+          ],
+          "shared_bottom_lifted": [
+            17
+          ],
+          "verification_reconstruction_cross": [
+            61,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            18
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 203228,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8170031657921881,
+        0.21484981961438832
+      ],
+      "dataset": "smooth"
+    },
+    {
+      "mode": "natural_plain",
+      "memory": {
+        "named_peak_bytes": 188752,
+        "peak_with_reserve_bytes": 254288,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 188752,
+          "plain_operator_shift": 20480,
+          "CG_vector_update": 24576,
+          "natural_true_residual_update": 20480
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            42
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 192900,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8170031657921881
+      ],
+      "dataset": "smooth"
+    },
+    {
+      "mode": "natural_schur",
+      "memory": {
+        "named_peak_bytes": 191920,
+        "peak_with_reserve_bytes": 257456,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "core_rhs_solve": 96768,
+          "reduced_rhs": 191384,
+          "Schur_first_pass": 191920,
+          "Schur_vector_update": 99328,
+          "Schur_second_pass": 191184,
+          "CG_vector_update": 97792,
+          "reconstruct_cross": 190000,
+          "reconstruct_vector": 92672,
+          "full_verification": 190392,
+          "natural_true_residual_update": 100096,
+          "natural_order_true_residual": 100096
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            123
+          ],
+          "Schur_first_pass": [
+            22
+          ],
+          "Schur_second_pass": [
+            106
+          ],
+          "reconstruct_cross": [
+            22
+          ],
+          "full_verification": [
+            23
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 199727,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.2148498196146851
+      ],
+      "dataset": "smooth"
+    },
+    {
+      "mode": "shared_plain",
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 103168,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90880,
+          "shared_top_cross": 191984,
+          "shared_bottom_lifted": 190768,
+          "shared_final_arrays": 102400,
+          "CG_vector_update": 102400,
+          "literal_original_kernel_verification": 190000,
+          "original_residual_vector_update": 106496
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            78,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "literal_original_kernel_verification": [
+            22
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 199252,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8170031657921881
+      ],
+      "dataset": "smooth"
+    },
+    {
+      "mode": "shared_schur",
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_factor_padded_leading_solve": 96768,
+          "full_core_triangular_product": 100864,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90112,
+          "shared_top_cross": 191872,
+          "shared_bottom_lifted": 188464,
+          "shared_final_arrays": 100096,
+          "CG_vector_update": 98560,
+          "verification_reconstruction_cross": 191872,
+          "literal_original_kernel_verification": 191864,
+          "original_residual_vector_update": 104192
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            80,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "verification_reconstruction_cross": [
+            80,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            23
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 200660,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.21484981961437144
+      ],
+      "dataset": "smooth"
+    },
+    {
+      "mode": "race",
+      "memory": {
+        "named_peak_bytes": 192176,
+        "peak_with_reserve_bytes": 257712,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_core_triangular_product": 148800,
+          "full_factor_padded_leading_solve": 136384,
+          "shared_initial_rhs": 191920,
+          "initial_rhs_copy": 114048,
+          "shared_top_cross": 191904,
+          "shared_bottom_lifted": 192176,
+          "shared_final_arrays": 151296,
+          "CG_vector_update": 143936,
+          "verification_reconstruction_cross": 191904,
+          "literal_original_kernel_verification": 190640,
+          "original_residual_vector_update": 157120
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            107
+          ],
+          "shared_top_cross": [
+            36,
+            54
+          ],
+          "shared_bottom_lifted": [
+            7
+          ],
+          "verification_reconstruction_cross": [
+            36,
+            54
+          ],
+          "literal_original_kernel_verification": [
+            7
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 202440,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        1.2457372384100465,
+        0.8246775270684631
+      ],
+      "dataset": "Concrete"
+    },
+    {
+      "mode": "natural_plain",
+      "memory": {
+        "named_peak_bytes": 191368,
+        "peak_with_reserve_bytes": 256904,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 191368,
+          "plain_operator_shift": 32960,
+          "CG_vector_update": 39552,
+          "natural_true_residual_update": 32960
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            25
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 195188,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        1.2457372384100467
+      ],
+      "dataset": "Concrete"
+    },
+    {
+      "mode": "natural_schur",
+      "memory": {
+        "named_peak_bytes": 192320,
+        "peak_with_reserve_bytes": 257856,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "core_rhs_solve": 109248,
+          "reduced_rhs": 191336,
+          "Schur_first_pass": 191800,
+          "Schur_vector_update": 116800,
+          "Schur_second_pass": 191040,
+          "CG_vector_update": 115264,
+          "reconstruct_cross": 192320,
+          "reconstruct_vector": 105152,
+          "full_verification": 190176,
+          "natural_true_residual_update": 117568,
+          "natural_order_true_residual": 117568
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            117
+          ],
+          "Schur_first_pass": [
+            7
+          ],
+          "Schur_second_pass": [
+            88
+          ],
+          "reconstruct_cross": [
+            8
+          ],
+          "full_verification": [
+            12
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 199768,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8246775270684783
+      ],
+      "dataset": "Concrete"
+    },
+    {
+      "mode": "shared_plain",
+      "memory": {
+        "named_peak_bytes": 192104,
+        "peak_with_reserve_bytes": 257640,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_core_triangular_product": 118144,
+          "shared_initial_rhs": 192104,
+          "initial_rhs_copy": 100864,
+          "shared_top_cross": 191856,
+          "shared_bottom_lifted": 187352,
+          "shared_final_arrays": 119872,
+          "CG_vector_update": 119872,
+          "literal_original_kernel_verification": 186584,
+          "original_residual_vector_update": 126464
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            117
+          ],
+          "shared_top_cross": [
+            64,
+            94
+          ],
+          "shared_bottom_lifted": [
+            11
+          ],
+          "literal_original_kernel_verification": [
+            11
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 198992,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        1.2457372384100467
+      ],
+      "dataset": "Concrete"
+    },
+    {
+      "mode": "shared_schur",
+      "memory": {
+        "named_peak_bytes": 192104,
+        "peak_with_reserve_bytes": 257640,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_factor_padded_leading_solve": 109248,
+          "full_core_triangular_product": 115840,
+          "shared_initial_rhs": 192104,
+          "initial_rhs_copy": 100096,
+          "shared_top_cross": 191504,
+          "shared_bottom_lifted": 191712,
+          "shared_final_arrays": 117568,
+          "CG_vector_update": 116032,
+          "verification_reconstruction_cross": 191504,
+          "literal_original_kernel_verification": 190944,
+          "original_residual_vector_update": 124160
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            117
+          ],
+          "shared_top_cross": [
+            66,
+            97
+          ],
+          "shared_bottom_lifted": [
+            12
+          ],
+          "verification_reconstruction_cross": [
+            66,
+            97
+          ],
+          "literal_original_kernel_verification": [
+            12
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 200180,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8246775270683206
+      ],
+      "dataset": "Concrete"
+    }
+  ],
+  "tiny_full_reference": {
+    "n": 37,
+    "maximum": 9,
+    "checks": [
+      {
+        "iteration": 20,
+        "candidate_size": 0,
+        "original_relative_residual": 0.00869025864688971,
+        "literal_residual_relative_error": 4.664607809333785e-15
+      },
+      {
+        "iteration": 20,
+        "candidate_size": 9,
+        "original_relative_residual": 0.00203417431411637,
+        "literal_residual_relative_error": 1.0902540047049054e-14
+      },
+      {
+        "iteration": 31,
+        "candidate_size": 9,
+        "original_relative_residual": 8.981501850614379e-11,
+        "literal_residual_relative_error": 3.908598870936195e-15
+      }
+    ],
+    "winner_size": 9,
+    "iterations": 31,
+    "independent_branch_iterations": [
+      45,
+      31
+    ],
+    "solution_relative_error": 4.5772197806460946e-12,
+    "true_relative_residual": 8.981467037046295e-11,
+    "all_core_buffer_aliases": true
+  },
+  "elapsed_cpu_seconds": 0.24878909999999993,
+  "elapsed_wall_seconds": 0.38168842101003975
+}

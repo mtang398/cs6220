@@ -1,0 +1,301 @@
+{
+  "case": {
+    "dataset": "synthetic",
+    "seed": 0,
+    "target": "mixed",
+    "regularization": 0.1,
+    "synthetic_n": 640,
+    "n_train": 512,
+    "n_test": 128,
+    "bandwidth": 4.055322311617086,
+    "train_fraction": 0.8,
+    "preprocessing_seconds": 0.05483696298324503,
+    "reference_preparation_seconds": 0.007439737004460767,
+    "reference_solve_seconds": 0.006868641008622944,
+    "reference_relative_residual": 5.6570913402963257e-14,
+    "dataset_sha256": "270836f95751f133409e5fab6a8bbac2f588e34e98ac407842b005825ccafe4a",
+    "train_indices_sha256": "b1dc82426735e634156b2c210eba321d138bdd9ff6a1eebb7ef7b0e59040fa24",
+    "target_construction": {
+      "type": "mixture of training-kernel eigenspaces",
+      "descending_zero_based_bands": [
+        [
+          1,
+          9
+        ],
+        [
+          64,
+          72
+        ]
+      ],
+      "band_interval": "half-open",
+      "equal_training_squared_norm": true,
+      "zero_training_mean_per_component": true,
+      "coefficient_seed": [
+        0,
+        6220,
+        17
+      ],
+      "test_targets": "kernel eigenfunction extension from training inputs",
+      "offline_eigendecomposition": true,
+      "eigenvectors_available_to_solver": false
+    }
+  },
+  "options": {
+    "rank": 16,
+    "seed": 0,
+    "checkpoint": 20,
+    "candidate_count": 4,
+    "rtol": 1e-08,
+    "maxiter": 2500,
+    "block_size": 128,
+    "history_size": 1,
+    "method": "flex_compact"
+  },
+  "metrics": {
+    "method": "flex_compact",
+    "converged": true,
+    "iterations": 21,
+    "true_relative_residual": 7.744807303310854e-09,
+    "breakdown": null,
+    "total_seconds": 0.06537538801785558,
+    "setup_seconds": 0.0024147580261342227,
+    "initialization_included": true,
+    "preconditioner_seconds": 0.0005950439663138241,
+    "preconditioner_applications": 21,
+    "update_seconds": 0.0,
+    "projection_seconds": 0.00045134295942261815,
+    "diagnostic_seconds": 0.0,
+    "diagnostic_run": false,
+    "direction_matvecs": 21,
+    "verification_matvecs": 2,
+    "initial_residual_matvecs": 0,
+    "update_matvecs": 0,
+    "restarts": 0,
+    "history_budget": 1,
+    "reorthogonalize": true,
+    "max_retained_directions": 1,
+    "max_history_vectors": 2,
+    "max_history_bytes": 8200,
+    "max_preconditioner_state_bytes": 65792,
+    "max_combined_retained_bytes": 73992,
+    "projection_inner_products": 40,
+    "initial_indices": [
+      272,
+      433,
+      60,
+      374,
+      169,
+      51,
+      365,
+      462,
+      128,
+      484,
+      97,
+      74,
+      264,
+      182,
+      181,
+      439
+    ],
+    "final_indices": [
+      272,
+      433,
+      60,
+      374,
+      169,
+      51,
+      365,
+      462,
+      128,
+      484,
+      97,
+      74,
+      264,
+      182,
+      181,
+      439
+    ],
+    "effective_rank": 16,
+    "preconditioner_diagnostics": {},
+    "accepted_exchanges": 0,
+    "accepted_iterations": [],
+    "numerical_fallbacks": 0,
+    "numerical_rejections": 0,
+    "matvecs": 23,
+    "column_evaluations": 16,
+    "matvec_seconds": 0.05879389098845422,
+    "column_seconds": 0.0005553739611059427,
+    "update_attempts": 0,
+    "relative_solution_error": 5.056645279987571e-09,
+    "energy_error_squared": 9.753214444853173e-14,
+    "relative_prediction_difference": 8.823203408594945e-09,
+    "test_rmse": 0.779283393813402,
+    "reference_test_rmse": 0.779283395159731,
+    "peak_rss_before_bytes": 63930368,
+    "peak_rss_bytes": 67682304,
+    "incremental_peak_rss_bytes": 3751936,
+    "blas_threads": [
+      1,
+      1
+    ]
+  },
+  "history": [
+    {
+      "iteration": 0,
+      "recursive_relative_residual": 1.0,
+      "true_relative_residual": 1.0,
+      "history_size": 0
+    },
+    {
+      "iteration": 1,
+      "recursive_relative_residual": 2.1848602853172903,
+      "directions_used": 0,
+      "history_size": 1,
+      "predicted_energy_decrease": 911.1893879735842
+    },
+    {
+      "iteration": 2,
+      "recursive_relative_residual": 0.43325985869479994,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 1368.8796660044134
+    },
+    {
+      "iteration": 3,
+      "recursive_relative_residual": 0.09672269483819217,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 44.77931041297941
+    },
+    {
+      "iteration": 4,
+      "recursive_relative_residual": 0.06828723497831157,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 2.895726456976491
+    },
+    {
+      "iteration": 5,
+      "recursive_relative_residual": 0.04985137529479694,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 0.8319503573591742
+    },
+    {
+      "iteration": 6,
+      "recursive_relative_residual": 0.019647841832712985,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 0.45891071424421376
+    },
+    {
+      "iteration": 7,
+      "recursive_relative_residual": 0.00533256976360123,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 0.11806526073796263
+    },
+    {
+      "iteration": 8,
+      "recursive_relative_residual": 0.002596829570268318,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 0.014211722026169266
+    },
+    {
+      "iteration": 9,
+      "recursive_relative_residual": 0.0009741488458721572,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 0.00268341299817128
+    },
+    {
+      "iteration": 10,
+      "recursive_relative_residual": 0.0005677613812534801,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 0.00035927184230724043
+    },
+    {
+      "iteration": 11,
+      "recursive_relative_residual": 0.00019791691936298325,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 0.00017339684626038285
+    },
+    {
+      "iteration": 12,
+      "recursive_relative_residual": 7.23534899039138e-05,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 3.187304411274248e-05
+    },
+    {
+      "iteration": 13,
+      "recursive_relative_residual": 3.902078168025365e-05,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 5.021838068476417e-06
+    },
+    {
+      "iteration": 14,
+      "recursive_relative_residual": 1.3934481830710582e-05,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 1.34851922037969e-06
+    },
+    {
+      "iteration": 15,
+      "recursive_relative_residual": 6.052310513930576e-06,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 1.9123792873484715e-07
+    },
+    {
+      "iteration": 16,
+      "recursive_relative_residual": 3.3608458723765934e-06,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 4.9954714571667135e-09
+    },
+    {
+      "iteration": 17,
+      "recursive_relative_residual": 1.41364154160195e-06,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 1.0458050858386236e-08
+    },
+    {
+      "iteration": 18,
+      "recursive_relative_residual": 3.4842656385473076e-07,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 2.4008293572897625e-09
+    },
+    {
+      "iteration": 19,
+      "recursive_relative_residual": 1.0783718060119842e-07,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 1.9663863119510295e-10
+    },
+    {
+      "iteration": 20,
+      "recursive_relative_residual": 3.544759481169482e-08,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 1.5736099590748498e-11,
+      "true_relative_residual": 3.544758607397599e-08
+    },
+    {
+      "iteration": 21,
+      "recursive_relative_residual": 7.744809896844066e-09,
+      "directions_used": 1,
+      "history_size": 1,
+      "predicted_energy_decrease": 1.3178738385237844e-12,
+      "true_relative_residual": 7.744807303310854e-09
+    }
+  ],
+  "events": [],
+  "variant_id": "compact16"
+}

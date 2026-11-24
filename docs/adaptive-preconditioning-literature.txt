@@ -1,0 +1,2659 @@
+Targeted literature for fixed-budget, solve-adaptive kernel preconditioning
+Verified 2026-11-23. Scope: CPU solves of (K + lambda I)x = b on synthetic,
+Concrete and Airfoil data, retaining k actual kernel columns. This is a bounded
+primary-source search, not an exhaustive novelty review. Section/page anchors
+below refer to the linked versions; PDF pages count from 1.
+
+Main finding
+
+Changing a Nyström preconditioner within one solve already appears in sGDML.
+Flexible CG, deflation, and target-aware incomplete Cholesky are established.
+Among the inspected sources, none implements our particular combination of
+fixed-cardinality column exchange, selection using unresolved solve information,
+and preservation of useful conjugacy. That search result is not a novelty claim.
+The meaningful research question is whether this combination pays for itself in
+CPU time at a fixed retained-column budget across all three dataset families.
+
+The existing project results separate two failures. Restarting harms progress,
+but exchanged versus unchanged preconditioners with equal restarts also lost
+every 5- and 10-step branch comparison. Therefore changing the Krylov recurrence
+alone does not repair the selection objective. The checkpoint comparisons are
+dependent observations, not 60 independent experiments. Evidence:
+project/docs/branch-verification.txt and project/docs/initial-observations.tex.
+
+1. Same-solve adaptive Nyström: a direct precedent
+
+Chmiela et al., Accurate Global Machine Learning Force Fields for Molecules with
+Hundreds of Atoms, Science Advances 9(2), eadf0873 (2023).
+https://doi.org/10.1126/sciadv.adf0873
+https://arxiv.org/pdf/2209.14865v3
+Anchor: Appendix G(d), PDF p.15 (supplement p.4); Appendix F, PDF p.14.
+
+The solver monitors average residual progress over a rolling window. When
+progress stalls, it restarts CG from the current iterate and increases the
+number of inducing columns before restarting. Approximate ridge leverage scores
+select columns. This is adaptation during the same kernel solve, although the
+adaptation increases rank rather than exchanging columns under a fixed cap.
+
+Official implementation, linked from https://sgdml.org/, was inspected:
+https://github.com/stefanch/sGDML/blob/master/sgdml/solvers/iterative.py
+Anchors: lines 48–51 (window/threshold), 401 (leverage sampling), 614 (status),
+730–735 (trigger), 755–798 (restart/rebuild), as inspected on the date above.
+Current code uses a 100-step window, effectiveness threshold <=0, and increases
+the inducing-point count to ceil(1.2 times its old value). It resamples from
+current leverage scores and rebuilds. It explicitly leaves keeping the same
+number of points as future work. Do not attribute these implementation constants
+to a theorem. A capped, fixed-k rebuild triggered by stagnation would be our
+adaptation of this control, not an exact reproduction of their algorithm.
+
+2. Flexible CG: preserve directions when the preconditioner changes
+
+Notay, Flexible Conjugate Gradients, SIAM J. Sci. Comput. 22(4), 1444–1460 (2000).
+https://doi.org/10.1137/S1064827599362314
+Publisher abstract verified; implementation details below use accessible sources.
+
+Knyazev and Lashuk, Steepest Descent and Conjugate Gradient Methods with Variable
+Preconditioning, SIAM J. Matrix Anal. Appl. 29(4), 1267–1280.
+https://doi.org/10.1137/060675290
+https://arxiv.org/pdf/math/0605767
+Anchor: §1, Eq.(1.1)–(1.2), PDF p.2; §5 for worst-case results.
+
+With z_t=M_t^{-1}r_t and retained recent directions p_j,
+  p_t = z_t - sum_j p_j (p_j^T A z_t)/(p_j^T A p_j),
+  alpha_t = (r_t^T p_t)/(p_t^T A p_t).
+Cache p_j and A p_j, so orthogonalization needs inner products, not extra A
+applications. A fixed window m_t=min(t,m) satisfies their truncation condition.
+Full history gives the diagnostic reference; bounded history is the practical
+control. Uniformly bounded SPD preconditioners still permit variable-PCG
+worst cases as slow as steepest descent. Flexibility is not a convergence-speed
+guarantee for arbitrary column replacements.
+
+Independent official implementation:
+https://petsc.org/release/manualpages/KSP/KSPFCG/
+https://petsc.org/release/src/ksp/ksp/impls/fcg/fcg.c.html
+Anchors: KSPSolve_FCG, source lines 155–205; standard/Notay truncation options.
+PETSc explicitly stores search directions and their A-images. Allow about 2mn
+extra vector entries, and report this memory separately from k kernel columns.
+Use the same history allowance for fixed and adaptive preconditioners. Ordinary
+fixed-PCG beta=rho_new/rho_old cannot simply be retained across an arbitrary
+preconditioner replacement.
+
+3. Deflation/augmentation: a stronger control for restart damage
+
+Gaul, Gutknecht, Liesen and Nabben, A Framework for Deflated and Augmented Krylov
+Subspace Methods, SIAM J. Matrix Anal. Appl. 34(2), 495–518 (2013).
+https://doi.org/10.1137/110820713
+https://people.math.ethz.ch/~mhg/pub/defl-GGLN1-SIMAX.pdf
+Anchors: Theorem 3.2, Eq.(3.11), PDF p.7; §4, Eq.(4.1), PDF pp.9–11.
+
+For a full-rank saved subspace U and E=U^T A U, the standard coarse correction is
+  x <- x + U E^{-1} U^T r,
+  r <- r - A U E^{-1} U^T r.
+The deflated operator is (I-AU E^{-1}U^T)A. Equivalent augmentation preserves
+the space U while solving the remaining problem. This supplies a mathematically
+defined control for keeping useful spectral information across our checkpoints.
+Use a few saved directions or Ritz vectors and cache AU; do not merely restart
+with an improved x and call that recycling. Small eigenvalues are a common
+deflation target, but relevant modes are those of the preconditioned problem,
+not automatically the smallest eigenvectors of the unpreconditioned kernel.
+This method stores non-column vectors and has a different memory allocation.
+Its benefits cannot be attributed to better landmark selection.
+
+4. Predictive incomplete Cholesky: target-aware columns are established
+
+Bach and Jordan, Predictive Low-Rank Decomposition for Kernel Methods,
+ICML 2005, 33–40. DOI: 10.1145/1102351.1102356.
+https://icml.cc/Conferences/2005/proceedings/papers/005_Predictive_BachJordan.pdf
+Anchors: §3.2 Eq.(2), PDF p.4; §4.3 Eqs.(5)–(8), PDF pp.4–5;
+§5 and Figure 1, PDF pp.5–6.
+
+CSI minimizes
+  w_K tr(K-GG^T) + w_Y ||(I-QQ^T)Y||_F^2,
+where Q spans G, w_K=(1-kappa)/tr(K), w_Y=kappa/||Y||_F^2.
+For candidate residual Cholesky column g and h=(I-QQ^T)g, the exact addition
+gain is w_K||g||^2 + w_Y||Y^T h||^2/||h||^2. A look-ahead Cholesky factor estimates
+gains for unseen columns, avoiding evaluation of every full kernel column.
+The algorithm appends columns and uses fixed side information Y. It does not
+establish a PCG error reduction guarantee or a fixed-budget exchange rule.
+
+Strong control: initialize rank-k landmarks with CSI using Y=b and solve with
+the resulting fixed preconditioner. Rebuilding with Y=r_t is a clearly labeled
+residual-driven adaptation of CSI. It should be compared with static CSI;
+using a current residual as side information is not sufficient novelty alone.
+Preserve zero-gain/dependent-column checks when h nearly vanishes.
+
+5. Adaptive matrix-residual sampling is different from solve-residual sampling
+
+Wang and Zhang, Efficient Algorithms and Error Analysis for the Modified Nyström
+Method, AISTATS 2014, PMLR 33, 996–1004.
+https://proceedings.mlr.press/v33/wang14c.pdf
+Anchor: §4, Algorithms 1–2 and Theorem 3, PDF p.4.
+
+After selecting C, sample column j with probability proportional to
+||(I-CC^dagger)K(:,j)||^2. Additional rounds append columns. The approximation
+is modified Nyström, C(C^dagger K(C^dagger)^T)C^T, which differs from our
+C K[S,S]^dagger C^T. The guarantee concerns matrix approximation, not the
+current system residual r=b-Ax. It does not justify probabilities proportional
+to r_j^2 or fixed-budget swaps. IterativeCUR's analogous matrix-versus-solve
+distinction is already documented in project/docs/iterativecur-notes.txt.
+An exact matrix-residual selector is a useful small-instance diagnostic but
+must not be presented as a cheap matrix-free control without charging its cost.
+
+6. Spectral normalization: a cheap control using the same retained columns
+
+Frangella, Tropp and Udell, Randomized Nyström Preconditioning,
+SIAM J. Matrix Anal. Appl. 44(2), 718–752 (2023).
+https://doi.org/10.1137/21M1466244
+https://arxiv.org/pdf/2110.02820v2
+Anchors: Eq.(1.3), PDF p.2; §5.4.1–5.4.3, PDF pp.14–16.
+
+If Khat=U diag(theta) U^T, with theta_k the smallest retained eigenvalue, their
+preconditioner is
+  P = U diag((theta+lambda)/(theta_k+lambda)) U^T + I-UU^T.
+This changes the relative treatment of the retained space and its complement;
+it is not merely a scalar rescaling of our Khat+lambda I. Its inverse is cheap
+from the same factor's thin SVD. Test this fixed baseline before claiming an
+advantage from online column adaptation.
+
+Their adaptive choices double sketch rank until an estimated matrix error or
+theta_k/lambda criterion is met, or take the largest affordable rank. These are
+setup decisions, not residual-based within-solve exchanges. The stated random
+projection guarantees do not automatically transfer to RPCholesky columns.
+Applying the normalized formula to our same column factor is an empirical
+control, not a direct theorem-backed reproduction of Gaussian-sketch Nyström.
+
+7. AFN clarifies another meaning of adaptive
+
+Zhao, Xu, Huang, Chow and Xi, An Adaptive Factorized Nyström Preconditioner for
+Regularized Kernel Matrices, arXiv:2304.05460v2 (2024).
+https://arxiv.org/html/2304.05460v2
+Anchors: §3.2 Algorithms 2–3; §3.3 Algorithm 4; §4.5; §5 code links.
+
+AFN uses a landmark block factorization and a sparse approximate inverse for
+the remaining Schur complement. It estimates rank from a subsampled kernel,
+then chooses landmark points by farthest-point sampling (FPS). Its adaptivity
+addresses kernel parameters and numerical rank, not current linear residuals.
+FPS repeatedly selects the point farthest from its closest retained landmark;
+maintaining nearest distances costs O(dnk). FPS is an inexpensive geometric
+fixed-k initialization control. Full AFN carries sparse correction storage,
+so it is not an equal column-only-memory baseline.
+Official C test routines were verified through the GitHub connector:
+https://github.com/scalable-matrix/H2Pack/tree/AFN_precond/examples/AFN_precond
+The paper's prose capitalizes the branch differently; the linked URL above
+works and contains Nys_precond.c, test_Nys.c and test_AFN.c.
+
+Recommended first implementation comparisons (our synthesis)
+
+Keep the original fixed-k solve objective and all three dataset families.
+First separate mechanisms using the already verified checkpoints:
+  (a) unchanged preconditioner with continuous PCG;
+  (b) unchanged preconditioner with matched restarts;
+  (c) unchanged versus exchanged preconditioner with identical truncated FCG;
+  (d) a curvature-based exchange decision under that same FCG recurrence.
+Then compare total solves against fixed RPCholesky, same-factor normalized
+spectral preconditioning, fixed CSI, the existing BFGS control, and a bounded
+recycling/deflation control. FPS is an optional inexpensive static check.
+These controls explain gains; they do not replace the adaptive project.
+
+For a proposed next direction p, exact squared A-error decrease after line
+minimization is (r^T p)^2/(p^T A p). For a restarted step p=M^{-1}r this is
+the Delta score already checked in branch-verification.txt. It is invariant
+under scalar rescaling of M, unlike q=r^T M^{-1}r. Under FCG, score the actual
+A-orthogonalized p, not the unprojected z. The denominator requires A p;
+charging one or more full kernel products for each trial can erase a gain.
+One-step dominance also does not ensure better multi-step or total solve time.
+
+Plausible research direction, not an established result
+
+Study selection of actual columns for the part of the error that the current
+Krylov history has not removed. The joint mechanism would combine bounded
+A-orthogonalization with a fixed-cardinality exchange objective evaluated after
+that projection. Keep a no-exchange option. This differs substantively from
+blindly reducing the inverse quadratic form on the current residual, and from
+merely adding FCG to the original selector.
+
+A concrete first candidate is: form a small candidate pool using CSI-style
+innovation against a short history of normalized residual/slow-mode vectors;
+use cheap low-rank algebra to shortlist exchanges; compare the best proposal
+with no exchange using the actual projected one-step energy decrease. Candidate
+histories and any extra vectors must be counted. A shortlist chosen solely by
+the old q rule is a useful diagnostic gate, but it can miss every beneficial
+exchange and is not the final selection mechanism.
+
+The hard contribution would be a low-cost predictor of multi-step benefit and
+a retention rule that avoids destroying useful modes, while fitting the fixed
+column budget. Curvature scoring, CSI projection gains, flexible CG and
+deflation themselves are established ingredients. A claim of a new combined
+method requires additional nearest-neighbor checking after its exact rule is
+fixed, plus consistent end-to-end speed improvements with all selection,
+factor-update, orthogonalization, and verification work charged.
+
+Practical falsification: retain the 5/10/20-step branch measurements, add the
+actual projected direction score, and run the whole solve with true residual
+stopping on synthetic, Concrete and Airfoil. A method that wins only its own
+selection score, or only against restarted weak controls, has not met the
+project objective. No speedup or guarantee is claimed by this literature note.
+
+Follow-up: fixed-rank generalized Nyström / secant memory (2026-11-23)
+
+Scope of this follow-up: targeted primary-source checking for replacing some
+coordinate probes by current-solve directions. No implementation or numerical
+claim. Earlier candidate recommendations above are historical hypotheses;
+subsequent failed exchange diagnostics do not support their effectiveness.
+
+1. Exact-line-search SR1 is already linked to PCG.
+Forsgren and Odland, On exact linesearch quasi-Newton methods for minimizing a
+quadratic function, Computational Optimization and Applications 69 (2018),
+225–241, DOI 10.1007/s10589-017-9940-7.
+https://link.springer.com/article/10.1007/s10589-017-9940-7
+Inspected §4.1 (rank-one updates, including SR1), §5, and §6 (preconditioning).
+Their results establish equivalence of appropriate quasi-Newton directions
+with CG/PCG on a quadratic under exact line searches; classical SR1 is a
+member when its update is well defined. Thus an unevicted SR1 scheme taking
+p=M^{-1}r and exact line searches is an equivalence control, not an intrinsic
+acceleration mechanism. This statement does not cover arbitrary truncation,
+finite precision, skipped updates, or ordinary fixed-PCG beta formulas after
+arbitrary changes of M. Our lower-bound construction gives SPD by a stronger
+special structure than general SR1 enjoys.
+
+2. Fixed-memory CG curvature sampling predates this proposal.
+Morales and Nocedal, Automatic Preconditioning by Limited Memory Quasi-Newton
+Updating, SIAM Journal on Optimization 10(4) (2000), 1079–1096,
+DOI 10.1137/S1052623497327854.
+https://users.iems.northwestern.edu/~nocedal/PDFfiles/autoprecond.pdf
+Author PDF: §2, pp.3–5; sampling experiments pp.16–19; SAMPLE appendix
+pp.20–21 (PDF page numbers, distinct from journal pagination).
+They form limited-memory BFGS preconditioners from CG correction pairs and
+compare the last m pairs with approximately uniform temporal sampling. Their
+appendix keeps at most m pairs while choosing insertions/deletions. A concluding
+small-Rayleigh-quotient policy was also tested without consistent superiority.
+The inspected experiments use the collected preconditioner on later RHS or
+Newton systems. They do not establish our active same-solve generalized-
+Nyström replacement rule. Nevertheless, CG curvature reuse, limited memory,
+and selecting non-FIFO pairs cannot be claimed individually as new.
+
+3. Compact SR1 and FIFO deletion are established preconditioner machinery.
+Bergamaschi, Marín and Martínez, Compact Quasi-Newton Preconditioners for SPD
+linear systems, arXiv:2001.01062v1 (2020), inspected author manuscript.
+https://arxiv.org/html/2001.01062
+https://www.dmsa.unipd.it/~berga/Research/Recenti/bmm2019.pdf
+§3.3–3.5, PDF pp.9–10, Eqs.(3.17)–(3.19): compact inverse SR1 representation,
+small-denominator skip rule, and deletion of the oldest stored vector/core
+row and column. Updates occur before PCG solves successive Newton systems,
+not between iterations of the same fixed system. This supplies an established
+limited-memory control; their general SPD conditions are not needed to prove
+SPD of a shifted PSD Nyström approximation.
+
+4. Krylov Nyström preconditioning is already explicit in recent theory.
+Chen, Huber, Lin and Zaid, Preconditioning without a preconditioner using
+randomized block Krylov subspace methods, ETNA 65 (2026), 63–92,
+DOI 10.1553/etna_vol65s63.
+https://etna.ricam.oeaw.ac.at/vol.65.2026/pp63-92.dir/pp63-92.pdf
+§2.2.2 Eq.(2.3), printed p.67: generalized Nyström on
+V=[Ω,AΩ,...,A^{s-1}Ω], Ahat=AV(V^TAV)^dagger V^TA.
+§3.1 Theorem 3.3, p.69: augmented block CG with starting block [b,Ω]
+dominates a broad fixed-preconditioner class after comparable matrix loads.
+§3.2, p.70 explicitly limits the comparison: no corresponding dominance in
+scalar matrix-vector products or floating-point cost. The paper does not give
+our rank-k eviction policy. Its construction also generally accumulates block
+Krylov information rather than maintaining exactly k active probes.
+
+5. Nyström retaining history and secant information has direct prior art.
+Hu, Jiang, Lin, Wen and Yuan, Structured Quasi-Newton Methods for Optimization
+with Orthogonality Constraints, SISC 41(4) (2019), A2239–A2269,
+DOI 10.1137/18M121112X. Inspected arXiv:1809.00452v1 author PDF:
+https://math.berkeley.edu/~linlin/publications/QN_OPT.pdf
+§2.3, PDF pp.6–7, Eqs.(2.10)–(2.11): limited-memory Nyström approximation
+of an expensive operator part, with sketch space containing iterate history
+and optionally an operator image; preserving the secant subspace preserves
+the associated secant condition. This is orthogonality-constrained nonlinear
+optimization, not fixed-k kernel PCG. It rules out a broad claim that history-
+adapted or secant-preserving Nyström itself is new.
+
+Screened near miss: Lifshitz et al., L-SR1: Learned Symmetric-Rank-One
+Preconditioning, ICML 2026, https://proceedings.mlr.press/v306/lifshitz26a.html
+and https://arxiv.org/html/2508.12270v2 . §4 uses a learned nonlinear optimizer,
+a bounded FIFO buffer, and a PSD parameterization with a secant training
+penalty. It does not supply exact same-solve Nyström interpolation or our
+kernel-sketch replacement rule. “Learned” in that title means meta-training.
+
+Mechanism identities and limits (our algebraic synthesis, not novelty claims)
+
+For K>=0, Ω with nonsingular W=Ω^TKΩ, Y=KΩ, let Khat=YW^{-1}Y^T.
+Appending p gives u=(K-Khat)p and δ=p^Tu. If δ>0, then
+  Khat_new=Khat+uu^T/δ.
+For A=K+λI and M=Khat+λI, this is the standard direct SR1 secant update
+with y=Ap, s=p. It preserves 0<=Khat_new<=K and interpolates every retained
+probe. The denominator-zero case carries no new K-information and must be
+handled as a rank-deficiency case, not repaired by claiming a positive gain.
+
+If a retained p obeys Mp=Ap and p^Tr=0, then p^TA M^{-1}r=0. Thus retained
+secants encode conjugacy against the preconditioned residual. This alone does
+not establish conjugacy against evicted directions, a complete three-term
+recurrence, or faster convergence. Generic spectral compression also need
+not preserve individual secants unless those directions remain in its span.
+
+For an augmented sketch with inverse core G=W^{-1}, define
+  d_j=Y G e_j / sqrt(G_jj).
+Deleting probe j gives Khat_without_j=Khat_full-d_j d_j^T. Therefore its
+trace loss is ||d_j||^2 and its shifted logdet loss is
+  -log(1-d_j^T M_full^{-1}d_j), M_full=λI+Khat_full.
+These are elementary Schur-complement and determinant-lemma identities.
+Use trace(Khat) or logdet(M), not logdet(W): the latter depends arbitrarily
+on the scale of mixed coordinate and CG probes. Such global objectives
+still do not measure remaining solve error or preservation of recurrence.
+
+The defensible open question in this bounded search is whether a fixed total
+memory budget can be allocated between initial coordinate information and
+same-solve secants to improve end-to-end CPU solve time. The exact eviction
+rule, including which secants it must protect and when it accepts an update,
+would carry any contribution. First controls should separate no-eviction SR1
+equivalence, FIFO retention, uniform temporal retention, and invariant global
+trace/logdet selection. All comparisons must charge sketch/core maintenance,
+inverse application, and true-residual verification and retain synthetic,
+Concrete and Airfoil. Once probes become dense p vectors, the constraint is
+a fixed retained-sketch rank/memory budget; calling it fixed actual-column
+selection would misstate the method. No inspected source was the identical
+mixed-probe same-solve eviction scheme, but that is a bounded search result,
+not proof of novelty or practical usefulness.
+
+Concept check: compress during warm-up, freeze, restart (2026-11-23)
+
+Inspected scripts/check_probe_compression_restart.py and
+src/nystrom_project/learning.py read-only. Current mechanism: initialize from
+RPCholesky columns, append the SR1/Nyström innovation obtained from an existing
+solve product Kp=Ap−λp, truncate the augmented factor to rank k, repeat during
+a short initial solve phase, then freeze and restart. The prototype uses
+one-direction flexible orthogonalization during learning. The conceptual
+review does not assess the reported timing or iteration evidence.
+
+Two additional decisive primary sources:
+
+Tropp, Yurtsever, Udell and Cevher, Fixed-Rank Approximation of a
+Positive-Semidefinite Matrix from Streaming Data, NeurIPS 2017.
+https://proceedings.neurips.cc/paper_files/paper/2017/file/4558dbb6f6f8bb2e16d03b85bde76e2c-Paper.pdf
+§2 Eq.(2.7), PDF p.3, explicitly takes the best rank-r truncation of the full
+Nyström approximation. §3 Algorithm 3, pp.4–5, implements this using a thin
+factor SVD. Thus full-factor spectral truncation, rather than truncating the
+small Nyström core, is established. Their evolving-matrix, fixed independent
+sketch setting differs from our fixed matrix and solve-selected probes; their
+random-sketch error bounds do not automatically transfer to our adaptive loop.
+
+Huh, Cartis and Nakatsukasa, Adaptive LSQR Preconditioning from One Small
+Sketch, arXiv:2604.05065v1, 6 April 2026 (preprint).
+https://arxiv.org/html/2604.05065v1
+§3.2.1–3.2.2, Algorithm 1, and §5.1: APLICUR interleaves warm-started LSQR
+phases with IterativeCUR spectral-preconditioner refinement. The original
+sketch is reused; rank grows by additional rows/columns selected from the
+sketched matrix-approximation residual. It separately adapts rank and the
+update schedule. This is close prior art for the overall interleaving and
+restart story, but it does not use our fixed rank, free current-solve Kp
+observations, and repeated factor truncation. A broad novelty claim of first
+same-solve adaptive low-rank preconditioning would be incorrect.
+
+Concept verdict: revise framing and continue development. The method is
+coherent and relevant to the specific fixed-memory kernel-solve problem.
+Its mathematical primitives are established; no identical full loop was found
+in this targeted primary-source search. The remaining algorithmic distinction
+is current-solve acquisition and forgetting under a fixed sketch budget,
+followed by a transition to a fixed preconditioner. This is presently a modest
+method variation with development potential, not an established new class of
+Nyström or quasi-Newton method. Confidence is high on the component overlap,
+moderate on the absence of an identical complete loop.
+
+C1 — Scope/identity: dense learned probes replace actual coordinate columns.
+Smallest repair: call the main method fixed-rank/fixed-memory sketch learning;
+keep the final QR column-selection branch as a separate actual-column variant.
+
+C2 — Meaning of optimality: the SVD is optimal for the current rank-(k+1)
+surrogate, not for K itself or for the union of all previously observed
+directions. Repeated truncation has forgotten information. Smallest repair:
+state local surrogate optimality and describe the method as online compression.
+
+C3 — Causal claim: rank truncation can alter the fixed-PCG trajectory, but
+breaking an equivalence is not itself a new insight or a convergence benefit.
+The retained-trace increase measures matrix approximation, not remaining solve
+error. The meaningful hypothesis is that solve-selected observations improve
+the useful spectral coverage enough to justify compression and one restart.
+Smallest repair: put that acquisition/forgetting tradeoff at the center of the
+problem statement; do not present an arbitrary ten-step limit as adaptivity.
+
+Exact-arithmetic identity explaining the representation (our derivation):
+write F=KS with S^TKS=I. The innovation is Kq, where
+  q=(p−S F^T p)/sqrt(p^TKp−||F^Tp||^2).
+Then [S,q] remains K-orthonormal. Truncating F_aug by its top k right singular
+vectors V_k gives F_new=F_aug V_k=K S_new with S_new=[S,q]V_k and
+S_new^TKS_new=I. Therefore the state is still generalized Nyström on a rotated
+probe space, with 0<=F_new F_new^T<=K. Individual old secants need not survive.
+This explains validity; it is an elementary identity, not a novelty claim.
+
+A concrete refinement is to separate acquisition from application: maintain
+the same rank-k shadow sketch from ordinary initial fixed-PCG products, then
+apply it only at the learning-to-solving transition. This preserves the warm-up
+recurrence and makes the learned-sketch contribution distinct from changing
+the solver during acquisition. It is an established-style design refinement,
+not a new claim by itself. A stronger research contribution would specify a
+principled learning/freeze policy using observed innovation and its retained
+fraction relative to the regularization scale, rather than only selecting a
+fixed number of early steps. Such a policy still needs comparison with the
+rank/schedule adaptivity already present in APLICUR; generic 'adaptive stopping'
+would not be an adequate novelty statement. Preserve the same dataset and
+regularization scope while resolving this conceptual distinction.
+
+Targeted FSAI-pattern verification (2026-11-23)
+
+Question: does existing work already perform fixed-row-cardinality exchanges
+during one kernel solve, recompute canonical FSAI coefficients from local Schur
+submatrices, and select exchanges by the current Schur-residual inverse-action
+energy J(z)=z^TSz−2q^Tz, z=G^TGq? This is a mechanism lookup, not a new concept
+review or a novelty conclusion.
+
+Brarda, Xu, Kalantzis, Li and Xi, Factored Sparse Approximate Inverse
+Preconditioning via Spectral Optimization, arXiv:2606.22742v1 (22 June 2026).
+https://arxiv.org/html/2606.22742v1
+Inspected §§2–4 and §5.2. This paper PRESCRIBES the support of G and optimizes
+its admissible VALUES through L_f(G)=tr(f(G^TAG))/n. It uses global spectral
+losses, with SLQ/Lanczos estimates and projected support-gradients; the small
+tests use exact eigendecompositions. §5.2 optimizes a factor with L-BFGS, then
+evaluates it in FGMRES solves. It neither swaps support positions nor selects
+changes from a current linear-system residual. Its principal distinction is
+spectral value selection, especially a bimodal objective for indefinite
+systems. Our canonical local FSAI coefficients and residual-driven support
+choice are different operations.
+
+Jia, A residual based sparse approximate inverse preconditioning procedure
+for large sparse linear systems, NLAA 24(2) (2017), e2080,
+DOI 10.1002/nla.2080.
+https://onlinelibrary.wiley.com/doi/10.1002/nla.2080
+Published abstract verified. Related full preprint inspected:
+https://arxiv.org/html/1503.04500v2 (Jia and Kang; do not merge author lists).
+§2, §3 and Algorithm 1 explicitly define the residual as r_j=A m_j−e_j,
+where m_j is a column of the approximate inverse. The dominant entries of
+this MATRIX-APPROXIMATION residual guide new pattern candidates. It is not
+the solve residual b−Ax. The published RSAI(fix) abstract allows repositioning
+entries, but says retained cardinality increases by a fixed amount per loop;
+RSAI(tol) drops small entries by a tolerance. Therefore “fix” does not establish
+the constant-b-per-row same-solve operation. Full published RSAI(fix) algorithm
+was not available in the inspected primary text; its precise details beyond
+the abstract remain unverified.
+
+Huckle and Kallischko, Frobenius norm minimization and probing for
+preconditioning, IJCM 84(8) (2007), 1225–1248,
+DOI 10.1080/00207160701396387.
+https://www.tandfonline.com/doi/abs/10.1080/00207160701396387
+https://portal.fis.tum.de/de/publications/frobenius-norm-minimization-and-probing-for-preconditioning/
+Primary abstract confirms MSPAI biases approximate-inverse construction to a
+chosen small probing subspace and can improve an existing preconditioner on
+that subspace. This is a relevant prior boundary for residual/test-vector
+targeting. Full method retrieval from the author PDF failed, so this check
+does not assert whether it contains any identical same-solve support policy.
+
+The verified static AFN base remains exactly relevant: Zhao et al.,
+arXiv:2304.05460v2, §3.1 Algorithm 1 and §3.2 apply canonical FSAI to the
+landmark Schur complement, using a prescribed w-entry lower-triangular
+nearest-neighbor pattern. §3.3 adapts landmark rank, not the current residual.
+https://arxiv.org/html/2304.05460v2
+Adaptive FSAI pattern construction also predates AFN: Janna and Ferronato,
+SISC 33(6) (2011), 3357–3380, DOI 10.1137/100810368, constructs patterns using
+a Kaporin-number-bound objective (primary abstract inspected only).
+https://epubs.siam.org/doi/10.1137/100810368
+
+Operational finding: neither of the two named papers implements the proposed
+fixed-budget same-solve energy-based row exchange. Pattern adaptation,
+inverse-residual targeting, and probing-subspace preference individually have
+prior art. No exact match was identified in this bounded check; the partially
+retrieved probing literature prevents a strong absence/novelty statement.
+
+Algebraic interpretation, not a new objective claim:
+  J(z)=||z−S^{-1}q||_S^2−q^TS^{-1}q.
+It scores inverse-action error in the S-energy norm. For a single changed row
+g→h, Δz=h(h^Tq)−g(g^Tq) and
+  ΔJ=2Δz^T(Sz−q)+Δz^TSΔz.
+Thus row exchanges are globally coupled through the full current z. This is
+distinct from independent canonical FSAI row fitting. The objective concerns
+an unscaled correction; it is not automatically the optimally line-searched
+PCG decrease. No performance or novelty conclusion follows from its identity.
+
+Targeted direct Schur-coordinate correction lookup (2026-11-23)
+
+The fixed-landmark/no-history base has an exact close predecessor, not merely
+an analogy: Lok and Rebrova, Subspace-Constrained Randomized Coordinate
+Descent for Linear Systems with Good Low-Rank Matrix Approximations,
+SIMAX 47(3) (2026), 1495–1529, DOI 10.1137/25M177446X.
+https://arxiv.org/html/2506.09394v3
+https://arxiv.org/pdf/2506.09394v3
+Algorithm 1 is on PDF p5; §3.1 Eqs (3.4)–(3.5) and Remark 3.1 are on
+pp17–18; implementation/costs are in §3.2, pp20–21. SC-RCD initializes
+RPCholesky pivots L, enforces A[L,:]x=b[L] exactly, solves a new coordinate
+block through A°=A−A[:,L]A[L,L]^-1A[L,:], and updates the full residual from
+selected columns of A° using the cached low-rank factor. Remark 3.1 explicitly
+identifies the Schur complement. This is our exact landmark elimination and
+Schur block correction when history is disabled and the same block is used.
+Their selection is iid proportional to diag(A°), not current-residual greedy
+selection. The stated storage is O(n(d+ell)); full kernel storage is unnecessary.
+The analysis uses RPCholesky of A, so choosing pivots from K then eliminating
+K+lambda I is an implementation distinction, not automatically the same bound.
+Verified paper-linked code: https://github.com/jackielok/subspace-constrained-rcd
+The repository supports implicit kernel entry evaluations. Its §1.3 and §5
+discuss momentum acceleration as future work; no retained direction window
+appears in Algorithm 1.
+
+Greedy kernel selection and incremental residual updates are established too:
+Bo and Sminchisescu, Greedy Block Coordinate Descent for Large Scale Gaussian
+Process Regression, UAI 2008, PMLR R6:43–52.
+https://proceedings.mlr.press/r6/bo08a.html
+https://arxiv.org/pdf/1206.3238
+§2 Algorithms 1–2, §2.1 Eqs (10)–(13), PDF pp3–4: choose coordinates by
+current residual squared/diagonal; after each choice, refit the small current
+block and update candidate scores before selecting the next coordinate.
+This sequential choice addresses redundancy between correlated coordinates,
+unlike taking the top B scalar scores once. Exact block solves and full
+gradient updates require only selected kernel columns. Their block is rebuilt
+each outer iteration, without a conjugate-direction history or fixed landmark
+constraint. Applying this rule to S is a direct existing-method control.
+
+Wu et al., Large-Scale Gaussian Processes via Alternating Projection,
+AISTATS 2024, PMLR 238:2620–2628.
+https://proceedings.mlr.press/v238/wu24d.html
+https://arxiv.org/html/2310.17137v2
+§3 Algorithm 1 and Eq (9), Appendix B: exact block coordinate descent,
+incrementally maintained residual, fixed block partition, largest block
+residual norm selection, and cached principal-block Cholesky factors.
+An epoch costs roughly one full matrix-vector multiplication; individual
+updates access only block columns. The paper distinguishes GPU-friendly
+fixed blocks from the sequential Bo–Sminchisescu construction (§6).
+Verified official implementation: https://github.com/kayween/alternating-projection-for-gp
+
+Gower, Molitor, Moorman and Needell, On Adaptive Sketch-and-Project for
+Solving Linear Systems, SIMAX 42(2) (2021), 954–989,
+DOI 10.1137/19M1285846.
+https://arxiv.org/html/1909.03604
+The inspected preprint v1 has a slightly different title. §2.1 Eq (8),
+§6.3 Eq (25), Algorithm 3, and §8 establish sketched-loss/max-distance
+selection and incremental score updates. For the SPD coordinate problem,
+the exact scalar energy decrease is r_i^2/(2 S_ii); the exact block decrease
+is r_J^T S_JJ^-1 r_J/2. Thus current-residual selection itself is known,
+including block selection through the full local quadratic geometry.
+
+Bounded history is the truncated conjugate-direction construction already
+used in variable-preconditioned CG: Knyazev and Lashuk (2007), §1 Eqs
+(1.1)–(1.2), PDF p2; Lemmas 3.2–3.3, pp5–6.
+https://arxiv.org/pdf/math/0605767
+It projects a new direction against a bounded A-conjugate window and performs
+energy minimization. Their theorem assumes SPD variable preconditioners;
+a singular coordinate/block selector does not automatically satisfy those
+assumptions. This is a mechanistic match for the orthogonalization, not a
+claim that their theorem already proves our entire block method. Related
+coordinate-specific precedent: Wang et al., Gauss–Seidel Method with Oblique
+Direction, Results in Applied Mathematics 12 (2021), 100180,
+DOI 10.1016/j.rinam.2021.100180; §3.1 Eq (8) projects a new coordinate
+against the previous coordinate in the least-squares Hessian geometry.
+https://arxiv.org/html/2106.00594v1
+It does not retain a window of previous conjugate correction directions.
+
+Operational conclusion: call the tested base Schur-coordinate descent or a
+SC-RCD variant. Fixed landmark equations, selected-column residual updates,
+memory O(n(k0+B)), and greedy residual scoring are prior mechanisms. This
+bounded search did not locate the exact greedy SC-RCD plus bounded conjugate
+history combination; its combination alone is insufficient for novelty.
+Use diagonal-sampled SC-RCD, greedy SC-RCD with no history, and the same
+greedy rule with history as attribution controls. Block Kaczmarz in the
+Euclidean metric is different: its directions are matrix rows and its block
+Gram involves row inner products. Our update minimizes the SPD quadratic
+over coordinate directions, i.e. block Gauss–Seidel/coordinate descent.
+
+Algebraic refinement sent to math_check (derived here, not a novelty claim):
+let H retain Schur directions, G=H^T S H, and D=(I−H G^-1 H^T S)E_J.
+Then D^T S D=S_JJ−(SH)[J,:]G^-1(SH)[J,:]^T and
+D^T r=r_J−(SH)[J,:]G^-1 H^T r. If H^T r=0, the latter is r_J.
+For S-normalized H, scalar d_i has denominator
+  tau_i=S_ii−sum_a (SH)[i,a]^2.
+Its exact scalar progress score is r_i^2/(2 tau_i), not r_i^2/(2 S_ii).
+All tau_i use cached SH in O(nh) arithmetic without new kernel queries.
+Guard nearly dependent directions/tiny tau. The B-coordinate selection
+should account for within-block coupling as well. This is standard greedy
+energy selection in the projected geometry; only measured net CPU benefit
+against the controls can establish whether it is useful here.
+
+Bounded follow-up: adaptive landmark cache and unresolved Ritz targets
+(2026-11-23; approximately three-minute targeted lookup)
+
+No exact fixed-cardinality, same-solve replacement of the SC-RCD landmark set
+was located. SC-RCD v3 Algorithm 1 initializes its pivot set once; §5 discusses
+learning subspaces for other spectral regions as future work. This bounded
+negative search is not evidence of novelty.
+
+Closest verified cache-aware replacement algorithm: Glasmachers and Igel,
+Maximum-Gain Working Set Selection for SVMs, JMLR 7 (2006), 1437–1466.
+https://jmlr.org/papers/volume7/glasmachers06a/glasmachers06a.pdf
+§2.3, printed pp1443–1444: retain one member of the previous working pair,
+evaluate the exact feasible quadratic gain with each possible new partner
+using cached kernel rows and maintained gradient, then select the best pair.
+§2.4 supplies a hybrid fallback for convergence. §2.5, p1446, discusses using
+larger cached sets and replacing one member of a q-variable working set;
+the larger-block gain requires solving local subproblems and may cost more
+than its reduced iterations save. This is direct precedent for bounded
+active kernel caches driven by current optimization progress. It concerns
+constrained SVM working sets, not persistent Schur landmark equations or
+Ritz-weighted preconditioning. The earlier Bo–Sminchisescu GBCD remains the
+closer unconstrained GP objective, but rebuilds working blocks rather than
+retaining an adaptive landmark core.
+
+Turning a learned spectral subspace into actual column indices also has
+established precedent: Sorensen and Embree, A DEIM Induced CUR Factorization,
+SISC 38(3) (2016), A1454–A1482, DOI 10.1137/140978430.
+https://arxiv.org/abs/1407.5516
+https://epubs.siam.org/doi/10.1137/140978430
+Their algorithm extracts row/column indices from approximate singular-vector
+bases using DEIM, then accesses actual matrix rows/columns. Therefore
+reselecting actual kernel landmarks from a Ritz-derived subspace is a familiar
+subspace-to-indices construction; its unresolved-mode target and online
+replacement policy, rather than this conversion, would need justification.
+
+The CSI boundary is unchanged: Bach–Jordan, ICML 2005, §3.2 and §4.3,
+https://icml.cc/Conferences/2005/proceedings/papers/005_Predictive_BachJordan.pdf
+combines kernel approximation and projection error of supplied targets Y.
+Choosing Y=U diag(sqrt(w)) for weighted Ritz vectors only changes the source
+of side information; it does not by itself create a different target-fitting
+objective. A causal difference requires demonstrating that how Y is acquired
+identifies error the current solver still fails to remove.
+
+Algebraic obstacle (our deduction, exact arithmetic, fixed preconditioner):
+write C=M^-1/2 A M^-1/2 and let V_t be the CG/Lanczos search basis. Current
+transformed residual rhat_t is orthogonal to V_t. For Ritz u=V_t y,
+u^T rhat_t=0. In physical coordinates, U=M^-1/2 V_t Y satisfies U^T r_t=0.
+Thus weighting old Ritz vectors by current residual overlap is degenerate.
+This does NOT mean every true eigencomponent of error has vanished: Ritz
+vectors may be inaccurate. It does mean their overlap is not a usable
+unresolved-component estimator. The Lanczos relation gives
+  C V_t y−theta V_t y = beta_t v_(t+1) (e_t^T y).
+All Ritz residuals of the complete unrestarted basis are collinear with the
+next Lanczos/current transformed-residual direction. Their squared weighted
+scores therefore reduce to a rank-one residual target. A truncated window
+can have additional boundary terms, which must be identified rather than
+assumed to estimate slow error. With M=Khat+lambda I <= A, generalized
+eigenvalues are >=1; selecting the lowest Ritz values is not automatically
+selecting the poorly preconditioned modes.
+Primary basis relation: Stathopoulos–Orginos eigCG §3, Eq (3.1), PDF p5,
+and §3.1, p7, https://arxiv.org/pdf/0707.0131 .
+
+A genuine causal acquisition mechanism has a close prior in adaptive AMG:
+Brannick et al., Adaptive Reduction-Based Multigrid for Nearly Singular and
+Highly Disordered Physical Systems, ETNA 37 (2010), 276–295.
+https://etna.ricam.oeaw.ac.at/vol.37.2010/pp276-295.dir/pp276-295.pdf
+Printed pp276–277 and p288/Appendix Algorithm 1: relax homogeneous test
+errors while coarse variables remain fixed, identify components surviving
+the relaxation, then add coarse variables where convergence is slow. Such
+filtered error is different from the already optimized CG search vectors.
+The paper grows the coarse set; it does not establish fixed-budget kernel
+landmark replacement. Filtering requires charged operator/relaxation work.
+
+Memory/cost implication: a small h-vector retained Krylov basis permits
+Ritz-based scoring in O(nh) extra storage rather than an additional n-by-k
+factor, but no O(h)-sized tridiagonal alone contains the spatial information
+needed to choose n coordinate indices. Retain basis vectors, stream their
+accumulated spatial score while available, or replay operator products;
+count the corresponding memory or work. To test an unresolved-mode claim,
+first compare the proposed scores against current residual/CSI scores and
+verify they are not algebraically or numerically the same before exchanging
+any landmarks. No production code was changed by this lookup.
+
+
+Bounded follow-up: residual allocation in FSAI and SPD hierarchical
+preconditioners (2026-11-23)
+
+Scope: exact same-solve allocation of a fixed global nnz/storage budget;
+primary-source lookup, not a general novelty verdict. No solver edits.
+
+FSAI boundary:
+- Janna--Ferronato, Adaptive Pattern Research for Block FSAI Preconditioning,
+  SISC 33(6), 3357--3380 (2011), DOI 10.1137/100810368.
+  Primary institutional abstract:
+  https://www.research.unipd.it/handle/11577/2474685
+  Pattern construction minimizes an upper bound on the Kaporin number.
+  This verifies matrix-conditioned adaptive pattern selection, not a
+  current-linear-solve-residual allocator. The full 2011 algorithm was not
+  newly retrieved in this follow-up; do not infer its absence from an abstract.
+- Official current hypre FSAI implementation documentation gives a sharper
+  operational contrast:
+  https://hypre.readthedocs.io/en/latest/api-sol-parcsr.html
+  HYPRE_FSAISetup explicitly ignores b and x; adaptive algorithm types 1/2
+  use max pattern steps, max step size, and Kaporin-gradient reduction.
+  HYPRE_FSAISetKapTolerance controls the latter. Thus this established
+  implementation is matrix-only setup, not same-solve residual allocation.
+- The previously inspected RSAI residual is A*m_j-e_j for an inverse
+  column, not b-A*x; Spectral Optimization 2606.22742 optimizes coefficients
+  on fixed support using global spectral losses. Neither establishes the
+  proposed cross-row allocation operation.
+- No identical operation was located in the bounded primary search:
+  current solve q determines which canonical FSAI rows receive global
+  S*g_i queries or which rows gain/lose nnz under a fixed global total.
+  This is only a narrow overlap boundary, not proof of novelty. Canonical
+  local coefficients, matrix-gradient neighbor selection, dropping, and
+  SPD factorization are established ingredients. If all rows receive the
+  same queries, the potential distinction reduces to residual-weighted
+  allocation of the fixed nnz budget, not selective query scheduling.
+- Our algebraic observation: |g_i^T q|^2 is exactly row i's contribution to
+  q^T G^T G q. It is exposure, not the marginal benefit of refining row i;
+  canonical refitting changes g_i and potentially its useful directions.
+  Treat an exposure allocator and actual marginal-change scoring as
+  distinct mechanisms.
+
+Closest SPD hierarchical kernel preconditioner:
+Xing, Huang, Chow, Efficient Construction of an HSS Preconditioner for
+Symmetric Positive Definite H^2 Matrices, SIMAX (2021),
+DOI 10.1137/20M1365776.
+https://faculty.cc.gatech.edu/~echow/pubs/xing-huang-chow-simax-2021.pdf
+Sections 3.1--3.2, PDF pp5--7: factor diagonal blocks A_ii=S_i*S_i^T,
+project scaled off-diagonals using orthonormal V_i, and scale back.
+Writing T=diag(S_i V_i V_i^T S_i^-1), the approximation is
+  A_new=T A_old T^T + diag(S_i (I-V_i V_i^T) S_i^T),
+which is SPD. Section 4, PDF p7, assumes fixed rank r for all blocks;
+Section 5 accelerates construction using a prior H^2 representation;
+Section 6.2, pp19--21, evaluates it as a kernel PCG preconditioner.
+No same-solve residual redistribution or fixed global variable-rank budget
+appears in the inspected construction. The positive-definiteness proof
+itself does not require equal ranks across nodes (our deduction), so
+variable ranks alone are not a new SPD principle. Using selected actual
+columns to obtain V_i would change acquisition, not this SPD identity.
+
+Closest solve-dependent hierarchical rank allocator, but different role:
+Bauer--Bebendorf, Block-adaptive Cross Approximation of Discrete Integral
+Operators, 2019 preprint, arXiv:1905.01918.
+https://epub.uni-bayreuth.de/id/eprint/4384/1/paper.pdf
+Section 4, Algorithm 2, PDF p8: form an improved approximation Ahat_k by
+extra ACA steps, W_k=A_k-Ahat_k; solve A_k*x_k=b; mark blocks using
+  eta_ts^2=||(W_k)_ts (x_k)_s||_2^2,
+and replace marked blocks by the improved versions. Lemma 1, p9, relates
+this estimator to the original-system residual under saturation and
+inner-solve conditions. Thus solution-weighted hierarchical refinement
+is already known. This algorithm grows the approximated coefficient
+matrix; it does not redistribute a fixed stored-column budget, keep A
+fixed while modifying an SPD preconditioner, or prove SPD for arbitrary
+independent low-rank block truncations. Calling this merely matrix-norm
+adaptivity would be inaccurate.
+
+Recent rank-adaptive matrix-free HSS near miss:
+Do--Chen, Simultaneous Matrix-Free HSS Compression and Factorization with
+Adaptive Ranks, arXiv:2610.16913v1, 12 October 2026 (preprint).
+https://arxiv.org/html/2610.16913v1
+Sections 4.3--4.4 estimate local Frobenius residuals using random samples,
+grow basis blocks, prune redundant columns from only the last added
+block, then coordinate one rank per level. This is tolerance-controlled
+setup, not current-solve residual feedback or a fixed total budget.
+Section 3.2.2 symmetrizes recovered diagonal blocks and adds a shift if
+Cholesky fails; Section 5 uses PCG on SPD cases. Hence adaptive local rank,
+pruning, matrix-free construction, and preconditioner use already coexist
+in prior work, but not the exact allocator requested here.
+
+Decision boundary: the inspected sources cover SPD hierarchical kernel
+compression and solve-dependent hierarchical refinement separately.
+The still-unverified intersection is a same-solve rule which trades actual
+stored block columns between nodes at fixed total memory, based on the
+current unresolved solve error, while preserving SPD. A claim limited to
+that operation needs comparison against equal-budget static/matrix-based
+allocation. A fixed sum of ranks is not generally a fixed storage budget:
+node lengths and coupling/transfer matrices must also be counted.
+
+Parent-reported disposition after this lookup: whole-factor FSAI budget
+allocation was negative in all eight tested cases; retire that family.
+The hierarchical mechanism is concept-only and has not been tested.
+These are handoff facts, not experiments run or independently audited here.
+
+
+Bounded follow-up: exact spectral guard for one landmark exchange
+(2026-11-23; targeted lookup, no production code changes)
+
+Actionable result (our algebraic derivation, not a novelty claim):
+Assume K is PSD, lambda>0, and M=Khat+lambda I with exact untruncated
+Nyström interpolation. For an exchange, let C be the shared k-1 landmarks,
+R_C=K-Khat_C, a=R_C[:,old]/sqrt(R_C[old,old]), and
+b=R_C[:,new]/sqrt(R_C[new,new]). Zero residual diagonals denote redundant
+columns and need the corresponding zero increment. Then
+  Khat_old=Khat_C+a*a^T, Khat_new=Khat_C+b*b^T,
+  M_new=M_old+b*b^T-a*a^T.
+With H=M_old^-1, alpha=a^T H a, beta=b^T H b, gamma=a^T H b,
+the only possibly nonunit eigenvalues of M_old^-1/2 M_new M_old^-1/2 are
+  ell=1+(beta-alpha-sqrt((alpha+beta)^2-4 gamma^2))/2,
+  u  =1+(beta-alpha+sqrt((alpha+beta)^2-4 gamma^2))/2.
+For n>=2 these are the exact extrema (including any zero/rank-one
+ degeneracies); ell<=1<=u. The nonzero eigenvalues of vv^T-uu^T have
+sum beta-alpha and product gamma^2-alpha*beta, which proves the formula.
+In particular ell*M_old <= M_new <= u*M_old, and for any SPD A,
+  kappa(M_new^-1 A) <= (u/ell)*kappa(M_old^-1 A).
+A cap on u/ell therefore rejects globally violent exchanges, even if a
+current-residual score approves them. It costs two applications of the
+existing low-rank inverse and a few dot products once a,b are available;
+no extra K matvec is required beyond acquiring the candidate column.
+O(nk) inverse-application work, plus cost of common-core residual columns.
+This formula does NOT cover the FTU normalized spectral preconditioner
+without modification. It also does not prove faster current-solve CG.
+Repeated stepwise caps multiply; they do not provide a uniform bound
+relative to the original preconditioner without tracking accumulated change.
+
+Closest primary global-quality acquisition:
+Frangella--Tropp--Udell, Randomized Nyström Preconditioning, SIMAX 44(2),
+718--752 (2023), DOI 10.1137/21M1466244.
+https://tropp.caltech.edu/papers/FTU23-Randomized-Nystrom-SIMAX.pdf
+Section 5.4.1, Eq5.6, printed p733 / PDF p16; Algorithm C.1:
+estimate ||K-Khat|| by randomized power iteration, then double sketch rank
+until a posteriori preconditioner-quality criteria pass. This is global
+matrix-residual quality control with rank growth, not fixed-k replacement
+or a same-solve RHS-aware swap policy. Their P is Eq1.3, not Khat+lambda I.
+For our M, E=K-Khat is PSD and (our deduction)
+  M^-1/2 A M^-1/2=I+M^-1/2 E M^-1/2,
+  kappa(M^-1 A)<=1+||M^-1/2 E M^-1/2||<=1+||E||/lambda.
+Hence global residual probes can complement an RHS score, but norm checks
+have real kernel-matvec and storage costs. A small fixed test block Omega
+allows K*Omega to be cached once and E_candidate*Omega to be recomputed
+using candidate factors. This is not free: count initial K applications,
+cached test vectors, and factor applications. The unwhitened bound can
+be very loose for small lambda.
+
+Certified-vs-heuristic distinction for probes:
+Halko--Martinsson--Tropp, SIAM Review 53(2), 217--288 (2011), Lemma4.1,
+printed p241 / PDF p25:
+https://tropp.caltech.edu/papers/HMT11-Finding-Structure.pdf
+For a fixed B and s independent standard Gaussian g_i,
+ ||B|| <= c*sqrt(2/pi)*max_i||B*g_i||
+except with probability c^(-s), c>1. Raw max probe norms or a few power
+steps are not deterministic upper certificates. If the candidate is chosen
+using these same probes, the fixed-B guarantee does not directly apply;
+use independent validation or an explicit finite-family union bound.
+
+Why CG-coefficient quality estimates cannot supply a global certificate:
+Meurant--Tichy, Approximating the extreme Ritz values and upper bounds for
+the A-norm of the error in CG, DOI10.1007/s11075-018-0634-8.
+https://www.gerard-meurant.fr/Meurant_Tichy_2018.pdf
+Section5 obtains cheap extreme Ritz estimates from CG coefficients;
+Sections3/6 distinguish rigorous Gauss--Radau bounds needing a valid lower
+eigenvalue bound from estimates using the smallest Ritz value. Their
+experiments (PDF pp28--29) show underestimation before Ritz convergence.
+Our deduction: theta_min>=lambda_min and theta_max<=lambda_max for the
+fixed transformed operator, so the exact Ritz ratio is a lower bound on
+its global condition number, not an upper safeguard. Modes absent from
+the initial RHS remain invisible. After changing M, the old tridiagonal
+also belongs to a different operator; do not reuse it as the spectrum of
+M_new^-1 A.
+
+Limit of the proposed safeguard, already established in primary theory:
+Knyazev--Lashuk, Steepest Descent and Conjugate Gradient Methods with
+Variable Preconditioning, SIMAX29(4),1267--1280 (2007),
+DOI10.1137/060675290; https://arxiv.org/pdf/math/0605767
+Introduction Eq1.3 and Section5: uniformly bounded preconditioned condition
+numbers still permit variable CG to lose all acceleration over steepest
+descent. A spectral cap is a rejection rule, not a convergence-speed claim.
+Use the exact rank-two cap as the cheapest bounded diagnostic beside the
+existing oracle FCG1 continuation; global randomized probes are the closest
+established acquisition if the cap alone admits harmful swaps. No exact
+fixed-actual-column, same-solve constrained-replacement method was verified
+in this bounded search. That absence is not evidence of novelty.
+
+
+Bounded follow-up: two-direction Nyström/kernel batching (2026-11-23)
+
+Exact algorithm overlap: Bridson--Greif, A Multipreconditioned Conjugate
+Gradient Algorithm, SIMAX27(4),1056--1068 (2006), DOI10.1137/040620047.
+https://www.cs.ubc.ca/~greif/Publications/bg2006.pdf
+Figure3.1 / PDF p4 forms Z=[M_1^-1 r,...,M_s^-1 r], A-conjugates it
+against previous blocks, and solves the small Galerkin system. Section3.6
+calls last-h-block truncation MPCG(h). Thus Z=[H_Nys*r,r], or two fixed
+spectral scalings of the same retained columns, is an instance of MPCG.
+Section3.3 explicitly addresses singular small Gram matrices by removing
+redundant directions. The special short-recurrence theorem requires two
+SPD preconditioner matrices summing to A; it does not automatically apply
+to the Nyström/identity pair. No-conjugation 2D correction is MPSD (§2).
+
+Adaptive enrichment is also established: Spillane, An Adaptive
+MultiPreconditioned Conjugate Gradient Algorithm, SISC38(3),A1896--A1918
+(2016), DOI10.1137/15M1028534.
+https://epubs.siam.org/doi/10.1137/15M1028534
+Verified primary abstract: choose ordinary versus multipreconditioned CG
+iterations from a measured-progress test and a lower eigenvalue bound.
+Full source via author's HAL link was blocked in this lookup, so no new
+claim about its exact implementation is made here. A residual-triggered
+switch to MPCG is therefore not a new high-level mechanism.
+
+Block/kernel-load boundary: Chen--Huber--Lin--Zaid, ETNA65,63--92 (2026),
+DOI10.1553/etna_vol65s63.
+https://etna.ricam.oeaw.ac.at/vol.65.2026/pp63-92.dir/pp63-92.pdf
+Theorem3.3/Remark3.4, PDF p7, use starting block [b,Omega] and prove a
+matrix-load comparison with Nyström PCG; the deterministic theorem allows
+any Omega. Footnote4, p5, limits their Nyström probability discussion to
+Gaussian sketches, distinguishing coordinate-column sampling. Section3.2,
+pp7--9, explicitly excludes CPU/storage guarantees and discusses instability
+without reorthogonalization. This covers the general shared-operator-pass
+motivation, not the identical dynamic block [H*r,r] algorithm or a measured
+Gaussian-kernel CPU result. A k+1-column starting block is not a matched
+width-two memory/work baseline.
+
+Enlarged-CG context: Grigori--Moufawad--Nataf, SIMAX37(2),744--773 (2016),
+DOI10.1137/140989492; https://epubs.siam.org/doi/10.1137/140989492
+Primary abstract verifies domain-partition-based enlarged Krylov spaces
+containing ordinary Krylov spaces, with communication reduction. This is
+another established source of multiple directions, not a new kernel
+preconditioning mechanism.
+
+Essential matched controls: (1) static MPCG([H_Nys,I]) with identical
+history length, column set and batched kernel routine; (2) width-two
+block-PCG with the same fixed H_Nys and starting RHS block [b,g], fixed
+independent random g, charging all preconditioner applications and workspace.
+Compare actual CPU, true residual, peak storage, kernel-entry evaluations,
+and block products. Batched Gaussian evaluation can share distance/exp
+work but accumulation and orthogonalization still grow with block width.
+
+Our deductions: an adaptive scalar rescaling of H*r gives no new direction;
+any second direction in span{H*r,r} gives the same exact 2D Galerkin space.
+A possible research distinction must change which second direction is
+acquired from the stored-column information, and beat fixed spectral-band,
+subset or shift choices at the same cost. Keeping H*r in the trial block
+protects the one-step attainable reduction at the same current state;
+it does not by itself prove domination of an uninterrupted PCG trajectory,
+especially after history truncation. No novelty or useful-speedup claim
+is established by this lookup. No production code was changed.
+
+
+Bounded follow-up: two-pass same-solve Ritz preconditioning (2026-11-23)
+
+Status: candidate for a later experiment, not an observed result or a novelty
+claim. No solver code changed. A bounded primary-source search verified the
+following overlap; it did not verify an identical two-pass same-solve
+spectral-LMP implementation.
+
+1. Spectral / Ritz LMP is established. Gratton--Sartenaer--Tshimanga,
+SIAM J. Optimization21(3),912--935 (2011), DOI10.1137/08074008.
+Primary preprint, with its own section/page numbering:
+https://optimization-online.org/wp-content/uploads/2008/12/2166.pdf
+Section3.2.1, Eq3.1, PDF pp17--18, gives I+V(Lambda^-1-I)V^T.
+Section3.2.2/Proposition3.3 develops Ritz-LMP using the Lanczos residual
+relation. Section3.3.1/Theorem3.5, pp22--23, distinguishes inserting
+approximate Ritz pairs into spectral-LMP from Ritz-LMP; their difference
+vanishes as relative Ritz residuals converge. The experiments on p24 show
+that the simple spectral substitution can perform poorly with inaccurate
+pairs. Importantly, Ritz-LMP needs d Ritz vectors plus one boundary Lanczos
+vector, versus d vectors for spectral-LMP, under the exact Lanczos relation.
+The paper targets sequential right-hand sides, not a verified same-solve
+replay algorithm. Its general LMP is the balanced inverse
+(I-U E^-1 U^T A) H0 (I-A U E^-1 U^T)+U E^-1 U^T.
+
+2. Same-solve Ritz retention is established. Abdel-Rehim--Morgan--Nicely--
+Wilcox, Deflated and Restarted Symmetric Lanczos Methods for Eigenvalues
+and Linear Equations with Multiple Right-Hand Sides, SISC32(1),129--149
+(2010), DOI10.1137/080727361; https://arxiv.org/pdf/0806.3477
+Section3, PDF pp3--5, defines Lan-DR: retain selected Ritz vectors across
+restarts to accelerate the current linear solve while improving eigenpairs.
+Section4, pp6--10, studies reorthogonalization. Example3/Table4.2 explicitly
+shows duplicate eigenvalues when orthogonality deteriorates; Example5
+requires retaining a rapidly converging large outlier as well as the small
+ones. This is a direct same-solve spectral-recycling baseline, though not the
+identical additive-preconditioner/two-pass implementation proposed here.
+
+3. Two-pass reconstruction is established independently of preconditioning.
+Grosso--Martinelli--Pastori Parravicini (1995), Phys.Rev.B51,13033,
+DOI10.1103/PhysRevB.51.13033; primary abstract explicitly describes a
+low-storage two-pass Lanczos eigenvalue/eigenfunction procedure:
+https://journals.aps.org/prb/abstract/10.1103/PhysRevB.51.13033
+For an explicit modern primary-paper implementation description, see
+Guettel--Schweitzer, A Comparison of Limited-memory Krylov Methods for
+Stieltjes Functions of Hermitian Matrices, DOI10.1137/20M1351072,
+Section2.1, PDF pp4--5:
+https://eprints.maths.manchester.ac.uk/2769/1/papernew.pdf
+First build the scalar tridiagonal without storing the basis; replay the
+basis while accumulating the desired linear combination. The second pass
+roughly doubles the prefix operator work. Their application is matrix
+functions, not same-solve preconditioner construction.
+
+4. Recent boundary: Diouane--Gurol--Mouhtal--Orban (2026),
+https://arxiv.org/html/2603.28969v1
+Section5.1 explicitly describes CG-derived spectral data reused in later
+linear systems. Section5.3 uses exact eigenpairs of diagonal test matrices;
+Section5.5 leaves robustness with approximate eigenpairs to follow-up work.
+This paper establishes iteration-budget-aware cluster placement, not our
+proposed same-solve replay or its kernel CPU benefit.
+
+Our deductions / implementation constraints:
+Let H0=M^-1, U^T M U=I, T=U^T A U>0. Then the proposed
+H=H0+U(T^-1-I)U^T is SPD, by whitening with M^(1/2).
+Mapping selected eigenvalues exactly to one requires AU=MU T, not merely
+the Ritz condition. A correct positive T alone does not imply acceleration.
+At the checkpoint, U in the old PCG space gives U^T r=0 in exact arithmetic,
+so the additive correction is initially inactive. Subsequent behavior must
+be measured; it is not equivalent to preserving the full old-space projector.
+
+An m-step prefix replay reconstructs d vectors with O(nd+md+m) storage
+plus O(n) recurrence workspace, approximately m extra A products/H0
+applications, and O(nmd) accumulation work. Count U on top of the original
+k actual columns; a fixed k+d storage comparison needs matched baselines.
+The second pass must replay the same fixed operator/preconditioner and
+recurrence arithmetic. Do not assume recomputing a mathematically equivalent
+CG/Lanczos recurrence produces bitwise-identical vectors. Adding new
+reorthogonalization corrections in pass two changes the basis, invalidating
+unadjusted first-pass Ritz coefficients.
+
+Ghost Ritz values require checking the reconstructed M-Gram matrix, rank
+revealing/orthonormalizing the retained block, and recomputing its small
+Rayleigh matrix and actual generalized Ritz residuals. Small tridiagonal
+residual estimates alone do not verify these finite-precision properties.
+A generic balanced control can cache AU; the d+1 boundary-vector shortcut
+needs a verified low-rank Lanczos residual relation, which may fail after
+loss of orthogonality or ad hoc basis repair.
+
+Useful next comparison: same reconstructed U with spectral-LMP versus
+balanced Ritz-LMP, both restarted from the same true residual; include
+ordinary restarted H0-PCG, uninterrupted H0-PCG, and a memory-matched Lan-DR
+control. Before CPU work, require saved continuation A-products to exceed
+the roughly m replay products, then charge replay, orthogonalization,
+verification, and the O(nd) per-step correction. Combining known spectral
+LMP, same-solve recycling, and two-pass reconstruction does not establish a
+new mechanism; any claim needs a distinct selection/budget policy and a
+measured same-solve advantage under the full cost/storage accounting.
+
+
+Bounded follow-up: interleaving two Nyström passes and two solve steps
+(2026-11-23)
+
+Candidate, not a result: first compute K[Omega,b], form H1 and take one
+unpreconditioned step along b; second compute K[Q,p], Q=orth(K Omega),
+p=H1 r1 made A-conjugate to b; form generalized Nyström on [Q,p], truncate
+to rank k, freeze. Here A=K+lambda I and x0=0.
+
+Exact information equivalence (our derivation): for an ordinary Nyström
+inverse H1=a I+Q D Q^T, a>0, the first step gives
+r1=(1-alpha lambda)b-alpha Kb. Therefore
+p=Qd+c b-a alpha Kb
+for some d,c, including the A-conjugacy correction in c. Modulo range(Q),
+p is a scalar multiple of Kb-tau b, tau=c/(a alpha). Consequently the
+final untruncated Nyström approximation is exactly generalized Nyström on
+[K Omega,Kb-tau b], by basis invariance. It is generally different from
+Nyström on [K Omega,Kb], but not a source of arbitrary new Krylov information.
+Also [Q,b,p] spans [K Omega,b,Kb], provided the extra direction is nonzero.
+
+The second queried image obeys
+Kp=KQ d+c Kb-a alpha K^2 b.
+Thus, using cached Kb, each second-pass block determines the other: querying
+K[Q,p] versus querying K*orth([K Omega,Kb]) has identical exact operator-
+information content when a alpha is nonzero. The static augmented power
+pass can reconstruct the same p, Kp and second solve step. Conversely the
+candidate can reconstruct K^2 b. Numerical cancellation can break practical
+accuracy of these conversions, so an implementation must check it rather
+than assume bitwise equivalence.
+
+Primary overlap, checked directly:
+APLICUR, Huh--Cartis--Nakatsukasa, arXiv:2604.05065v1,
+https://arxiv.org/html/2604.05065v1
+Sections3.2.1--3.2.2/Algorithm1 and5.1 already interleave solve phases with
+preconditioner refinement. Its CUR rank grows using matrix-approximation
+residuals from one fixed sketch; it does not give this two-pass filtered-RHS,
+fixed-rank-truncation schedule. Broad setup/solve interleaving is established.
+
+Chen--Huber--Lin--Zaid, ETNA65,63--92 (2026),
+https://etna.ricam.oeaw.ac.at/vol.65.2026/pp63-92.dir/pp63-92.pdf
+Section2.2.2 Eq2.3 gives generalized block-Krylov Nyström. Theorem3.3 uses
+an augmented [b,Omega] starting block, and Sections1.2/3.2 explicitly analyze
+shared matrix loads while separating CPU/storage costs. The candidate's
+vectors and images lie inside this augmented block-Krylov information, but
+its warm start, fixed-rank compression and frozen continuation are not that
+paper's full block-CG algorithm. The theorem should not be quoted as an
+identical-trajectory or fixed-storage CPU guarantee.
+
+Tropp--Yurtsever--Udell--Cevher, NeurIPS2017,
+https://proceedings.neurips.cc/paper_files/paper/2017/file/4558dbb6f6f8bb2e16d03b85bde76e2c-Paper.pdf
+Section2 Eq2.7/Section3 Algorithm3 already define best rank-k truncation of
+a larger Nyström approximation by factor SVD. Compression itself supplies
+no distinction. Hu--Jiang--Lin--Wen--Yuan, SISC2019, Section2.3 Eqs2.10--2.11,
+https://math.berkeley.edu/~linlin/publications/QN_OPT.pdf
+already use iterate/history-augmented Nyström sketch spaces in nonlinear
+optimization; this is an adjacent mechanism, not identical kernel PCG.
+
+Essential matched control: static augmented power Nyström from [Omega,b],
+using the same two k+1-wide passes, rank-k truncation and identical two-step
+warm start. An additional plain [K Omega] control separates benefit from
+RHS augmentation. Any remaining distinction is selection of the filtered
+RHS direction (tau), compression, and transition policy, not new information
+acquisition from the overlapping solve. Charge peak workspace as well as
+retained rank; Gaussian dense probes are not actual retained kernel columns.
+Optional QR-reselected actual columns require a separate build and solve
+measurement. No identical complete schedule was verified in the bounded
+search, and no novelty or CPU improvement is established. No code changed.
+
+
+Coordinate implementation/source audit (2026-11-23)
+
+The current check_matrix_free_coordinates.py and
+check_coordinate_static_controls.py pilots use exhaustive projected-coordinate
+selection: r_projected[j]^2 / S_projected[j,j], with within-block conjugate
+directions/images. Their no-history label 'GBCD' does not identify the
+cheaper published GBCD algorithm faithfully. Bo--Sminchisescu, ICML2008,
+https://arxiv.org/pdf/1206.3238, Section2.1 distinguishes exhaustive prefitting
+(Eq7) from residual/diagonal selection (Eq10). Algorithms1--2/Eqs12--13 use
+small active-set inverse/refit updates, a global persistent-gradient update
+once per block, and optionally random candidate subsets to reduce selection
+cost. Exhaustive candidates remain a well-defined, costlier version of this
+published selection rule. Exact projected prefitting and exhaustive cheaper
+selection are different algorithms, even when both inspect every candidate.
+
+SC-RCD already supplies fixed-landmark Schur coordinate solving:
+https://arxiv.org/html/2506.09394v3, Algorithm1 and Section3.2.
+Cache-aware derivative/curvature selection is also established by
+Glasmachers--Igel, JMLR7 (2006),1437--1466:
+https://jmlr.org/papers/volume7/glasmachers06a/glasmachers06a.pdf
+Section2.3 and Sections4.5--4.6 preserve a previous working-set element and
+use cached curvature to allow at most one new row query per iteration.
+This is constrained SVM optimization, not identical Schur KRR; it still
+rules out a broad new-mechanism claim based merely on residual-aware caching.
+
+The existing pilot does not factor a matrix per coordinate. Initial coarse
+setup is below0.015 seconds in the no-history records. Kernel entry evaluation
+is only roughly28--33percent of their total time. Even setting every query
+cost to zero leaves measured score+projection+update times of
+0.580/1.378/1.322 seconds (smooth/Concrete/Airfoil), versus complete rank48
+power controls of0.192/0.914/0.899 seconds in that exploratory file. This is
+an optimistic cache-only cost bound within the recorded timings, not an
+isolated timing experiment or a general impossibility claim.
+
+A read-only deterministic rerun wrapped GaussianKernel.entries to record
+selected indices, ran the existing no-history coordinate_solve unchanged,
+and replayed LRU caches on that trajectory. Seed0, lambda.001, rank16,
+width16, one BLAS thread, original true tolerance1e-8. Exact original query
+counts and residuals were reproduced:7712/16736/14112 queries, with every
+remaining coordinate touched (496/808/1186 distinct). Capacity32 LRU hits:
+1.893/1.560/0.581percent; capacity64:5.537/4.356/1.431percent. CPU times were
+0.830/2.288/2.459 seconds. These values were returned in tool output only;
+NO raw result file was retained for this read-only rerun, so this evidence
+is exploratory and should not enter a publication result table. It shows
+little locality for caching the unchanged trajectory. Changing selection to
+favor cached columns changes the algorithm and meets the prior-art boundary
+above. Adding a cache alone does not address the dominant measured costs.
+
+Decision: retire cache-only rescue of the existing trajectory. The real gap
+is a missing efficient published GBCD control, not an established novel
+adaptive preconditioner. New separate diagnostic
+scripts/check_canonical_schur_gbcd.py implements Eqs10--13 on the same
+fixed-landmark Schur system, block16, no history, all candidates, one smooth
+case, with independent small-SPD direct-refit checks. Its purpose is to repair
+that baseline gap; its own result file preserves hashes, protocol and trace.
+
+Canonical Schur-GBCD control outcome: the separate script and
+results/canonical-schur-gbcd-diagnostic.json are complete. Independent
+29-dimensional SPD checks match the selected coordinates obtained from
+independent direct solves; maximum inverse-identity error1.725e-13, refit
+relative error5.894e-15, full/Schur residual error6.804e-15. Smooth seed0,
+lambda.001, coarse16, block16, no history, all candidates:810 blocks,
+12960 column queries, true relative residual9.780e-9,1.0055 seconds.
+Same-process projected/prefitting control:482 blocks,7712 queries,
+0.7719 seconds. Rank48 power reference:50 iterations,0.1433 seconds.
+Total recorded experiment CPU1.975 seconds. These are single-repeat timing
+observations. Canonical GBCD has less block storage than the prefitting
+implementation, so rank48 power is a contextual strong reference, NOT an
+exact memory-matched comparison for the canonical version. No additional
+rank32 benchmark was run after the root requested closing this route.
+Cheaper blocks were offset by more blocks; no new method or speed benefit
+is established. Source hashes, small-check outputs and full coordinate
+trace are preserved in the result. No production source or ledger changed.
+
+Related target-aware initialization branch, audited from
+results/target-greedy-initialization-diagnostic.json: rank32 f/P-greedy on
+A=K+lambda I selects squared current Schur RHS residual / Schur diagonal,
+then uses the selected actual K columns for a frozen ordinary Nyström
+preconditioner. Across five workloads and lambda.001/1e-5, it loses all ten
+comparisons against matrix-only diagonal-greedy selection for BOTH zero and
+coordinate-Galerkin starts: nine need more iterations and Concrete1e-5 is
+censored at2500 iterations while matrix-only converges. This is not a
+claimed result from a new criterion. Wenzel--Santin--Haasdonk, Constructive
+Approximation57,45--74 (2023; online2022), Section1 lists f/P-greedy as
+|r(x)|/P(x); squaring it gives the finite-SPD Schur score above:
+https://link.springer.com/article/10.1007/s00365-022-09592-3
+
+Objective-aware pivoting also has explicit prior overlap. Schaub--Zaspel,
+Variational Free Energy Pivot Selection for Pivoted Cholesky,
+arXiv:2606.01821v1 (1June2026), Sections1.1 and6.2:
+https://arxiv.org/html/2606.01821v1
+Their text attributes an equivalent exact scalar VFE gain to Cao et al.'s
+CholQR, Efficient optimization for sparse Gaussian process regression,
+TPAMI37(12),2415--2427 (2015). Section1.1 reports that CholQR's appendix
+forward-greedy variant did not improve performance in that setting. This
+last statement was checked as Schaub--Zaspel's attribution; the original
+CholQR appendix was not independently retrieved in this bounded follow-up.
+The VFE criterion includes data-fit, logdet and trace contributions. It is
+not the same criterion as f/P-greedy, and neither source establishes a
+same-solve preconditioning runtime benefit for our project. Do not claim
+novel objective-aware pivot selection on the basis of this family.
+
+
+Mechanism audit: streamed implicit Nyström inverse statistics (2026-11-24)
+
+Scope: derivation plus one tiny independent dense arithmetic check, not a
+new solver, benchmark, or novelty claim. No production source changed.
+Let C=K[:,S], W=K[S,S]>0, G=C^T C, A=K+lambda I, and
+M=lambda I+C W^-1 C^T. Define B=G+lambda W and c=C^T r. Then
+  M^-1 r = (r-C beta)/lambda,  beta=B^-1 c.
+Thus storing indices and small cores can replace retained n-by-m factors,
+at the cost of reconstructing C beta when applying the inverse. Initial G
+and c must exist before the first such inverse application; they cannot be
+computed from a first PCG product whose direction itself requires them.
+A prior setup pass or explicitly different first step is necessary.
+
+In a row-block Kp pass, K[I,:] gives C[I,:] and finalized
+ap[I]=K[I,:]p+lambda p[I]. Accumulate d += C[I,:]^T ap[I].
+After the global denominator determines alpha, update
+  r_new=r-alpha ap, c_new=c-alpha d.
+No additional kernel entries are required for this projection update.
+For a candidate bank T fixed before the pass, the same rows also supply
+C_T^T r_old, C_T^T ap, C_S^T C_T and C_T^T C_T. Small kernel cores can be
+gathered from these entries. Candidates may be admitted after alpha is
+known, using c_T,new=C_T^T r_old-alpha C_T^T ap. Candidates selected only
+after the pass cannot retroactively contribute through discarded rows.
+Old fixed-set Grams need not be rebuilt. Cross-Gram work for q proposed
+columns costs O(n*m*q+n*q^2) arithmetic even though entry access is shared.
+
+Causality: beta_new depends on completed dot products, alpha and possibly
+post-pass admission. Therefore it is not available when earlier row blocks
+are discarded. The next C beta_new generally requires O(n*m) selected-column
+entry reevaluation, processed in small row blocks. An available Kp is not
+a general substitute. Fusing C beta into K(p+E_S beta) works only if beta
+is already known before that pass and does not produce both separate
+products automatically. Column-oriented traversal can fuse construction
+of the new direction into its matrix product, but then Ap rows are not
+finalized until the end; C^T Ap cannot be streamed from the discarded C
+rows by the same procedure. This shifts the dependency rather than
+eliminating both required actions. Retaining C actions for a basis spanning
+all possible next beta vectors works, but in the general case restores
+O(n*m) storage. Special invariant-subspace or dependent-coefficient cases
+do not justify a general elimination claim.
+
+Memory beyond the existing solver vectors: O(m^2) old small cores,
+O(m*q+q^2) candidate statistics, O(block_rows*(m+q)) selected-column
+workspace. The existing full-kernel block buffer remains O(block_rows*n).
+This is a retained-state observation, not a claim that an RP initializer
+or any existing implementation already avoids its temporary n-by-m arrays.
+For singular/near-singular W, use its rank-revealing small eigendecomposition:
+R=V_r Lambda_r^-1/2, beta=R(lambda I+R^T G R)^-1 R^T c.
+The formal full-rank B inverse is not a safe substitute for rank handling.
+
+Drift/reset: recursive c updates can diverge from C^T r, especially as both
+quantities approach zero. Each existing Kp pass can also accumulate C^T r_old
+from the stored residual, costing O(n*m) extra reductions and no kernel
+queries; this limits projection drift to the current update. It does not
+repair drift of r from b-Ax. A true-residual verification pass for Ax can
+jointly recompute r_true and C^T r_true while its rows are available, with
+one full kernel pass and no extra selected-column entries. A standalone
+projection reset against stored r costs n*m entries and leaves residual
+drift untouched; a subsequent C beta still needs its own action unless C
+is retained. Forming (r-C beta)/lambda may amplify cancellation at small
+lambda. Changing S also changes the preconditioner; these identities do
+not establish preservation of a fixed-PCG trajectory.
+
+Independent arithmetic check (tool execution only, 19-dimensional Gaussian
+K, numpy default_rng seed622091, four Gaussian features, bandwidth1.3,
+lambda.07, S=[1,5,11], candidate bank[1,5,11,3,8], row-block size4):
+streamed Ap error2.15e-16; accumulated Gram error2.24e-16; updated projection
+error2.91e-16; replacing index11 by8 and applying the small-core formula
+agreed with an independent dense inverse to5.43e-16 relative error.
+
+A generic-SPD information counterexample was checked with the same matrix:
+choose an orthogonal reflection R fixing E_S, p, r and Ap, but changing the
+component of C beta_new outside their span. K2=R K R^T is SPD. Initial
+preconditioned direction, Kp, W, G, C^T r and C^T Ap agree to at most8.81e-15,
+while the next exact preconditioned action differs by7.87percent. Minimum
+eigenvalue of K2 is.0556. K2 is not asserted to remain a Gaussian kernel;
+this rules out a general SPD algebraic identity from the saved statistics,
+not every structure-specific kernel algorithm or traversal with extra state.
+The tiny check is an arithmetic validation, not a drift or performance test.
+
+
+Primary-source boundary for small-core storage and nested elimination
+(2026-11-24; bounded concept audit, no new experiment)
+
+Meanti, Carratino, Rosasco and Rudi, Kernel methods through the roof:
+handling billions of points efficiently, NeurIPS 2020.
+https://papers.neurips.cc/paper_files/paper/2020/file/a59afb1b7d82ec353921a55c579ee26d-Paper.pdf
+Section 3.1, printed p5, explicitly avoids storing K_nm and packs two
+triangular preconditioner factors into one m-by-m allocation. Section 3.2
+evaluates K_mn(K_nm v) by accumulating K_block^T(K_block v), computing each
+kernel block once. This is direct prior for recomputation in place of a
+retained rectangular kernel factor and for block-product reuse. FALKON
+solves a reduced Nyström regression system; this does not make it the same
+algorithm as exact full-system PCG with a streamed Woodbury inverse.
+
+Agarwal, Snavely, Seitz and Szeliski, Bundle Adjustment in the Large,
+ECCV 2010, pp29--42, DOI 10.1007/978-3-642-15552-9_3.
+https://www.microsoft.com/en-us/research/wp-content/uploads/2010/10/Agarwal-ECCV10.pdf
+Section 4, Eq(12), printed p8, gives the implicit Schur action through two
+cross-block products and a principal-block solve. Section 5 compares
+implicit Schur-PCG variants that never store the Schur complement. The
+sparse bundle-adjustment structure differs from dense kernel elimination,
+but implicit Schur-CG and its memory-saving block action are established.
+The dense-kernel count (n-m)^2+2m(n-m)=n^2-m^2 is our operation accounting,
+not a complexity result attributed to their sparse problem.
+
+For nested residual-guided landmark growth, the Wenzel--Santin--Haasdonk
+source already recorded above defines f/P-greedy in Section 1 as |r|/P.
+For a finite SPD Schur system, its squared score is r_j^2/D_jj, twice the
+exact scalar coordinate energy decrease. This local decrease does not
+bound subsequent CG runtime. SC-RCD supplies fixed landmark constraints;
+sGDML Appendix G(d), recorded above, supplies same-solve inducing-column
+growth and restart. These references establish the ingredients, not an
+identical published fixed-byte-budget adaptive Schur implementation.
+
+If future diagnostics justify retaining the ten-step CG prefix across a
+larger eliminated set, the mechanism belongs to standard augmentation and
+recycling. Gaul et al., already recorded above, Theorem 3.2 and Section 4
+give the augmentation/deflation equivalence. The saved directions and their
+operator images must be charged explicitly. A successful result would
+require comparison with the larger static elimination core made feasible
+by the same in-place factorization and actual workspace implementation;
+the previous conservative three-core allowance is not an intrinsic limit.
+
+
+Primary source for feedback-controlled retention of Lanczos information
+(2026-11-24; bounded concept audit, no new experiment)
+
+Parlett and Scott, The Lanczos Algorithm with Selective Orthogonalization.
+Primary conference version: NASA, 1978, pp221--224, document 19790002294.
+https://ntrs.nasa.gov/api/citations/19790002294/downloads/19790002294.pdf
+Journal version: Mathematics of Computation 33(145), 217--238 (1979),
+DOI 10.1090/S0025-5718-1979-0514820-3.
+The inspected NASA version, pp222--223, explains the storage cost of full
+reorthogonalization, relates loss of orthogonality to converging Ritz
+vectors, and selects vectors for explicit orthogonalization using residual
+information from the small tridiagonal eigenproblem. Previously computed
+good Ritz vectors can be reused. Thus current-iteration spectral feedback
+to choose which old vectors deserve retention/corrective work is already
+central to selective orthogonalization. The journal PDF was blocked in this
+lookup; the mechanistic claim above is supported by the primary NASA text.
+
+This source supplies a prior-art boundary, not a result for the present
+fixed-byte kernel implementation. Trading an elimination core against saved
+Krylov vectors could still have engineering value, but a conjugacy-loss or
+converged-Ritz trigger alone does not define a distinct mechanism beyond
+selective reorthogonalization and the augmentation literature already cited.
+
+
+Primary-source boundary for convergence forecasting and concurrent solvers
+(2026-11-24; bounded concept audit, no new experiment)
+
+Meurant, Papez and Tichy, Accurate error estimation in CG (2021 preprint).
+https://arxiv.org/pdf/2101.03931
+Sections 1--3 estimate the current squared energy error using a delayed
+Gauss-quadrature bound: later CG coefficients improve an estimate of an
+earlier iterate. Section 5 discusses unreliable early estimates using the
+smallest Ritz value. This supplies error-estimation machinery for the
+current operator, not a counterfactual runtime guarantee after eliminating
+new coordinates. A valid spectral lower bound is a separate assumption.
+
+Wang and O'Leary, Adaptive use of iterative methods in predictor--corrector
+interior point methods for linear programming, Numerical Algorithms 25,
+387--406 (2000).
+https://www.cs.umd.edu/users/oleary/reprints/j55.pdf
+Section 3.2, pp393--394, uses measured costs of factorization, updates and
+PCG steps, with predictions from earlier solves, to choose direct versus
+iterative solution and preconditioner update versus reinitialization.
+This is direct prior for cost-aware adaptive preconditioning decisions;
+its evidence comes from a sequence of related interior-point systems.
+It does not infer an unseen elimination benefit from one CG prefix.
+
+DiPaolo and Gu, A Randomized Algorithm for Preconditioner Selection
+(arXiv:1908.00633v1, 2019).
+https://arxiv.org/html/1908.00633v1
+Algorithms 1--2 use Gaussian probes to estimate the Frobenius norm of
+I-M^{-1}A and select a preconditioner; the identity is an admissible choice.
+Section 3.2 includes Gaussian-kernel regression. The guarantees concern the
+estimated stability surrogate, not minimum CG iterations or total runtime.
+Actual candidate actions are paid for. Section 2.1 also gives a deterministic
+query lower bound by hiding operator differences outside the queried span.
+
+Barrett, Berry, Dongarra, Eijkhout and Romine, Algorithmic bombardment for
+the iterative solution of linear systems: A poly-iterative approach,
+Journal of Computational and Applied Mathematics 74, 91--109 (1996),
+DOI 10.1016/0377-0427(96)00019-2.
+https://netlib.org/utk/people/JackDongarra/PAPERS/080_1996_algorithmic-bombardment-for-the-iterative-solution-of-linear-systems.pdf
+Section 1 interleaves independent solvers on the same system, shares
+communication, and stops when one converges. Section 5 warns against
+transferring iterates by restarting other trajectories. Section 7 explicitly
+allows different compatible preconditioners and interleaved multipliers to
+share matrix access. Concurrent preconditioner selection and shared products
+are therefore established. Their stated elimination rule removes breakdowns;
+it does not certify killing an unfinished solver for worse current residual.
+
+Anzt, Dongarra, Kreutzer, Wellein and Kohler, Efficiency of general Krylov
+methods on GPUs -- An experimental study (2016 author-hosted paper).
+https://icl.utk.edu/files/publications/2016/icl-utk-873-2016.pdf
+The introduction explicitly combines independent solver matrix-vector
+products into a sparse matrix times block-vector product and interleaves
+reductions in algorithmic bombardment. This is direct overlap with sharing
+matrix loads across a solver portfolio, rather than only separate parallel
+execution. Its platform and nonsymmetric sparse solvers differ from the
+present CPU Gaussian-kernel Schur systems.
+
+For the present bounded question, one maximum nested Cholesky factor and
+shared generated kernel tiles are possible implementation opportunities,
+not evidence of a new selection principle. First-certified-completion racing
+preserves each fixed solver's trajectory; pruning by incomplete residual
+progress adds a forecast assumption. Memory accounting must include both
+solver states, padded triangular-solve buffers and any resulting reduction
+in row-block workspace. A portfolio must be compared with the best single
+fixed implementation and the per-instance single-solver oracle, including
+setup, verification, arithmetic for every right-hand side and peak bytes.
+
+
+Primary-source boundary for variable-accuracy kernel and core applications
+(2026-11-24; concept-only pivot assessment, no experiment)
+
+Higham and Pranesh, Exploiting Lower Precision Arithmetic in Solving
+Symmetric Positive Definite Linear Systems and Least Squares Problems,
+SIAM Journal on Scientific Computing, DOI 10.1137/19M1298263.
+https://epubs.siam.org/doi/10.1137/19M1298263
+The primary publisher abstract specifies low-precision Cholesky factors as
+preconditioners in GMRES-based iterative refinement, with a diagonal shift
+to prevent factorization breakdown. This directly covers the central
+low-precision-factor/high-precision-correction mechanism. Replacing dense
+storage by packed storage or using the factor inside a Schur action does
+not by itself establish a different feedback mechanism.
+
+Guo, de Sturler and Warburton, An Adaptive Mixed Precision and Dynamically
+Scaled Preconditioned Conjugate Gradient Algorithm, arXiv:2505.04155 (2025).
+https://arxiv.org/pdf/2505.04155
+The abstract and introduction specify precision switches based on the
+target tolerance and a residual-gap estimate, separate changes to the
+preconditioned residual/search direction, and dynamic scaling. The
+experiments use a GPU. Thus current-solve feedback to control precision
+and preserve final accuracy is already an explicit mechanism; GPU timing
+does not establish a benefit for this project's CPU kernel computations.
+
+Zhai et al., EvoCG: Self-Evolving Precision Control for Faster Conjugate
+Gradient, arXiv:2611.04469v1, 3 November 2026; preprint only.
+https://arxiv.org/html/2611.04469v1
+Section 3.2 and Algorithm 1 choose tile precision from the current search
+direction. Section 4.1 specifies matrix-specific offline policy training;
+Section 4.8 counts multiple prequantized value streams and reports that
+training is amortized across repeated solves. This is direct overlap with
+vector-dependent precision decisions, but not a ready single-solve,
+fixed-memory CPU implementation. Its performance claims are not adopted.
+
+Graillat, Jezequel, Mary and Molina, Adaptive Precision Sparse Matrix--Vector
+Product and Its Application to Krylov Solvers, SIAM Journal on Scientific
+Computing 46(1), C30--C56 (2024), DOI 10.1137/22M1522619.
+https://perso.lip6.fr/Theo.Mary/doc/adaptSpMV.pdf
+The abstract and Section 1 give magnitude-based precision buckets with
+rounding-error control and a multicore CPU implementation. This is an
+important static precision control: using smaller matrix entries at lower
+precision alone does not establish a current-solve adaptation benefit.
+
+Wang, Layton and Barba, Inexact Krylov iterations and relaxation strategies
+with fast-multipole boundary element method, arXiv:1506.05957v2 (2016).
+https://arxiv.org/pdf/1506.05957
+The abstract and Section 1 decrease the multipole expansion order as
+Krylov convergence proceeds. The implementation is multithreaded C++ on a
+CPU, for Laplace/Stokes boundary-element systems. This already establishes
+residual-progress-controlled FMM accuracy; it concerns inexact outer
+operator products, not solely changing a preconditioner.
+
+Balaji Vasan Srinivasan, Fast Matrix-Vector Product Based FGMRES for Kernel
+Machines, University of Maryland M.S. scholarly paper; repository version.
+https://www.cs.umd.edu/sites/default/files/scholarly_papers/Srinivasan_1.pdf
+The abstract and Section 3 use a regularized Gaussian kernel preconditioner,
+truncated inner CG and fast approximate kernel products inside FGMRES.
+Section 2.3 discusses sensitivity to dimension, bandwidth and accuracy,
+including direct-summation fallback. Therefore an inner approximate
+fast-Gauss solve is itself established kernel-preconditioning machinery.
+
+Assessment of the concrete FP32 packed-core possibility:
+Retaining an m-by-m triangular factor in FP32 uses 2*m*(m+1) bytes, half
+the FP64 packed-factor storage; vectors, indices, conversion buffers and
+kernel workspace remain additional. That can permit a larger fixed core.
+However, a right-hand-side-specific inner residual h=c-W*y must be computed
+with the original W=A_SS. Using L32*L32^T certifies a different operator.
+Without retaining the original W, a full blocked W*y requires m^2 kernel
+entries in the present nonsymmetry-exploiting traversal; symmetry reduces
+unique entry evaluations but does not make this operation free. The current
+Schur traversal skips this principal block. One such blocked certificate
+per action adds m^2 to its n^2-m^2 entry count before further corrections.
+The represented factor can be fixed, but adaptive inner accuracy makes the
+outer Schur actions inexact; exact final residual checks alone do not prove
+unchanged CG convergence or prevent accumulated residual gaps.
+
+No distinct qualified mechanism emerged from this bounded assessment.
+Mixed precision may still improve the static memory frontier, but that is
+not evidence that current-solve feedback adds value. The necessary future
+discriminator would compare adaptive and fixed-accuracy applications of
+the identical low-precision core under the same actual memory allowance,
+including all original-core certificates and final exact residual work.
+No such experiment is recommended solely on the present overlap evidence.
+
+
+Stored low-rank precision allocation: primary anchors and bounded oracle
+(2026-11-24; following the separately recorded quantization-headroom result)
+
+Carson and Dauzickaite, Single-Pass Nystrom Approximation in Mixed Precision,
+SIAM Journal on Matrix Analysis and Applications 45(3), 1361--1391 (2024),
+DOI 10.1137/22M154079X.
+https://arxiv.org/pdf/2205.13355
+https://epubs.siam.org/doi/10.1137/22M154079X
+The abstract and Sections 1--2 use lower precision for the expensive kernel
+matrix/sketch product, analyze the resulting Nystrom approximation, and
+derive a precision-selection heuristic. The preconditioning analysis
+accounts for finite-precision construction. This is close prior for mixed
+precision Nystrom preconditioning, but the inspected operation is not
+same-solve promotion of selected stored basis columns.
+
+Amestoy, Boiteau, Buttari, Gerest, Jezequel, L'Excellent and Mary,
+Mixed precision low-rank approximations and their application to block
+low-rank LU factorization, IMA Journal of Numerical Analysis 43(4),
+2198--2227 (2023), DOI 10.1093/imanum/drac037.
+https://tmary.perso.lip6.fr/doc/MixedBLR.pdf
+https://academic.oup.com/imajna/article-abstract/43/4/2198/6667623
+The abstract and Section 1 allocate singular-vector storage precision
+according to the singular value's weighting of rounding error. Their
+rounding-error analysis motivates static per-component precision rather
+than uniformly storing every vector at the same precision. This supplies
+the relevant static allocation principle; the heuristic used in the
+diagnostic below is not asserted to reproduce their algorithm.
+
+New evidence is confined to scripts/check_selective_precision_oracle.py
+and results/selective-precision-oracle.json. The predeclared ranks119/71,
+eight FP32 promotions, and checkpoint1 compare greedy H-action restoration
+using b alone versus b plus the first residual, while retaining every basis
+direction and using the FTU complement scale. Exact dense eigenvectors,
+decoded factors, construction, promotion selection and workspace are free
+in this oracle. Only the final mixed representation is charged against
+128KiB; this is not a 256KiB total-memory implementation.
+
+All42 trajectories reached the true original relative residual1e-8. Adding
+the first residual changed two of six promotion masks by one column, and
+changed none of the six full-solve iteration counts relative to the b-only
+mask applied at the same checkpoint. The combined-probe action discrepancy
+fell83.1--91.8percent, which is an action-fidelity result, not evidence of
+added current-solve convergence benefit. This bounded selector is negative;
+the underlying quantization-headroom observation remains separate.
+
+
+Matrix-free Gaussian inner solves in mixed precision: closest overlap
+(2026-11-24; bounded primary-source audit, no experiment)
+
+Srinivasan, Hu, Gumerov, Murtugudde and Duraiswami, Preconditioned Krylov
+solvers for kernel regression, arXiv:1408.1237v1 (2014).
+https://arxiv.org/pdf/1408.1237
+Sections 1 and 3.1 generate kernel entries on demand. Section 5.1 explicitly
+uses single-precision inner kernel products and double-precision outer
+products; Sections 5.4--6 discuss the inner tolerance and extra diagonal
+regularization. The evaluated products use GPUML. The introduction also
+names single-precision CPU SSE as an available acceleration, but this is
+not a CPU packed-Schur performance result. The inspected source is the
+arXiv version; its journal-style header is not evidence of publication.
+This is direct prior for the main mixed-precision Gaussian inner/outer
+mechanism, stronger overlap than the earlier scholarly-paper reference.
+
+Maddox, Potapczynski and Wilson, Low-Precision Arithmetic for Fast Gaussian
+Processes, UAI 2022, PMLR180:1306--1316.
+https://proceedings.mlr.press/v180/maddox22a/maddox22a.pdf
+Sections 4--5 study precision-dependent kernel behavior and use on-the-fly
+KeOps kernel products. Section 5.1 separates low-precision block products
+from higher-precision accumulation; Section 6 evaluates on a V100 GPU.
+Thus the distinction between kernel evaluation, reduction accuracy and
+solver stability is already important in primary Gaussian-process work.
+Its training experiment does not establish our original FP64-system
+residual1e-8 target, fixed CPU workspace allowance, or Schur cancellation
+behavior. No GPU speedup is transferred to the present CPU setting.
+
+Cutajar, Osborne, Cunningham and Filippone, Preconditioning Kernel Matrices,
+ICML2016, PMLR48:2529--2538.
+https://proceedings.mlr.press/v48/cutajar16.pdf
+Section 3.3.2 describes shifted-kernel inner CG with flexible outer CG,
+attributing it to Srinivasan et al. Section 4 includes the inner products
+in its work comparison and reports that the regularization approach is
+ineffective in its tested cases because inner iterations are costly.
+This is evidence that the inner/outer construction can lose after proper
+work accounting, not a universal rejection of accelerated mixed precision.
+
+Yang, Duraiswami and Davis, Efficient Kernel Machines Using the Improved
+Fast Gauss Transform, NeurIPS2004.
+https://proceedings.neurips.cc/paper/2004/file/85353d3b2f39b9c9b5ee3576578c04b7-Paper.pdf
+The abstract and experiments use approximate Gaussian matrix-vector
+products in an iterative kernel solver; the experiments specify a Pentium4
+CPU with512MB memory. This supplies a CPU matrix-free Gaussian precedent,
+but its approximation is an IFGT expansion rather than FP32/FP64 arithmetic.
+The bounded lookup did not identify an exact CPU mixed-precision packed-
+Schur implementation matching the proposed workspace constraint.
+
+Remaining causal question (our synthesis, not an established result):
+For an inner correction z, separate inner-solve error from operator error,
+  r-A*z = (r-A_low*z) + (A_low-A)*z.
+The FP64 outer product supplies A*z. An independently evaluated A_low*z
+would isolate operator discrepancy for that current vector and costs a
+low-precision action; a recursive inner residual alone also contains its
+own residual gap. This information could prevent oversolving the rounded
+inner system or justify higher precision on subsequent corrections. It is
+not a certificate for an unobserved next right-hand side. A fixed-accuracy
+mixed-precision method using the same packed core and kernel generator is
+therefore the essential feedback control.
+
+For D=T-C*W^{-1}*C^T, a first-order perturbation contains the terms
+deltaT-deltaC*W^{-1}*C^T-C*W^{-1}*deltaC^T
+ +C*W^{-1}*deltaW*W^{-1}*C^T.
+Small entrywise Gaussian evaluation error need not imply a small relative
+Schur-action error when these terms nearly cancel. FP64 outer verification
+keeps the target system unchanged, but does not guarantee that FP32 inner
+CG retains positive curvature. Any inner shift belongs to the approximate
+preconditioner, not to the requested original regularization.
+The possible contribution is the measured interaction of kernel-generation
+accuracy, inner stopping and packed-Schur memory, rather than a new
+mixed-precision principle. Count the FP32 input copy, all outer Arnoldi and
+preconditioned vectors, conversion buffers, row tiles and exact products.
+Compare generators at the same precision as well as across precisions;
+different distance/exp implementations can otherwise confound the saving.
+
+Parent-reported microbenchmark handoff for this assessment:
+results/kernel-precision-cost.json compares equal128KiB tile allowances and
+finds a2.5--2.8-fold FP32-versus-FP64 Gram-generator speedup on reference
+solution vectors. FP32 kernel-action errors relative to ||b|| are about
+2.57e-4--2.18e-3; rounding features alone gives smaller but nonzero errors.
+These are action measurements, not inner-solver or refinement results.
+Generating FP32 kernel tiles but multiplying the original FP64 vector and
+accumulating in FP64 is the relevant next isolation: it removes input-vector
+rounding and low-precision summation from the comparison, while retaining
+kernel-entry and feature perturbations. The simultaneous source and cast
+tiles require12 bytes per entry, so the working block must shrink or an
+explicit conversion scheme must be audited. A fixed entry approximation
+does not by itself guarantee that the computed kernel or its Schur
+complement is SPD. The original FP64 outer residual remains necessary.
+
+
+Primary-source boundary for slow-error-informed Schur block membership
+(2026-11-24; conceptual mechanism and source audit)
+
+Vecharynski, Saad and Sosonkina, Graph partitioning using matrix values for
+preconditioning symmetric positive definite systems, arXiv:1110.5709v4
+(17 November2013 author preprint).
+https://arxiv.org/pdf/1110.5709
+Section2, Theorem2.2, relates two-block Jacobi conditioning to the normalized
+cross-block coupling (the CBS constant), with bound (1+gamma)/(1-gamma).
+Section3, Algorithm3.1 and Theorem3.1, explicitly treat nonoverlapping
+additive Schwarz as principal-block diagonal preconditioning and formulate
+partition quality in terms of that coupling. The paper develops a
+matrix-coefficient-aware balanced partition; its partition criterion is
+not current-right-hand-side feedback. Thus changing block membership to
+improve preconditioning is established, rather than a new principle here.
+
+Brandt, Brannick, Kahl and Livshits, Algebraic distance for anisotropic
+diffusion problems: multilevel results, ETNA44,472--496 (2015).
+https://etna.ricam.oeaw.ac.at/vol.44.2015/pp472-496.dir/pp472-496.pdf
+Section2 describes bootstrap test vectors approximating slow/near-kernel
+errors. Equation(2.2) fits them by weighted least-squares interpolation;
+Section2.2 uses homogeneous compatible relaxation to expose unresolved
+error, and Section3 derives strength of connection from these vectors.
+The intended transfer is the use of slow-error information to identify
+algebraic connections. The primary result concerns multigrid coarsening
+and interpolation, not fixed-byte kernel Schur block solves or a runtime
+guarantee for a single current solve.
+
+Local derivation used for the bounded block-membership hypothesis:
+For S SPD and D_pi=blockdiag(S[B,B]),
+v^T D_pi v=sum_i S_ii*v_i^2+2*sum_{i<j in the same block}S_ij*v_i*v_j.
+With fixed v, reducing this denominator increases the generalized
+Rayleigh quotient v^T S v/(v^T D_pi v). A beneficial pair for a small
+Rayleigh mode has S_ij*v_i*v_j<0: positive conditional kernel couplings
+can require opposite-sign error components in one block. This identity
+is a local calculation, not a theorem of future PCG improvement. Neither
+the partitioning source nor bootstrap AMG establishes that minimizing
+this single-vector quantity improves a complete kernel solve. True error
+and exact generalized eigenvectors used for an oracle are unavailable
+production inputs and do not establish an affordable test-vector method.
+
+
+Model-error forcing terms for mixed-precision correction
+(2026-11-24; bounded primary-source check, no experiment)
+
+Eisenstat and Walker, Choosing the Forcing Terms in an Inexact Newton
+Method, SIAM Journal on Scientific Computing17(1),16--32 (1996).
+https://doi.org/10.1137/0917003
+Author-hosted primary text:
+https://users.wpi.edu/~walker/Papers/forcing_terms,SISC_17,1996,16-32.pdf
+Section2, Choice1, equation(2.1), chooses the next forcing term from the
+normalized difference between the observed function change and the
+previous Jacobian prediction:
+ eta_k = ||F(x_k)-F(x_{k-1})-F'(x_{k-1})s_{k-1}||
+         / ||F(x_{k-1})||.
+Equation(2.2) also gives a difference-of-norms alternative. The paper
+motivates these choices by avoiding unnecessary inner accuracy when the
+local model is inaccurate. Its convergence assumptions concern inexact
+Newton steps with the specified Jacobian model.
+
+Our mapping and limitation: take F(x)=A64*x-b and substitute M_low for
+the exact Jacobian in the model. The numerator becomes
+||(A64-M_low)*z||. Thus the proposed eta_next=clip(0.5*delta,1e-4,0.2),
+delta=||(M_low-A64)*z||/||r_old||, is an Eisenstat--Walker-style
+model-error forcing rule. The factor0.5 and clipping are chosen safeguards,
+not the cited equation. For a linear function with its exact Jacobian,
+the cited model defect is zero; its convergence theorem does not establish
+convergence with a rounded Gaussian operator.
+
+The exact current-step identity is r_new=h+g, where
+h=r_old-M_low*z and g=M_low*z-A64*z. If the full original-coordinate
+inner residual satisfies ||h||<=eta_old*||r_old||, then the current
+relative residual is at most eta_old+delta. A reduced or recursive
+residual requires separate residual-gap and constraint accounting.
+The previous delta gives no bound on the next correction's delta, and
+clipping eta cannot cure an inaccurate operator. If the computed action
+includes FP32 rounding of the input vector, it need not be a fixed linear
+map, although the computed-vector residual identity still applies.
+
+The diagnostic M_low*z action must be charged to the adaptive variant;
+fixed-tolerance controls need not perform it. The remaining research
+question is whether this known feedback principle pays for that action
+through Gaussian-generation accuracy, Schur stability and memory-limited
+inner work. It is not a new forcing-term principle or a proven contraction
+guarantee.
+
+
+Finite Taylor Gaussian preconditioner: primary overlap and cost boundary
+(2026-11-24; concept-only assessment after the refinement pilot)
+
+Cotter, Keshet and Srebro, Explicit Approximations of the Gaussian Kernel,
+arXiv:1109.4603v1 (21 September2011; preprint status used here).
+https://arxiv.org/pdf/1109.4603
+Section3, especially equation(10), gives exactly the proposed globally
+centered Gaussian factorization with the inner-product exponential
+truncated after degree p. The paper interprets it as an orthogonal feature
+projection and counts binomial(d+p,p) distinct monomials. This establishes
+the approximation itself; using its positive feature expansion is not a
+new kernel construction. Its SVM experiments do not establish the present
+original-system residual tolerance or fixed-memory solver performance.
+
+Song, Woodruff, Yu and Zhang, Fast Sketching of Polynomial Kernels of
+Polynomial Degree, ICML2021, PMLR139:9812--9823.
+https://proceedings.mlr.press/v139/song21c.html
+https://proceedings.mlr.press/v139/song21c/song21c-supp.pdf
+AppendixA writes the Gaussian kernel as the diagonally scaled sum of
+positive tensor-feature Gram matrices, truncates this sum, and sketches
+the terms. AppendixD constructs a preconditioner for Gaussian kernel
+linear systems from that approximation. Thus Taylor features plus kernel
+preconditioning also have direct prior overlap. Their high-dimensional
+sketching construction is different from an entrywise Horner evaluator
+inside a memory-limited Schur solve.
+
+Yang, Duraiswami and Davis2004, already cited above, Section3.1.1 uses the
+same exponential factorization around source centers for IFGT; Section4
+uses approximate products in regularized least-squares classification.
+Its clustered source-target expansion is not the same global symmetric
+feature truncation, so its approximation need not inherit the same
+Loewner-order guarantee without additional construction.
+
+Van den Eshof, Sleijpen and van Gijzen, Relaxation strategies for nested
+Krylov methods, Journal of Computational and Applied Mathematics177,
+347--365 (2005), DOI10.1016/j.cam.2004.09.024.
+https://webspace.science.uu.nl/~sleij101/Reprints/ESl05b.pdf
+The abstract and introduction address expensive approximate products,
+inner Krylov preconditioning and accuracy selection in flexible outer
+methods; the application includes a Schur-complement system. Together
+with the existing Srinivasan approximate-Gaussian FGMRES source, this
+limits any claim that adapting Taylor order to outer progress supplies a
+new inner/outer principle.
+
+Our exact-arithmetic derivation:
+Let Z=X/bw, s_i=||Z_i||^2, D_ii=exp(-s_i/2), and
+ K_p=D*[sum_{j=0}^p (Z*Z^T)^{Hadamard j}/j!]*D.
+Every summand is a feature Gram matrix. Consequently
+ 0 <= K_p <= K_{p+1} <= K,  M_p=K_p+lambda*I is SPD,
+ and E_p=A-M_p is PSD.
+The omitted diagonal and its trace are
+ e_i=1-exp(-s_i)*sum_{j=0}^p s_i^j/j!,  tau_p=sum_i e_i.
+Hence ||E_p||_2<=tau_p and
+ spec(M_p^{-1/2}*A*M_p^{-1/2}) is contained in
+ [1,1+tau_p/lambda]. Norms cost O(nd); tail evaluation adds O(np)
+by recurrence, or n scalar tail-function evaluations. Small tails need
+stable evaluation rather than subtraction of nearly equal numbers.
+
+PSD alone does not ensure unit-step refinement converges. Exact correction
+has error propagator -M_p^{-1}*E_p; it is contractive only if the relative
+tail has spectral radius below one. tau_p<lambda is sufficient, not
+necessary. For a correction with full inner residual at most eta*||r||,
+the elementary Euclidean bound is
+ ||r_new||/||r|| <= eta+(1+eta)*tau_p/lambda.
+Observed small ||E_p*z|| for one correction does not certify the next.
+Increasing p improves the ideal matrix ordering; this is a substantive
+difference from arbitrary FP32 entry perturbations, not evidence that
+solve feedback beats a fixed degree.
+
+The same global p and center must define every block in a fixed inner
+solve, including its elimination core. Entrywise/rowwise stopping,
+independent local-center truncations, or replacing negative off-diagonal
+entries by zero do not follow from this PSD proof. Floating-point Horner
+evaluation also needs its own error accounting. Explicit features have
+binomial(d+p,p) coordinates; direct entry evaluation avoids storing them
+but costs O(n^2*(d+p)) arithmetic and has no FGT linear-scaling claim.
+Besides existing input/core/vectors, count the n diagonal scales, norms
+or tail arrays actually retained, polynomial coefficients and all tile
+buffers; a separate Gram tile and polynomial tile are not free.
+
+Decision: no adaptive solver is justified solely by PSD truncation. The
+bounded cost discriminator is whether a globally controlled degree (for
+example, the least p with tau_p<=lambda/2) admits a materially cheaper
+compiled action than the same-workspace FP64 Gaussian generator. That
+specific bound supplies contraction with sufficiently accurate inner
+solves, but may be conservative. If the controlled action is not cheaper,
+this certificate-based route lacks its proposed cost mechanism; this is
+not an impossibility theorem for every lower-degree, direction-dependent
+scheme. If action headroom exists, the remaining research question is
+adaptive versus fixed order with identical representations and all
+diagnostic/rebuild work charged. It remains a combination of established
+Taylor features, preconditioning and variable-accuracy iteration.
+
+2026-11-24: diagonal correction and executed cost discriminator.
+For E=K-Kp PSD, e=diag(E), D=diag(e), Kp+D is PSD (not
+necessarily PD), and M=Kp+D+lambda I is SPD. The off-diagonal
+error obeys beta=max_i sqrt(e_i)*(sum_j sqrt(e_j)-sqrt(e_i))
+and ||E-D||2<=beta. For a current correction z, set
+w_i=sqrt(e_i)*(sum_j sqrt(e_j)*abs(z_j)-sqrt(e_i)*abs(z_i));
+then ||(E-D)z||2<=||w||2. With full inner residual bounded by
+eta*||r||, ||r-Az||/||r||<=eta+||w||/||r||. beta<=lambda/2
+and eta<1/3 suffice for contraction in exact arithmetic. beta
+is not uniformly tighter than trace(E); no novelty claim for this
+basic PSD entry bound or diagonal correction. Floating point
+evaluation needs separate control; measured symmetry/Cholesky
+are numerical audits, not universal rounding-error proofs.
+Executed results/taylor-kernel-cost.json: selected degrees8–17,
+1.06–1.72x standalone action speedup over fastest matched FP64
+generator. Accuracy audit found directionwise bounds6–710 times
+actual error on reference solution vectors. No adaptive solver
+performance or novelty established by these two screens.
+
+Direct inexact PCG after the negative repeated-correction oracle
+(2026-11-24; bounded mechanism/prior check, no experiment)
+
+Van den Eshof and Sleijpen, Inexact Krylov Subspace Methods for Linear
+Systems, SIAM Journal on Matrix Analysis and Applications26(1),125--153
+(2004), DOI10.1137/S0895479802403459.
+https://webspace.science.uu.nl/~sleij101/Reprints/ESl04b-40345.pdf
+Section6 equations(6.1)--(6.7) define inexact CG with perturbed products
+and bound the residual gap by the sum of step lengths times action errors.
+Sections6.3/6.5 distinguish this accuracy control from convergence speed:
+small action errors can still delay convergence. Thus the proposed
+residual-gap allocation is established inexact-Krylov machinery.
+
+Wang, Layton and Barba, Inexact Krylov iterations and relaxation strategies
+with fast-multipole boundary element method, arXiv:1506.05957v2 (2016),
+already cited above.
+https://arxiv.org/pdf/1506.05957
+Section2.6 equations(17)--(19) explicitly map a residual-dependent action
+accuracy to multipole expansion order; the implementation uses direct
+GMRES. This covers the accuracy/order-adaptation principle, though its
+Laplace/Stokes FMM cost and kernel bounds differ from the current Gaussian
+Horner evaluator.
+
+Our specialization: with fixed SPD inverse preconditioner H, let
+z_j=H*r_j, f_j=Atilde_j*p_j-A*p_j, and ||f_j||<=B_j(p_j).
+Starting from an exact initial residual, the recurrences give
+ (b-A*x_k)-r_k=sum_{j<k} alpha_j*f_j.
+If the corrected Taylor operator obeys Atilde_j>=lambda*I, then
+ 0<alpha_j=(r_j^T*z_j)/(p_j^T*Atilde_j*p_j)
+            <=(r_j^T*z_j)/(lambda*||p_j||^2)=alpha_upper_j.
+Selecting the least degree with alpha_upper_j*B_j<=delta_j therefore
+limits the truncation part of the gap to sum_j delta_j. This uses the
+actual current direction, a scalar cumulative budget and O(n) bound
+workspace; it requires no full Krylov basis or approximate inverse solve.
+Rounding errors in products/recurrences remain additional, and final
+original-FP64 residual verification is mandatory. The identity alone does
+not guarantee that the recursively computed residual converges rapidly.
+
+Decision: a single bounded diagnostic is justified by a different cost
+path from the failed nested correction: no inner iteration or degree-
+changing core rebuild, and no diagnostic exact product per direction.
+The available action speedup supplies a plausible, unproved cost benefit.
+This is adaptive operator accuracy with a fixed preconditioner, not a new
+adaptive preconditioner. A meaningful result must beat fixed-M exact PCG
+and fixed-degree controls under the same total bytes, then the strong
+packed-Schur baseline. Fixed degree controls must not be charged adaptive
+selection work. Any useful contribution would be the Gaussian-specific
+certificate, implementation and full-scope evidence, not the known gap
+identity or expansion-order feedback in isolation.
+
+Preconditioner-energy curvature bound: primary anchor and negative decision
+(2026-11-24)
+
+Gratton, Simon, Titley-Peloquin and Toint, Minimizing convex quadratics
+with variable precision conjugate gradients, Numerical Linear Algebra
+with Applications28(1),e2337 (2021), DOI10.1002/nla.2337.
+https://arxiv.org/pdf/1807.07476
+https://doi.org/10.1002/nla.2337
+Theorem2.3 bounds the CG step length using true direction energy minus
+an operator-error allowance, then uses that bound to allocate action
+accuracy. Section3.2 discusses the unavailable direction energy and
+replaces it by computable estimates, including trace(A)/n times the
+squared direction norm. Thus energy-sensitive accuracy allocation and
+curvature-based step bounds are established. The inspected paper does
+not supply the particular fixed-Nystrom energy recurrence below.
+
+For fixed P=Khat+lambda I<=A and H=P^{-1}, p=H*r+beta*p_prev gives
+ sigma=p^T*P*p=r^T*H*r+2*beta*r^T*p_prev+beta^2*sigma_prev.
+With ||A-M_q||2<=BETA_q and M_q>=lambda I, the proposed bound
+ alpha_upper(q)=rho/max(lambda*||p||^2,sigma-BETA_q*||p||^2)
+is valid in exact arithmetic. It needs one additional dot product and
+scalar recurrence state, not a new kernel action. Its improvement over
+the lambda-only bound requires
+ BETA_q < sigma/||p||^2-lambda
+at a useful cheaper degree q. A large true-curvature/lambda ratio does
+not establish this: omitted Nyström directions can have substantial
+A-curvature while their P-curvature remains at the lambda floor.
+Floating-point recurrence drift must be distinguished from the ideal
+bound, and H must be the inverse of this same P.
+
+Parent-reported executed evidence: results/taylor-energy-cg-diagnostic.json.
+All six cases converge. Mean degree reductions relative to lambda-only
+selection are at most0.103; one case is unchanged. Independent evaluation
+of p^T*P*p agrees with the recurrence to at most5.5e-13 relative error,
+and all observed alpha values satisfy the proposed upper bound. Thus the
+mechanism is mathematically coherent but gives negligible useful degree
+reduction in this scope. Retire it without native promotion or threshold
+tuning; the earlier 5--100-fold looseness of the lambda-only step bound
+was not recoverable through the represented Nyström curvature.
+
+Fixed block approximation with transient exact residual products
+(2026-11-24; proposed structural headroom gate, no result here)
+
+Bauer and Bebendorf, Adaptive H-matrix computations in linear elasticity,
+Applied Numerical Mathematics201,1--19 (2024),
+DOI10.1016/j.apnum.2024.02.007.
+https://epub.uni-bayreuth.de/id/eprint/8010/1/1-s2.0-S0168927424000291-main.pdf
+The introduction and Section3 explicitly adapt hierarchical matrix-vector
+approximation to the vector being multiplied. Block approximations are
+successively refined using error estimators. This is direct prior for
+vector-dependent block accuracy, alongside their BACA2019 solution-guided
+matrix assembly already cited above. Fixed retained factors with transient
+exact fallback are an implementation/resource distinction, not a claim
+to invent vector-adaptive hierarchical multiplication.
+
+The proposed operation freezes all factors and the elimination core.
+For each current direction, selected off-diagonal kernel block residual
+products are evaluated exactly; their transposed partners are also used.
+This removes expensive kernel queries on the other blocks without evicting
+retained modes, changing the preconditioner or rebuilding its core.
+
+Smallest favorable gate: n2048, packed exact core320, four balanced kd
+blocks of the1728 remaining points, rank6 SVD factors for each of the six
+off-diagonal K_RR block pairs. Diagonal blocks remain exact and unstored.
+Cache factor bytes are248832 and packed-core bytes410880; vectors, indices,
+norms, metadata and workspace still count against the same1MiB allowance.
+Cache K_RR rather than its Schur complement: charge both cross passes,
+2*m*(n-m) entries per action, plus exact diagonal/fallback blocks. This
+avoids hiding retained A_RS L^{-T} factors. Price low-rank factor actions.
+
+Replay frozen exact core320 CG directions with free exact step lengths and
+future iteration count N. For each step enumerate all64 exact-fallback
+masks, choosing minimum query cost subject to
+ |alpha|*||sum(omitted paired-block error vectors)||
+ <=0.1*1e-8*||b||/N.
+The true error vectors and SVD construction are free oracle information.
+Using their summed vector norm allows cancellations and is more favorable
+than summing blockwise norm bounds. Compare exact core320, exact core416,
+and the cheapest fixed mask satisfying the same replay budget. Use the
+same symmetry exploitation rule for all query counts. Ignore construction
+and selector cost only as an explicit advantage to this headroom oracle.
+Failure against core416 closes this gate; passing only licenses an actual
+inexact-recurrence and full-cost check with fixed-accuracy controls. It
+does not establish a production error certificate, unchanged trajectories,
+or useful current-solve feedback across the original scope.
+
+Executed fixed-block-cache oracle (results/block-cache-oracle.json):
+core320, four balanced kd tail groups, six rank6 K_RR off-diagonal
+pairs. Cached singular values explicitly charged:249120B factors,
+410880B packedcore,660000B total vs core416693888B. Original norm
+tolerance1e-8;0.25 of total tolerance distributed equally over known
+trajectory length. This is more permissive than the preliminary0.1
+fraction in the concept note. Enumerated64 actual summed-error masks
+at each exactSchur-CGstep. On4n2048 cases no nonempty approximate
+mask met the bound, so bestfixedmask is also all-exact. No lowrank
+application costs need pricing to reject this screen: even granting
+themfree, kernelentries exceedcore416 by23.6–66.5percent. Uniform
+row traversal chargesbothdirections in candidate/control identically.
+Dense/SVD/selection costsfree; no production-memory conclusion.
+
+Largecore exchange follow-up: for C=A_SS, h_i=(C^-1)ii,
+v=C^-1 A_Sj, s=A_jj-A_jS v, deleting i then adding j has
+conditionalpivot t=s+v_i²/h_i and determinant ratio h_i*s+v_i².
+If currentr_S=0, exact reconstruction decreasesquadraticenergy
+by r_j²/(2t). Oldcore coordinatecorrection at j instead gives
+r_j²/(2s)>=this. The minimumpenalty removal choosesminv_i²/h_i,
+which can imply nearlyorthogonal old/new conditionaldirections: 
+conditionalcorrelation²=v_i²/(h_i*s+v_i²). In four n2048/core416
+cases it is2.3e-12..1.9e-7 and swappedcontinuation exactlymatches
+oldcorecoordinatewarmcontrol counts, bothloseuninterrupted.
+Sources: results/large-core-exchange-oracle.json and
+results/large-core-exchange-energy.json. Allconstructionfree,
+originalresidualtarget1e-8. Changedregimedoesnotrescuecriterion.
+
+Fixed-basis complement scaling: direct prior boundary (2026-11-24)
+
+Diouane, Gurol, Mouhtal and Orban, An Efficient Scaled Spectral
+Preconditioner for Sequences of Symmetric Positive Definite Linear
+Systems, arXiv:2410.02204v1 (2024).
+https://arxiv.org/html/2410.02204v1
+Section4.3, Theorem7, Eq19 gives the initial-residual-optimal cluster
+position as the Rayleigh quotient of the residual projected outside an
+exact invariant eigenspace. Eq23 shows that its first step removes the
+retained-space residual components. This directly covers the proposed
+missing-curvature scalar when exact eigenvectors are available.
+
+Diouane, Gurol, Mouhtal and Orban, A Spectral Preconditioner for the
+Conjugate Gradient Method with Iteration Budget, arXiv:2603.28969v1
+(2026). https://arxiv.org/html/2603.28969v1
+Theorem3/Corollary4 optimize spectral cluster placement for a prescribed
+iteration budget; Section4 gives practical scaling choices, including
+initial-residual information. These are primary preprints, not asserted
+here to have a verified journal publication.
+
+Our mapping and deductions: for orthonormal U and D=diag(theta+lambda),
+H_mu=U D^-1 U^T+(I-UU^T)/mu is, up to the irrelevant positive scalar
+1/mu, their scaled spectral inverse I+U(mu D^-1-I)U^T. In the exact
+invariant case its missing-spectrum condition-number ratio is unchanged
+by mu. If CG is RESTARTED from an iterate whose residual has no
+retained-space component, all positive fixed mu give identical subsequent
+exact-arithmetic iterates. This does not hold merely because one residual
+of unrestarted PCG has zero retained component: its stored search direction
+can reintroduce that component. The source's Theorem8 explicitly compares
+the restarted and uninterrupted sequences. Approximate Nyström bases can
+also leave coupling and leakage; current-scale tuning needs a demonstrated
+benefit beyond the established initial-residual scale.
+
+For a general approximate U, current p and Ap do not alone give the
+projected curvature exactly: with c=U^T p and v=p-Uc,
+v^T A v=p^T Ap-2*c^T U^T Ap+c^T(U^T A U)c.
+The last matrix is not generally diag(theta+lambda); obtaining it or
+Av has a real setup/product cost. Changing only the complement scale
+also changes the preconditioner rather than multiplying all of it by
+a scalar, so fixed-PCG conjugacy is not automatically preserved.
+Executed approximate-basis gate: results/spectral-floor-feedback.json,
+rank64, smooth512/mixed512/Concrete824 at lambda .001 and1e-5. All60
+runs reached literal original relative residual1e-8. Current-direction
+feedback required56/527/51/218/135/1323 iterations, versus best tested
+fixed scales40/338/38/169/88/748. Initial-RHS and first-direction frozen
+fits also lost in allsix cases. Every branch uses one previous
+A-conjugate direction. Dense construction and verification are free;
+there is no native timing or total-memory claim. This closes this
+feedback rule; it does not prove that every scalar schedule is inferior.
+
+Larger packed elimination cores through FP32 factor storage (2026-11-24)
+
+Additional primary CPU storage precedent: Schneck, Weiser and Wende,
+Impact of mixed precision and storage layout on additive Schwarz
+smoothers, Numerical Linear Algebra with Applications28(4), e2366
+(2021), DOI10.1002/nla.2366.
+https://onlinelibrary.wiley.com/doi/full/10.1002/nla.2366
+Sections3.1.3 and3.2 study reduced-precision Cholesky-factor storage,
+including packed layouts, and its effect on CPU cost and convergence.
+Their application is overlapping Schwarz, not Gaussian landmark
+elimination. This is direct precedent for the storage/precision tradeoff.
+
+The low-precision-factor/high-precision-core-residual mechanism remains
+ordinary mixed-precision iterative refinement; Higham--Pranesh2021,
+DOI10.1137/19M1298263, already cited above, is the direct SPD reference.
+Using more landmarks under fixed total bytes is a legitimate new resource
+regime for this project, not a new adaptive principle. It differs from
+the failed global FP32-kernel inner solves: the original kernel remains
+FP64 and rounding is confined to the stored principal-core factor.
+
+Our accounting and accuracy boundary: packed FP32 L needs2*m*(m+1)
+bytes, versus4*m*(m+1) for FP64. Thus m600 needs721200B, slightly more
+than the693888B of FP64 m416; all remaining buffers must still fit.
+Streaming construction can retain completed FP32 columns and an FP64
+working column, but must not form an uncharged FP64 m-by-m factor or
+matrix. Setup uses rounded previous columns and requires its own pivot
+breakdown check; merely accumulating dot products in FP64 does not make
+it the rounded result of an exact FP64 Cholesky factorization.
+
+Finite refinement makes the Schur action inexact. With C=A_SS,
+t=A_SR*v, delta=t-C*yhat, its error relative to the true Schur action is
+  (A_RR*v-A_RS*yhat)-S*v=A_RS*C^-1*delta.
+Consequently, a small relative core residual alone is not a relative
+Schur-action guarantee. An SPD stored factor also does not imply that
+A_RR-A_RS*(L*L^T)^-1*A_SR is SPD. Variable stopping can further make
+the implemented action nonlinear. Original-system residual verification
+and propagated action-error control remain necessary; ordinary flexible
+preconditioning alone does not turn an inexact operator into the exact A.
+
+With j regenerated original-core products per reduced action, count
+n^2-m^2+j*m^2 kernel entries under the same traversal convention.
+Even one core residual evaluation removes the n^2-m^2 query saving;
+additional correction checks add m^2 each. Larger-core iteration savings
+must pay these products, triangular solves, streamed setup and workspace.
+This licenses only a static representation/headroom test. A later
+current-solve contribution must beat a fixed FP32-core/refinement control;
+ordinary residual-based iterative-refinement stopping is not sufficient
+to claim adaptive kernel preconditioning.
+
+Probabilistic core-error certificate and current-action refinement choice
+(2026-11-24; mathematical/prior check, no experiment)
+
+Verified directly in Halko--Martinsson--Tropp2011, Lemma4.1, printed
+p241/PDFp25: for fixed E and r independent standard Gaussian probes,
+ delta=alpha*sqrt(2/pi)*max_i||E*g_i|| bounds||E|| with failure at most
+alpha^(-r), alpha>1. Source:
+https://tropp.caltech.edu/papers/HMT11-Finding-Structure.pdf
+(alpha,r)=(10,6) gives1e-6; (4,10) gives9.5367431640625e-7. Probes
+must be independent of the already constructed factor. For an unchanged
+E, the resulting norm event covers all later current-solve vectors,
+including adaptively generated vectors; no iteration-wise union bound
+is needed. Changing/selecting factors with the same probes requires a
+separate independence or simultaneous-probability argument. This is an
+exact-arithmetic probability statement; computed probe-action error is
+not included automatically. Raw probe norms can be conservative when
+the error has many comparable singular values.
+
+Our derived specialization: C=A_SS, B=A_TS, H0=(L*L^T)^-1,
+E=L^-1*C*L^-T-I, and delta<1. With t=B^T*p, y0=H0*t and
+h0=t-C*y0, let Hj be j stationary iterative-refinement corrections
+after the initial base solve. In exact arithmetic,
+ Hj=L^-T*[sum_{ell=0}^j(-E)^ell]*L^-1,
+ C^-1-Hj=L^-T*E^(j+1)*(I+E)^-1*L^-1 for odd j.
+Therefore0<H1<=H3<=C^-1 and S1>=S3>=S, where Sj=A_TT-B*Hj*B^T.
+Here H1 means ONE correction, hence TWO applications of H0.
+
+Since B*C^-1*B^T<=K_TT and ||K_TT||<=n_tail for the unit-diagonal
+Gaussian kernel, the current-direction action error satisfies
+ ||(Sj-S)*p|| <= delta^j*sqrt(n_tail/(1-delta)*h0^T*H0*h0), j=1,3.
+Indeed the residual after j corrections is L*(-E)^j*L^-1*h0;
+its C^-1-energy is bounded by delta^(2j)/(1-delta)*h0^T*H0*h0.
+The proposed leading delta is thus valid for H1, but would be wrong
+for the uncorrected H0 action. The needed energy uses the correction
+H0*h0 already computed, rather than an extra core product.
+
+Each candidate's curvature d_j=p^T*A_TT*p-t^T*Hj*t is available before
+the second cross pass. Use its own alpha_j=rho/d_j in the residual-gap
+increment |alpha_j|*bound_j. Since d3<=d1, alpha3>=alpha1 for positive
+rho: the H1 step cannot be reused as an upper bound for H3. Recheck H3
+as well; it is not automatically accurate enough. The cumulative gap
+budget controls approximation error, not the number of outer iterations;
+floating-point recurrence error, reduced RHS construction and final
+back-substitution need separate treatment and original-system checking.
+
+Closest algorithmic overlap remains van den Eshof, Sleijpen and van
+Gijzen, Relaxation strategies for nested Krylov methods, JCAM177(2),
+347--365(2005), DOI10.1016/j.cam.2004.09.024:
+https://webspace.science.uu.nl/~sleij101/Reprints/ESl05b.pdf
+They select accuracy for expensive inexact products and variable inner
+preconditioners, explicitly demonstrating a Schur-complement system.
+Together with Higham--Pranesh's mixed-precision Cholesky refinement and
+the HMT norm estimator, this supplies direct prior for the ingredients.
+The concrete project question is whether current-action certification
+avoids enough original-core products to beat fixed refinement counts
+under the same total bytes, while retaining the larger core. It is not
+a new random norm estimator, iterative-refinement formula, or general
+inexact-Schur principle. No exact matching implementation was established
+by this bounded source check; that absence is not a novelty claim.
+
+Final online selector: error relative to fixed S3 (native results pending)
+
+This replaces the preliminary absolute-Schur gate for the pending native
+comparison; the earlier absolute-error derivation remains valid. Here
+write B=A_ST (core-by-tail), C=A_SS, t=B*p, H0=(L*L^T)^-1,
+E=L^-1*C*L^-T-I, h0=t-C*H0*t, and Sj=A_TT-B^T*Hj*B.
+Define Z=B^T*L^-T*E. The exact identity is
+ H3-H1=L^-T*E*(I-E)*E*L^-1.
+Since L^-1*h0=-E*L^-1*t, it follows that
+ (S1-S3)*p=-Z*(I-E)*L^-1*h0,
+ ||(S1-S3)*p||<=sigma*(1+delta)*sqrt(h0^T*H0*h0),
+provided ||E||<=delta and ||Z||<=sigma. Require delta<1 for the
+previously established SPD/order guarantee. The h0 energy uses the
+already-computed H0*h0 correction. This bound controls the difference
+from the fixed three-correction action, not its bias relative to exact S.
+
+Estimate delta and sigma with six standard Gaussian probes and alpha10
+using HMT2011 Lemma4.1 above. Both operators must be fixed before probing.
+The two bounds hold simultaneously with failure probability at most
+2e-6 by a union bound; independence between these two events is not
+required. Their common event covers all subsequent online directions.
+The claims are in exact arithmetic. The implementation's floating-point
+guard is not yet a rigorous bound for computed probe/actions/recurrences.
+
+For each H1 candidate compute its own curvature
+ d1=p^T*A_TT*p-t^T*H1*t and alpha1=rho/d1 before the second cross
+pass. Let e1=sigma*(1+delta)*sqrt(h0^T*H0*h0) and d=|alpha1|*e1.
+Initialize total approximation budget D=.25*tol*||b|| and spent budget
+g=0. Accept H1 exactly when d<=D-g, then set g<-g+d. Otherwise use
+H3, which incurs no additional model gap relative to the reference S3.
+The decision uses no future trajectory length or future residuals.
+With exact arithmetic, g bounds the accumulated recurrence-residual gap
+relative to S3. It does not by itself certify the original Gaussian
+system: fixed-S3 bias, reduced-RHS/back-substitution error and floating-
+point error remain separate. Candidate and paired controls use the same
+.5*tol recursive stopping threshold, and final original-system residual
+verification is mandatory.
+
+Scientific scope: adaptive accuracy for inexact Schur products is already
+covered by the primary sources above. The concrete project mechanism is
+to use current outer-action information and the coupling-sensitive bound
+to skip paid core products while retaining the larger compressed core.
+It can support a course-project contribution if its full cost improves
+on accurate fixed-order controls and the strong exact packed-core
+baseline across the retained scope. The existing static compressed-core
+speedup alone is not evidence for same-solve adaptation. No new formula
+or general adaptive-Schur novelty is asserted, and the pending native
+batch has no recorded result here.
+
+Bounded prior check: current-RHS-informed factor precision (2026-11-24)
+
+Three targeted searches covered Cholesky precision with RHS-dependent
+storage, goal-oriented mixed-precision factorization, and residual-based
+precision allocation. The inspected primary sources establish substantial
+matrix/error-based allocation prior, but this bounded search did not
+verify an algorithm that uses current outer-solve residuals to choose
+which stored Cholesky columns to promote and then rebuilds that factor.
+This is limited coverage, not evidence of novelty or an exhaustive search.
+
+Kulkarni, Demmel and Grigori, Adaptive Precision Cholesky with Error
+Guarantees, arXiv:2611.19687v1 (15November2026).
+https://arxiv.org/html/2611.19687v1
+Section5.2, Eq75 and Algorithm7 select each panel's GEMM input precision
+using factorization-error budgets, panel squared norms, matrix diagonals
+and underflow terms. The algorithm takes A and a prescribed tolerance;
+no linear-solve RHS or outer residual enters its precision decision.
+Its input matrix and output factor are specified in high precision h;
+reduced precision is used for GEMM inputs. This is direct prior for
+error-controlled adaptive factorization arithmetic, not a demonstrated
+current-solve policy for persistent packed-factor storage. Treat this
+source as a preprint: its HTML has placeholder journal/DOI metadata.
+
+Abdurakhmanov, Mary, Ltaief, Keyes and Fahmy, Error-Controlled
+Mixed-Precision Cholesky Factorization with MX Microscaling Formats
+(2026), author-hosted manuscript:
+https://sfahmy.github.io/publications/2026-toms-abdurakhmanov.pdf
+The manuscript supplies DOI10.1145/3857919; the publisher page could
+not be opened in this check. Introduction and Algorithm1/PDFp7 allocate
+tile precision from rounding and underflow bounds relative to a global
+matrix-norm tolerance. Its precision assignment occurs before
+factorization, with no current solve vector in Algorithm1. It is the
+closer storage/allocation control, beyond condition-number-only rules.
+
+Zhang et al., Mixed-Precision GPU Acceleration for Confidence Regions
+of Spatial Excursion Sets, arXiv:2610.25039v1 (18October2026).
+https://arxiv.org/html/2610.25039v1
+SectionIV-C explicitly states that its triangular multiplication inherits
+the factor precision map; the RHS norm is diagnostic and does not alter
+precision. Thus this Gaussian-covariance application does not supply
+the proposed residual-informed factor-storage rule.
+
+Remaining hypothesis, not a result: observed core inverse-error directions
+could allocate a fixed FP64 storage allowance differently from matrix-only
+rounding/error criteria or the initial RHS. The pending gate compares
+those alternatives after a complete streamed mixed-factor rebuild and
+evaluates later core RHS. Improved training-vector action fidelity alone
+does not demonstrate useful precision allocation or repayment of rebuild
+cost and reduced core size. No performance result is added by this audit.
+
+
+Original-residual correction after approximate Schur solves (2026-11-24)
+This is standard iterative refinement used as a shared accuracy repair,
+not a contribution of the precision-selection candidate. The Airfoil
+source-of-error diagnostic is results/airfoil-core-error-diagnosis.json.
+For C=A_SS, B=A_SR, D=A_RR, boundary inverse action Hb and inner
+Schur action Sa=D-B^T Ha B, retain the full accumulated iterate x.
+From the literal original residual r=b-Ax, form
+  q=r_R-B^T Hb r_S,
+solve Sa v approximately equal to q, then compute
+  u=Hb(r_S-Bv),    x <- x+[u;v].
+The new exact residual is
+  [(I-C Hb)(r_S-Bv); q-Sb v],  Sb=D-B^T Hb B.
+Reconstructing the TOTAL x_S again as Hb(b_S-B x_R) would discard
+this correction and is incorrect for this outer-refinement scheme.
+Beyond inner actions, each correction needs two Hb applications,
+two cross-block products, and a full original residual verification;
+the preceding false-stop residual is reused. Full iterate and residual
+storage must be counted for a native fixed-memory implementation.
+The same absolute original tolerance, correction cap and accounting
+apply to static and adaptive controls. No contraction or runtime
+improvement follows merely from writing this correction identity.
+
+Causal qualification for the Concrete trajectory observation:
+The current-mask candidate used H2 in its first four iterations, whereas
+previous fixed-mask H1 controls did not. A static FIRST8 factor with the
+same H2 prefix is required to separate precision-mask selection from
+extra early action accuracy. The observed endpoints remain valid;
+attribution to adaptive mask selection is not yet established.
+
+Mechanism screening before sparse paired rotations (2026-11-24)
+For an SPD system A and an inverse approximation H0 with R=H0-A^-1
+positive semidefinite, let y=Ap, u=H0y-p=Ry and d=y^T R y>0.
+The inverse SR1 downdate H1=H0-u u^T/d satisfies
+ A^-1 <= H1 <= H0, H1y=p,
+because H1-A^-1=R^(1/2)(I-vv^T)R^(1/2),
+v=R^(1/2)y/sqrt(d). If d=0 then u=0 and the secant already holds.
+This algebra does not by itself predict a faster continuing CG solve.
+For fixed-H0 PCG in exact arithmetic, an old direction p_i gives
+u_i^T r_j=0 for j>=i+2: p_i^T r_j=0 and
+(Ap_i)^T H0 r_j=(Ap_i)^T(p_j-beta_j p_(j-1))=0.
+Thus sign-only changes to updates built from older completed directions
+do not supply a new action on untouched future residuals. This screening
+rejects that motivation, not every SR1 construction. No experiment or
+novelty claim is made here.
+
+A residual polynomial alone also lacks a new cheap mechanism: evaluated
+on its original seed it reproduces the current residual; evaluated at
+the prefix Ritz roots it vanishes there by construction. Those roots
+are not certificates that true spectral clusters are resolved. Filtering
+independent probes incurs extra sequential operator applications.
+
+The pending distinct mechanism localizes a completed displacement to
+disjoint geometric coordinate pairs before constructing coarse basis
+vectors. Local restrictions need not lie in the completed global Krylov
+space. Sparse orthogonal pair rotations then permit exact Schur
+elimination without discarding couplings. This is a proposed mechanism
+related to adaptive aggregation, not a demonstrated new method. Its
+diagnostic protocol is in method-revision.json.
+
+Closest verified source for local restriction: Brezina et al., Adaptive
+Smoothed Aggregation, SIAM Journal on Scientific Computing 25(6),
+1896-1920 (2004), author-hosted paper
+https://www.math.mun.ca/~smaclachlan/research/aSA.pdf
+Printed p.1898 describes restricting candidate error vectors to aggregates
+and extending by zero. This supports the established coarse-space
+construction, not the usefulness of recent CG displacements as candidates.
+The source uses errors surviving homogeneous relaxation. A recent CG
+displacement may instead emphasize an already corrected error component;
+the planned comparison must test this distinction.
+
+Protected local constants in adaptive aggregation (2026-11-24)
+Brezina et al., Adaptive Smoothed Aggregation, source above, Section2
+Eq(2.6), printed p1901 uses local QR. Note3.1 pp1904-1905 preserves
+supplied constant modes. Note3.5 pp1908-1909 adds
+y=d-P_old P_old^T d while retaining old columns. With the local old
+column equal to ones/sqrt(3), this is the same rank-two local basis
+construction proposed for the triplet diagnostic. The candidate there
+is homogeneous V-cycle error, not verified as the latest actual CG
+displacement. The construction itself is established, not a new principle.
+Additional primary source identified by the literature check:
+https://www.osti.gov/servlets/purl/875948 , Section3.2 pp5-6, contrasts
+global PCG prototypes with local enrichment. No identical same-solve
+CG/triplet exact-Schur implementation was verified by the bounded search.
+
+Streamed-action algebra for sparse paired bases
+After relabeling each pair, U=a e_J+b e_T with |a|>=1/sqrt(2),
+W=-b e_J+a e_T. For transformed tail p=(p_T,p_R), put
+q=(p_T/a,p_R) on physical coordinates L=T union R. Form
+f_J=A[J,L]q, f_T=A[T,L]q, t=a*f_J+b*f_T, h=C^-1 t,
+v_J=-a*h, v_T=q_T-b*h, v_R=q_R. Compute
+y_T=f_T-A[T,J](a*h)-A[T,T](b*h), y_R=A[R,:]v.
+The exact Schur output is (y_T/a,y_R). With an approximate core solve
+it is (y_T/a-(b/a)*(t-C h),y_R); the correction cannot be omitted.
+This schedule queries 2m(n-m)+(n-2m)n+2m^2=n^2 kernel entries.
+Independent random-SPD check n31,m8 produced relative errors
+2.7594e-16 (exact Schur action) and2.2816e-16 (approximate-core
+projected action with residual correction). This is an algebra check,
+not native performance or memory validation.
+
+For g disjoint triples with two coarse vectors and one fine vector,
+choose the physical fine coordinate with maximum fine-vector magnitude
+(at least1/sqrt(3)). The other two coarse rows form a uniformly
+invertible local interpolation block. The analogous exact schedule
+queries covered3g rows against n-2g physical-tail columns, uncovered
+n-3g rows against all n, then g physical fine rows against3g covered
+columns: 3g(n-2g)+(n-3g)n+3g^2=n^2-3g^2. For n2048,g208,
+this is4,064,512 entries, versus4,021,248 for coordinate core416.
+Setup, transforms, factor memory and workspace costs remain unmeasured.
+
+General local-block output reconstruction, independently checked:
+Partition physical covered coordinates into J (2g) and T (g), with
+U_J=F,U_T=H,W_J=G,W_T=D, where D is invertible diagonal after local
+pivoting. For p=(p_T,p_R), q=(D^-T p_T,p_R), form
+f_J=A[J,L]q, f_T=A[T,L]q, t=F^T f_J+H^T f_T, h approximately C^-1t.
+Set v=(-Fh,q_T-Hh,q_R), y_T=f_T-A[T,J]Fh-A[T,T]Hh,
+e=t-Ch. The projected output is
+  (D^-1 y_T+G^T F^-T e, A[R,:]v).
+For exact h the residual term vanishes. Random-SPD n19,g4 check
+agreed with dense exact Schur to5.6041e-16 and with the full projected
+action using an intentionally inexact h to3.8438e-16. These checks
+validate the identities only. Native kernel tiles, numerical stability
+on the project data and full-memory allocation remain untested.
+
+Whitened factorization-error correction: important representation boundary
+Primary source: Bock–Andersen, Numerical Linear Algebra with Applications
+(2025), https://doi.org/10.1002/nla.70012 ; Section2 Eqs16-20, Section3
+Eq26/Theorem2, Section5 Eq39/Woodbury. Its correction uses
+E=L^-1 C L^-T-I and selects eigenmodes by theta-log(1+theta).
+For a Nystrom underestimate, positive E makes this ranking monotone in
+theta and overlaps prior largest-generalized-eigenmode corrections.
+That reduction does NOT apply to our compressed principal-core factors:
+their E can be indefinite. Negative theta adds inverse curvature in
+Hc=H0-Z diag(theta/(1+theta)) Z^T, Z=L^-T V. This correction is
+established prior, not a new contribution. Current-solve acquisition and
+fixed-total-memory complete-cost benefits remain open.
+
+APLICUR, https://arxiv.org/html/2604.05065v1 , Section3.2/Algorithm1,
+already interleaves matrix-residual CUR refinement with Krylov solving
+and grows approximation rank. Merely combining iterative refinement and
+Krylov feedback is not a new mechanism or a fixed-memory solution.
+
+Positive correction of the first core-refinement inverse error
+For fixed SPD C and symmetric H0=(LL^T)^-1, define
+H1=2H0-H0 C H0. Then
+ C^-1-H1=(I-H0 C) C^-1 (I-C H0) >=0.
+For any independent columns S, set W=(I-H0 C)S, T=S^T C S.
+Since S T^-1 S^T <= C^-1,
+ H1 <= H1+W T^-1 W^T <= C^-1.
+Thus the associated Schur operator remains at least the exact Schur
+operator in exact arithmetic. H1 itself need not be positive for this
+Schur ordering. This is symmetric two-level preconditioning machinery,
+not a new principle.
+
+An acquisition route uses existing first-refinement work. On core RHS t,
+z=H0t, r=t-Cz, delta=H0r are already computed, and delta=(I-H0 C)z.
+Archive S=[z_i], W=[delta_i]; T cross terms use already computed Cz_i.
+No additional core products or half-solves are required. Normalizing or
+dropping columns must transform S and W together. Keep C and H0 fixed
+throughout collection. After freezing, S may be freed. Archive storage,
+small Gram construction, low-rank application and the changed-Schur
+restart are real costs. The next diagnostic compares four such current
+core directions to static random acquisition and larger static cores.
+This differs from the prior one-pair BFGS core fit and from full-system
+quantized-eigenbasis balanced deflation, but its practical benefit and
+research novelty are unestablished.
+
+
+Instructor-reference v2 scope recheck (2026-11-24)
+Source: literature/iterativecur-2509.21963v2.txt, pp4,10–11; arXiv2509.21963v2.
+The retained column residual is G(A−CUR); the row residual is restricted to newly
+selected columns. These update identities concern a growing CUR approximation.
+Section3.3 explicitly separates extra Gaussian error-evaluation vectors from
+selection vectors to remove dependence. The Frobenius stopping bound therefore
+does not transfer to current-solve residual directions, nor certify linear-solve
+time. This recheck makes no claim of a flaw in IterativeCUR. Its setup/solve
+interleaving extension APLICUR is already covered above; no fresh interleaving
+novelty claim is justified. README now distinguishes the archived fixed-column
+proposal from the current authorized fixed-total-memory objective.
+
+
+HODLR triangular-factor representation gate (2026-11-24)
+Primary sources inspected:
+https://portal.nersc.gov/project/sparse/strumpack/master/HOD_Preconditioning.html
+The official documentation distinguishes nonnested HODLR bases from HSS and
+describes approximate LU preconditioning. This supports format terminology, not
+a performance claim for our Gaussian-kernel sizes.
+https://arxiv.org/abs/2407.21637v5
+Carson, Chen, Liu, Mixed precision HODLR matrices (v5,2025): abstract explicitly
+studies low-precision off-diagonal representations and adaptive precision. Thus
+generic HODLR compression or adaptive precision is established prior work.
+Our diagnostic compresses the exact Cholesky L itself, keeps leaf triangles,
+and uses Ltilde Ltilde.T. This is a static free-construction capacity screen,
+not an implementation of a source's complete algorithm or a novelty claim.
+Positive unchanged diagonal makes Ltilde nonsingular. Independent review
+confirmed rectangular low-rank storage; tree/rank metadata and recursive
+workspace remain part of any later full allocation audit. A next-sigma²/byte
+greedy rank allocation targets factor Frobenius error heuristically, not
+optimal knapsack allocation or solve-error optimality.
+
+BLOKS: sequential factor recomputation under a memory cap (2026-11-24)
+
+Giordano Vitale, Giacomo Meanti, Marco Rando, Blanca Ayuso de Dios,
+Lorenzo Rosasco. BLOKS: Scaling Kernel Solvers with Sketched Block
+Preconditioning. arXiv:2610.13382v1, submitted 2026-10-09. Method preprint;
+no venue acceptance asserted. Primary records inspected:
+https://arxiv.org/abs/2610.13382
+https://arxiv.org/html/2610.13382v1
+Sections2–3, equations7 and12–16, Algorithm1.
+
+BLOKS solves the Nystrom normal system H=K_nm^T K_nm+lambda*n*K_mm.
+Its local approximation is H_j=(n*q/m0)*K_j^2+lambda*n*q*K_j.
+Two triangular factors apply each inverse block without explicitly forming
+K_j^2. Blocks can be reconstructed sequentially at each PCG application;
+left preconditioning avoids the second reconstruction required by the
+compared bilateral formulation. Thus memory depends on block size, with
+recomputation paid in time.
+
+Project implication (our inference): generic factor recomputation under a
+fixed memory budget is established. This source does not establish gains
+for our original K+lambda*I system, CPU implementation, or solve-informed
+updates. Directly using its squared-kernel block formula on our system
+would change the preconditioning rationale. Existing project Schur block-
+Jacobi tests concern another construction and do not test BLOKS. No
+benchmark result or novelty claim is transferred; no implementation follows
+without a specific applicable mechanism and cost prediction.
+
+Fourier-feature preconditioning and weighted sampling (2026-11-24)
+
+Verified primary records:
+https://arxiv.org/abs/1611.03220 (v4,2017), Avron, Clarkson, Woodruff,
+Faster Kernel Ridge Regression Using Sketching and Preconditioning.
+Random-feature preconditioning for the full kernel system is established.
+https://proceedings.mlr.press/v70/avron17a.html (ICML2017), Avron et al.,
+Random Fourier Features for Kernel Ridge Regression: Approximation Bounds
+and Statistical Guarantees. Spectral approximation is the relevant lens;
+a statistical approximation guarantee alone does not price a solver update.
+https://arxiv.org/abs/1911.09158 (v1,2019; record reports AAAI20 acceptance),
+Liu et al., Random Fourier Features via Fast Surrogate Leverage Weighted
+Sampling. Kernel alignment guides feature sampling; generic weighted feature
+sampling is therefore not new. These records establish precedent, not a
+claim that their algorithms equal our current-residual diagnostic.
+
+Our finite-pool diagnostic uses q_j=0.5/L+0.5*(phi_j^T r)^2/sum scores and
+Z_j=phi_j/sqrt(m*L*q_j) for independent draws with replacement. Conditional
+on pool and q, E[ZZ^T]=PhiPhi^T/L. Current-residual, initial-b and uniform
+branches share checkpoint and categorical random numbers. Duplicate features
+are inherent in this policy. The observed negative result closes this rule;
+no exhaustive novelty assessment or general Fourier-preconditioner rejection
+is implied. See results/residual-fourier-preconditioning.json.
+
+Streamed column-defect estimate for exact-congruence omission (derived and
+independently checked,2026-11-24; not a literature novelty claim):
+Let u=2^-53, gamma=2mu/(1-2mu), t=m*(1+lambda),
+eta=1/((1-u)^2*(1-gamma)), and epshat=initial_epsilon_norm.
+B_F=(sqrt(2)*eta*epshat+2*gamma*t)/(1-gamma*sqrt(m)).
+The computed column defect differs from E=C-LtildeLtildeT by sequential
+FP64 subtraction error bounded componentwise by gamma*(|C|+|L||L|T).
+Symmetrized stored defects have Frobenius norm at mostsqrt(2)*eta*epshat.
+Use ||C||F<=t and tr(LLT)<=t+sqrt(m)||E||F to resolve the inequality.
+A formal bound requires the floating arithmetic model, no underflow/overflow,
+properly rounded sqrt/norm, no reassociation, and outward-safe evaluation.
+The implemented expression is a rounding-aware bound estimate, not a full
+native certificate. Kernel regeneration and triangular application errors
+are separate; original-system residual verification remains required.
+
+Residual replacement / inexact Krylov anchor check, 2026-11-24.
+Van der Vorst and Ye, Residual Replacement Strategies for Krylov Subspace Iterative Methods for the Convergence of True Residuals, SIAM J Sci Comput, DOI10.1137/S1064827599353865. Publisher abstract inspected: computable error bounds select residual replacement steps by monitoring computed/true residual deviation. https://epubs.siam.org/doi/abs/10.1137/S1064827599353865
+Van den Eshof and Sleijpen, Inexact Krylov Subspace Methods for Linear Systems, SIMAX26(1):125–153,2004, DOI10.1137/S0895479802403459. Author-hosted paper abstract/introduction inspected: approximate matvec precision is tuned within Krylov iteration; CG relaxation strategies and residual gaps are established. https://webspace.science.uu.nl/~sleij101/Reprints/ESl04b-40345.pdf
+Inference: generic adaptive residual replacement or approximate products cannot be the novelty claim. Core-supported error correction may reduce refresh cost, but this lookup does not establish that specialization as novel. Full-text overlap analysis remains before any novelty claim.
+
+Calibration quantization anchor,2026-11-24: Frantar,Ashkboos,Hoefler,Alistarh, GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers, ICLR2023; arXiv2210.17323v2 (record/abstract inspected). https://arxiv.org/abs/2210.17323 . One-shot quantization using approximate second-order information is established. Our two factor-action floor/ceil coordinate loss is a separate diagnostic, not a GPTQ reproduction; generic calibration/rounding is not a novelty claim. Bounded prototype results and invalid initial range evidence are recorded in the method ledger.
+
+
+Fresh current-residual splitting (2026-11-24 follow-up)
+Sophie Moufawad, Flexibly Enlarged Conjugate Gradient methods, arXiv:2305.19013v2 (17 September 2024). Primary source https://arxiv.org/html/2305.19013v2, section2.2 and Algorithm2, describes splitting each current residual and A-orthonormalizing the directions against earlier directions. Section4.5 distinguishes split preconditioning; commuting the partition and factor is valid only for aligned block structure.
+Our next diagnostic is explicitly split-after-precondition [D*z,(I-D)*z] with z=M*r in congruence coordinates and full operator orthogonalization. It is not a verbatim reproduction of the paper. Full history and its cost are granted free to screen for headroom; a passing result cannot establish fixed-memory or native runtime benefit. Existing initial geometric block [q,D*q] spans the same initial space as [D*q,(I-D)*q], so initial splitting alone is already covered.
+
+
+Actual accumulated-error indicator follow-up
+Smith, Do and Chen, Adaptive, Matrix-Free Low-Rank Approximation, arXiv:2607.06758v1, 7 July 2026, https://arxiv.org/html/2607.06758v1, Sections1.2 and3.1. The paper uses randomized sketches to estimate approximation residual norms without subtracting nearly equal energies. Its object is QB approximation error, not the evolving solve vector E*s, and it supplies no CPU performance guarantee for our solver. Generic sketch-based residual estimation is established.
+Our inference to test first: the native factor construction already computes lower-triangular local column defects, potentially allowing a small sketch of E to be accumulated without new kernel queries. Storage, rounding effects and adaptive dependence remain unresolved. Before implementing this, replace the Frobenius bound by a free measured norm(E*s) with the same trigger and recurrence. Failure of that indicator policy would not justify building its approximation.
+
+
+Global feature-moment acquisition cost audit
+The expansion in scripts/check_taylor_kernel_cost.py and scripts/taylor_kernel_tile.c is exp(-||Zi||²/2) exp(-||Zj||²/2) sum_k (Zi^T Zj)^k/k!, evaluated entrywise. A multinomial feature product is algebraically equivalent, but has a different implementation cost. Existing results/taylor-kernel-cost.json selects degrees9/11 for smooth2048 without diagonal correction under its conservative global trace certificate. In8dimensions these degrees have24310/75582features, requiring194480/604656bytes for FP64 moments and99573760/309583872feature visits for a two-pass n2048product. These are conditional counts, not required degrees or runtime lower bounds; localized expansions and direction-dependent accuracy remain untested. No global featuremoment implementation is justified solely by this certificate.
+
+Localized Gaussian product follow-up
+Rechecked official NIPS2004 abstract for Yang, Duraiswami and Davis, Efficient Kernel Machines Using the Improved Fast Gauss Transform: https://proceedings.neurips.cc/paper_files/paper/2004/hash/85353d3b2f39b9c9b5ee3576578c04b7-Abstract.html . It already applies IFGT to kernel machines with error bounds and UCI experiments. UMD record for Raykar, Yang, Duraiswami and Gumerov, Fast Computation of Sums of Gaussians in High Dimensions, 2005: https://drum.lib.umd.edu/items/c5b2f016-c079-4497-90bf-4504ee395579 . Its abstract explicitly includes multivariate Taylor expansion, k-center subdivision and point-wise error bounds. Generic local expansions or adapting approximation accuracy are not new contributions.
+The pending diagnostic uses actual product vectors from the existing packed24 solve to test signed cancellation and feature-work/storage headroom. Dense absolute-error triangle bounds are oracle diagnostics, not cheap certificates. A source-local expansion need not be symmetric; acceptable product errors alone do not establish a valid SPD preconditioner or a convergent inexact recurrence. No full-solver method or novelty claim follows from this screen.
+
+Structural redesign: positive graph polynomial preconditioner
+Official NeurIPS2021 abstract for BernNet: Learning Arbitrary Graph Spectral Filters via Bernstein Approximation, https://proceedings.neurips.cc/paper_files/paper/2021/hash/76f1cfd7754a6e4fc3281bcccb3d0902-Abstract.html , explicitly uses Bernstein coefficients to parameterize normalized-Laplacian spectral filters. This basis is established, not a proposed new construction. The current experimental inference is to fit positive coefficients using fresh original-kernel actions on graph-filtered current residuals and freeze the resulting full-rank SPD preconditioner. It requires separate current/initial/random-probe and one-shot warm-correction controls. Sparse graph action supplies directions generally outside the completed original-A Krylov space; this algebraic distinction alone establishes no speed or novelty claim.
+
+
+Full-system scalar triangular-factor sparsification candidate (2026-11-24)
+Primary implementation documentation inspected: HSL_MI28 official catalogue,
+https://www.hsl.rl.ac.uk/catalogue/hsl_mi28.html , lines37–41.
+It provides incompleteCholesky preconditioning with reordering/scaling/shifting,
+user-controlled dropping and per-column retained-entry bounds. Sparse triangular
+factors and memory-bounded dropping are therefore established machinery.
+The current proposed screen instead drops individual entries of a FREE exact
+full-system L while retaining every positive diagonal; this is a capacity oracle,
+not a reproduction of MI28 or an implementable cheap incompletefactorization.
+Prior project HODLR inversefactor/Choleskyfactor tests compress offdiagonal blocks;
+SchurFSAI changes an inversefactor pattern. They do not settle fullsystem scalarL.
+For v=L^-1r and w=L^-Tv, differentiating H=(LL^T)^-1 gives
+ delta(Hr)=-H deltaL v-L^-T deltaL^T w.
+Candidate entryscore Lij^2*(vj^2/||r||^2+wi^2/||v||^2) sums the individually
+normalized forward/backward equation-residual contributions. It is not a joint
+error optimum and ignores cancellation/inverse amplification. ExactL and its
+currentinverseactions are free privileged information in the capacitygate.
+Preserved diagonal makes sparseT nonsingular and TT^T SPD in exact arithmetic;
+it does not guarantee useful conditioning or floating-point convergence.
+A practical construction would have to use approximatefactor intermediates and
+charge acquisition/reconstruction; none is yet demonstrated. No noveltyclaim.
+
+
+Frozen diagonal scaling in preconditioned coordinates (2026-11-24)
+Diamond–Boyd, Stochastic Matrix-Free Equilibration, JOTA172(2):436–454(2017),
+https://web.stanford.edu/~boyd/papers/mf_equil.html : authorabstractdescribes
+stochastic row/column equilibration using operatorproducts. Thus matrix-free
+diagonal scaling/estimated norms are established, notanewprinciple.
+Ghadimi,Jung,Sujanani,Torregrosa-Belen,Wolkowicz, arXiv2509.23439v3,
+https://arxiv.org/html/2509.23439v3 , Corollary3.2 identifies Jacobi asomega-optimal
+SPD diagonal scaling; tables4.9–4.10 applyJacobi afterkappa-optimal
+scaling and reports improvedPCG in theirtestedinstances. This doesnotprove
+benefitforourkerneldata orcurrent-solve-estimatedscalings.
+Proposed inference: forH=M^-1, whitenpaidpairsu=H^-1/2p,v=H^1/2Ap;
+normalizedpairstatistics s=sumu^2,t=sumv^2 give positive d=sqrt(s/t),
+minimizing sum(d*t+s/d) whenallpositive. FreezeHnew=H^1/2diag(d)H^1/2.
+No newkernelproducts forcurrentpairs; extra basisprojections remainrealcosts.
+Unlike prioradditive residual diagonal/paircorrections, this changes a full
+coordinate metric inpreconditionedspace. CurrentstatisticsarebiasedbyKrylov
+sampling; no equilibrationguarantee, noveltyorconvergence claim. Compare
+firstpair/randomprobes/exactdiag(H^1/2 A H^1/2) andunchangedrestart.
+
+
+Multiresolution matrix factorization capacity candidate (2026-11-24)
+Kondor,Teneva,Garg, ICML2014, https://proceedings.mlr.press/v32/kondor14.html
+introduces MMF and its hierarchical matrix-compression representation.
+Mudrakarta,Kondor, arXiv1707.02054v1,
+https://arxiv.org/html/1707.02054 , section4/Algorithms3–4, uses products
+of sparseorthogonal rotations and acore-diagonal matrix forpreconditioning.
+Matrix-based pairing/Gramrotation and offdiagonal-norm elimination are
+established. Their sparsematrix experiments do not establish denseGaussian
+kernel speed or our current-solve selector. No newMMFprinciple claimed.
+Our proposed gatechanges eliminationchoice using currenttarget f. Dropping
+onecrossg produces E=[0,g^T;g,0], hence||Ef||²=(g^Tf_R)²+f_e²||g||².
+This is exactforonecross, not a jointobjective acrosssuccessivedrops.
+Comparecurrentr,initialb,random,andfreeexactremainingerror targets to
+unweightedmatrixselection onthe same nestedrotation representation.
+Rawr predictsoperatoraction error, not inverseaccuracy; exacterror is
+privilegedinformation and cannot be treated ascheapacquisition.
+Originalone-levelpair/tripletSchur uses exactelimination ofonecoarsespace;
+bootstrapmultilevel adds inverseactions. Neither tests thisnested
+core-diagonal approximation. Positivecore/retireddiagonals plusorthogonalQ
+ensureSPD only. Gateconstructionfree; storageplan notnativeallocationproof.
+
+
+General CUR rowselection and low-memory preconditioning (2026-11-24)
+Gilles–Wilber, Low-Rank Approximation by Randomly Pivoted LU,
+https://arxiv.org/html/2601.22344v1 , section4.3: CURWoodbury inverse
+for B+A is explicit; recomputing rectangularfactor actions tradesproducts
+for O(k²+n+m) storage. Their GMRES20 experiment usesaGPU anddriftedGaussian
+integraloperator plusLaplacian, notourCPU SPDGaussian benchmarks. Core
+formation andapplication costs areexplicit; genericCUR-GMRES isnotnew.
+Our algebra: A=K+lambdaI, C=K[:,J],R=K[I,:],W=K[I,J].
+ M^-1r=(r−Cy)/lambda, (AC)[I,:]y=(Kr)[I].
+ChangingI onlychangescoefficients in lambda^-1r+range(C).
+Galerkincapacitycontrol y=(C^TAC)^-1(AC−lambdaC)^T r minimizesA-energy
+error inthisaffinespace. ItsC,AC storage matchesleading2nk forC,R,
+but formingAC costsmore thanselectedRC; no acquisition-cost dominance.
+Exactrankk withnonsingularcrosses makesCURindependentofI. Verified24tiny
+algebra checks inresults/cur-collocation-identity.json, notsolverbenchmarks.
+Potentialcheaprule QRCP of(diag(abs(currentr)/norm(currentr))*C)^T
+needsno fullAC. RequiresfullGMRES andconditioning tests againstunweighted,
+initial/random-weighted rows andmemory-matchedNyström; notyetexecuted.

@@ -1,0 +1,2302 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_scaled_hss_headroom.py": "00227d4d162d92411357ceeb7bbc5e891bdb1bbd4fe7c942653eea0c7d30eaf0",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "protocol": {
+    "source": "Xing-Huang-Chow SIMAX2021 Sections3-4 https://faculty.cc.gatech.edu/~echow/pubs/xing-huang-chow-simax-2021.pdf",
+    "method": "Bottom-up SPD scaling/projection; parent bases restricted to scaled child-basis span; complete interblock couplings retained through low-rank nested bases.",
+    "leaf_max": 32,
+    "rank": "largest uniform rank fitting declared component planner, no convergence tuning",
+    "scope": "Dense construction/full dense Cholesky inverse granted free. Component planner is not a native allocation audit or implemented compact factorization. Static representation gate only; no solve-adaptive claim.",
+    "reference": "Existing four hardshift development cases, seed0; exact original residual1e-8 every iteration.",
+    "regularization": 1e-05,
+    "wall_cap_seconds": 120,
+    "cpu_cap_seconds": 80,
+    "per_solve_cpu_cap": 6
+  },
+  "tiny_check": {
+    "full_rank_identity_relative_error": 8.796753378704545e-15,
+    "compressed_minimum_eigenvalue": 9.069505077863957,
+    "max_nested_error": 3.000071364752026e-15
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "n": 2048,
+      "planner": {
+        "rank": 10,
+        "bytes": 1014752,
+        "parts": {
+          "packed_leaf_factors": 270336,
+          "leaf_bases": 163840,
+          "nonroot_transfers": 99200,
+          "sibling_couplings": 50400,
+          "dense_reduced_factor_allowance": 201600,
+          "permutation_and_five_vectors": 98304,
+          "kernel_workspace": 65536,
+          "reserve": 65536
+        }
+      },
+      "planner_frontier": [
+        {
+          "rank": 1,
+          "bytes": 519608,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 16384,
+            "nonroot_transfers": 992,
+            "sibling_couplings": 504,
+            "dense_reduced_factor_allowance": 2016,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 2,
+          "bytes": 546528,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 32768,
+            "nonroot_transfers": 3968,
+            "sibling_couplings": 2016,
+            "dense_reduced_factor_allowance": 8064,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 3,
+          "bytes": 580472,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 49152,
+            "nonroot_transfers": 8928,
+            "sibling_couplings": 4536,
+            "dense_reduced_factor_allowance": 18144,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 4,
+          "bytes": 621440,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 65536,
+            "nonroot_transfers": 15872,
+            "sibling_couplings": 8064,
+            "dense_reduced_factor_allowance": 32256,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 5,
+          "bytes": 669432,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 81920,
+            "nonroot_transfers": 24800,
+            "sibling_couplings": 12600,
+            "dense_reduced_factor_allowance": 50400,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 6,
+          "bytes": 724448,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 98304,
+            "nonroot_transfers": 35712,
+            "sibling_couplings": 18144,
+            "dense_reduced_factor_allowance": 72576,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 7,
+          "bytes": 786488,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 114688,
+            "nonroot_transfers": 48608,
+            "sibling_couplings": 24696,
+            "dense_reduced_factor_allowance": 98784,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 8,
+          "bytes": 855552,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 131072,
+            "nonroot_transfers": 63488,
+            "sibling_couplings": 32256,
+            "dense_reduced_factor_allowance": 129024,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 9,
+          "bytes": 931640,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 147456,
+            "nonroot_transfers": 80352,
+            "sibling_couplings": 40824,
+            "dense_reduced_factor_allowance": 163296,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 10,
+          "bytes": 1014752,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 163840,
+            "nonroot_transfers": 99200,
+            "sibling_couplings": 50400,
+            "dense_reduced_factor_allowance": 201600,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 11,
+          "bytes": 1104888,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 180224,
+            "nonroot_transfers": 120032,
+            "sibling_couplings": 60984,
+            "dense_reduced_factor_allowance": 243936,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 12,
+          "bytes": 1202048,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 196608,
+            "nonroot_transfers": 142848,
+            "sibling_couplings": 72576,
+            "dense_reduced_factor_allowance": 290304,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 13,
+          "bytes": 1306232,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 212992,
+            "nonroot_transfers": 167648,
+            "sibling_couplings": 85176,
+            "dense_reduced_factor_allowance": 340704,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 14,
+          "bytes": 1417440,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 229376,
+            "nonroot_transfers": 194432,
+            "sibling_couplings": 98784,
+            "dense_reduced_factor_allowance": 395136,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 15,
+          "bytes": 1535672,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 245760,
+            "nonroot_transfers": 223200,
+            "sibling_couplings": 113400,
+            "dense_reduced_factor_allowance": 453600,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 16,
+          "bytes": 1660928,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 262144,
+            "nonroot_transfers": 253952,
+            "sibling_couplings": 129024,
+            "dense_reduced_factor_allowance": 516096,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 17,
+          "bytes": 1793208,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 278528,
+            "nonroot_transfers": 286688,
+            "sibling_couplings": 145656,
+            "dense_reduced_factor_allowance": 582624,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 18,
+          "bytes": 1932512,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 294912,
+            "nonroot_transfers": 321408,
+            "sibling_couplings": 163296,
+            "dense_reduced_factor_allowance": 653184,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 19,
+          "bytes": 2078840,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 311296,
+            "nonroot_transfers": 358112,
+            "sibling_couplings": 181944,
+            "dense_reduced_factor_allowance": 727776,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 20,
+          "bytes": 2232192,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 327680,
+            "nonroot_transfers": 396800,
+            "sibling_couplings": 201600,
+            "dense_reduced_factor_allowance": 806400,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 21,
+          "bytes": 2392568,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 344064,
+            "nonroot_transfers": 437472,
+            "sibling_couplings": 222264,
+            "dense_reduced_factor_allowance": 889056,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 22,
+          "bytes": 2559968,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 360448,
+            "nonroot_transfers": 480128,
+            "sibling_couplings": 243936,
+            "dense_reduced_factor_allowance": 975744,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 23,
+          "bytes": 2734392,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 376832,
+            "nonroot_transfers": 524768,
+            "sibling_couplings": 266616,
+            "dense_reduced_factor_allowance": 1066464,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 24,
+          "bytes": 2915840,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 393216,
+            "nonroot_transfers": 571392,
+            "sibling_couplings": 290304,
+            "dense_reduced_factor_allowance": 1161216,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 25,
+          "bytes": 3104312,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 409600,
+            "nonroot_transfers": 620000,
+            "sibling_couplings": 315000,
+            "dense_reduced_factor_allowance": 1260000,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 26,
+          "bytes": 3299808,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 425984,
+            "nonroot_transfers": 670592,
+            "sibling_couplings": 340704,
+            "dense_reduced_factor_allowance": 1362816,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 27,
+          "bytes": 3502328,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 442368,
+            "nonroot_transfers": 723168,
+            "sibling_couplings": 367416,
+            "dense_reduced_factor_allowance": 1469664,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 28,
+          "bytes": 3711872,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 458752,
+            "nonroot_transfers": 777728,
+            "sibling_couplings": 395136,
+            "dense_reduced_factor_allowance": 1580544,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 29,
+          "bytes": 3928440,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 475136,
+            "nonroot_transfers": 834272,
+            "sibling_couplings": 423864,
+            "dense_reduced_factor_allowance": 1695456,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 30,
+          "bytes": 4152032,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 491520,
+            "nonroot_transfers": 892800,
+            "sibling_couplings": 453600,
+            "dense_reduced_factor_allowance": 1814400,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 31,
+          "bytes": 4382648,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 507904,
+            "nonroot_transfers": 953312,
+            "sibling_couplings": 484344,
+            "dense_reduced_factor_allowance": 1937376,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 32,
+          "bytes": 4620288,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 524288,
+            "nonroot_transfers": 1015808,
+            "sibling_couplings": 516096,
+            "dense_reduced_factor_allowance": 2064384,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        }
+      ],
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "history": [
+        {
+          "block_count": 64,
+          "largest_block": 32,
+          "ranks": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 0,
+          "maximum_basis_orthogonality_error": 2.2803881947788767e-13,
+          "relative_asymmetry_before_symmetrizing": 6.60364991956781e-15
+        },
+        {
+          "block_count": 32,
+          "largest_block": 64,
+          "ranks": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 9.836208542630588e-15,
+          "maximum_basis_orthogonality_error": 3.976320825825547e-13,
+          "relative_asymmetry_before_symmetrizing": 7.615265480530265e-15
+        },
+        {
+          "block_count": 16,
+          "largest_block": 128,
+          "ranks": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 5.7914264626032e-15,
+          "maximum_basis_orthogonality_error": 1.38896644253821e-13,
+          "relative_asymmetry_before_symmetrizing": 6.341177889697844e-15
+        },
+        {
+          "block_count": 8,
+          "largest_block": 256,
+          "ranks": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 4.8717547984408064e-15,
+          "maximum_basis_orthogonality_error": 2.7023440953300197e-13,
+          "relative_asymmetry_before_symmetrizing": 7.9509619314618e-15
+        },
+        {
+          "block_count": 4,
+          "largest_block": 512,
+          "ranks": [
+            10,
+            10,
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 2.8670143195292997e-15,
+          "maximum_basis_orthogonality_error": 2.951547147132776e-13,
+          "relative_asymmetry_before_symmetrizing": 4.09674024496912e-15
+        },
+        {
+          "block_count": 2,
+          "largest_block": 1024,
+          "ranks": [
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 5.400282290560398e-15,
+          "maximum_basis_orthogonality_error": 6.440218433071769e-15,
+          "relative_asymmetry_before_symmetrizing": 2.952165843028083e-15
+        }
+      ],
+      "relative_matrix_error": 0.06133637017830641,
+      "minimum_Cholesky_diagonal": 0.005496435062447623,
+      "status": "cpu_cap",
+      "converged": false,
+      "iterations": 120,
+      "original_relative_residual": 2.3276870830616727,
+      "exact_matvec_kernel_entries": 503316480,
+      "preconditioner_applications": 121,
+      "diagnostic_cpu_seconds": 6.0533114999999995
+    },
+    {
+      "dataset": "mixed",
+      "n": 2048,
+      "planner": {
+        "rank": 10,
+        "bytes": 1014752,
+        "parts": {
+          "packed_leaf_factors": 270336,
+          "leaf_bases": 163840,
+          "nonroot_transfers": 99200,
+          "sibling_couplings": 50400,
+          "dense_reduced_factor_allowance": 201600,
+          "permutation_and_five_vectors": 98304,
+          "kernel_workspace": 65536,
+          "reserve": 65536
+        }
+      },
+      "planner_frontier": [
+        {
+          "rank": 1,
+          "bytes": 519608,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 16384,
+            "nonroot_transfers": 992,
+            "sibling_couplings": 504,
+            "dense_reduced_factor_allowance": 2016,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 2,
+          "bytes": 546528,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 32768,
+            "nonroot_transfers": 3968,
+            "sibling_couplings": 2016,
+            "dense_reduced_factor_allowance": 8064,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 3,
+          "bytes": 580472,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 49152,
+            "nonroot_transfers": 8928,
+            "sibling_couplings": 4536,
+            "dense_reduced_factor_allowance": 18144,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 4,
+          "bytes": 621440,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 65536,
+            "nonroot_transfers": 15872,
+            "sibling_couplings": 8064,
+            "dense_reduced_factor_allowance": 32256,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 5,
+          "bytes": 669432,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 81920,
+            "nonroot_transfers": 24800,
+            "sibling_couplings": 12600,
+            "dense_reduced_factor_allowance": 50400,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 6,
+          "bytes": 724448,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 98304,
+            "nonroot_transfers": 35712,
+            "sibling_couplings": 18144,
+            "dense_reduced_factor_allowance": 72576,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 7,
+          "bytes": 786488,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 114688,
+            "nonroot_transfers": 48608,
+            "sibling_couplings": 24696,
+            "dense_reduced_factor_allowance": 98784,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 8,
+          "bytes": 855552,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 131072,
+            "nonroot_transfers": 63488,
+            "sibling_couplings": 32256,
+            "dense_reduced_factor_allowance": 129024,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 9,
+          "bytes": 931640,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 147456,
+            "nonroot_transfers": 80352,
+            "sibling_couplings": 40824,
+            "dense_reduced_factor_allowance": 163296,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 10,
+          "bytes": 1014752,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 163840,
+            "nonroot_transfers": 99200,
+            "sibling_couplings": 50400,
+            "dense_reduced_factor_allowance": 201600,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 11,
+          "bytes": 1104888,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 180224,
+            "nonroot_transfers": 120032,
+            "sibling_couplings": 60984,
+            "dense_reduced_factor_allowance": 243936,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 12,
+          "bytes": 1202048,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 196608,
+            "nonroot_transfers": 142848,
+            "sibling_couplings": 72576,
+            "dense_reduced_factor_allowance": 290304,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 13,
+          "bytes": 1306232,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 212992,
+            "nonroot_transfers": 167648,
+            "sibling_couplings": 85176,
+            "dense_reduced_factor_allowance": 340704,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 14,
+          "bytes": 1417440,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 229376,
+            "nonroot_transfers": 194432,
+            "sibling_couplings": 98784,
+            "dense_reduced_factor_allowance": 395136,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 15,
+          "bytes": 1535672,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 245760,
+            "nonroot_transfers": 223200,
+            "sibling_couplings": 113400,
+            "dense_reduced_factor_allowance": 453600,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 16,
+          "bytes": 1660928,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 262144,
+            "nonroot_transfers": 253952,
+            "sibling_couplings": 129024,
+            "dense_reduced_factor_allowance": 516096,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 17,
+          "bytes": 1793208,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 278528,
+            "nonroot_transfers": 286688,
+            "sibling_couplings": 145656,
+            "dense_reduced_factor_allowance": 582624,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 18,
+          "bytes": 1932512,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 294912,
+            "nonroot_transfers": 321408,
+            "sibling_couplings": 163296,
+            "dense_reduced_factor_allowance": 653184,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 19,
+          "bytes": 2078840,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 311296,
+            "nonroot_transfers": 358112,
+            "sibling_couplings": 181944,
+            "dense_reduced_factor_allowance": 727776,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 20,
+          "bytes": 2232192,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 327680,
+            "nonroot_transfers": 396800,
+            "sibling_couplings": 201600,
+            "dense_reduced_factor_allowance": 806400,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 21,
+          "bytes": 2392568,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 344064,
+            "nonroot_transfers": 437472,
+            "sibling_couplings": 222264,
+            "dense_reduced_factor_allowance": 889056,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 22,
+          "bytes": 2559968,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 360448,
+            "nonroot_transfers": 480128,
+            "sibling_couplings": 243936,
+            "dense_reduced_factor_allowance": 975744,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 23,
+          "bytes": 2734392,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 376832,
+            "nonroot_transfers": 524768,
+            "sibling_couplings": 266616,
+            "dense_reduced_factor_allowance": 1066464,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 24,
+          "bytes": 2915840,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 393216,
+            "nonroot_transfers": 571392,
+            "sibling_couplings": 290304,
+            "dense_reduced_factor_allowance": 1161216,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 25,
+          "bytes": 3104312,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 409600,
+            "nonroot_transfers": 620000,
+            "sibling_couplings": 315000,
+            "dense_reduced_factor_allowance": 1260000,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 26,
+          "bytes": 3299808,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 425984,
+            "nonroot_transfers": 670592,
+            "sibling_couplings": 340704,
+            "dense_reduced_factor_allowance": 1362816,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 27,
+          "bytes": 3502328,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 442368,
+            "nonroot_transfers": 723168,
+            "sibling_couplings": 367416,
+            "dense_reduced_factor_allowance": 1469664,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 28,
+          "bytes": 3711872,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 458752,
+            "nonroot_transfers": 777728,
+            "sibling_couplings": 395136,
+            "dense_reduced_factor_allowance": 1580544,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 29,
+          "bytes": 3928440,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 475136,
+            "nonroot_transfers": 834272,
+            "sibling_couplings": 423864,
+            "dense_reduced_factor_allowance": 1695456,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 30,
+          "bytes": 4152032,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 491520,
+            "nonroot_transfers": 892800,
+            "sibling_couplings": 453600,
+            "dense_reduced_factor_allowance": 1814400,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 31,
+          "bytes": 4382648,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 507904,
+            "nonroot_transfers": 953312,
+            "sibling_couplings": 484344,
+            "dense_reduced_factor_allowance": 1937376,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 32,
+          "bytes": 4620288,
+          "parts": {
+            "packed_leaf_factors": 270336,
+            "leaf_bases": 524288,
+            "nonroot_transfers": 1015808,
+            "sibling_couplings": 516096,
+            "dense_reduced_factor_allowance": 2064384,
+            "permutation_and_five_vectors": 98304,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        }
+      ],
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "history": [
+        {
+          "block_count": 64,
+          "largest_block": 32,
+          "ranks": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 0,
+          "maximum_basis_orthogonality_error": 2.2803881947788767e-13,
+          "relative_asymmetry_before_symmetrizing": 6.60364991956781e-15
+        },
+        {
+          "block_count": 32,
+          "largest_block": 64,
+          "ranks": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 9.836208542630588e-15,
+          "maximum_basis_orthogonality_error": 3.976320825825547e-13,
+          "relative_asymmetry_before_symmetrizing": 7.615265480530265e-15
+        },
+        {
+          "block_count": 16,
+          "largest_block": 128,
+          "ranks": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 5.7914264626032e-15,
+          "maximum_basis_orthogonality_error": 1.38896644253821e-13,
+          "relative_asymmetry_before_symmetrizing": 6.341177889697844e-15
+        },
+        {
+          "block_count": 8,
+          "largest_block": 256,
+          "ranks": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 4.8717547984408064e-15,
+          "maximum_basis_orthogonality_error": 2.7023440953300197e-13,
+          "relative_asymmetry_before_symmetrizing": 7.9509619314618e-15
+        },
+        {
+          "block_count": 4,
+          "largest_block": 512,
+          "ranks": [
+            10,
+            10,
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 2.8670143195292997e-15,
+          "maximum_basis_orthogonality_error": 2.951547147132776e-13,
+          "relative_asymmetry_before_symmetrizing": 4.09674024496912e-15
+        },
+        {
+          "block_count": 2,
+          "largest_block": 1024,
+          "ranks": [
+            10,
+            10
+          ],
+          "maximum_nested_relative_error": 5.400282290560398e-15,
+          "maximum_basis_orthogonality_error": 6.440218433071769e-15,
+          "relative_asymmetry_before_symmetrizing": 2.952165843028083e-15
+        }
+      ],
+      "relative_matrix_error": 0.06133637017830641,
+      "minimum_Cholesky_diagonal": 0.005496435062447623,
+      "status": "cpu_cap",
+      "converged": false,
+      "iterations": 101,
+      "original_relative_residual": 0.6117464650128056,
+      "exact_matvec_kernel_entries": 423624704,
+      "preconditioner_applications": 102,
+      "diagnostic_cpu_seconds": 6.0376203
+    },
+    {
+      "dataset": "Concrete",
+      "n": 824,
+      "planner": {
+        "rank": 19,
+        "bytes": 1004984,
+        "parts": {
+          "packed_leaf_factors": 88192,
+          "leaf_bases": 125248,
+          "nonroot_transfers": 173280,
+          "sibling_couplings": 89528,
+          "dense_reduced_factor_allowance": 358112,
+          "permutation_and_five_vectors": 39552,
+          "kernel_workspace": 65536,
+          "reserve": 65536
+        }
+      },
+      "planner_frontier": [
+        {
+          "rank": 1,
+          "bytes": 267128,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 6592,
+            "nonroot_transfers": 480,
+            "sibling_couplings": 248,
+            "dense_reduced_factor_allowance": 992,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 2,
+          "bytes": 278880,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 13184,
+            "nonroot_transfers": 1920,
+            "sibling_couplings": 992,
+            "dense_reduced_factor_allowance": 3968,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 3,
+          "bytes": 294072,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 19776,
+            "nonroot_transfers": 4320,
+            "sibling_couplings": 2232,
+            "dense_reduced_factor_allowance": 8928,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 4,
+          "bytes": 312704,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 26368,
+            "nonroot_transfers": 7680,
+            "sibling_couplings": 3968,
+            "dense_reduced_factor_allowance": 15872,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 5,
+          "bytes": 334776,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 32960,
+            "nonroot_transfers": 12000,
+            "sibling_couplings": 6200,
+            "dense_reduced_factor_allowance": 24800,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 6,
+          "bytes": 360288,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 39552,
+            "nonroot_transfers": 17280,
+            "sibling_couplings": 8928,
+            "dense_reduced_factor_allowance": 35712,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 7,
+          "bytes": 389240,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 46144,
+            "nonroot_transfers": 23520,
+            "sibling_couplings": 12152,
+            "dense_reduced_factor_allowance": 48608,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 8,
+          "bytes": 421632,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 52736,
+            "nonroot_transfers": 30720,
+            "sibling_couplings": 15872,
+            "dense_reduced_factor_allowance": 63488,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 9,
+          "bytes": 457464,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 59328,
+            "nonroot_transfers": 38880,
+            "sibling_couplings": 20088,
+            "dense_reduced_factor_allowance": 80352,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 10,
+          "bytes": 496736,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 65920,
+            "nonroot_transfers": 48000,
+            "sibling_couplings": 24800,
+            "dense_reduced_factor_allowance": 99200,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 11,
+          "bytes": 539448,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 72512,
+            "nonroot_transfers": 58080,
+            "sibling_couplings": 30008,
+            "dense_reduced_factor_allowance": 120032,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 12,
+          "bytes": 585600,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 79104,
+            "nonroot_transfers": 69120,
+            "sibling_couplings": 35712,
+            "dense_reduced_factor_allowance": 142848,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 13,
+          "bytes": 635192,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 85696,
+            "nonroot_transfers": 81120,
+            "sibling_couplings": 41912,
+            "dense_reduced_factor_allowance": 167648,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 14,
+          "bytes": 688224,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 92288,
+            "nonroot_transfers": 94080,
+            "sibling_couplings": 48608,
+            "dense_reduced_factor_allowance": 194432,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 15,
+          "bytes": 744696,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 98880,
+            "nonroot_transfers": 108000,
+            "sibling_couplings": 55800,
+            "dense_reduced_factor_allowance": 223200,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 16,
+          "bytes": 804608,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 105472,
+            "nonroot_transfers": 122880,
+            "sibling_couplings": 63488,
+            "dense_reduced_factor_allowance": 253952,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 17,
+          "bytes": 867960,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 112064,
+            "nonroot_transfers": 138720,
+            "sibling_couplings": 71672,
+            "dense_reduced_factor_allowance": 286688,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 18,
+          "bytes": 934752,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 118656,
+            "nonroot_transfers": 155520,
+            "sibling_couplings": 80352,
+            "dense_reduced_factor_allowance": 321408,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 19,
+          "bytes": 1004984,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 125248,
+            "nonroot_transfers": 173280,
+            "sibling_couplings": 89528,
+            "dense_reduced_factor_allowance": 358112,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 20,
+          "bytes": 1078656,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 131840,
+            "nonroot_transfers": 192000,
+            "sibling_couplings": 99200,
+            "dense_reduced_factor_allowance": 396800,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 21,
+          "bytes": 1155768,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 138432,
+            "nonroot_transfers": 211680,
+            "sibling_couplings": 109368,
+            "dense_reduced_factor_allowance": 437472,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 22,
+          "bytes": 1236320,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 145024,
+            "nonroot_transfers": 232320,
+            "sibling_couplings": 120032,
+            "dense_reduced_factor_allowance": 480128,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 23,
+          "bytes": 1320312,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 151616,
+            "nonroot_transfers": 253920,
+            "sibling_couplings": 131192,
+            "dense_reduced_factor_allowance": 524768,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 24,
+          "bytes": 1407744,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 158208,
+            "nonroot_transfers": 276480,
+            "sibling_couplings": 142848,
+            "dense_reduced_factor_allowance": 571392,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 25,
+          "bytes": 1498616,
+          "parts": {
+            "packed_leaf_factors": 88192,
+            "leaf_bases": 164800,
+            "nonroot_transfers": 300000,
+            "sibling_couplings": 155000,
+            "dense_reduced_factor_allowance": 620000,
+            "permutation_and_five_vectors": 39552,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        }
+      ],
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "history": [
+        {
+          "block_count": 32,
+          "largest_block": 26,
+          "ranks": [
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19
+          ],
+          "maximum_nested_relative_error": 0,
+          "maximum_basis_orthogonality_error": 3.560669418071901e-13,
+          "relative_asymmetry_before_symmetrizing": 3.141852979142355e-15
+        },
+        {
+          "block_count": 16,
+          "largest_block": 52,
+          "ranks": [
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19
+          ],
+          "maximum_nested_relative_error": 6.709545124655259e-15,
+          "maximum_basis_orthogonality_error": 3.250751526939605e-13,
+          "relative_asymmetry_before_symmetrizing": 7.570405508721767e-15
+        },
+        {
+          "block_count": 8,
+          "largest_block": 103,
+          "ranks": [
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19,
+            19
+          ],
+          "maximum_nested_relative_error": 5.8530524802933185e-15,
+          "maximum_basis_orthogonality_error": 1.7657541300743062e-13,
+          "relative_asymmetry_before_symmetrizing": 6.973821233107368e-15
+        },
+        {
+          "block_count": 4,
+          "largest_block": 206,
+          "ranks": [
+            19,
+            19,
+            19,
+            19
+          ],
+          "maximum_nested_relative_error": 7.473964189435997e-15,
+          "maximum_basis_orthogonality_error": 1.6727194807928496e-14,
+          "relative_asymmetry_before_symmetrizing": 7.101373703966076e-15
+        },
+        {
+          "block_count": 2,
+          "largest_block": 412,
+          "ranks": [
+            19,
+            19
+          ],
+          "maximum_nested_relative_error": 6.56237706180733e-15,
+          "maximum_basis_orthogonality_error": 1.031427721499243e-14,
+          "relative_asymmetry_before_symmetrizing": 4.863293659429418e-15
+        }
+      ],
+      "relative_matrix_error": 0.022457372776791253,
+      "minimum_Cholesky_diagonal": 0.0034089875850330646,
+      "status": "maxiter",
+      "converged": false,
+      "iterations": 2000,
+      "original_relative_residual": 0.0004860130326777834,
+      "exact_matvec_kernel_entries": 1357952000,
+      "preconditioner_applications": 2001,
+      "diagnostic_cpu_seconds": 3.8083951999999996
+    },
+    {
+      "dataset": "Airfoil",
+      "n": 1202,
+      "planner": {
+        "rank": 13,
+        "bytes": 1002456,
+        "parts": {
+          "packed_leaf_factors": 95152,
+          "leaf_bases": 125008,
+          "nonroot_transfers": 167648,
+          "sibling_couplings": 85176,
+          "dense_reduced_factor_allowance": 340704,
+          "permutation_and_five_vectors": 57696,
+          "kernel_workspace": 65536,
+          "reserve": 65536
+        }
+      },
+      "planner_frontier": [
+        {
+          "rank": 1,
+          "bytes": 297048,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 9616,
+            "nonroot_transfers": 992,
+            "sibling_couplings": 504,
+            "dense_reduced_factor_allowance": 2016,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 2,
+          "bytes": 317200,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 19232,
+            "nonroot_transfers": 3968,
+            "sibling_couplings": 2016,
+            "dense_reduced_factor_allowance": 8064,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 3,
+          "bytes": 344376,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 28848,
+            "nonroot_transfers": 8928,
+            "sibling_couplings": 4536,
+            "dense_reduced_factor_allowance": 18144,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 4,
+          "bytes": 378576,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 38464,
+            "nonroot_transfers": 15872,
+            "sibling_couplings": 8064,
+            "dense_reduced_factor_allowance": 32256,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 5,
+          "bytes": 419800,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 48080,
+            "nonroot_transfers": 24800,
+            "sibling_couplings": 12600,
+            "dense_reduced_factor_allowance": 50400,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 6,
+          "bytes": 468048,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 57696,
+            "nonroot_transfers": 35712,
+            "sibling_couplings": 18144,
+            "dense_reduced_factor_allowance": 72576,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 7,
+          "bytes": 523320,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 67312,
+            "nonroot_transfers": 48608,
+            "sibling_couplings": 24696,
+            "dense_reduced_factor_allowance": 98784,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 8,
+          "bytes": 585616,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 76928,
+            "nonroot_transfers": 63488,
+            "sibling_couplings": 32256,
+            "dense_reduced_factor_allowance": 129024,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 9,
+          "bytes": 654936,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 86544,
+            "nonroot_transfers": 80352,
+            "sibling_couplings": 40824,
+            "dense_reduced_factor_allowance": 163296,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 10,
+          "bytes": 731280,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 96160,
+            "nonroot_transfers": 99200,
+            "sibling_couplings": 50400,
+            "dense_reduced_factor_allowance": 201600,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 11,
+          "bytes": 814648,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 105776,
+            "nonroot_transfers": 120032,
+            "sibling_couplings": 60984,
+            "dense_reduced_factor_allowance": 243936,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 12,
+          "bytes": 905040,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 115392,
+            "nonroot_transfers": 142848,
+            "sibling_couplings": 72576,
+            "dense_reduced_factor_allowance": 290304,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 13,
+          "bytes": 1002456,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 125008,
+            "nonroot_transfers": 167648,
+            "sibling_couplings": 85176,
+            "dense_reduced_factor_allowance": 340704,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 14,
+          "bytes": 1106896,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 134624,
+            "nonroot_transfers": 194432,
+            "sibling_couplings": 98784,
+            "dense_reduced_factor_allowance": 395136,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 15,
+          "bytes": 1218360,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 144240,
+            "nonroot_transfers": 223200,
+            "sibling_couplings": 113400,
+            "dense_reduced_factor_allowance": 453600,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 16,
+          "bytes": 1336848,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 153856,
+            "nonroot_transfers": 253952,
+            "sibling_couplings": 129024,
+            "dense_reduced_factor_allowance": 516096,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 17,
+          "bytes": 1462360,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 163472,
+            "nonroot_transfers": 286688,
+            "sibling_couplings": 145656,
+            "dense_reduced_factor_allowance": 582624,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        },
+        {
+          "rank": 18,
+          "bytes": 1594896,
+          "parts": {
+            "packed_leaf_factors": 95152,
+            "leaf_bases": 173088,
+            "nonroot_transfers": 321408,
+            "sibling_couplings": 163296,
+            "dense_reduced_factor_allowance": 653184,
+            "permutation_and_five_vectors": 57696,
+            "kernel_workspace": 65536,
+            "reserve": 65536
+          }
+        }
+      ],
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "history": [
+        {
+          "block_count": 64,
+          "largest_block": 19,
+          "ranks": [
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13
+          ],
+          "maximum_nested_relative_error": 0,
+          "maximum_basis_orthogonality_error": 5.442366826498399e-14,
+          "relative_asymmetry_before_symmetrizing": 5.91372738103871e-16
+        },
+        {
+          "block_count": 32,
+          "largest_block": 38,
+          "ranks": [
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13
+          ],
+          "maximum_nested_relative_error": 8.314695236864496e-15,
+          "maximum_basis_orthogonality_error": 6.416922307772321e-14,
+          "relative_asymmetry_before_symmetrizing": 2.0683163524994655e-15
+        },
+        {
+          "block_count": 16,
+          "largest_block": 76,
+          "ranks": [
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13
+          ],
+          "maximum_nested_relative_error": 6.842549749217661e-15,
+          "maximum_basis_orthogonality_error": 1.9395205390700836e-13,
+          "relative_asymmetry_before_symmetrizing": 6.067566747942077e-15
+        },
+        {
+          "block_count": 8,
+          "largest_block": 151,
+          "ranks": [
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13,
+            13
+          ],
+          "maximum_nested_relative_error": 7.595235545484178e-15,
+          "maximum_basis_orthogonality_error": 4.1822064981673814e-14,
+          "relative_asymmetry_before_symmetrizing": 7.807162379276482e-15
+        },
+        {
+          "block_count": 4,
+          "largest_block": 301,
+          "ranks": [
+            13,
+            13,
+            13,
+            13
+          ],
+          "maximum_nested_relative_error": 6.550312177346001e-15,
+          "maximum_basis_orthogonality_error": 1.1551362969245498e-14,
+          "relative_asymmetry_before_symmetrizing": 7.783660654348368e-15
+        },
+        {
+          "block_count": 2,
+          "largest_block": 601,
+          "ranks": [
+            13,
+            13
+          ],
+          "maximum_nested_relative_error": 6.526615503424055e-15,
+          "maximum_basis_orthogonality_error": 3.7816563172648535e-15,
+          "relative_asymmetry_before_symmetrizing": 4.1156298157597206e-15
+        }
+      ],
+      "relative_matrix_error": 0.055868845477630456,
+      "minimum_Cholesky_diagonal": 0.0036429235667662287,
+      "status": "cpu_cap",
+      "converged": false,
+      "iterations": 919,
+      "original_relative_residual": 0.782019057352312,
+      "exact_matvec_kernel_entries": 1327774876,
+      "preconditioner_applications": 920,
+      "diagnostic_cpu_seconds": 6.008382100000002
+    }
+  ],
+  "failures": [],
+  "elapsed_wall_seconds": 28.580028733005747,
+  "elapsed_cpu_seconds": 29.477262800000002
+}

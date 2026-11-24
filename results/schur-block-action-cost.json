@@ -1,0 +1,3008 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_schur_block_action_cost.py": "a9eaef49a6994d46351ba153054211d47ec8a5c93baec990fc83e9a93e516204",
+    "scripts/check_block_pcg_width2.py": "3f017f3dd78f5bcebbea1e87c94cd798364fa43d2627cc989908299f2af1ea03",
+    "results/native-first8-schur.json": "2f311fd6eabcb9d9164cd760ffe2e7ea94bb46a798b5d22f8911a032318bba94",
+    "scripts/check_native_first8_schur.py": "ba770aee8fcd1c469b54b37c729a4e33c2594f15e5f5e4eaa8c2c498d087847d",
+    "results/core-precision-outer-correction.json": "c3b4e6db387379f8b596feae797973d4e88793364efc948b3aa7118f8075a651",
+    "scripts/check_core_precision_outer_correction.py": "2afbc638233b30ca8a9cefae4404cd89f0859f1d0a4eeeb466854f3b5fa2eae2",
+    "results/airfoil-core-error-diagnosis.json": "eef0d6802917fbb35fbdaf93a53dfb32d4b7c77f151b8b6d1c85932d81da987d",
+    "scripts/check_airfoil_core_error.py": "ee2f98b5b917d9c9e2b6df8cffb0b220503bbf234374f0bfd4c25916d42859e7",
+    "results/core-precision-trajectories.json": "632272cc6706ec273a535efd55290a67362c8b4e57aef39700da6b3e79beb7ac",
+    "scripts/check_core_precision_trajectories.py": "808504c4a7c83adce05e9e1bb3c76c78ab7ae85dbcac1c160530303e310f10c2",
+    "results/core-precision-allocation.json": "7b9aa68f5afab30f2fffd7566930909cc41d7f5a09aae9ea1162e1786b3150fa",
+    "scripts/check_core_precision_allocation.py": "ce97909f61de27d880812330a31bacc6d4427fdcccc466811050282c77371f7e",
+    "scripts/mixed_column_factor.c": "8515cdd9b1ac498284f6cd4f12b7c97474e8fe873029385c121b25c18acb6530",
+    "results/mixed_column_factor.so": "cb74e07e083248f44c7b54fb86f06eac8e778d1bab05ea47c3843cfdbada7808",
+    "results/compressed-core-adaptive-pilot.json": "33dba630ba8c6592badbbca7474be8429b0f0823e97a9065462f73c17c90c27d",
+    "scripts/check_compressed_core_adaptive.py": "18214e209167f8f4e0792b4f85a6c522897800fa6fb3bfa3624adb2b644b09e3",
+    "scripts/packed_float_halfsolves.c": "7b5bd9037046343e5c25aabe0b855700d3c6dd143b6c572fd60af77b59ae868c",
+    "results/packed_float_halfsolves.so": "56c6210d9b01e34da1446b75fc2089ce6bf154871c74c35b1be1c7c9e743ad56",
+    "results/compressed-core-schur-odd-pilot.json": "856b215feddacc683e6137fe155fb37aa3bcbfc233b8a40494abe22a4f6e6f64",
+    "scripts/check_compressed_core_schur_odd.py": "26f0680e297a25781e913ac54fd9d07f97feedc5e945161036623c8a5dac9585",
+    "results/compressed-core-schur-pilot.json": "dd94e844054355e9edcaf496de48b140a56d58170be40c854e17fa62803a6255",
+    "scripts/check_compressed_core_schur.py": "a4e8e154e8748296a55f7afe1e81375da2cd1f6ad2817e7c8c3eaf5e32979910",
+    "scripts/check_packed_float_factor.py": "aba5e0daebae9fbde98897523ad44e41bf8f5cc974f2950cabbce3d375489909",
+    "scripts/check_packed_float_allocation.py": "09216df37c25aee4096d94fc2c49a5cdaa6c89ebdc086f88107fd263519545f1",
+    "scripts/check_packed_schur_feasibility.py": "7b853198fd2476504a40cfeb7dc9d9a3f68e5e5b2a66454580e3119ab1c519ac",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959",
+    "scripts/packed_float_factor.c": "a5e847d19c76cee939b2054b4e0444950d6ef8d70e3b4d08ed52d0ad31e13f94",
+    "results/packed_float_factor.so": "13408d14463ede1b1a13015cc92a0991d43cde780177c280615fc4da40614ac3",
+    "results/first8-specialization.json": "b2d3aa7fc7456bfc887ed6263ae755d73d1c0952553333a961af4e97a07d53e8",
+    "results/mixed_column_factor_first8.so": "943741be07c35b2e1fb85cc2116dd9367a171ac20ee3a1e23c6293478f8d277a",
+    "scripts/check_first8_specialization.py": "3404678c796bd40e5f39d2167341dac01a1ff67f3b3fc85979bcaf1db1b0f42a",
+    "scripts/mixed_column_factor_first8.c": "d65fbe1054ca852e71f69ed7f8e78355f949ea59d491fbcf0c6974ce4dc720ff"
+  },
+  "orthonormal_search_sha256": "f4b97f7d05c0927df4528853d457003bc587b14372438bc511b33efb07e0c4cf",
+  "protocol": {
+    "cases": [
+      [
+        "smooth2048",
+        "synthetic-n2560-smooth-s0-lambda0.001.npz"
+      ],
+      [
+        "Concrete",
+        "concrete-observed-s0-lambda1e-05.npz"
+      ],
+      [
+        "Airfoil",
+        "airfoil-observed-s0-lambda1e-05.npz"
+      ]
+    ],
+    "regularization": 1e-05,
+    "width": 2,
+    "repeats": 5,
+    "capacity": "Binary search only on named phase-byte formulas, m<=592; all phases fit1MiB including64KiB reserve and first-pass minimum4rows. No timed rank tuning.",
+    "states": "B=[q,g], X,R,P,AP width2; fullouterx/fullresidual; actual validatedQR, nine-block old workspace bound, reprojection, true-check and auxiliary-deflation copies; core buffers and feature packs.",
+    "active_B": "B[:,active] replaced with exactly equal B[:,:len(active)]view for the old active orders[0,1]and[0]; all other declared QR/deflation copies retained.",
+    "action": "H1 Schur action; each Gaussian tile generated once for both columns, including originalC residual product; per-column mixed triangular solves.",
+    "helper": "Verified bitwise-equivalent FIRST8 specialization used for all block and scalar methods, selected before this gate execution.",
+    "comparisons": [
+      "block_width2 at selectedm",
+      "scalar_same_core",
+      "scalar592"
+    ],
+    "timing": "Five cyclic single-action repeats. Fresh factor/state rebuilt and freed for each method; setup separately measured, not charged to action ratio. No tracing during timings.",
+    "scope": "Component/phase feasibility only. Previousrank32block failure remains; previous GaussianKernel.matmat already shared tiles. No block iteration or end-to-end benefit claim.",
+    "cpu_cap": 58,
+    "wall_cap": 90
+  },
+  "tiny_check": {
+    "dense_H1_Schur_relative_error": 7.542527634492249e-16,
+    "independent_scalar_columns_relative_error": 5.671790786264949e-16,
+    "minimum_dense_Schur_eigenvalue": 0.013630420460810172
+  },
+  "cases": [
+    {
+      "dataset": "smooth2048",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "resource_plan": {
+        "m": 552,
+        "n": 2048,
+        "d": 8,
+        "factor_bytes": 628064,
+        "metadata_bytes": 4968,
+        "permutation_bytes": 16384,
+        "outer_full_arrays_bytes": 32768,
+        "width_two_tail_block_bytes": 23936,
+        "phase_bytes": {
+          "construction": 690120,
+          "first_pass_four_rows": 982472,
+          "split_first_pass": 867400,
+          "core_product": 905064,
+          "core_mixed_solves": 869640,
+          "second_pass": 878568,
+          "QR_old_workspace_bound": 902216,
+          "true_block_residual_subtract": 850248,
+          "auxiliary_deflation_copies": 850248,
+          "primary_lift_core": 875416,
+          "primary_lift_cross": 930136,
+          "original_verification": 838744,
+          "original_residual_update": 834632
+        },
+        "limiting_phase": "first_pass_four_rows",
+        "named_peak_bytes": 982472,
+        "peak_with_reserve_bytes": 1048008,
+        "feasible": true,
+        "next_rank_plan": {
+          "m": 553,
+          "n": 2048,
+          "d": 8,
+          "factor_bytes": 630308,
+          "metadata_bytes": 4977,
+          "permutation_bytes": 16384,
+          "outer_full_arrays_bytes": 32768,
+          "width_two_tail_block_bytes": 23920,
+          "phase_bytes": {
+            "construction": 692469,
+            "first_pass_four_rows": 984549,
+            "split_first_pass": 869573,
+            "core_product": 907357,
+            "core_mixed_solves": 871869,
+            "second_pass": 880813,
+            "QR_old_workspace_bound": 904325,
+            "true_block_residual_subtract": 852389,
+            "auxiliary_deflation_copies": 852389,
+            "primary_lift_core": 877685,
+            "primary_lift_cross": 932237,
+            "original_verification": 840917,
+            "original_residual_update": 836805
+          },
+          "limiting_phase": "first_pass_four_rows",
+          "named_peak_bytes": 984549,
+          "peak_with_reserve_bytes": 1050085,
+          "feasible": false
+        }
+      },
+      "timings": [
+        {
+          "method": "block_width2",
+          "m": 552,
+          "action_seconds": 0.046335456951055676,
+          "action_cpu_seconds": 0.041685799999999995,
+          "separately_measured_setup_seconds": 0.08010185399325565,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 603,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 0.0001056395104271647,
+          "memory": {
+            "named_peak_bytes": 978312,
+            "peak_with_reserve_bytes": 1043848,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37184,
+              "mixed_stream_setup": 681608,
+              "mixed_stream_column": 686024,
+              "mixed_permutation": 667848,
+              "mixed_triangular_solve": 865544,
+              "original_core_product": 974608,
+              "original_core_shift": 723784,
+              "refinement_update": 723784,
+              "reduced_rhs": 977744,
+              "block_initial_rhs": 718088,
+              "initial_QR_workspace": 854344,
+              "block_retained_state": 801864,
+              "block_Schur_first_pass": 978312,
+              "block_Schur_split": 867400,
+              "block_mixed_column_solve": 865544,
+              "block_core_product": 977544,
+              "block_core_shift": 861128,
+              "block_core_update": 861128,
+              "block_Schur_shift": 867400,
+              "block_Schur_second_pass": 977864
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                49
+              ],
+              "reduced_rhs": [
+                49
+              ],
+              "block_Schur_first_pass": [
+                4
+              ],
+              "block_core_product": [
+                20
+              ],
+              "block_Schur_second_pass": [
+                24
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 0,
+          "order_position": 0
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 552,
+          "action_seconds": 0.03805148403625935,
+          "action_cpu_seconds": 0.04167900000000002,
+          "separately_measured_setup_seconds": 0.07864549499936402,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 236,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 9.553262166879293e-05,
+          "memory": {
+            "named_peak_bytes": 977600,
+            "peak_with_reserve_bytes": 1043136,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37184,
+              "mixed_stream_setup": 681608,
+              "mixed_stream_column": 686024,
+              "mixed_permutation": 667848,
+              "mixed_triangular_solve": 759688,
+              "original_core_product": 977600,
+              "original_core_shift": 759688,
+              "refinement_update": 759688,
+              "reduced_rhs": 976248,
+              "Schur_first_pass": 973920,
+              "Schur_split": 762824,
+              "Schur_shift": 762824,
+              "Schur_second_pass": 974752
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                41,
+                55
+              ],
+              "reduced_rhs": [
+                54
+              ],
+              "Schur_first_pass": [
+                11
+              ],
+              "Schur_second_pass": [
+                43
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 0,
+          "order_position": 1
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.04448645398952067,
+          "action_cpu_seconds": 0.04169070000000019,
+          "separately_measured_setup_seconds": 0.10376140498556197,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 614,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 8.323312720100953e-05,
+          "memory": {
+            "named_peak_bytes": 978208,
+            "peak_with_reserve_bytes": 1043744,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37504,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 761088,
+              "mixed_triangular_solve": 852608,
+              "original_core_product": 977112,
+              "original_core_shift": 852608,
+              "refinement_update": 852608,
+              "reduced_rhs": 973936,
+              "Schur_first_pass": 978208,
+              "Schur_split": 854784,
+              "Schur_shift": 854784,
+              "Schur_second_pass": 977256
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                19,
+                31
+              ],
+              "reduced_rhs": [
+                30
+              ],
+              "Schur_first_pass": [
+                4
+              ],
+              "Schur_second_pass": [
+                21
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 0,
+          "order_position": 2
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 552,
+          "action_seconds": 0.03749299998162314,
+          "action_cpu_seconds": 0.0312380000000001,
+          "separately_measured_setup_seconds": 0.07598278799559921,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 236,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 9.553262166879293e-05,
+          "memory": {
+            "named_peak_bytes": 977600,
+            "peak_with_reserve_bytes": 1043136,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37184,
+              "mixed_stream_setup": 681608,
+              "mixed_stream_column": 686024,
+              "mixed_permutation": 667848,
+              "mixed_triangular_solve": 759688,
+              "original_core_product": 977600,
+              "original_core_shift": 759688,
+              "refinement_update": 759688,
+              "reduced_rhs": 976248,
+              "Schur_first_pass": 973920,
+              "Schur_split": 762824,
+              "Schur_shift": 762824,
+              "Schur_second_pass": 974752
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                41,
+                55
+              ],
+              "reduced_rhs": [
+                54
+              ],
+              "Schur_first_pass": [
+                11
+              ],
+              "Schur_second_pass": [
+                43
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 1,
+          "order_position": 0
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.04320558102335781,
+          "action_cpu_seconds": 0.04168519999999987,
+          "separately_measured_setup_seconds": 0.09111618698807433,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 614,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 8.323312720100953e-05,
+          "memory": {
+            "named_peak_bytes": 978208,
+            "peak_with_reserve_bytes": 1043744,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37504,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 761088,
+              "mixed_triangular_solve": 852608,
+              "original_core_product": 977112,
+              "original_core_shift": 852608,
+              "refinement_update": 852608,
+              "reduced_rhs": 973936,
+              "Schur_first_pass": 978208,
+              "Schur_split": 854784,
+              "Schur_shift": 854784,
+              "Schur_second_pass": 977256
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                19,
+                31
+              ],
+              "reduced_rhs": [
+                30
+              ],
+              "Schur_first_pass": [
+                4
+              ],
+              "Schur_second_pass": [
+                21
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 1,
+          "order_position": 1
+        },
+        {
+          "method": "block_width2",
+          "m": 552,
+          "action_seconds": 0.047948667022865266,
+          "action_cpu_seconds": 0.04168459999999996,
+          "separately_measured_setup_seconds": 0.10087547800503671,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 603,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 0.0001056395104271647,
+          "memory": {
+            "named_peak_bytes": 978312,
+            "peak_with_reserve_bytes": 1043848,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37184,
+              "mixed_stream_setup": 681608,
+              "mixed_stream_column": 686024,
+              "mixed_permutation": 667848,
+              "mixed_triangular_solve": 865544,
+              "original_core_product": 974608,
+              "original_core_shift": 723784,
+              "refinement_update": 723784,
+              "reduced_rhs": 977744,
+              "block_initial_rhs": 718088,
+              "initial_QR_workspace": 854344,
+              "block_retained_state": 801864,
+              "block_Schur_first_pass": 978312,
+              "block_Schur_split": 867400,
+              "block_mixed_column_solve": 865544,
+              "block_core_product": 977544,
+              "block_core_shift": 861128,
+              "block_core_update": 861128,
+              "block_Schur_shift": 867400,
+              "block_Schur_second_pass": 977864
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                49
+              ],
+              "reduced_rhs": [
+                49
+              ],
+              "block_Schur_first_pass": [
+                4
+              ],
+              "block_core_product": [
+                20
+              ],
+              "block_Schur_second_pass": [
+                24
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 1,
+          "order_position": 2
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.044287977972999215,
+          "action_cpu_seconds": 0.05209899999999967,
+          "separately_measured_setup_seconds": 0.09136838297126815,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 614,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 8.323312720100953e-05,
+          "memory": {
+            "named_peak_bytes": 978208,
+            "peak_with_reserve_bytes": 1043744,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37504,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 761088,
+              "mixed_triangular_solve": 852608,
+              "original_core_product": 977112,
+              "original_core_shift": 852608,
+              "refinement_update": 852608,
+              "reduced_rhs": 973936,
+              "Schur_first_pass": 978208,
+              "Schur_split": 854784,
+              "Schur_shift": 854784,
+              "Schur_second_pass": 977256
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                19,
+                31
+              ],
+              "reduced_rhs": [
+                30
+              ],
+              "Schur_first_pass": [
+                4
+              ],
+              "Schur_second_pass": [
+                21
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 2,
+          "order_position": 0
+        },
+        {
+          "method": "block_width2",
+          "m": 552,
+          "action_seconds": 0.04617908596992493,
+          "action_cpu_seconds": 0.0416477000000004,
+          "separately_measured_setup_seconds": 0.08029319898923859,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 603,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 0.0001056395104271647,
+          "memory": {
+            "named_peak_bytes": 978312,
+            "peak_with_reserve_bytes": 1043848,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37184,
+              "mixed_stream_setup": 681608,
+              "mixed_stream_column": 686024,
+              "mixed_permutation": 667848,
+              "mixed_triangular_solve": 865544,
+              "original_core_product": 974608,
+              "original_core_shift": 723784,
+              "refinement_update": 723784,
+              "reduced_rhs": 977744,
+              "block_initial_rhs": 718088,
+              "initial_QR_workspace": 854344,
+              "block_retained_state": 801864,
+              "block_Schur_first_pass": 978312,
+              "block_Schur_split": 867400,
+              "block_mixed_column_solve": 865544,
+              "block_core_product": 977544,
+              "block_core_shift": 861128,
+              "block_core_update": 861128,
+              "block_Schur_shift": 867400,
+              "block_Schur_second_pass": 977864
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                49
+              ],
+              "reduced_rhs": [
+                49
+              ],
+              "block_Schur_first_pass": [
+                4
+              ],
+              "block_core_product": [
+                20
+              ],
+              "block_Schur_second_pass": [
+                24
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 2,
+          "order_position": 1
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 552,
+          "action_seconds": 0.03887656796723604,
+          "action_cpu_seconds": 0.04167819999999978,
+          "separately_measured_setup_seconds": 0.07972381199942902,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 236,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 9.553262166879293e-05,
+          "memory": {
+            "named_peak_bytes": 977600,
+            "peak_with_reserve_bytes": 1043136,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37184,
+              "mixed_stream_setup": 681608,
+              "mixed_stream_column": 686024,
+              "mixed_permutation": 667848,
+              "mixed_triangular_solve": 759688,
+              "original_core_product": 977600,
+              "original_core_shift": 759688,
+              "refinement_update": 759688,
+              "reduced_rhs": 976248,
+              "Schur_first_pass": 973920,
+              "Schur_split": 762824,
+              "Schur_shift": 762824,
+              "Schur_second_pass": 974752
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                41,
+                55
+              ],
+              "reduced_rhs": [
+                54
+              ],
+              "Schur_first_pass": [
+                11
+              ],
+              "Schur_second_pass": [
+                43
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 2,
+          "order_position": 2
+        },
+        {
+          "method": "block_width2",
+          "m": 552,
+          "action_seconds": 0.04655134002678096,
+          "action_cpu_seconds": 0.04167439999999978,
+          "separately_measured_setup_seconds": 0.0802049040212296,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 603,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 0.0001056395104271647,
+          "memory": {
+            "named_peak_bytes": 978312,
+            "peak_with_reserve_bytes": 1043848,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37184,
+              "mixed_stream_setup": 681608,
+              "mixed_stream_column": 686024,
+              "mixed_permutation": 667848,
+              "mixed_triangular_solve": 865544,
+              "original_core_product": 974608,
+              "original_core_shift": 723784,
+              "refinement_update": 723784,
+              "reduced_rhs": 977744,
+              "block_initial_rhs": 718088,
+              "initial_QR_workspace": 854344,
+              "block_retained_state": 801864,
+              "block_Schur_first_pass": 978312,
+              "block_Schur_split": 867400,
+              "block_mixed_column_solve": 865544,
+              "block_core_product": 977544,
+              "block_core_shift": 861128,
+              "block_core_update": 861128,
+              "block_Schur_shift": 867400,
+              "block_Schur_second_pass": 977864
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                49
+              ],
+              "reduced_rhs": [
+                49
+              ],
+              "block_Schur_first_pass": [
+                4
+              ],
+              "block_core_product": [
+                20
+              ],
+              "block_Schur_second_pass": [
+                24
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 3,
+          "order_position": 0
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 552,
+          "action_seconds": 0.0367781319655478,
+          "action_cpu_seconds": 0.04168409999999989,
+          "separately_measured_setup_seconds": 0.07617588597349823,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 236,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 9.553262166879293e-05,
+          "memory": {
+            "named_peak_bytes": 977600,
+            "peak_with_reserve_bytes": 1043136,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37184,
+              "mixed_stream_setup": 681608,
+              "mixed_stream_column": 686024,
+              "mixed_permutation": 667848,
+              "mixed_triangular_solve": 759688,
+              "original_core_product": 977600,
+              "original_core_shift": 759688,
+              "refinement_update": 759688,
+              "reduced_rhs": 976248,
+              "Schur_first_pass": 973920,
+              "Schur_split": 762824,
+              "Schur_shift": 762824,
+              "Schur_second_pass": 974752
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                41,
+                55
+              ],
+              "reduced_rhs": [
+                54
+              ],
+              "Schur_first_pass": [
+                11
+              ],
+              "Schur_second_pass": [
+                43
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 3,
+          "order_position": 1
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.04518613399704918,
+          "action_cpu_seconds": 0.05226969999999964,
+          "separately_measured_setup_seconds": 0.09016310697188601,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 614,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 8.323312720100953e-05,
+          "memory": {
+            "named_peak_bytes": 978208,
+            "peak_with_reserve_bytes": 1043744,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37504,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 761088,
+              "mixed_triangular_solve": 852608,
+              "original_core_product": 977112,
+              "original_core_shift": 852608,
+              "refinement_update": 852608,
+              "reduced_rhs": 973936,
+              "Schur_first_pass": 978208,
+              "Schur_split": 854784,
+              "Schur_shift": 854784,
+              "Schur_second_pass": 977256
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                19,
+                31
+              ],
+              "reduced_rhs": [
+                30
+              ],
+              "Schur_first_pass": [
+                4
+              ],
+              "Schur_second_pass": [
+                21
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 3,
+          "order_position": 2
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 552,
+          "action_seconds": 0.03732272598426789,
+          "action_cpu_seconds": 0.041710500000000206,
+          "separately_measured_setup_seconds": 0.07790787698468193,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 236,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 9.553262166879293e-05,
+          "memory": {
+            "named_peak_bytes": 977600,
+            "peak_with_reserve_bytes": 1043136,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37184,
+              "mixed_stream_setup": 681608,
+              "mixed_stream_column": 686024,
+              "mixed_permutation": 667848,
+              "mixed_triangular_solve": 759688,
+              "original_core_product": 977600,
+              "original_core_shift": 759688,
+              "refinement_update": 759688,
+              "reduced_rhs": 976248,
+              "Schur_first_pass": 973920,
+              "Schur_split": 762824,
+              "Schur_shift": 762824,
+              "Schur_second_pass": 974752
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                41,
+                55
+              ],
+              "reduced_rhs": [
+                54
+              ],
+              "Schur_first_pass": [
+                11
+              ],
+              "Schur_second_pass": [
+                43
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 4,
+          "order_position": 0
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.04407023702515289,
+          "action_cpu_seconds": 0.05209889999999984,
+          "separately_measured_setup_seconds": 0.09343642700696364,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 614,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 8.323312720100953e-05,
+          "memory": {
+            "named_peak_bytes": 978208,
+            "peak_with_reserve_bytes": 1043744,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37504,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 761088,
+              "mixed_triangular_solve": 852608,
+              "original_core_product": 977112,
+              "original_core_shift": 852608,
+              "refinement_update": 852608,
+              "reduced_rhs": 973936,
+              "Schur_first_pass": 978208,
+              "Schur_split": 854784,
+              "Schur_shift": 854784,
+              "Schur_second_pass": 977256
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                19,
+                31
+              ],
+              "reduced_rhs": [
+                30
+              ],
+              "Schur_first_pass": [
+                4
+              ],
+              "Schur_second_pass": [
+                21
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 4,
+          "order_position": 1
+        },
+        {
+          "method": "block_width2",
+          "m": 552,
+          "action_seconds": 0.0454105039825663,
+          "action_cpu_seconds": 0.052074299999999685,
+          "separately_measured_setup_seconds": 0.07649915001820773,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 4194304,
+            "entry_blocks": 603,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 0.0001056395104271647,
+          "memory": {
+            "named_peak_bytes": 978312,
+            "peak_with_reserve_bytes": 1043848,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 37184,
+              "mixed_stream_setup": 681608,
+              "mixed_stream_column": 686024,
+              "mixed_permutation": 667848,
+              "mixed_triangular_solve": 865544,
+              "original_core_product": 974608,
+              "original_core_shift": 723784,
+              "refinement_update": 723784,
+              "reduced_rhs": 977744,
+              "block_initial_rhs": 718088,
+              "initial_QR_workspace": 854344,
+              "block_retained_state": 801864,
+              "block_Schur_first_pass": 978312,
+              "block_Schur_split": 867400,
+              "block_mixed_column_solve": 865544,
+              "block_core_product": 977544,
+              "block_core_shift": 861128,
+              "block_core_update": 861128,
+              "block_Schur_shift": 867400,
+              "block_Schur_second_pass": 977864
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                49
+              ],
+              "reduced_rhs": [
+                49
+              ],
+              "block_Schur_first_pass": [
+                4
+              ],
+              "block_core_product": [
+                20
+              ],
+              "block_Schur_second_pass": [
+                24
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 4,
+          "order_position": 2
+        }
+      ],
+      "allocation_audit": {
+        "status": "passed",
+        "m": 552,
+        "traced_peak_bytes": 1003158,
+        "trace_within_1MiB": true,
+        "first_pass_minimum_rows": 4,
+        "minimum_four_rows_passed": true,
+        "phase_cumulative_traced_peaks": {
+          "setup_and_initial_QR": 993048,
+          "matrix_action": 998609,
+          "QR_and_reprojection": 998609,
+          "primary_lift_and_original_verification": 999478,
+          "true_check_and_auxiliary_deflation": 1003158
+        },
+        "simulated_QR_rank": 2,
+        "memory": {
+          "named_peak_bytes": 978312,
+          "peak_with_reserve_bytes": 1043848,
+          "reserve_bytes": 65536,
+          "phase_named_peaks": {
+            "selection": 37184,
+            "mixed_stream_setup": 681608,
+            "mixed_stream_column": 686024,
+            "mixed_permutation": 667848,
+            "mixed_triangular_solve": 865544,
+            "original_core_product": 974608,
+            "original_core_shift": 831496,
+            "refinement_update": 831496,
+            "reduced_rhs": 977744,
+            "block_initial_rhs": 718088,
+            "initial_QR_workspace": 854344,
+            "block_retained_state": 801864,
+            "block_Schur_first_pass": 978312,
+            "block_Schur_split": 867400,
+            "block_mixed_column_solve": 865544,
+            "block_core_product": 977544,
+            "block_core_shift": 861128,
+            "block_core_update": 861128,
+            "block_Schur_shift": 867400,
+            "block_Schur_second_pass": 977864,
+            "old_and_new_AP": 825800,
+            "block_Galerkin_update": 825864,
+            "local_reprojection": 849832,
+            "QR_old_workspace_bound": 902280,
+            "QR_after": 902296,
+            "correction_cross": 974192,
+            "full_correction_update": 846600,
+            "full_verification": 965776,
+            "full_original_update": 834632,
+            "block_with_original_verification": 818248,
+            "true_block_residual": 849736,
+            "auxiliary_deflation_copies": 849736,
+            "auxiliary_true_residual_copy": 813832
+          },
+          "phase_row_sizes": {
+            "original_core_product": [
+              25,
+              49
+            ],
+            "reduced_rhs": [
+              49
+            ],
+            "block_Schur_first_pass": [
+              4
+            ],
+            "block_core_product": [
+              20
+            ],
+            "block_Schur_second_pass": [
+              24
+            ],
+            "correction_cross": [
+              5
+            ],
+            "full_verification": [
+              9
+            ]
+          }
+        },
+        "kernel_stats": {
+          "column_queries": 552,
+          "entry_evaluations": 17955252,
+          "entry_blocks": 2820,
+          "full_matvecs": 1
+        },
+        "qualification": "Actual component action/QR/update/verification/deflation phases, not a complete block solver."
+      },
+      "column_validation": {
+        "column_relative_errors": [
+          5.147063194075884e-10,
+          4.912728641540235e-10
+        ],
+        "scope": "Independent scalar references retained outside the component allocation/timing claims."
+      },
+      "action_means_seconds": {
+        "block_width2": 0.046485010790638624,
+        "scalar_same_core": 0.03770438198698685,
+        "scalar592": 0.044247276801615956
+      },
+      "block_to_scalar_same_core_cost": 1.2328808573677799,
+      "block_to_scalar592_cost": 1.050573371985255,
+      "required_block_iterations_over_scalar592_for_action_break_even": 0.9518611709245142,
+      "required_block_iterations_over_same_core_scalar_for_action_break_even": 0.8111083840939957,
+      "caveat": "Iteration ratios are required thresholds only; smaller block core may change convergence. Setup, QR/updates/deflation and verification are not included in the action-only break-even."
+    },
+    {
+      "dataset": "Concrete",
+      "n": 824,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "resource_plan": {
+        "m": 592,
+        "n": 824,
+        "d": 8,
+        "factor_bytes": 720944,
+        "metadata_bytes": 5328,
+        "permutation_bytes": 6592,
+        "outer_full_arrays_bytes": 13184,
+        "width_two_tail_block_bytes": 3712,
+        "phase_bytes": {
+          "construction": 787200,
+          "first_pass_four_rows": 804288,
+          "split_first_pass": 790976,
+          "core_product": 853024,
+          "core_mixed_solves": 815040,
+          "second_pass": 824608,
+          "QR_old_workspace_bound": 784064,
+          "true_block_residual_subtract": 772544,
+          "auxiliary_deflation_copies": 772544,
+          "primary_lift_core": 832208,
+          "primary_lift_cross": 792080,
+          "original_verification": 781904,
+          "original_residual_update": 777792
+        },
+        "limiting_phase": "core_product",
+        "named_peak_bytes": 853024,
+        "peak_with_reserve_bytes": 918560,
+        "feasible": true,
+        "next_rank_plan": null
+      },
+      "timings": [
+        {
+          "method": "block_width2",
+          "m": 592,
+          "action_seconds": 0.007291336019989103,
+          "action_cpu_seconds": 0.0,
+          "separately_measured_setup_seconds": 0.05892653705086559,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 38,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.7901936927739852e-05,
+          "memory": {
+            "named_peak_bytes": 976944,
+            "peak_with_reserve_bytes": 1042480,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 810944,
+              "original_core_product": 974944,
+              "original_core_shift": 768704,
+              "refinement_update": 768704,
+              "reduced_rhs": 976944,
+              "block_initial_rhs": 751616,
+              "initial_QR_workspace": 776640,
+              "block_retained_state": 764608,
+              "block_Schur_first_pass": 976096,
+              "block_Schur_split": 790976,
+              "block_mixed_column_solve": 810944,
+              "block_core_product": 974288,
+              "block_core_shift": 806208,
+              "block_core_update": 806208,
+              "block_Schur_shift": 790976,
+              "block_Schur_second_pass": 974608
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                36
+              ],
+              "reduced_rhs": [
+                38
+              ],
+              "block_Schur_first_pass": [
+                98
+              ],
+              "block_core_product": [
+                29
+              ],
+              "block_Schur_second_pass": [
+                33
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 0,
+          "order_position": 0
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 592,
+          "action_seconds": 0.00725318503100425,
+          "action_cpu_seconds": 0.010425000000000129,
+          "separately_measured_setup_seconds": 0.06769123702542856,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 32,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.1247584720308903e-05,
+          "memory": {
+            "named_peak_bytes": 978040,
+            "peak_with_reserve_bytes": 1043576,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 774272,
+              "original_core_product": 976040,
+              "original_core_shift": 774272,
+              "refinement_update": 774272,
+              "reduced_rhs": 978040,
+              "Schur_first_pass": 976224,
+              "Schur_split": 766656,
+              "Schur_shift": 766656,
+              "Schur_second_pass": 975848
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                35,
+                37
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                108
+              ],
+              "Schur_second_pass": [
+                37
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 0,
+          "order_position": 1
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.006529036967549473,
+          "action_cpu_seconds": 0.010421199999999686,
+          "separately_measured_setup_seconds": 0.06124991102842614,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 32,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.1247584720308903e-05,
+          "memory": {
+            "named_peak_bytes": 978040,
+            "peak_with_reserve_bytes": 1043576,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 774272,
+              "original_core_product": 976040,
+              "original_core_shift": 774272,
+              "refinement_update": 774272,
+              "reduced_rhs": 978040,
+              "Schur_first_pass": 976224,
+              "Schur_split": 766656,
+              "Schur_shift": 766656,
+              "Schur_second_pass": 975848
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                35,
+                37
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                108
+              ],
+              "Schur_second_pass": [
+                37
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 0,
+          "order_position": 2
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 592,
+          "action_seconds": 0.006514278007671237,
+          "action_cpu_seconds": 0.0,
+          "separately_measured_setup_seconds": 0.0700130479526706,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 32,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.1247584720308903e-05,
+          "memory": {
+            "named_peak_bytes": 978040,
+            "peak_with_reserve_bytes": 1043576,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 774272,
+              "original_core_product": 976040,
+              "original_core_shift": 774272,
+              "refinement_update": 774272,
+              "reduced_rhs": 978040,
+              "Schur_first_pass": 976224,
+              "Schur_split": 766656,
+              "Schur_shift": 766656,
+              "Schur_second_pass": 975848
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                35,
+                37
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                108
+              ],
+              "Schur_second_pass": [
+                37
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 1,
+          "order_position": 0
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.006347447982989252,
+          "action_cpu_seconds": 0.0,
+          "separately_measured_setup_seconds": 0.0800097449682653,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 32,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.1247584720308903e-05,
+          "memory": {
+            "named_peak_bytes": 978040,
+            "peak_with_reserve_bytes": 1043576,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 774272,
+              "original_core_product": 976040,
+              "original_core_shift": 774272,
+              "refinement_update": 774272,
+              "reduced_rhs": 978040,
+              "Schur_first_pass": 976224,
+              "Schur_split": 766656,
+              "Schur_shift": 766656,
+              "Schur_second_pass": 975848
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                35,
+                37
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                108
+              ],
+              "Schur_second_pass": [
+                37
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 1,
+          "order_position": 1
+        },
+        {
+          "method": "block_width2",
+          "m": 592,
+          "action_seconds": 0.0072983960271812975,
+          "action_cpu_seconds": 0.010425800000000152,
+          "separately_measured_setup_seconds": 0.057089567999355495,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 38,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.7901936927739852e-05,
+          "memory": {
+            "named_peak_bytes": 976944,
+            "peak_with_reserve_bytes": 1042480,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 810944,
+              "original_core_product": 974944,
+              "original_core_shift": 768704,
+              "refinement_update": 768704,
+              "reduced_rhs": 976944,
+              "block_initial_rhs": 751616,
+              "initial_QR_workspace": 776640,
+              "block_retained_state": 764608,
+              "block_Schur_first_pass": 976096,
+              "block_Schur_split": 790976,
+              "block_mixed_column_solve": 810944,
+              "block_core_product": 974288,
+              "block_core_shift": 806208,
+              "block_core_update": 806208,
+              "block_Schur_shift": 790976,
+              "block_Schur_second_pass": 974608
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                36
+              ],
+              "reduced_rhs": [
+                38
+              ],
+              "block_Schur_first_pass": [
+                98
+              ],
+              "block_core_product": [
+                29
+              ],
+              "block_Schur_second_pass": [
+                33
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 1,
+          "order_position": 2
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.0063404180109500885,
+          "action_cpu_seconds": 0.0,
+          "separately_measured_setup_seconds": 0.06294187402818352,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 32,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.1247584720308903e-05,
+          "memory": {
+            "named_peak_bytes": 978040,
+            "peak_with_reserve_bytes": 1043576,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 774272,
+              "original_core_product": 976040,
+              "original_core_shift": 774272,
+              "refinement_update": 774272,
+              "reduced_rhs": 978040,
+              "Schur_first_pass": 976224,
+              "Schur_split": 766656,
+              "Schur_shift": 766656,
+              "Schur_second_pass": 975848
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                35,
+                37
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                108
+              ],
+              "Schur_second_pass": [
+                37
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 2,
+          "order_position": 0
+        },
+        {
+          "method": "block_width2",
+          "m": 592,
+          "action_seconds": 0.007300792960450053,
+          "action_cpu_seconds": 0.010446899999999815,
+          "separately_measured_setup_seconds": 0.07196362200193107,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 38,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.7901936927739852e-05,
+          "memory": {
+            "named_peak_bytes": 976944,
+            "peak_with_reserve_bytes": 1042480,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 810944,
+              "original_core_product": 974944,
+              "original_core_shift": 768704,
+              "refinement_update": 768704,
+              "reduced_rhs": 976944,
+              "block_initial_rhs": 751616,
+              "initial_QR_workspace": 776640,
+              "block_retained_state": 764608,
+              "block_Schur_first_pass": 976096,
+              "block_Schur_split": 790976,
+              "block_mixed_column_solve": 810944,
+              "block_core_product": 974288,
+              "block_core_shift": 806208,
+              "block_core_update": 806208,
+              "block_Schur_shift": 790976,
+              "block_Schur_second_pass": 974608
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                36
+              ],
+              "reduced_rhs": [
+                38
+              ],
+              "block_Schur_first_pass": [
+                98
+              ],
+              "block_core_product": [
+                29
+              ],
+              "block_Schur_second_pass": [
+                33
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 2,
+          "order_position": 1
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 592,
+          "action_seconds": 0.006378908990882337,
+          "action_cpu_seconds": 0.0,
+          "separately_measured_setup_seconds": 0.06121356401126832,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 32,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.1247584720308903e-05,
+          "memory": {
+            "named_peak_bytes": 978040,
+            "peak_with_reserve_bytes": 1043576,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 774272,
+              "original_core_product": 976040,
+              "original_core_shift": 774272,
+              "refinement_update": 774272,
+              "reduced_rhs": 978040,
+              "Schur_first_pass": 976224,
+              "Schur_split": 766656,
+              "Schur_shift": 766656,
+              "Schur_second_pass": 975848
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                35,
+                37
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                108
+              ],
+              "Schur_second_pass": [
+                37
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 2,
+          "order_position": 2
+        },
+        {
+          "method": "block_width2",
+          "m": 592,
+          "action_seconds": 0.007344142999500036,
+          "action_cpu_seconds": 0.010412399999999877,
+          "separately_measured_setup_seconds": 0.07676811900455505,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 38,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.7901936927739852e-05,
+          "memory": {
+            "named_peak_bytes": 976944,
+            "peak_with_reserve_bytes": 1042480,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 810944,
+              "original_core_product": 974944,
+              "original_core_shift": 768704,
+              "refinement_update": 768704,
+              "reduced_rhs": 976944,
+              "block_initial_rhs": 751616,
+              "initial_QR_workspace": 776640,
+              "block_retained_state": 764608,
+              "block_Schur_first_pass": 976096,
+              "block_Schur_split": 790976,
+              "block_mixed_column_solve": 810944,
+              "block_core_product": 974288,
+              "block_core_shift": 806208,
+              "block_core_update": 806208,
+              "block_Schur_shift": 790976,
+              "block_Schur_second_pass": 974608
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                36
+              ],
+              "reduced_rhs": [
+                38
+              ],
+              "block_Schur_first_pass": [
+                98
+              ],
+              "block_core_product": [
+                29
+              ],
+              "block_Schur_second_pass": [
+                33
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 3,
+          "order_position": 0
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 592,
+          "action_seconds": 0.006313124962616712,
+          "action_cpu_seconds": 0.0,
+          "separately_measured_setup_seconds": 0.059059744991827756,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 32,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.1247584720308903e-05,
+          "memory": {
+            "named_peak_bytes": 978040,
+            "peak_with_reserve_bytes": 1043576,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 774272,
+              "original_core_product": 976040,
+              "original_core_shift": 774272,
+              "refinement_update": 774272,
+              "reduced_rhs": 978040,
+              "Schur_first_pass": 976224,
+              "Schur_split": 766656,
+              "Schur_shift": 766656,
+              "Schur_second_pass": 975848
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                35,
+                37
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                108
+              ],
+              "Schur_second_pass": [
+                37
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 3,
+          "order_position": 1
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.007437933993060142,
+          "action_cpu_seconds": 0.0,
+          "separately_measured_setup_seconds": 0.07798789802473038,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 32,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.1247584720308903e-05,
+          "memory": {
+            "named_peak_bytes": 978040,
+            "peak_with_reserve_bytes": 1043576,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 774272,
+              "original_core_product": 976040,
+              "original_core_shift": 774272,
+              "refinement_update": 774272,
+              "reduced_rhs": 978040,
+              "Schur_first_pass": 976224,
+              "Schur_split": 766656,
+              "Schur_shift": 766656,
+              "Schur_second_pass": 975848
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                35,
+                37
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                108
+              ],
+              "Schur_second_pass": [
+                37
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 3,
+          "order_position": 2
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 592,
+          "action_seconds": 0.0069877989590168,
+          "action_cpu_seconds": 0.0,
+          "separately_measured_setup_seconds": 0.06389980902895331,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 32,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.1247584720308903e-05,
+          "memory": {
+            "named_peak_bytes": 978040,
+            "peak_with_reserve_bytes": 1043576,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 774272,
+              "original_core_product": 976040,
+              "original_core_shift": 774272,
+              "refinement_update": 774272,
+              "reduced_rhs": 978040,
+              "Schur_first_pass": 976224,
+              "Schur_split": 766656,
+              "Schur_shift": 766656,
+              "Schur_second_pass": 975848
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                35,
+                37
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                108
+              ],
+              "Schur_second_pass": [
+                37
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 4,
+          "order_position": 0
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.006653098971582949,
+          "action_cpu_seconds": 0.010422699999999452,
+          "separately_measured_setup_seconds": 0.05829722504131496,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 32,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.1247584720308903e-05,
+          "memory": {
+            "named_peak_bytes": 978040,
+            "peak_with_reserve_bytes": 1043576,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 774272,
+              "original_core_product": 976040,
+              "original_core_shift": 774272,
+              "refinement_update": 774272,
+              "reduced_rhs": 978040,
+              "Schur_first_pass": 976224,
+              "Schur_split": 766656,
+              "Schur_shift": 766656,
+              "Schur_second_pass": 975848
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                35,
+                37
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                108
+              ],
+              "Schur_second_pass": [
+                37
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 4,
+          "order_position": 1
+        },
+        {
+          "method": "block_width2",
+          "m": 592,
+          "action_seconds": 0.007682046969421208,
+          "action_cpu_seconds": 0.010445000000000704,
+          "separately_measured_setup_seconds": 0.06012768001528457,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 678976,
+            "entry_blocks": 38,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 2.7901936927739852e-05,
+          "memory": {
+            "named_peak_bytes": 976944,
+            "peak_with_reserve_bytes": 1042480,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 17920,
+              "mixed_stream_setup": 778368,
+              "mixed_stream_column": 783104,
+              "mixed_permutation": 740280,
+              "mixed_triangular_solve": 810944,
+              "original_core_product": 974944,
+              "original_core_shift": 768704,
+              "refinement_update": 768704,
+              "reduced_rhs": 976944,
+              "block_initial_rhs": 751616,
+              "initial_QR_workspace": 776640,
+              "block_retained_state": 764608,
+              "block_Schur_first_pass": 976096,
+              "block_Schur_split": 790976,
+              "block_mixed_column_solve": 810944,
+              "block_core_product": 974288,
+              "block_core_shift": 806208,
+              "block_core_update": 806208,
+              "block_Schur_shift": 790976,
+              "block_Schur_second_pass": 974608
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                36
+              ],
+              "reduced_rhs": [
+                38
+              ],
+              "block_Schur_first_pass": [
+                98
+              ],
+              "block_core_product": [
+                29
+              ],
+              "block_Schur_second_pass": [
+                33
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 4,
+          "order_position": 2
+        }
+      ],
+      "allocation_audit": {
+        "status": "passed",
+        "m": 592,
+        "traced_peak_bytes": 992193,
+        "trace_within_1MiB": true,
+        "first_pass_minimum_rows": 98,
+        "minimum_four_rows_passed": true,
+        "phase_cumulative_traced_peaks": {
+          "setup_and_initial_QR": 984976,
+          "matrix_action": 985748,
+          "QR_and_reprojection": 985748,
+          "primary_lift_and_original_verification": 992193,
+          "true_check_and_auxiliary_deflation": 992193
+        },
+        "simulated_QR_rank": 2,
+        "memory": {
+          "named_peak_bytes": 977224,
+          "peak_with_reserve_bytes": 1042760,
+          "reserve_bytes": 65536,
+          "phase_named_peaks": {
+            "selection": 17920,
+            "mixed_stream_setup": 778368,
+            "mixed_stream_column": 783104,
+            "mixed_permutation": 740280,
+            "mixed_triangular_solve": 810944,
+            "original_core_product": 977224,
+            "original_core_shift": 785408,
+            "refinement_update": 785408,
+            "reduced_rhs": 976944,
+            "block_initial_rhs": 751616,
+            "initial_QR_workspace": 776640,
+            "block_retained_state": 764608,
+            "block_Schur_first_pass": 976096,
+            "block_Schur_split": 790976,
+            "block_mixed_column_solve": 810944,
+            "block_core_product": 974288,
+            "block_core_shift": 806208,
+            "block_core_update": 806208,
+            "block_Schur_shift": 790976,
+            "block_Schur_second_pass": 974608,
+            "old_and_new_AP": 768320,
+            "block_Galerkin_update": 768384,
+            "local_reprojection": 772128,
+            "QR_old_workspace_bound": 784128,
+            "QR_after": 784144,
+            "correction_cross": 976920,
+            "full_correction_update": 785408,
+            "full_verification": 975800,
+            "full_original_update": 777792,
+            "block_with_original_verification": 771200,
+            "true_block_residual": 772032,
+            "auxiliary_deflation_copies": 772032,
+            "auxiliary_true_residual_copy": 766464
+          },
+          "phase_row_sizes": {
+            "original_core_product": [
+              33,
+              36
+            ],
+            "reduced_rhs": [
+              38
+            ],
+            "block_Schur_first_pass": [
+              98
+            ],
+            "block_core_product": [
+              29
+            ],
+            "block_Schur_second_pass": [
+              33
+            ],
+            "correction_cross": [
+              99
+            ],
+            "full_verification": [
+              31
+            ]
+          }
+        },
+        "kernel_stats": {
+          "column_queries": 592,
+          "entry_evaluations": 5778664,
+          "entry_blocks": 1440,
+          "full_matvecs": 1
+        },
+        "qualification": "Actual component action/QR/update/verification/deflation phases, not a complete block solver."
+      },
+      "column_validation": {
+        "column_relative_errors": [
+          3.213086419926793e-10,
+          7.191930489771083e-10
+        ],
+        "scope": "Independent scalar references retained outside the component allocation/timing claims."
+      },
+      "action_means_seconds": {
+        "block_width2": 0.007383342995308339,
+        "scalar_same_core": 0.006689459190238267,
+        "scalar592": 0.006661587185226381
+      },
+      "block_to_scalar_same_core_cost": 1.1037279375412943,
+      "block_to_scalar592_cost": 1.1083459226777996,
+      "required_block_iterations_over_scalar592_for_action_break_even": 0.9022453906664515,
+      "required_block_iterations_over_same_core_scalar_for_action_break_even": 0.9060203751185617,
+      "caveat": "Iteration ratios are required thresholds only; smaller block core may change convergence. Setup, QR/updates/deflation and verification are not included in the action-only break-even."
+    },
+    {
+      "dataset": "Airfoil",
+      "n": 1202,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "resource_plan": {
+        "m": 592,
+        "n": 1202,
+        "d": 5,
+        "factor_bytes": 720944,
+        "metadata_bytes": 5328,
+        "permutation_bytes": 9616,
+        "outer_full_arrays_bytes": 19232,
+        "width_two_tail_block_bytes": 9760,
+        "phase_bytes": {
+          "construction": 772992,
+          "first_pass_four_rows": 871296,
+          "split_first_pass": 842384,
+          "core_product": 884152,
+          "core_mixed_solves": 860400,
+          "second_pass": 855736,
+          "QR_old_workspace_bound": 847568,
+          "true_block_residual_subtract": 823952,
+          "auxiliary_deflation_copies": 823952,
+          "primary_lift_core": 860312,
+          "primary_lift_cross": 846968,
+          "original_verification": 827264,
+          "original_residual_update": 823152
+        },
+        "limiting_phase": "core_product",
+        "named_peak_bytes": 884152,
+        "peak_with_reserve_bytes": 949688,
+        "feasible": true,
+        "next_rank_plan": null
+      },
+      "timings": [
+        {
+          "method": "block_width2",
+          "m": 592,
+          "action_seconds": 0.01435264595784247,
+          "action_cpu_seconds": 0.010424000000000433,
+          "separately_measured_setup_seconds": 0.07920269801979885,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 96,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 4.147404581158254e-05,
+          "memory": {
+            "named_peak_bytes": 976216,
+            "peak_with_reserve_bytes": 1041752,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 856304,
+              "original_core_product": 974992,
+              "original_core_shift": 783824,
+              "refinement_update": 783824,
+              "reduced_rhs": 975184,
+              "block_initial_rhs": 769760,
+              "initial_QR_workspace": 828048,
+              "block_retained_state": 803920,
+              "block_Schur_first_pass": 974848,
+              "block_Schur_split": 842384,
+              "block_mixed_column_solve": 856304,
+              "block_core_product": 975992,
+              "block_core_shift": 851568,
+              "block_core_update": 851568,
+              "block_Schur_shift": 842384,
+              "block_Schur_second_pass": 976216
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                36
+              ],
+              "reduced_rhs": [
+                37
+              ],
+              "block_Schur_first_pass": [
+                26
+              ],
+              "block_core_product": [
+                23
+              ],
+              "block_Schur_second_pass": [
+                27
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 0,
+          "order_position": 0
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 592,
+          "action_seconds": 0.012586780998390168,
+          "action_cpu_seconds": 0.010428199999999777,
+          "separately_measured_setup_seconds": 0.06629245996009558,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 72,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 3.8003705710708955e-05,
+          "memory": {
+            "named_peak_bytes": 975376,
+            "peak_with_reserve_bytes": 1040912,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 798464,
+              "original_core_product": 975280,
+              "original_core_shift": 798464,
+              "refinement_update": 798464,
+              "reduced_rhs": 974992,
+              "Schur_first_pass": 974848,
+              "Schur_split": 793872,
+              "Schur_shift": 793872,
+              "Schur_second_pass": 975376
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                33,
+                38
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                34
+              ],
+              "Schur_second_pass": [
+                35
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 0,
+          "order_position": 1
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.012574592023156583,
+          "action_cpu_seconds": 0.010459899999999855,
+          "separately_measured_setup_seconds": 0.06415166502119973,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 72,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 3.8003705710708955e-05,
+          "memory": {
+            "named_peak_bytes": 975376,
+            "peak_with_reserve_bytes": 1040912,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 798464,
+              "original_core_product": 975280,
+              "original_core_shift": 798464,
+              "refinement_update": 798464,
+              "reduced_rhs": 974992,
+              "Schur_first_pass": 974848,
+              "Schur_split": 793872,
+              "Schur_shift": 793872,
+              "Schur_second_pass": 975376
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                33,
+                38
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                34
+              ],
+              "Schur_second_pass": [
+                35
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 0,
+          "order_position": 2
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 592,
+          "action_seconds": 0.012712611991446465,
+          "action_cpu_seconds": 0.010420199999999546,
+          "separately_measured_setup_seconds": 0.0674802020075731,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 72,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 3.8003705710708955e-05,
+          "memory": {
+            "named_peak_bytes": 975376,
+            "peak_with_reserve_bytes": 1040912,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 798464,
+              "original_core_product": 975280,
+              "original_core_shift": 798464,
+              "refinement_update": 798464,
+              "reduced_rhs": 974992,
+              "Schur_first_pass": 974848,
+              "Schur_split": 793872,
+              "Schur_shift": 793872,
+              "Schur_second_pass": 975376
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                33,
+                38
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                34
+              ],
+              "Schur_second_pass": [
+                35
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 1,
+          "order_position": 0
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.011843462998513132,
+          "action_cpu_seconds": 0.010405399999999787,
+          "separately_measured_setup_seconds": 0.06348989997059107,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 72,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 3.8003705710708955e-05,
+          "memory": {
+            "named_peak_bytes": 975376,
+            "peak_with_reserve_bytes": 1040912,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 798464,
+              "original_core_product": 975280,
+              "original_core_shift": 798464,
+              "refinement_update": 798464,
+              "reduced_rhs": 974992,
+              "Schur_first_pass": 974848,
+              "Schur_split": 793872,
+              "Schur_shift": 793872,
+              "Schur_second_pass": 975376
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                33,
+                38
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                34
+              ],
+              "Schur_second_pass": [
+                35
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 1,
+          "order_position": 1
+        },
+        {
+          "method": "block_width2",
+          "m": 592,
+          "action_seconds": 0.014346780022606254,
+          "action_cpu_seconds": 0.010433899999999774,
+          "separately_measured_setup_seconds": 0.06856103398604318,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 96,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 4.147404581158254e-05,
+          "memory": {
+            "named_peak_bytes": 976216,
+            "peak_with_reserve_bytes": 1041752,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 856304,
+              "original_core_product": 974992,
+              "original_core_shift": 783824,
+              "refinement_update": 783824,
+              "reduced_rhs": 975184,
+              "block_initial_rhs": 769760,
+              "initial_QR_workspace": 828048,
+              "block_retained_state": 803920,
+              "block_Schur_first_pass": 974848,
+              "block_Schur_split": 842384,
+              "block_mixed_column_solve": 856304,
+              "block_core_product": 975992,
+              "block_core_shift": 851568,
+              "block_core_update": 851568,
+              "block_Schur_shift": 842384,
+              "block_Schur_second_pass": 976216
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                36
+              ],
+              "reduced_rhs": [
+                37
+              ],
+              "block_Schur_first_pass": [
+                26
+              ],
+              "block_core_product": [
+                23
+              ],
+              "block_Schur_second_pass": [
+                27
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 1,
+          "order_position": 2
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.011860694969072938,
+          "action_cpu_seconds": 0.010416000000000203,
+          "separately_measured_setup_seconds": 0.06534168100915849,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 72,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 3.8003705710708955e-05,
+          "memory": {
+            "named_peak_bytes": 975376,
+            "peak_with_reserve_bytes": 1040912,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 798464,
+              "original_core_product": 975280,
+              "original_core_shift": 798464,
+              "refinement_update": 798464,
+              "reduced_rhs": 974992,
+              "Schur_first_pass": 974848,
+              "Schur_split": 793872,
+              "Schur_shift": 793872,
+              "Schur_second_pass": 975376
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                33,
+                38
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                34
+              ],
+              "Schur_second_pass": [
+                35
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 2,
+          "order_position": 0
+        },
+        {
+          "method": "block_width2",
+          "m": 592,
+          "action_seconds": 0.013924074999522418,
+          "action_cpu_seconds": 0.010428899999999963,
+          "separately_measured_setup_seconds": 0.06570505897980183,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 96,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 4.147404581158254e-05,
+          "memory": {
+            "named_peak_bytes": 976216,
+            "peak_with_reserve_bytes": 1041752,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 856304,
+              "original_core_product": 974992,
+              "original_core_shift": 783824,
+              "refinement_update": 783824,
+              "reduced_rhs": 975184,
+              "block_initial_rhs": 769760,
+              "initial_QR_workspace": 828048,
+              "block_retained_state": 803920,
+              "block_Schur_first_pass": 974848,
+              "block_Schur_split": 842384,
+              "block_mixed_column_solve": 856304,
+              "block_core_product": 975992,
+              "block_core_shift": 851568,
+              "block_core_update": 851568,
+              "block_Schur_shift": 842384,
+              "block_Schur_second_pass": 976216
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                36
+              ],
+              "reduced_rhs": [
+                37
+              ],
+              "block_Schur_first_pass": [
+                26
+              ],
+              "block_core_product": [
+                23
+              ],
+              "block_Schur_second_pass": [
+                27
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 2,
+          "order_position": 1
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 592,
+          "action_seconds": 0.01219782797852531,
+          "action_cpu_seconds": 0.010420500000000388,
+          "separately_measured_setup_seconds": 0.07746983598917723,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 72,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 3.8003705710708955e-05,
+          "memory": {
+            "named_peak_bytes": 975376,
+            "peak_with_reserve_bytes": 1040912,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 798464,
+              "original_core_product": 975280,
+              "original_core_shift": 798464,
+              "refinement_update": 798464,
+              "reduced_rhs": 974992,
+              "Schur_first_pass": 974848,
+              "Schur_split": 793872,
+              "Schur_shift": 793872,
+              "Schur_second_pass": 975376
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                33,
+                38
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                34
+              ],
+              "Schur_second_pass": [
+                35
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 2,
+          "order_position": 2
+        },
+        {
+          "method": "block_width2",
+          "m": 592,
+          "action_seconds": 0.013296401011757553,
+          "action_cpu_seconds": 0.0104545000000007,
+          "separately_measured_setup_seconds": 0.08290262700757012,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 96,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 4.147404581158254e-05,
+          "memory": {
+            "named_peak_bytes": 976216,
+            "peak_with_reserve_bytes": 1041752,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 856304,
+              "original_core_product": 974992,
+              "original_core_shift": 783824,
+              "refinement_update": 783824,
+              "reduced_rhs": 975184,
+              "block_initial_rhs": 769760,
+              "initial_QR_workspace": 828048,
+              "block_retained_state": 803920,
+              "block_Schur_first_pass": 974848,
+              "block_Schur_split": 842384,
+              "block_mixed_column_solve": 856304,
+              "block_core_product": 975992,
+              "block_core_shift": 851568,
+              "block_core_update": 851568,
+              "block_Schur_shift": 842384,
+              "block_Schur_second_pass": 976216
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                36
+              ],
+              "reduced_rhs": [
+                37
+              ],
+              "block_Schur_first_pass": [
+                26
+              ],
+              "block_core_product": [
+                23
+              ],
+              "block_Schur_second_pass": [
+                27
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 3,
+          "order_position": 0
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 592,
+          "action_seconds": 0.012655630009248853,
+          "action_cpu_seconds": 0.020856600000000114,
+          "separately_measured_setup_seconds": 0.06381597399013117,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 72,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 3.8003705710708955e-05,
+          "memory": {
+            "named_peak_bytes": 975376,
+            "peak_with_reserve_bytes": 1040912,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 798464,
+              "original_core_product": 975280,
+              "original_core_shift": 798464,
+              "refinement_update": 798464,
+              "reduced_rhs": 974992,
+              "Schur_first_pass": 974848,
+              "Schur_split": 793872,
+              "Schur_shift": 793872,
+              "Schur_second_pass": 975376
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                33,
+                38
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                34
+              ],
+              "Schur_second_pass": [
+                35
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 3,
+          "order_position": 1
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.012628828000742942,
+          "action_cpu_seconds": 0.01039969999999979,
+          "separately_measured_setup_seconds": 0.06640560697996989,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 72,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 3.8003705710708955e-05,
+          "memory": {
+            "named_peak_bytes": 975376,
+            "peak_with_reserve_bytes": 1040912,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 798464,
+              "original_core_product": 975280,
+              "original_core_shift": 798464,
+              "refinement_update": 798464,
+              "reduced_rhs": 974992,
+              "Schur_first_pass": 974848,
+              "Schur_split": 793872,
+              "Schur_shift": 793872,
+              "Schur_second_pass": 975376
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                33,
+                38
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                34
+              ],
+              "Schur_second_pass": [
+                35
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 3,
+          "order_position": 2
+        },
+        {
+          "method": "scalar_same_core",
+          "m": 592,
+          "action_seconds": 0.011990510043688118,
+          "action_cpu_seconds": 0.010429300000000197,
+          "separately_measured_setup_seconds": 0.07631839404348284,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 72,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 3.8003705710708955e-05,
+          "memory": {
+            "named_peak_bytes": 975376,
+            "peak_with_reserve_bytes": 1040912,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 798464,
+              "original_core_product": 975280,
+              "original_core_shift": 798464,
+              "refinement_update": 798464,
+              "reduced_rhs": 974992,
+              "Schur_first_pass": 974848,
+              "Schur_split": 793872,
+              "Schur_shift": 793872,
+              "Schur_second_pass": 975376
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                33,
+                38
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                34
+              ],
+              "Schur_second_pass": [
+                35
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 4,
+          "order_position": 0
+        },
+        {
+          "method": "scalar592",
+          "m": 592,
+          "action_seconds": 0.012294301996007562,
+          "action_cpu_seconds": 0.020862700000000345,
+          "separately_measured_setup_seconds": 0.06368310103425756,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 72,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 3.8003705710708955e-05,
+          "memory": {
+            "named_peak_bytes": 975376,
+            "peak_with_reserve_bytes": 1040912,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 798464,
+              "original_core_product": 975280,
+              "original_core_shift": 798464,
+              "refinement_update": 798464,
+              "reduced_rhs": 974992,
+              "Schur_first_pass": 974848,
+              "Schur_split": 793872,
+              "Schur_shift": 793872,
+              "Schur_second_pass": 975376
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                33,
+                38
+              ],
+              "reduced_rhs": [
+                39
+              ],
+              "Schur_first_pass": [
+                34
+              ],
+              "Schur_second_pass": [
+                35
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 4,
+          "order_position": 1
+        },
+        {
+          "method": "block_width2",
+          "m": 592,
+          "action_seconds": 0.013272550015244633,
+          "action_cpu_seconds": 0.01037079999999957,
+          "separately_measured_setup_seconds": 0.06512389000272378,
+          "action_kernel_stats": {
+            "column_queries": 0,
+            "entry_evaluations": 1444804,
+            "entry_blocks": 96,
+            "full_matvecs": 0
+          },
+          "action_output_norm": 4.147404581158254e-05,
+          "memory": {
+            "named_peak_bytes": 976216,
+            "peak_with_reserve_bytes": 1041752,
+            "reserve_bytes": 65536,
+            "phase_named_peaks": {
+              "selection": 23968,
+              "mixed_stream_setup": 764160,
+              "mixed_stream_column": 768896,
+              "mixed_permutation": 746706,
+              "mixed_triangular_solve": 856304,
+              "original_core_product": 974992,
+              "original_core_shift": 783824,
+              "refinement_update": 783824,
+              "reduced_rhs": 975184,
+              "block_initial_rhs": 769760,
+              "initial_QR_workspace": 828048,
+              "block_retained_state": 803920,
+              "block_Schur_first_pass": 974848,
+              "block_Schur_split": 842384,
+              "block_mixed_column_solve": 856304,
+              "block_core_product": 975992,
+              "block_core_shift": 851568,
+              "block_core_update": 851568,
+              "block_Schur_shift": 842384,
+              "block_Schur_second_pass": 976216
+            },
+            "phase_row_sizes": {
+              "original_core_product": [
+                36
+              ],
+              "reduced_rhs": [
+                37
+              ],
+              "block_Schur_first_pass": [
+                26
+              ],
+              "block_core_product": [
+                23
+              ],
+              "block_Schur_second_pass": [
+                27
+              ]
+            }
+          },
+          "status": "complete",
+          "repeat": 4,
+          "order_position": 2
+        }
+      ],
+      "allocation_audit": {
+        "status": "passed",
+        "m": 592,
+        "traced_peak_bytes": 991481,
+        "trace_within_1MiB": true,
+        "first_pass_minimum_rows": 26,
+        "minimum_four_rows_passed": true,
+        "phase_cumulative_traced_peaks": {
+          "setup_and_initial_QR": 983352,
+          "matrix_action": 987356,
+          "QR_and_reprojection": 987356,
+          "primary_lift_and_original_verification": 990697,
+          "true_check_and_auxiliary_deflation": 991481
+        },
+        "simulated_QR_rank": 2,
+        "memory": {
+          "named_peak_bytes": 977144,
+          "peak_with_reserve_bytes": 1042680,
+          "reserve_bytes": 65536,
+          "phase_named_peaks": {
+            "selection": 23968,
+            "mixed_stream_setup": 764160,
+            "mixed_stream_column": 768896,
+            "mixed_permutation": 746706,
+            "mixed_triangular_solve": 856304,
+            "original_core_product": 975856,
+            "original_core_shift": 827744,
+            "refinement_update": 827744,
+            "reduced_rhs": 975184,
+            "block_initial_rhs": 769760,
+            "initial_QR_workspace": 828048,
+            "block_retained_state": 803920,
+            "block_Schur_first_pass": 974848,
+            "block_Schur_split": 842384,
+            "block_mixed_column_solve": 856304,
+            "block_core_product": 975992,
+            "block_core_shift": 851568,
+            "block_core_update": 851568,
+            "block_Schur_shift": 842384,
+            "block_Schur_second_pass": 976216,
+            "old_and_new_AP": 813680,
+            "block_Galerkin_update": 813744,
+            "local_reprojection": 823536,
+            "QR_old_workspace_bound": 847632,
+            "QR_after": 847648,
+            "correction_cross": 975920,
+            "full_correction_update": 828032,
+            "full_verification": 977144,
+            "full_original_update": 823152,
+            "block_with_original_verification": 813536,
+            "true_block_residual": 823440,
+            "auxiliary_deflation_copies": 823440,
+            "auxiliary_true_residual_copy": 808800
+          },
+          "phase_row_sizes": {
+            "original_core_product": [
+              27,
+              36
+            ],
+            "reduced_rhs": [
+              37
+            ],
+            "block_Schur_first_pass": [
+              26
+            ],
+            "block_core_product": [
+              23
+            ],
+            "block_Schur_second_pass": [
+              27
+            ],
+            "correction_cross": [
+              28
+            ],
+            "full_verification": [
+              17
+            ]
+          }
+        },
+        "kernel_stats": {
+          "column_queries": 592,
+          "entry_evaluations": 8747476,
+          "entry_blocks": 1642,
+          "full_matvecs": 1
+        },
+        "qualification": "Actual component action/QR/update/verification/deflation phases, not a complete block solver."
+      },
+      "column_validation": {
+        "column_relative_errors": [
+          6.070815353614613e-10,
+          1.8042546935232059e-09
+        ],
+        "scope": "Independent scalar references retained outside the component allocation/timing claims."
+      },
+      "action_means_seconds": {
+        "block_width2": 0.013838490401394666,
+        "scalar_same_core": 0.012428672204259783,
+        "scalar592": 0.012240375997498632
+      },
+      "block_to_scalar_same_core_cost": 1.1134327282886811,
+      "block_to_scalar592_cost": 1.1305608916117131,
+      "required_block_iterations_over_scalar592_for_action_break_even": 0.8845167097319392,
+      "required_block_iterations_over_same_core_scalar_for_action_break_even": 0.898123411135018,
+      "caveat": "Iteration ratios are required thresholds only; smaller block core may change convergence. Setup, QR/updates/deflation and verification are not included in the action-only break-even."
+    }
+  ],
+  "failures": [],
+  "elapsed_wall_seconds": 7.928947523003444,
+  "elapsed_cpu_seconds": 6.1116717,
+  "process_peak_rss_kib": 70696
+}

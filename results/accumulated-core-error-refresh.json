@@ -1,0 +1,412 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_accumulated_core_refresh.py": "1f0216affbf0989eae37d36f4bf98bc302fcb4454f0088a12d41fe43f1175e69",
+    "scripts/check_fused_congruence_core.py": "33b205bc01549d9ba49a7646abd2a53db5fc86fb1b8688591af5d8f548e2c1ac",
+    "scripts/check_core_precision_allocation.py": "ce97909f61de27d880812330a31bacc6d4427fdcccc466811050282c77371f7e",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959",
+    "results/mixed_column_factor_first8.so": "943741be07c35b2e1fb85cc2116dd9367a171ac20ee3a1e23c6293478f8d277a"
+  },
+  "protocol": {
+    "core": 592,
+    "shift": 1e-05,
+    "choice": "Approximate every core product, accumulate s=sum alpha*q; replace residual by [-Es,+BT H Es] at refresh. Adaptive trigger bound*norm(s)>.1*norm(transformed recursive residual); periodic8 control; adaptive_restart isolates restart cost.",
+    "cost": "Dense gate: factors, selection, vector arithmetic and per-step diagnostic true residual free. Kernel entries charge actions, each correction core+cross, setup, boundaries and final verification. Original 1e-8 acceptance; no native memory/speed claim."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "runs": [
+        {
+          "method": "exact",
+          "iterations": 42,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.17638182878306e-09,
+          "omitted": 0,
+          "refresh_steps": [],
+          "refresh_identity_defect": 0.0,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "actions": 176160768,
+            "refresh": 0,
+            "boundary_cross": 1723904,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 183466920
+        },
+        {
+          "method": "periodic8",
+          "iterations": 43,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.864114107689108e-09,
+          "omitted": 43,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32,
+            40
+          ],
+          "refresh_identity_defect": 2.7763623425417453e-10,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "actions": 165285120,
+            "refresh": 6062080,
+            "boundary_cross": 1723904,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 178653352
+        },
+        {
+          "method": "adaptive",
+          "iterations": 43,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.434986434322012e-09,
+          "omitted": 43,
+          "refresh_steps": [
+            12,
+            22,
+            32,
+            42
+          ],
+          "refresh_identity_defect": 2.6083404787280617e-10,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "actions": 165285120,
+            "refresh": 4849664,
+            "boundary_cross": 1723904,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 177440936
+        },
+        {
+          "method": "adaptive_restart",
+          "iterations": 50,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.967145174827285e-09,
+          "omitted": 50,
+          "refresh_steps": [
+            12,
+            26,
+            39
+          ],
+          "refresh_identity_defect": 2.612514343044726e-10,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "actions": 192192000,
+            "refresh": 3637248,
+            "boundary_cross": 1723904,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 203135400
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "runs": [
+        {
+          "method": "exact",
+          "iterations": 37,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 6.9651555818125414e-09,
+          "omitted": 0,
+          "refresh_steps": [],
+          "refresh_identity_defect": 0.0,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "actions": 155189248,
+            "refresh": 0,
+            "boundary_cross": 1723904,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 162495400
+        },
+        {
+          "method": "periodic8",
+          "iterations": 38,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.058660230776768e-09,
+          "omitted": 38,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32
+          ],
+          "refresh_identity_defect": 6.1287179149958e-10,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "actions": 146065920,
+            "refresh": 4849664,
+            "boundary_cross": 1723904,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 158221736
+        },
+        {
+          "method": "adaptive",
+          "iterations": 38,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.973991790457456e-09,
+          "omitted": 38,
+          "refresh_steps": [
+            10,
+            18,
+            27,
+            36
+          ],
+          "refresh_identity_defect": 5.955468805247668e-10,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "actions": 146065920,
+            "refresh": 4849664,
+            "boundary_cross": 1723904,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 158221736
+        },
+        {
+          "method": "adaptive_restart",
+          "iterations": 43,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.127259494664329e-09,
+          "omitted": 43,
+          "refresh_steps": [
+            10,
+            19,
+            30,
+            42
+          ],
+          "refresh_identity_defect": 6.127054150740525e-10,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "actions": 165285120,
+            "refresh": 4849664,
+            "boundary_cross": 1723904,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 177440936
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "runs": [
+        {
+          "method": "exact",
+          "iterations": 18,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 3.568679900102368e-09,
+          "omitted": 0,
+          "refresh_steps": [],
+          "refresh_identity_defect": 0.0,
+          "entry_components": {
+            "FPS": 487808,
+            "factor": 175528,
+            "actions": 12221568,
+            "refresh": 0,
+            "boundary_cross": 274688,
+            "final_verification": 678976
+          },
+          "analytical_entries": 13838568
+        },
+        {
+          "method": "periodic8",
+          "iterations": 21,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.077733732264508e-09,
+          "omitted": 21,
+          "refresh_steps": [
+            8,
+            16
+          ],
+          "refresh_identity_defect": 2.4995964834256303e-10,
+          "entry_components": {
+            "FPS": 487808,
+            "factor": 175528,
+            "actions": 6898752,
+            "refresh": 975616,
+            "boundary_cross": 274688,
+            "final_verification": 678976
+          },
+          "analytical_entries": 9491368
+        },
+        {
+          "method": "adaptive",
+          "iterations": 19,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 3.0990013654981744e-09,
+          "omitted": 19,
+          "refresh_steps": [
+            4,
+            6,
+            10,
+            12,
+            15,
+            18
+          ],
+          "refresh_identity_defect": 4.919219184547714e-10,
+          "entry_components": {
+            "FPS": 487808,
+            "factor": 175528,
+            "actions": 6241728,
+            "refresh": 2926848,
+            "boundary_cross": 274688,
+            "final_verification": 678976
+          },
+          "analytical_entries": 10785576
+        },
+        {
+          "method": "adaptive_restart",
+          "iterations": 24,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 4.068540512447153e-09,
+          "omitted": 24,
+          "refresh_steps": [
+            4,
+            9,
+            14,
+            19,
+            24
+          ],
+          "refresh_identity_defect": 3.715914231385039e-10,
+          "entry_components": {
+            "FPS": 487808,
+            "factor": 175528,
+            "actions": 7884288,
+            "refresh": 2439040,
+            "boundary_cross": 274688,
+            "final_verification": 678976
+          },
+          "analytical_entries": 11940328
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "runs": [
+        {
+          "method": "exact",
+          "iterations": 21,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.143246206176998e-09,
+          "omitted": 0,
+          "refresh_steps": [],
+          "refresh_identity_defect": 0.0,
+          "entry_components": {
+            "FPS": 711584,
+            "factor": 175528,
+            "actions": 30340884,
+            "refresh": 0,
+            "boundary_cross": 722240,
+            "final_verification": 1444804
+          },
+          "analytical_entries": 33395040
+        },
+        {
+          "method": "periodic8",
+          "iterations": 24,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.279001484174774e-09,
+          "omitted": 24,
+          "refresh_steps": [
+            8,
+            16,
+            24
+          ],
+          "refresh_identity_defect": 2.068130264405837e-09,
+          "entry_components": {
+            "FPS": 711584,
+            "factor": 175528,
+            "actions": 26264160,
+            "refresh": 2134752,
+            "boundary_cross": 722240,
+            "final_verification": 1444804
+          },
+          "analytical_entries": 31453068
+        },
+        {
+          "method": "adaptive",
+          "iterations": 22,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.18400967530603e-09,
+          "omitted": 22,
+          "refresh_steps": [
+            4,
+            8,
+            11,
+            15,
+            18,
+            22
+          ],
+          "refresh_identity_defect": 1.974715497316526e-09,
+          "entry_components": {
+            "FPS": 711584,
+            "factor": 175528,
+            "actions": 24075480,
+            "refresh": 4269504,
+            "boundary_cross": 722240,
+            "final_verification": 1444804
+          },
+          "analytical_entries": 31399140
+        },
+        {
+          "method": "adaptive_restart",
+          "iterations": 26,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 5.695761084467909e-09,
+          "omitted": 26,
+          "refresh_steps": [
+            4,
+            8,
+            13,
+            17,
+            22,
+            26
+          ],
+          "refresh_identity_defect": 2.310653578946553e-09,
+          "entry_components": {
+            "FPS": 711584,
+            "factor": 175528,
+            "actions": 28452840,
+            "refresh": 4269504,
+            "boundary_cross": 722240,
+            "final_verification": 1444804
+          },
+          "analytical_entries": 35776500
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 2.8140964480116963,
+  "elapsed_cpu_seconds": 2.5387469000000005
+}

@@ -1,0 +1,62 @@
+{
+  "purpose": "End-to-end check of finite learning phase, with factor and actual-column variants and strong setup controls.",
+  "synthetic_n": 640,
+  "seeds": [
+    0
+  ],
+  "repetitions": 1,
+  "solver_defaults": {
+    "rank": 32,
+    "checkpoint": 20,
+    "history_size": 1,
+    "warmup_steps": 10,
+    "maxiter": 2500
+  },
+  "variants": [
+    {
+      "id": "flex_compact",
+      "method": "flex_compact"
+    },
+    {
+      "id": "flex_gaussian_qr",
+      "method": "flex_gaussian_qr"
+    },
+    {
+      "id": "flex_static_qr",
+      "method": "flex_static_qr"
+    },
+    {
+      "id": "flex_restart",
+      "method": "flex_restart"
+    },
+    {
+      "id": "flex_compress",
+      "method": "flex_compress"
+    },
+    {
+      "id": "flex_compress_columns",
+      "method": "flex_compress_columns"
+    }
+  ],
+  "max_wall_seconds": 175,
+  "run_timeout_seconds": 70,
+  "workloads": [
+    {
+      "dataset": "synthetic",
+      "target": "smooth"
+    },
+    {
+      "dataset": "synthetic",
+      "target": "random"
+    },
+    {
+      "dataset": "concrete"
+    },
+    {
+      "dataset": "airfoil"
+    }
+  ],
+  "regularization": [
+    0.001
+  ]
+}

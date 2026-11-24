@@ -1,0 +1,53 @@
+{
+  "status": "running",
+  "sources": {
+    "scripts/check_directional_derivative_preconditioning.py": "222cd43c2f5f1d255f67ab41143f59a1e41fbb54e58002c492796421fea19db2",
+    "scripts/check_cached_kernel_static_frontier.py": "c3ab08358aa2945bb17a58a45acc43ca75bd19887d454f8d8245c4d00c5d8f48",
+    "src/nystrom_project/preconditioners.py": "86da13326a40c7f8c2aefdce86bfc8c655abd3ee4da76dcc8c511e2f413527a9",
+    "src/nystrom_project/numerics.py": "53022a2afffbb65fb01ff24b8a7ee3be1f16881455b641baccd4f1da2a2f1d23"
+  },
+  "protocol": {
+    "initial_points": 64,
+    "derivative_directions": 64,
+    "prefix_steps": 8,
+    "regularization": 1e-05,
+    "choice": "Condition each normalized h*derivative family on the 64 initial point values. E=D-C Wpp^dagger B, T=I-B^T Wpp^dagger B. For probe v choose u proportional to T^dagger E^T v. Matrix control maximizes ||Eu||^2/(u^T T u). Choices at all centers condition only on the original point set, not on each other.",
+    "probes": "current literal r8; initial b; independent seeded Gaussian; matrix-only conditional derivative energy. Combine point and derivative features using the FULL joint covariance, including offdiagonal cross-center derivative covariance.",
+    "comparison": "Common x8 restart for all derivative controls and point64/128/512. Initial-b and matrix derivatives also upfront; current-final-set-upfront is explicitly hindsight. Static point128/512 also upfront.",
+    "cost": "Dense cached K, derivatives, selection, eigendecomposition and factors are free diagnostic assistance. Every iterate is checked against the original system. All products reported, including separate verification/boundary counts. Prefix cost recorded separately. NOT complete-cost, fixed-memory or native-runtime evidence. No resource contract adopted.",
+    "decision": "If current directional selection does not improve subsequent convergence relative to initial/random/matrix/point controls enough to justify pricing, close this selector without rank/checkpoint tuning. No full-scope success or heldout use."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "n": 2048,
+      "data_file": "data/prepared/synthetic-n2560-smooth-s0-lambda0.001.npz",
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "input_hashes": [
+        "935328f32fe7a6841558d49a5d8adf6059b6b7063c9fa1244f8e503bf6113508",
+        "c3a23bfcc266181b02d4f31ba5403a859d112a49e365bf1e690e7af09c93e209"
+      ],
+      "prefix": {
+        "status": "prefix",
+        "converged": false,
+        "iterations": 8,
+        "original_relative_residual": 1.221686826717002,
+        "operator_products": 17,
+        "verification_products": 9,
+        "iteration_products": 8,
+        "boundary_products": 0,
+        "residual_replacements": 0,
+        "diagnostic_continuation_cpu_seconds": 0.06243169999999998
+      },
+      "runs": []
+    }
+  ],
+  "tiny": {
+    "first_derivative_relative_error": 3.813813088443345e-09,
+    "mixed_derivative_relative_error": 1.1099300874458002e-08,
+    "approximation_residual_minimum_eigenvalue": -4.3035771296622186e-15,
+    "inverse_relative_error": 4.375001994442975e-15
+  },
+  "elapsed_wall_seconds": 0.24813318002270535,
+  "elapsed_cpu_seconds": 0.1696498999999999
+}

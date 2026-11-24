@@ -1,0 +1,168 @@
+{
+  "scope": "Derived interpretation of bounded fixed-landmark inner-solver screen; no new runs or adaptive landmark implementation",
+  "result_sha256": "ccf50254151ecc9e22cd3c5393bec61b0e47bc65a941e0be86da81bc6d5f303e",
+  "source_hashes_still_match": true,
+  "total_experiment_cpu_seconds": 108.76644739999999,
+  "status": "cpu_budget",
+  "resource_statement": "The larger scalar controls use ranks54 on smooth and53 on Concrete. They are stronger practical controls under an explicit coarse/history/column-work allowance, not exact total-peak matches. Same-rank16 controls are listed separately. Default128-row kernel tiles and setup allocations are disclosed. Queried block columns are released before full verification.",
+  "timing_statement": "One repeat per method, shared flock, one BLAS thread, raw CPU and wall times recorded. All coordinate times are censored because true original residual never reached1e-8 within the predeclared CPU screen.",
+  "mechanism": "Two-direction minimization over the already-computed block correction and previous displacement does not preserve the selected residual zeros. The joint(b+1)-dimensional control does, using h=d-E_J S_JJ^-1(Sd)_J and Sh with an existing block factor; no extra kernel query.",
+  "conclusion": "No tested coordinate variant established CPU headroom over the larger scalar controls. The compatible joint-block control is mathematically valid but remains too inaccurate when its screened budget ends. This result does not justify implementing adaptive landmark exchanges.",
+  "incomplete": "All24 coordinate variants and all12 larger scalar controls ran. Same-rank16 controls ran on three cases; the three Concrete1e-5 controls were not started after the global CPU guard.",
+  "validation_reference_attempt": "results/batched-schur-validation-attempts.json preserves the initial ill-scaled reference pseudoinverse failure; only the independent reference normalization was repaired before workload execution.",
+  "cases": [
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 0.001,
+      "coordinate_variants": 6,
+      "coordinate_converged": 0,
+      "all_coordinate_statuses": [
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap"
+      ],
+      "any_numerical_breakdown": false,
+      "joint_greedy": {
+        "blocks": 3775,
+        "censored_total_seconds": 1.0021897179831285,
+        "true_original_relative_residual": 1.6198477415712004e-07,
+        "exact_entry_equivalent_full_passes": 133.3134765625,
+        "maximum_recursive_selected_block_residual": 1.1760350510563381e-16,
+        "maximum_true_recursive_residual_gap": 7.116069616828028e-13
+      },
+      "best_larger_scalar": {
+        "rank": 54,
+        "power_passes": 4,
+        "total_seconds": 0.13002291700104252,
+        "iterations": 41,
+        "true_relative_residual": 6.849340994315124e-09
+      },
+      "best_same_rank_scalar": {
+        "rank": 16,
+        "power_passes": 4,
+        "total_seconds": 0.3740053219953552,
+        "iterations": 132,
+        "true_relative_residual": 7.418605906444912e-09
+      },
+      "same_rank_comparison_limit": "The coordinate run was still unconverged after the same-rank scalar had completed."
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 0.001,
+      "coordinate_variants": 6,
+      "coordinate_converged": 0,
+      "all_coordinate_statuses": [
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap"
+      ],
+      "any_numerical_breakdown": false,
+      "joint_greedy": {
+        "blocks": 3550,
+        "censored_total_seconds": 1.2809504170145374,
+        "true_original_relative_residual": 0.009430240368898501,
+        "exact_entry_equivalent_full_passes": 85.61297011970969,
+        "maximum_recursive_selected_block_residual": 2.0075872791645825e-15,
+        "maximum_true_recursive_residual_gap": 2.040248615451645e-12
+      },
+      "best_larger_scalar": {
+        "rank": 53,
+        "power_passes": 4,
+        "total_seconds": 0.6211327000055462,
+        "iterations": 90,
+        "true_relative_residual": 8.304969746272549e-09
+      },
+      "best_same_rank_scalar": {
+        "rank": 16,
+        "power_passes": 8,
+        "total_seconds": 1.8118958279956132,
+        "iterations": 259,
+        "true_relative_residual": 7.918116036429535e-09
+      },
+      "same_rank_comparison_limit": "Coordinate screen ended before the fastest same-rank scalar finished; no same-rank win/loss inferred from a censored coordinate run."
+    },
+    {
+      "dataset": "synthetic-n640-smooth",
+      "regularization": 1e-05,
+      "coordinate_variants": 6,
+      "coordinate_converged": 0,
+      "all_coordinate_statuses": [
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap"
+      ],
+      "any_numerical_breakdown": false,
+      "joint_greedy": {
+        "blocks": 7200,
+        "censored_total_seconds": 1.7728436569741461,
+        "true_original_relative_residual": 0.03860588536733201,
+        "exact_entry_equivalent_full_passes": 254.0,
+        "maximum_recursive_selected_block_residual": 1.6687715251306042e-15,
+        "maximum_true_recursive_residual_gap": 2.3821097349099006e-11
+      },
+      "best_larger_scalar": {
+        "rank": 54,
+        "power_passes": 8,
+        "total_seconds": 0.8922137090121396,
+        "iterations": 346,
+        "true_relative_residual": 9.562258096702355e-09
+      },
+      "best_same_rank_scalar": {
+        "rank": 16,
+        "power_passes": 4,
+        "total_seconds": 2.778600138000911,
+        "iterations": 1157,
+        "true_relative_residual": 9.765781568044103e-09
+      },
+      "same_rank_comparison_limit": "Coordinate screen ended before the fastest same-rank scalar finished; no same-rank win/loss inferred from a censored coordinate run."
+    },
+    {
+      "dataset": "concrete-observed",
+      "regularization": 1e-05,
+      "coordinate_variants": 6,
+      "coordinate_converged": 0,
+      "all_coordinate_statuses": [
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap",
+        "cpu_screen_cap"
+      ],
+      "any_numerical_breakdown": false,
+      "joint_greedy": {
+        "blocks": 23450,
+        "censored_total_seconds": 7.9766827290004585,
+        "true_original_relative_residual": 0.05186675164235581,
+        "exact_entry_equivalent_full_passes": 564.5176736732963,
+        "maximum_recursive_selected_block_residual": 2.6164771347426134e-13,
+        "maximum_true_recursive_residual_gap": 1.3083513278292202e-10
+      },
+      "best_larger_scalar": {
+        "rank": 53,
+        "power_passes": 8,
+        "total_seconds": 4.998589405993698,
+        "iterations": 766,
+        "true_relative_residual": 9.686317126261795e-09
+      },
+      "best_same_rank_scalar": null,
+      "same_rank_comparison_limit": "Primary control missing."
+    }
+  ],
+  "validation_summary": {
+    "max_direct_galerkin_scaled_absolute_error": 2.9639664462228908e-15,
+    "max_early_direct_galerkin_relative_error": 1.432567486509123e-10,
+    "max_checked_energy_increase": 0.0,
+    "max_joint_selected_residual": 1.7080110722945397e-16,
+    "max_joint_old_direction_residual": 7.909774280152812e-17
+  }
+}

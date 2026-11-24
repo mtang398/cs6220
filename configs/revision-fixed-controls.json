@@ -1,0 +1,88 @@
+{
+  "purpose": "Compare established fixed preconditioners before further adaptive development.",
+  "workloads": [
+    {
+      "dataset": "synthetic",
+      "target": "smooth"
+    },
+    {
+      "dataset": "synthetic",
+      "target": "random"
+    },
+    {
+      "dataset": "concrete"
+    },
+    {
+      "dataset": "airfoil"
+    }
+  ],
+  "synthetic_n": 640,
+  "seeds": [
+    0
+  ],
+  "regularization": [
+    0.001
+  ],
+  "repetitions": 1,
+  "solver_defaults": {
+    "checkpoint": 20
+  },
+  "variants": [
+    {
+      "id": "flex_fixed_k16",
+      "method": "flex_fixed",
+      "rank": 16,
+      "history_size": 1
+    },
+    {
+      "id": "flex_spectral_k16",
+      "method": "flex_spectral",
+      "rank": 16,
+      "history_size": 1
+    },
+    {
+      "id": "flex_diagonal_k16",
+      "method": "flex_diagonal",
+      "rank": 16,
+      "history_size": 1
+    },
+    {
+      "id": "flex_fixed_k32",
+      "method": "flex_fixed",
+      "rank": 32,
+      "history_size": 1
+    },
+    {
+      "id": "flex_spectral_k32",
+      "method": "flex_spectral",
+      "rank": 32,
+      "history_size": 1
+    },
+    {
+      "id": "flex_diagonal_k32",
+      "method": "flex_diagonal",
+      "rank": 32,
+      "history_size": 1
+    },
+    {
+      "id": "flex_fixed_k64",
+      "method": "flex_fixed",
+      "rank": 64,
+      "history_size": 1
+    },
+    {
+      "id": "flex_spectral_k64",
+      "method": "flex_spectral",
+      "rank": 64,
+      "history_size": 1
+    },
+    {
+      "id": "flex_diagonal_k64",
+      "method": "flex_diagonal",
+      "rank": 64,
+      "history_size": 1
+    }
+  ],
+  "max_wall_seconds": 175,
+  "run_timeout_seconds": 30
+}

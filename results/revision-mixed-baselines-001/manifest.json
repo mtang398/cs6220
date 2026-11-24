@@ -1,0 +1,106 @@
+{
+  "protocol": {
+    "purpose": "Execution and baseline coverage for the originally planned mixed-eigenspace workload; exploratory single-repeat timings.",
+    "workloads": [
+      {
+        "dataset": "synthetic",
+        "target": "mixed"
+      }
+    ],
+    "synthetic_n": 640,
+    "seeds": [
+      0
+    ],
+    "regularization": [
+      0.1,
+      0.001,
+      1e-05
+    ],
+    "repetitions": 1,
+    "solver_defaults": {
+      "history_size": 1,
+      "checkpoint": 20,
+      "maxiter": 2500,
+      "rtol": 1e-08
+    },
+    "variants": [
+      {
+        "id": "compact16",
+        "method": "flex_compact",
+        "rank": 16
+      },
+      {
+        "id": "compact32",
+        "method": "flex_compact",
+        "rank": 32
+      },
+      {
+        "id": "compact64",
+        "method": "flex_compact",
+        "rank": 64
+      },
+      {
+        "id": "power16",
+        "method": "flex_power",
+        "rank": 16
+      },
+      {
+        "id": "power32",
+        "method": "flex_power",
+        "rank": 32
+      },
+      {
+        "id": "power64",
+        "method": "flex_power",
+        "rank": 64
+      }
+    ],
+    "max_wall_seconds": 175,
+    "run_timeout_seconds": 45
+  },
+  "status": "complete",
+  "source_sha256": {
+    "src/nystrom_project/__init__.py": "160f59e9dc27f2624dd9467757579e986251bd3804b7278e98355a9910564967",
+    "src/nystrom_project/benchmark.py": "7db234a0d6f0e1c3dab88b0fe4b66f19247220c612e9f5d0f86af0ae667df43d",
+    "src/nystrom_project/curvature.py": "d9a768371a2555746bd6fad6105299833fb5a438b05d4fac01dd53b42492c71d",
+    "src/nystrom_project/datasets.py": "122e81dcd12d5a1ca3d43c8d04eecb0e236c5f04092d9b4ea9bb768509281962",
+    "src/nystrom_project/diagnostics.py": "04080c2dfa3dfdf833f6003527dc23cf8ec686fbfad097fbd8aeebd306e1ff92",
+    "src/nystrom_project/exchange.py": "a75af2a4063e7d82cb76af036889fcabd77ad572603198b241908ca49e9868ca",
+    "src/nystrom_project/flexible.py": "b181c50f91176b7a36fcfa06c2e18b83d5b0fa473b221cf9edbbb5ec247e0a90",
+    "src/nystrom_project/learning.py": "19be6a433f2fc290a06cb1bda4d4313c73f7f424726e8c99d68f683f21183c77",
+    "src/nystrom_project/numerics.py": "53022a2afffbb65fb01ff24b8a7ee3be1f16881455b641baccd4f1da2a2f1d23",
+    "src/nystrom_project/preconditioners.py": "86da13326a40c7f8c2aefdce86bfc8c655abd3ee4da76dcc8c511e2f413527a9",
+    "src/nystrom_project/revisions.py": "98142fc7722f797270b73ff88e5a6fe12077d18956e8e53c7f69e88447f18238",
+    "src/nystrom_project/schur.py": "e20bffbdcdefc2bcc47855dd80c327a9730da626960bee80b5f3adb1ec69f568",
+    "src/nystrom_project/solvers.py": "8e4f7c6b0ce9df20f4dedba3abd6f3f721ddd0b6398febb70869e9b5ec73274f",
+    "src/nystrom_project/sweep.py": "c41281181b31358910ec7c1b7386b0c349d7fabbcb3dfe100e6d1773850e175a",
+    "src/nystrom_project/worker.py": "4a9a9b4801893b3c5ca76a21646e24e4b8a692c949288742d7285afe16378f19"
+  },
+  "completed_runs": 18,
+  "python": "3.13.12 (main, Feb  4 2026, 09:25:39) [GCC 13.3.0]",
+  "platform": "Linux-5.15.167.4-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "order": [
+    "synthetic-n640-mixed-s0-lambda0.1-power16-r0",
+    "synthetic-n640-mixed-s0-lambda0.1-compact64-r0",
+    "synthetic-n640-mixed-s0-lambda0.1-power64-r0",
+    "synthetic-n640-mixed-s0-lambda0.1-power32-r0",
+    "synthetic-n640-mixed-s0-lambda0.1-compact16-r0",
+    "synthetic-n640-mixed-s0-lambda0.1-compact32-r0",
+    "synthetic-n640-mixed-s0-lambda0.001-power16-r0",
+    "synthetic-n640-mixed-s0-lambda0.001-compact64-r0",
+    "synthetic-n640-mixed-s0-lambda0.001-power64-r0",
+    "synthetic-n640-mixed-s0-lambda0.001-power32-r0",
+    "synthetic-n640-mixed-s0-lambda0.001-compact16-r0",
+    "synthetic-n640-mixed-s0-lambda0.001-compact32-r0",
+    "synthetic-n640-mixed-s0-lambda1e-05-power16-r0",
+    "synthetic-n640-mixed-s0-lambda1e-05-compact64-r0",
+    "synthetic-n640-mixed-s0-lambda1e-05-power64-r0",
+    "synthetic-n640-mixed-s0-lambda1e-05-power32-r0",
+    "synthetic-n640-mixed-s0-lambda1e-05-compact16-r0",
+    "synthetic-n640-mixed-s0-lambda1e-05-compact32-r0"
+  ],
+  "failures": [],
+  "timing": "All setup, updates, kernel products and verification are inside worker solve time. Parent references and worker startup are outside.",
+  "elapsed_wall_seconds": 26.49152752099326,
+  "timing_scope": "Exploratory baseline coverage, one repeat; offline diagnostics may have overlapped. These timings do not establish any adaptive speedup."
+}

@@ -1,0 +1,229 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_calibrated_factor_rounding_bounded.py": "fa8f03b6ff1eb19ac44aba72a00f6336a0567d999364109be43ed62758c1becd",
+    "scripts/calibrated_factor_rounding_bounded.c": "889154e2c60ab4462fac585a53930c55587416821e89383c484e7757cdf5bd9b",
+    "results/calibrated_factor_rounding_bounded.so": "105519c05c3186758e3c3c604ef7beb278460824f48c9f343c30a6de9b8a1459",
+    "scripts/check_int24_precision_selection.py": "11663bd942b0c6a725e1de2ac1773c86f2610ed47da37bee92c1877778881849",
+    "scripts/check_int16_core_capacity.py": "092aea8830f40dec71900e48ad78b64837c3ea321a1d1cf0d8f33e9abb0e7167"
+  },
+  "protocol": {
+    "core": 818,
+    "comparison_core": 600,
+    "shift": 1e-05,
+    "rounding": "Two coordinate-flip sweeps within floor/ceil of each exact offdiagonal entry on fixed signedint16 scale, candidates explicitly restricted to symmetric[-32767,32767]. First8 columns and diagonal unchanged. Minimize ||(Q-L)V||F\u00b2+||(Q-L)^T U||F\u00b2. U from exact core inverse applied to [rS,B rR]; V=L^TU; columns normalized independently. Same4step nearest-rounding prefix.",
+    "scope": "All dense reference construction, calibration, scoring and re-encoding free. Payload720442bytes unchanged; no fullmemory/native claim. Compare initialRHS/currentresidual calibration, matched nearestrestart and upfrontFP32core600. First-order action calibration is not GPTQ implementation or novelty claim."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.9257103134935831,
+        "analytical_entries": 24994035
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 42,
+          "original_relative_residual": 7.0339609444211055e-09,
+          "analytical_entries": 183501772,
+          "method": "uniform600_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 384,
+          "original_relative_residual": 8.404018259481909e-09,
+          "analytical_entries": 1625036139,
+          "method": "nearest_restart"
+        },
+        {
+          "status": "cpu_cap",
+          "iterations": 387,
+          "original_relative_residual": 5.698236397261314e-06,
+          "analytical_entries": 1637619051,
+          "method": "initial_restart",
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 36632,
+          "calibration_before": 7.378309195507031e-10,
+          "calibration_after": 2.3204478115872744e-11,
+          "calibration_ratio": 0.03144958756947045
+        },
+        {
+          "status": "cpu_cap",
+          "iterations": 397,
+          "original_relative_residual": 5.5133074965902086e-05,
+          "analytical_entries": 1679562091,
+          "method": "current_restart",
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 43044,
+          "calibration_before": 1.6982700608675599e-09,
+          "calibration_after": 7.372658991929033e-11,
+          "calibration_ratio": 0.04341275961823596
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.49144006433440185,
+        "analytical_entries": 24994035
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 40,
+          "original_relative_residual": 7.146231880022853e-09,
+          "analytical_entries": 175113164,
+          "method": "uniform600_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 386,
+          "original_relative_residual": 5.738579392279354e-09,
+          "analytical_entries": 1633424747,
+          "method": "nearest_restart"
+        },
+        {
+          "status": "cpu_cap",
+          "iterations": 468,
+          "original_relative_residual": 2.7968890927397773e-07,
+          "analytical_entries": 1977357675,
+          "method": "initial_restart",
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 34025,
+          "calibration_before": 3.426584756314958e-09,
+          "calibration_after": 2.9645678229118815e-11,
+          "calibration_ratio": 0.008651669325991101
+        },
+        {
+          "status": "cpu_cap",
+          "iterations": 459,
+          "original_relative_residual": 5.90785595393589e-07,
+          "analytical_entries": 1939608939,
+          "method": "current_restart",
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 36808,
+          "calibration_before": 2.5383521933720345e-09,
+          "calibration_after": 1.119316577069426e-10,
+          "calibration_ratio": 0.04409618885795699
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 0.9749729743846929,
+        "analytical_entries": 4413699
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 18,
+          "original_relative_residual": 4.899669055332535e-09,
+          "analytical_entries": 13844044,
+          "method": "uniform600_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 33,
+          "original_relative_residual": 7.795592717085823e-10,
+          "analytical_entries": 24792795,
+          "method": "nearest_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 33,
+          "original_relative_residual": 4.328209141395807e-09,
+          "analytical_entries": 24792795,
+          "method": "initial_restart",
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 60850,
+          "calibration_before": 6.304804580841011e-09,
+          "calibration_after": 8.101212299413772e-11,
+          "calibration_ratio": 0.012849267880612303
+        },
+        {
+          "status": "converged",
+          "iterations": 37,
+          "original_relative_residual": 1.3970104503408243e-09,
+          "analytical_entries": 27508699,
+          "method": "current_restart",
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 133449,
+          "calibration_before": 1.8970127685364885e-08,
+          "calibration_after": 8.229137355106425e-10,
+          "calibration_ratio": 0.04337945158616437
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "prefix": {
+        "status": "prefix",
+        "iterations": 4,
+        "original_relative_residual": 2.205294424446829,
+        "analytical_entries": 9170451
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "iterations": 23,
+          "original_relative_residual": 4.469196890564323e-09,
+          "analytical_entries": 36299196,
+          "method": "uniform600_upfront"
+        },
+        {
+          "status": "converged",
+          "iterations": 337,
+          "original_relative_residual": 8.579059988548511e-09,
+          "analytical_entries": 492363211,
+          "method": "nearest_restart"
+        },
+        {
+          "status": "converged",
+          "iterations": 441,
+          "original_relative_residual": 8.258637414414107e-09,
+          "analytical_entries": 642622827,
+          "method": "initial_restart",
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 41285,
+          "calibration_before": 7.277628819814836e-10,
+          "calibration_after": 2.2708380083361786e-11,
+          "calibration_ratio": 0.031202992960473012
+        },
+        {
+          "status": "converged",
+          "iterations": 448,
+          "original_relative_residual": 8.437224191702689e-09,
+          "analytical_entries": 652736455,
+          "method": "current_restart",
+          "max_code": 32767.0,
+          "min_code": -32767.0,
+          "flips": 54317,
+          "calibration_before": 3.0509044361255524e-09,
+          "calibration_after": 1.119519967946711e-10,
+          "calibration_ratio": 0.03669469140660556
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 32.49179194198223,
+  "elapsed_cpu_seconds": 33.1617639
+}

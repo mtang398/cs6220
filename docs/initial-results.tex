@@ -1,0 +1,145 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=0.8in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,microtype}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\newcommand{\nystrom}{Nystr\"om}
+\hypersetup{pdftitle={Residual-guided Nystrom preconditioning: initial experiments}}
+\begin{document}
+\begin{center}
+{\large\bfseries Residual-guided \nystrom{} preconditioning: initial experiments}\\[4pt]
+CS 6220 research record \qquad November 23, 2026
+\end{center}
+
+\textbf{Question and implemented method.}
+Can the current residual guide kernel-column replacements that reduce the total
+time to reach a prescribed solution accuracy, while keeping the number of
+retained columns fixed?
+For the Gaussian kernel matrix $K$, the implementation solves
+$A\alpha=y$, where $A=K+\lambda I$ and $\lambda>0$.
+Randomly pivoted Cholesky (RPCholesky) selects an initial set $S$ of $k$ columns. The
+preconditioner and exchange score are
+\[
+M_S=K_{:,S}K_{S,S}^{\dagger}K_{S,:}+\lambda I,
+\qquad q(S;r)=r^{\mathsf T}M_S^{-1}r,
+\qquad r=y-A\alpha.
+\]
+Here $K_{:,S}$ contains the selected columns, $K_{S,S}$ contains their entries
+at the selected rows, and $\dagger$ denotes the pseudoinverse.
+Every 20 iterations of preconditioned conjugate gradients (PCG), four candidate
+columns are sampled sequentially with probabilities proportional to the squared
+residual entries outside $S$. Each candidate is compared with all possible
+removals, including discarding the candidate itself. A replacement is accepted
+only if a stable evaluation of $q$ decreases by more than $10^{-12}$ relative.
+The solver restarts from its current iterate after an accepted checkpoint and
+continues its recurrence after a rejected checkpoint. Exactly $k$ distinct
+column indices are retained throughout.
+
+\textbf{Exchange score and subsequent progress.}
+The \nystrom{} approximation satisfies
+$K_{:,S}K_{S,S}^{\dagger}K_{S,:}\preceq K$, where $B\preceq C$ means
+$v^{\mathsf T}Bv\leq v^{\mathsf T}Cv$ for every vector $v$. Consequently,
+\[
+e^{\mathsf T}Ae=r^{\mathsf T}A^{-1}r\leq q(S;r),
+\qquad e=\alpha-A^{-1}y.
+\]
+An accepted exchange tightens this upper bound without changing the current solution
+error. Whether it improves the next iterations is an empirical question.
+The instructor's suggested paper,
+\href{https://arxiv.org/abs/2509.21963v2}{\emph{IterativeCUR: Large Rank-Adaptive
+Approximation From a Small Recycled Sketch}}, uses the matrix residual of a CUR
+approximation to select additional rows and columns. Here the residual belongs
+to a linear solve, and each accepted new column replaces a retained column.
+The paper motivates reusing matrix information during selection; the following
+experiment directly tests the effect of the proposed fixed-budget exchanges.
+
+\textbf{Comparing preconditioners from the same iterate.}
+For each of five seeds, synthetic inputs contain four Gaussian clusters and are
+paired with a smooth target and a Gaussian target independent of the inputs. The two targets
+share the same kernel and data split. There are 512 training observations,
+$k=16$, and $\lambda\in\{10^{-3},10^{-5}\}$.
+At the first three accepted checkpoints of each solve, two diagnostic branches
+start from the same iterate: one restarts with the old preconditioner, and one
+restarts with the exchanged preconditioner. Each preconditioner is then held
+fixed for up to 20 iterations. A direct Cholesky solution supplies the reference
+for the squared energy error $e^{\mathsf T}Ae$.
+
+\input{initial-diagnostic-table.tex}
+
+At all 60 inspected checkpoints, the updated set reduced $q$. Nevertheless, the exchanged
+preconditioner produced a larger squared energy error after both 5 and 10
+iterations at every inspected checkpoint. After 20 iterations it produced a
+smaller error at 24 checkpoints and a larger error at 36. The checkpoint
+observations are grouped within 20 solves; they are not independent replicates.
+At $\lambda=10^{-3}$, all ten adaptive solves reached the relative residual
+tolerance $10^{-8}$. At $\lambda=10^{-5}$, none reached it within 2,000 iterations.
+
+\textbf{Total solve time.}
+The timing comparison uses the two synthetic targets, UCI
+\href{https://archive.ics.uci.edu/dataset/165/concrete+compressive+strength}{Concrete Compressive Strength},
+and UCI \href{https://archive.ics.uci.edu/dataset/291/airfoil+self+noise}{Airfoil Self-Noise}.
+Each case uses an 80/20 train/test split,
+training-only standardization, and a Gaussian bandwidth equal to the median
+training pairwise distance. The settings are $k=16$, $\lambda=10^{-3}$, five
+seeds, and three timing repeats per seed. The initial selected columns are
+shared across methods. ``Fixed'' holds the original preconditioner throughout;
+``Restarted fixed'' uses those same columns and restarts at the accepted-update
+iterations of the adaptive solve; ``Exchange'' is the residual-guided method.
+Unpreconditioned conjugate gradients (CG) is also included.
+
+Each solve uses one CPU BLAS thread on an Intel Core i7-13700H under WSL2 and
+the same blockwise kernel operator.
+Timing includes initialization, updates, and directly checked residuals.
+Dense reference construction, preprocessing, and post-solve prediction checks
+are outside the common timing boundary. The stopping rule requires a true
+relative residual at most $10^{-8}$, with a 2,000-iteration limit.
+Method order is randomized for each repeat; a separate untimed adaptive run
+establishes the restart schedule, which is checked against the timed run.
+
+\input{initial-timing-table.tex}
+
+\input{initial-observations.tex}
+
+An additional one-seed execution check ran all eight implemented methods on
+the smooth synthetic case and Airfoil. In addition to the four methods above,
+it included target-based exchanges, uniform candidate sampling, periodic
+RPCholesky reconstruction, and limited-memory BFGS using block secant pairs.
+All 16 solves converged. Their repeated multi-seed comparison, the larger column
+budgets, and the remaining regularization settings belong to the next stages
+of the original research plan.
+
+\newpage
+\textbf{Next experiment.}
+The branch diagnostic already compares old and new columns under the same
+restart. A third branch will continue the old PCG recurrence without restarting,
+preserving its recursive residual, search direction, and recurrence scalars. Comparing this branch
+with restarted old PCG will measure the effect of restarting at the same
+iterate; comparing restarted old and new PCG will measure the effect of the
+column exchange.
+
+The next diagnostic will also record the actual decrease available in one
+restarted PCG step. For $z=M^{-1}r$, the step length is
+$(r^{\mathsf T}z)/(z^{\mathsf T}Az)$ and the squared energy decrease is
+\[
+\Delta(M;r)=\frac{(r^{\mathsf T}z)^2}{z^{\mathsf T}Az}.
+\]
+In the independently checked first checkpoint of the smooth seed-0 case at
+$\lambda=10^{-3}$, exchanging columns reduces $q$ from $11132.41$ to $10796.33$,
+but reduces $\Delta$ from $76.45$ to $73.25$. The direction and its curvature
+therefore explain a distinction that the upper-bound score misses.
+Checking $\Delta$ requires an additional matrix--vector product for each
+preconditioner evaluated. Any later use of this quantity for accepting exchanges
+will include that cost in total solve time. The research question remains the
+fixed-column-budget improvement of the solve; the present evidence calls for
+revising the exchange criterion and examining the restart policy.
+
+\textbf{Reproduction.}
+The exact configurations are in \texttt{configs/}; complete histories, exchange
+decisions, source snapshots, and version records are in \texttt{results/}.
+\texttt{results/initial-analysis.json} contains the paired summaries used here.
+\texttt{docs/branch-verification.txt} records the independent numerical check.
+The implementation passes 19 numerical and solver tests. The submitted proposal
+is preserved in \texttt{proposal/}.
+\end{document}

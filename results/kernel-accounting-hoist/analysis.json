@@ -1,0 +1,119 @@
+{
+  "cases": [
+    {
+      "case": "smooth-hard",
+      "source_sha256": "798d77b6712373029c805d78592aa48b1ca479390b75f48fdee1049c99fb6b8a",
+      "methods": {
+        "adaptive": {
+          "old_mean_seconds": 1.8090202134626452,
+          "hoisted_mean_seconds": 1.6609950729762204,
+          "mean_ratio": 0.9181738604218855,
+          "paired_ratios": [
+            0.9077759328921509,
+            0.9287994074329191
+          ],
+          "all_work_and_memory_equal": true
+        },
+        "periodic8": {
+          "old_mean_seconds": 1.8247066029871348,
+          "hoisted_mean_seconds": 1.6750813364924397,
+          "mean_ratio": 0.9180003698952198,
+          "paired_ratios": [
+            0.9231633193791832,
+            0.9128679203821951
+          ],
+          "all_work_and_memory_equal": true
+        },
+        "uniform600": {
+          "old_mean_seconds": 1.7826838524779305,
+          "hoisted_mean_seconds": 1.6842963890230749,
+          "mean_ratio": 0.9448093595967131,
+          "paired_ratios": [
+            0.9405221801816114,
+            0.949153203802597
+          ],
+          "all_work_and_memory_equal": true
+        },
+        "packed24": {
+          "old_mean_seconds": 1.6761979540169705,
+          "hoisted_mean_seconds": 1.6105851984757464,
+          "mean_ratio": 0.9608562011521464,
+          "paired_ratios": [
+            0.9397916207796747,
+            0.9823219063434926
+          ],
+          "all_work_and_memory_equal": true
+        },
+        "original_exact416": {
+          "old_mean_seconds": 2.84155810798984,
+          "hoisted_mean_seconds": 2.8363491630007047,
+          "mean_ratio": 0.9981668701496939,
+          "paired_ratios": [
+            0.9979044771014847,
+            0.9984190977387732
+          ],
+          "all_work_and_memory_equal": true
+        }
+      }
+    },
+    {
+      "case": "concrete-medium",
+      "source_sha256": "90e248646acf917c7653b018e460f75f5f00809e0697d58a0978fca76791d485",
+      "methods": {
+        "adaptive": {
+          "old_mean_seconds": 0.11328302350011654,
+          "hoisted_mean_seconds": 0.10902227999758907,
+          "mean_ratio": 0.9623885082611421,
+          "paired_ratios": [
+            0.9516589948664986,
+            0.9739558248150261
+          ],
+          "all_work_and_memory_equal": true
+        },
+        "periodic8": {
+          "old_mean_seconds": 0.11243730501155369,
+          "hoisted_mean_seconds": 0.11756262701237574,
+          "mean_ratio": 1.0455838211374364,
+          "paired_ratios": [
+            0.9215163727348773,
+            1.1798531182169258
+          ],
+          "all_work_and_memory_equal": true
+        },
+        "uniform600": {
+          "old_mean_seconds": 0.15045098948758096,
+          "hoisted_mean_seconds": 0.13799135951558128,
+          "mean_ratio": 0.9171847921078102,
+          "paired_ratios": [
+            0.9253744832141674,
+            0.9096813987732516
+          ],
+          "all_work_and_memory_equal": true
+        },
+        "packed24": {
+          "old_mean_seconds": 0.2195743640186265,
+          "hoisted_mean_seconds": 0.215220808488084,
+          "mean_ratio": 0.9801727512681162,
+          "paired_ratios": [
+            0.9739403973022096,
+            0.986473760980231
+          ],
+          "all_work_and_memory_equal": true
+        },
+        "original_exact416": {
+          "old_mean_seconds": 0.11094926303485408,
+          "hoisted_mean_seconds": 0.11174270499031991,
+          "mean_ratio": 1.007151394554253,
+          "paired_ratios": [
+            0.9847375949248299,
+            1.030719344591621
+          ],
+          "all_work_and_memory_equal": true
+        }
+      }
+    }
+  ],
+  "all_pairs_exactly_equal": true,
+  "maximum_traced_bytes": 1008352,
+  "interpretation": "Common implementation improvement only, applied to every method. Two timing repeats are descriptive; some small Concrete changes reverse signs. Not a solve-informed scientific success. Preserve old evidence and use common hoisted context uniformly in future comparisons."
+}

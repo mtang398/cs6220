@@ -1,0 +1,165 @@
+{
+  "case": {
+    "dataset": "synthetic",
+    "seed": 0,
+    "target": "mixed",
+    "regularization": 0.1,
+    "synthetic_n": 640,
+    "n_train": 512,
+    "n_test": 128,
+    "bandwidth": 4.055322311617086,
+    "train_fraction": 0.8,
+    "preprocessing_seconds": 0.05483696298324503,
+    "reference_preparation_seconds": 0.007439737004460767,
+    "reference_solve_seconds": 0.006868641008622944,
+    "reference_relative_residual": 5.6570913402963257e-14,
+    "dataset_sha256": "270836f95751f133409e5fab6a8bbac2f588e34e98ac407842b005825ccafe4a",
+    "train_indices_sha256": "b1dc82426735e634156b2c210eba321d138bdd9ff6a1eebb7ef7b0e59040fa24",
+    "target_construction": {
+      "type": "mixture of training-kernel eigenspaces",
+      "descending_zero_based_bands": [
+        [
+          1,
+          9
+        ],
+        [
+          64,
+          72
+        ]
+      ],
+      "band_interval": "half-open",
+      "equal_training_squared_norm": true,
+      "zero_training_mean_per_component": true,
+      "coefficient_seed": [
+        0,
+        6220,
+        17
+      ],
+      "test_targets": "kernel eigenfunction extension from training inputs",
+      "offline_eigendecomposition": true,
+      "eigenvectors_available_to_solver": false
+    }
+  },
+  "options": {
+    "rank": 32,
+    "seed": 0,
+    "checkpoint": 20,
+    "candidate_count": 4,
+    "rtol": 1e-08,
+    "maxiter": 2500,
+    "block_size": 128,
+    "method": "cg"
+  },
+  "metrics": {
+    "method": "cg",
+    "converged": true,
+    "iterations": 16,
+    "true_relative_residual": 1.812142242091976e-09,
+    "breakdown": null,
+    "total_seconds": 0.04999472000054084,
+    "setup_seconds": 4.7901994548738e-07,
+    "update_seconds": 0.0,
+    "preconditioner_seconds": 2.6892987079918385e-05,
+    "restarts": 0,
+    "verification_matvecs": 1,
+    "initial_indices": [],
+    "final_indices": [],
+    "effective_rank": null,
+    "max_preconditioner_state_bytes": 0,
+    "accepted_exchanges": 0,
+    "numerical_fallbacks": 0,
+    "numerical_rejections": 0,
+    "accepted_iterations": [],
+    "diagnostic_run": false,
+    "matvecs": 17,
+    "column_evaluations": 0,
+    "matvec_seconds": 0.047847266017924994,
+    "column_seconds": 0.0,
+    "relative_solution_error": 2.4435307305389085e-09,
+    "energy_error_squared": 1.3525077101819997e-14,
+    "relative_prediction_difference": 8.283156554536301e-10,
+    "test_rmse": 0.7792833951077991,
+    "reference_test_rmse": 0.779283395159731,
+    "peak_rss_before_bytes": 63889408,
+    "peak_rss_bytes": 63889408,
+    "incremental_peak_rss_bytes": 0,
+    "blas_threads": [
+      1,
+      1
+    ]
+  },
+  "history": [
+    {
+      "iteration": 0,
+      "recursive_relative_residual": 1.0,
+      "true_relative_residual": 1.0
+    },
+    {
+      "iteration": 1,
+      "recursive_relative_residual": 2.400600151887719
+    },
+    {
+      "iteration": 2,
+      "recursive_relative_residual": 1.4686044993573364
+    },
+    {
+      "iteration": 3,
+      "recursive_relative_residual": 1.425848052379623
+    },
+    {
+      "iteration": 4,
+      "recursive_relative_residual": 2.349472366280026
+    },
+    {
+      "iteration": 5,
+      "recursive_relative_residual": 1.3048991280272042
+    },
+    {
+      "iteration": 6,
+      "recursive_relative_residual": 0.4647595093782244
+    },
+    {
+      "iteration": 7,
+      "recursive_relative_residual": 0.14504603186947998
+    },
+    {
+      "iteration": 8,
+      "recursive_relative_residual": 0.01727365594220189
+    },
+    {
+      "iteration": 9,
+      "recursive_relative_residual": 0.10078116072771559
+    },
+    {
+      "iteration": 10,
+      "recursive_relative_residual": 0.005299184015992881
+    },
+    {
+      "iteration": 11,
+      "recursive_relative_residual": 4.726717631037649e-05
+    },
+    {
+      "iteration": 12,
+      "recursive_relative_residual": 0.00025069678588062833
+    },
+    {
+      "iteration": 13,
+      "recursive_relative_residual": 1.0039444031125772e-05
+    },
+    {
+      "iteration": 14,
+      "recursive_relative_residual": 3.693713989524519e-07
+    },
+    {
+      "iteration": 15,
+      "recursive_relative_residual": 4.9103295735016585e-06
+    },
+    {
+      "iteration": 16,
+      "recursive_relative_residual": 1.8121439818791065e-09,
+      "true_relative_residual": 1.812142242091976e-09
+    }
+  ],
+  "events": [],
+  "variant_id": "cg"
+}

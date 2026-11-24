@@ -1,0 +1,219 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_residual_fourier_preconditioning.py": "8ee0c135565ef13d073fce082f77a81b54f619ac1903ee8416d972e800a5ea61",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "protocol": {
+    "m": 416,
+    "pool": 832,
+    "seed": 622091,
+    "lambda_value": 1e-05,
+    "checkpoint": 10,
+    "representation": "P=lambda I+ZZ^T; Gaussian frequencies omega~N(0,I/bw\u00b2), random uniform phases, raw features sqrt(2)cos(Xomega+phase). Initial Z uses first416 divided by sqrt416.",
+    "selection": "Pool832, q_j=.5/832+.5*(phi_j^T direction)^2/sum scores. Sample416 with replacement; Z_j=phi_j/sqrt(416*832*q_j). Expectation equals uniform finite-pool covariance. Uniform and initial-b controls use the same categorical inverse-CDF random numbers.",
+    "cost": "Dense feature/kernel matrices, pool scoring, factorization and reconstruction free. No native memory/time claim. Each run3CPU/2000steps; literal original1e-8 everyiterate. Static and changed preconditioners are fixed within each branch.",
+    "scope": "Established RFF preconditioner with a diagnostic residual-based sampling rule; not a novelty claim or reproduction of a specific literature implementation."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "n": 2048,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "baseline": {
+        "iterations": 559,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 9.998782057536871e-09
+      },
+      "branches": [
+        {
+          "iterations": 552,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.694481452643708e-09,
+          "method": "unchanged_restart",
+          "prefix_plus_iterations": 562,
+          "distinct_frequencies": 416
+        },
+        {
+          "iterations": 623,
+          "status": "cpu_cap",
+          "converged": false,
+          "original_relative_residual": 3.347889000433241e-06,
+          "method": "uniform_resample",
+          "prefix_plus_iterations": 633,
+          "distinct_frequencies": 323
+        },
+        {
+          "iterations": 587,
+          "status": "cpu_cap",
+          "converged": false,
+          "original_relative_residual": 0.0003462186489214902,
+          "method": "initial_target_resample",
+          "prefix_plus_iterations": 597,
+          "distinct_frequencies": 303
+        },
+        {
+          "iterations": 557,
+          "status": "cpu_cap",
+          "converged": false,
+          "original_relative_residual": 0.00028206801286476693,
+          "method": "current_residual_resample",
+          "prefix_plus_iterations": 567,
+          "distinct_frequencies": 318
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "n": 2048,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "baseline": {
+        "iterations": 575,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 9.85530401373677e-09
+      },
+      "branches": [
+        {
+          "iterations": 575,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.103205254423511e-09,
+          "method": "unchanged_restart",
+          "prefix_plus_iterations": 585,
+          "distinct_frequencies": 416
+        },
+        {
+          "iterations": 611,
+          "status": "cpu_cap",
+          "converged": false,
+          "original_relative_residual": 1.001324449917521e-05,
+          "method": "uniform_resample",
+          "prefix_plus_iterations": 621,
+          "distinct_frequencies": 323
+        },
+        {
+          "iterations": 581,
+          "status": "cpu_cap",
+          "converged": false,
+          "original_relative_residual": 0.002153943838936615,
+          "method": "initial_target_resample",
+          "prefix_plus_iterations": 591,
+          "distinct_frequencies": 295
+        },
+        {
+          "iterations": 517,
+          "status": "cpu_cap",
+          "converged": false,
+          "original_relative_residual": 0.0008120630765222731,
+          "method": "current_residual_resample",
+          "prefix_plus_iterations": 527,
+          "distinct_frequencies": 318
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "n": 824,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "baseline": {
+        "iterations": 305,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 7.978675656508876e-09
+      },
+      "branches": [
+        {
+          "iterations": 296,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.960385272053035e-09,
+          "method": "unchanged_restart",
+          "prefix_plus_iterations": 306,
+          "distinct_frequencies": 416
+        },
+        {
+          "iterations": 418,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.674170506119916e-09,
+          "method": "uniform_resample",
+          "prefix_plus_iterations": 428,
+          "distinct_frequencies": 323
+        },
+        {
+          "iterations": 627,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.898887814088344e-09,
+          "method": "initial_target_resample",
+          "prefix_plus_iterations": 637,
+          "distinct_frequencies": 301
+        },
+        {
+          "iterations": 467,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.818642810800532e-09,
+          "method": "current_residual_resample",
+          "prefix_plus_iterations": 477,
+          "distinct_frequencies": 321
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "n": 1202,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "baseline": {
+        "iterations": 237,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 9.957876390200156e-09
+      },
+      "branches": [
+        {
+          "iterations": 231,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.844529967659428e-09,
+          "method": "unchanged_restart",
+          "prefix_plus_iterations": 241,
+          "distinct_frequencies": 416
+        },
+        {
+          "iterations": 264,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.598356299904608e-09,
+          "method": "uniform_resample",
+          "prefix_plus_iterations": 274,
+          "distinct_frequencies": 330
+        },
+        {
+          "iterations": 307,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 4.7417750176813245e-09,
+          "method": "initial_target_resample",
+          "prefix_plus_iterations": 317,
+          "distinct_frequencies": 303
+        },
+        {
+          "iterations": 265,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.2770912926112e-09,
+          "method": "current_residual_resample",
+          "prefix_plus_iterations": 275,
+          "distinct_frequencies": 326
+        }
+      ]
+    }
+  ],
+  "tiny_inverse_error": 7.534768030115685e-15,
+  "elapsed_wall_seconds": 32.76383663096931,
+  "elapsed_cpu_seconds": 33.8141721
+}

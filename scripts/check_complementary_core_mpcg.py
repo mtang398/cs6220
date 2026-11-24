@@ -1,0 +1,83 @@
+"""Two disjoint principal-core MPCG(1) query-capacity gate."""
+import json,resource
+from pathlib import Path
+from hashlib import sha256
+from time import perf_counter,process_time
+import numpy as np
+from scipy.linalg import cho_factor,cho_solve,eigh
+from threadpoolctl import threadpool_limits
+from check_schur_inplace_frontier_v2 import ROOT,SharedKernel,Budget
+
+class Core:
+ def __init__(self,A,S,lam):
+  self.S=S;self.R=np.setdiff1d(np.arange(len(A)),S);self.factor=cho_factor(A[np.ix_(S,S)],lower=True)
+  self.B=A[np.ix_(S,self.R)];self.lam=lam
+ def apply(self,r):
+  u=cho_solve(self.factor,r[self.S]);v=(r[self.R]-self.B.T@u)/self.lam
+  x=np.empty_like(r);x[self.S]=u-cho_solve(self.factor,self.B@v);x[self.R]=v
+  return x
+
+def run(A,b,cores,mode,cap=4.):
+ start,cpu=perf_counter(),process_time();n=len(b);x=np.zeros(n);r=b.copy();Pold=APold=None
+ target=1e-8*np.linalg.norm(b);status='maxiter';history=[];rankdrops=0
+ for k in range(2001):
+  true=b-A@x
+  if np.linalg.norm(true)<=target:status='converged';break
+  if process_time()-cpu>cap:status='cpu_cap';break
+  if k==2000:break
+  if mode=='single384':P=cores[2].apply(r)[:,None]
+  else:
+   z1,z2=cores[0].apply(r),cores[1].apply(r)
+   P=(.5*(z1+z2))[:,None] if mode=='average' else np.column_stack([z1,z2])
+  if Pold is not None:P-=Pold@(APold.T@P)
+  scales=np.linalg.norm(P,axis=0)
+  if np.any(scales==0):status='zero_direction';break
+  P/=scales;AP=A@P;G=P.T@AP;G=(G+G.T)*.5
+  values,V=eigh(G);keep=values>1e-12*max(values[-1],0.)
+  if not np.any(keep):status='nonpositive_block';break
+  rankdrops+=P.shape[1]-int(sum(keep))
+  transform=V[:,keep]/np.sqrt(values[keep]);P=P@transform;AP=AP@transform
+  alpha=P.T@r;x+=P@alpha;r-=AP@alpha
+  Pold,APold=P,AP;history.append(dict(rank=P.shape[1],recursive_relative_residual=float(np.linalg.norm(r)/np.linalg.norm(b))))
+ steps=len(history);m=384 if mode=='single384' else 272
+ cross_per_step=2*m*(n-m) if mode=='single384' else 4*m*n-6*m*m
+ selected=384 if mode=='single384' else 544
+ entries=dict(FPS=n*selected,factor_columns=m*(m+1)//2*(1 if mode=='single384' else 2),
+              batched_operator=steps*n*n,preconditioner_cross_optimistic=steps*cross_per_step,final_verification=n*n)
+ return dict(method=mode,status=status,converged=status=='converged',steps=steps,direction_count=sum(h['rank'] for h in history),rank_drops=rankdrops,
+             original_relative_residual=float(np.linalg.norm(b-A@x)/np.linalg.norm(b)),history=history,
+             optimistic_Gaussian_entry_components=entries,optimistic_Gaussian_entries=sum(entries.values()),
+             diagnostic_wall_seconds=perf_counter()-start,diagnostic_cpu_seconds=process_time()-cpu)
+
+def main():
+ out=ROOT/'results/complementary-core-mpcg.json'
+ if out.exists():raise FileExistsError(out)
+ resource.setrlimit(resource.RLIMIT_CPU,(80,85));start,cpu=perf_counter(),process_time()
+ sources=[Path(__file__).resolve(),ROOT/'scripts/check_schur_inplace_frontier_v2.py']
+ rec=dict(status='running',sources={str(p.relative_to(ROOT)):sha256(p.read_bytes()).hexdigest() for p in sources},protocol=dict(
+  question='Can complementary principal cores benefit from current-residual Galerkin combination and one shared kernel traversal?',
+  cores='Two disjoint272 cores from alternating first544 FPS indices. Single384 uses FPS prefix384.',
+  methods=['average','MPCG1','single384'],factor_storage='Dual exact packedFP64 factors594048B versus single384591360B; full allocation untested.',
+  direction='Form H1r,H2r; A-orthogonalize only against last block. Normalize columns; retain small-Gram eigenvalues>1e-12 lambda_max; local Galerkin step.',
+  work='One n² kernel pass per block regardlessofrank; dual crosspasses granted symmetry-fused4mn-6m² queries, not implemented streaming. Extra diagnostic true-residual products free except final1. Dense setup/products and extra block arithmetic not runtime.',
+  scope='Dense capacity gate for established MPCG; no novelty or fullmemory/native claim. Literal original1e-8 target,2000steps,4CPU per solve,80CPU command.'),tiny_check=None,runs=[])
+ def save():
+  rec.update(elapsed_wall_seconds=perf_counter()-start,elapsed_cpu_seconds=process_time()-cpu)
+  tmp=out.with_suffix('.json.tmp');tmp.write_text(json.dumps(rec,indent=2,allow_nan=False)+'\n');tmp.replace(out)
+ save()
+ with threadpool_limits(limits=1):
+  rng=np.random.default_rng(622087);F=rng.normal(size=(19,19));A=F@F.T+np.eye(19);core=Core(A,np.arange(7),.1)
+  B=core.B;C=A[:7,:7];P=np.block([[C,B],[B.T,B.T@cho_solve(core.factor,B)+.1*np.eye(12)]])
+  r=rng.normal(size=19);identity=float(np.linalg.norm(P@core.apply(r)-r)/np.linalg.norm(r));assert identity<1e-10
+  rec['tiny_check']=dict(block_inverse_identity_relative_error=identity);save()
+  cases=[('smooth','synthetic-n2560-smooth-s0-lambda0.001.npz'),('mixed','synthetic-n2560-mixed-s0-lambda0.001.npz'),('Concrete','concrete-observed-s0-lambda1e-05.npz'),('Airfoil','airfoil-observed-s0-lambda1e-05.npz')]
+  for name,filename in cases:
+   path=ROOT/'data/prepared'/filename
+   with np.load(path) as d:X,b,bw=d['X_train'],d['y_train'],float(d['bandwidth'])
+   kernel=SharedKernel(X,bw,Budget([X,b]));selected=kernel.farthest(544);A=kernel.block(X,X);A.flat[::len(b)+1]+=1e-5
+   cores=[Core(A,selected[::2],1e-5),Core(A,selected[1::2],1e-5),Core(A,selected[:384],1e-5)]
+   for mode in ['average','MPCG1','single384']:
+    row=run(A,b,cores,mode);row.update(dataset=name,n=len(b),data_sha256=sha256(path.read_bytes()).hexdigest());rec['runs'].append(row);save()
+    print(json.dumps({k:row[k] for k in ['dataset','method','status','steps','optimistic_Gaussian_entries','original_relative_residual']}),flush=True)
+ rec['status']='complete';save()
+if __name__=='__main__':main()

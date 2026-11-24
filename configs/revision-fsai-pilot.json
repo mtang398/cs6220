@@ -1,0 +1,41 @@
+{
+  "purpose": "Execution and cost pilot for matrix-free Schur-FSAI; exploratory timings only.",
+  "workloads": [
+    {
+      "dataset": "concrete"
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "regularization": [
+    0.001,
+    1e-05
+  ],
+  "repetitions": 1,
+  "solver_defaults": {
+    "rank": 32,
+    "history_size": 1,
+    "checkpoint": 20,
+    "maxiter": 2500
+  },
+  "variants": [
+    {
+      "id": "fsai8",
+      "method": "flex_fsai",
+      "sparsity": 8
+    },
+    {
+      "id": "compact48",
+      "method": "flex_compact",
+      "rank": 48
+    },
+    {
+      "id": "power48",
+      "method": "flex_power",
+      "rank": 48
+    }
+  ],
+  "max_wall_seconds": 175,
+  "run_timeout_seconds": 60
+}

@@ -1,0 +1,5579 @@
+{
+  "status": "complete",
+  "source_sha256": {
+    "scripts/check_shared_schur_race.py": "aa3802aed7ccc08fc9ccfe10c4819cb8afc184c6a5cce5ea89ac110db95cdc9b",
+    "scripts/check_shared_schur_action.py": "00d1d2ccae0c17c391c3d4ed6f8e76cf7856c060fb2d0c2d032b2c1154db4b2b",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "protocol": {
+    "budget_bytes": 262144,
+    "reserve_bytes": 65536,
+    "maximum": 96,
+    "candidates": [
+      0,
+      96
+    ],
+    "datasets": [
+      "smooth",
+      "mixed",
+      "Concrete"
+    ],
+    "regularizations": [
+      0.001,
+      1e-05
+    ],
+    "seed": 0,
+    "repeats": 1,
+    "rtol": 1e-08,
+    "maxiter": 2500,
+    "per_run_cpu_cap": 8.0,
+    "terminal_verification_reserve_seconds": 0.2,
+    "global_cpu_cap": 90,
+    "blas_threads": 1,
+    "true_checks": "Every20steps for all branches and at own suspected convergence; literal original kernel entries. First certified branch wins, candidate order breaks simultaneous ties.",
+    "failure_policy": "Only a false suspected stop replaces that branch residual/direction. No pruning or other restarts.",
+    "controls": [
+      "natural_plain",
+      "natural_schur",
+      "shared_plain",
+      "shared_schur"
+    ],
+    "shared_cross_feature_column_chunk": 128,
+    "immutable_inputs": "Shared X/b additional to algorithm-owned arrays; temporary feature packs counted.",
+    "lock": "/tmp/cs6220-project-benchmark.lock",
+    "interpretation": "One native pilot, no confirmation seeds or novelty claim"
+  },
+  "runs": [
+    {
+      "mode": "natural_plain",
+      "status": "converged",
+      "converged": true,
+      "iterations": 391,
+      "winner_size": 0,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [
+        0
+      ],
+      "true_relative_residuals": [
+        9.839233291515679e-09
+      ],
+      "last_checked_iterations": [
+        391
+      ],
+      "original_verifications": [
+        20
+      ],
+      "literal_original_kernel_passes": 20,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 391,
+      "scalar_operator_products": 391,
+      "setup_seconds": 0.00015028798952698708,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.9389734249853063,
+      "total_cpu_seconds": 0.9828965000000001,
+      "kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 107741184,
+        "entry_blocks": 5343,
+        "full_matvecs": 411
+      },
+      "setup_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 0,
+        "entry_blocks": 0,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 188752,
+        "peak_with_reserve_bytes": 254288,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 188752,
+          "plain_operator_shift": 20480,
+          "CG_vector_update": 24576,
+          "natural_true_residual_update": 20480
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            42
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [],
+      "selected_indices_sha256": null,
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 62000,
+      "final_full_buffer_columns": 1,
+      "dataset": "smooth",
+      "n": 512,
+      "regularization": 0.001,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "natural_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 44,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        7.4379972550826304e-09
+      ],
+      "last_checked_iterations": [
+        44
+      ],
+      "original_verifications": [
+        3
+      ],
+      "literal_original_kernel_passes": 3,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 44,
+      "scalar_operator_products": 44,
+      "setup_seconds": 0.005819826998049393,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.13208137301262468,
+      "total_cpu_seconds": 0.13638680000000014,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 12133376,
+        "entry_blocks": 1417,
+        "full_matvecs": 3
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 191920,
+        "peak_with_reserve_bytes": 257456,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "core_rhs_solve": 96768,
+          "reduced_rhs": 191384,
+          "Schur_first_pass": 191920,
+          "Schur_vector_update": 99328,
+          "Schur_second_pass": 191184,
+          "CG_vector_update": 97792,
+          "reconstruct_cross": 190000,
+          "reconstruct_vector": 92672,
+          "full_verification": 190392,
+          "natural_true_residual_update": 100096,
+          "natural_order_true_residual": 100096
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            123
+          ],
+          "Schur_first_pass": [
+            22
+          ],
+          "Schur_second_pass": [
+            106
+          ],
+          "reconstruct_cross": [
+            22
+          ],
+          "full_verification": [
+            23
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65404,
+      "final_full_buffer_columns": 1,
+      "dataset": "smooth",
+      "n": 512,
+      "regularization": 0.001,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "shared_plain",
+      "status": "converged",
+      "converged": true,
+      "iterations": 391,
+      "winner_size": 0,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [
+        0
+      ],
+      "true_relative_residuals": [
+        6.854851753723254e-09
+      ],
+      "last_checked_iterations": [
+        391
+      ],
+      "original_verifications": [
+        20
+      ],
+      "literal_original_kernel_passes": 20,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 391,
+      "scalar_operator_products": 391,
+      "setup_seconds": 0.004329195973696187,
+      "setup_cpu_seconds": 0.0012478000000000211,
+      "total_seconds": 1.0790820449765306,
+      "total_cpu_seconds": 1.130454,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 104236032,
+        "entry_blocks": 10747,
+        "full_matvecs": 20
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 103168,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90880,
+          "shared_top_cross": 191984,
+          "shared_bottom_lifted": 190768,
+          "shared_final_arrays": 102400,
+          "CG_vector_update": 102400,
+          "literal_original_kernel_verification": 190000,
+          "original_residual_vector_update": 106496
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            78,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "literal_original_kernel_verification": [
+            22
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65404,
+      "final_full_buffer_columns": 1,
+      "dataset": "smooth",
+      "n": 512,
+      "regularization": 0.001,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "shared_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 44,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        8.554073903945296e-09
+      ],
+      "last_checked_iterations": [
+        44
+      ],
+      "original_verifications": [
+        3
+      ],
+      "literal_original_kernel_passes": 3,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 44,
+      "scalar_operator_products": 44,
+      "setup_seconds": 0.0033814530179370195,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.1290040379972197,
+      "total_cpu_seconds": 0.13316309999999998,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 12133376,
+        "entry_blocks": 1335,
+        "full_matvecs": 3
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_factor_padded_leading_solve": 96768,
+          "full_core_triangular_product": 100864,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90112,
+          "shared_top_cross": 191872,
+          "shared_bottom_lifted": 188464,
+          "shared_final_arrays": 100096,
+          "CG_vector_update": 98560,
+          "verification_reconstruction_cross": 191872,
+          "literal_original_kernel_verification": 191864,
+          "original_residual_vector_update": 104192
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            80,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "verification_reconstruction_cross": [
+            80,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            23
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65404,
+      "final_full_buffer_columns": 1,
+      "dataset": "smooth",
+      "n": 512,
+      "regularization": 0.001,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "race",
+      "status": "converged",
+      "converged": true,
+      "iterations": 44,
+      "winner_size": 96,
+      "candidate_sizes": [
+        0,
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        0.3711675717779974,
+        9.142380030290178e-09
+      ],
+      "last_checked_iterations": [
+        40,
+        44
+      ],
+      "original_verifications": [
+        2,
+        3
+      ],
+      "literal_original_kernel_passes": 3,
+      "residual_replacements": [
+        0,
+        0
+      ],
+      "operator_batches": 44,
+      "scalar_operator_products": 88,
+      "setup_seconds": 0.004077823017723858,
+      "setup_cpu_seconds": 0.0017427999999997112,
+      "total_seconds": 0.14008331499644555,
+      "total_cpu_seconds": 0.13892649999999973,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 12133376,
+        "entry_blocks": 1614,
+        "full_matvecs": 5
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192104,
+        "peak_with_reserve_bytes": 257640,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 121344,
+          "full_factor_padded_leading_solve": 113920,
+          "shared_initial_rhs": 192064,
+          "initial_rhs_copy": 99072,
+          "shared_top_cross": 192016,
+          "shared_bottom_lifted": 189008,
+          "shared_final_arrays": 121344,
+          "CG_vector_update": 116480,
+          "verification_reconstruction_cross": 192104,
+          "literal_original_kernel_verification": 191648,
+          "original_residual_vector_update": 124672
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            116
+          ],
+          "shared_top_cross": [
+            61,
+            128
+          ],
+          "shared_bottom_lifted": [
+            17
+          ],
+          "verification_reconstruction_cross": [
+            61,
+            69,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            18,
+            20
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "smooth",
+      "n": 512,
+      "regularization": 0.001,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "natural_plain",
+      "status": "maxiter",
+      "converged": false,
+      "iterations": 2500,
+      "winner_size": null,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [],
+      "true_relative_residuals": [
+        3.0568084521467444e-05
+      ],
+      "last_checked_iterations": [
+        2500
+      ],
+      "original_verifications": [
+        126
+      ],
+      "literal_original_kernel_passes": 126,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 2500,
+      "scalar_operator_products": 2500,
+      "setup_seconds": 9.249700815416873e-05,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 6.13048648100812,
+      "total_cpu_seconds": 6.384871799999999,
+      "kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 688390144,
+        "entry_blocks": 34138,
+        "full_matvecs": 2626
+      },
+      "setup_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 0,
+        "entry_blocks": 0,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 188752,
+        "peak_with_reserve_bytes": 254288,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 188752,
+          "plain_operator_shift": 20480,
+          "CG_vector_update": 24576,
+          "natural_true_residual_update": 20480
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            42
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [],
+      "selected_indices_sha256": null,
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 0,
+      "dataset": "smooth",
+      "n": 512,
+      "regularization": 1e-05,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "natural_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 296,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        7.59244146172531e-09
+      ],
+      "last_checked_iterations": [
+        296
+      ],
+      "original_verifications": [
+        15
+      ],
+      "literal_original_kernel_passes": 15,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 296,
+      "scalar_operator_products": 296,
+      "setup_seconds": 0.010017880005761981,
+      "setup_cpu_seconds": 0.009690700000000163,
+      "total_seconds": 0.8400764119869564,
+      "total_cpu_seconds": 0.8655784000000004,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 79496192,
+        "entry_blocks": 8809,
+        "full_matvecs": 15
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 191920,
+        "peak_with_reserve_bytes": 257456,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "core_rhs_solve": 96768,
+          "reduced_rhs": 191384,
+          "Schur_first_pass": 191920,
+          "Schur_vector_update": 99328,
+          "Schur_second_pass": 191184,
+          "CG_vector_update": 97792,
+          "reconstruct_cross": 190000,
+          "reconstruct_vector": 92672,
+          "full_verification": 190392,
+          "natural_true_residual_update": 100096,
+          "natural_order_true_residual": 100096
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            123
+          ],
+          "Schur_first_pass": [
+            22
+          ],
+          "Schur_second_pass": [
+            106
+          ],
+          "reconstruct_cross": [
+            22
+          ],
+          "full_verification": [
+            23
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "smooth",
+      "n": 512,
+      "regularization": 1e-05,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "shared_plain",
+      "status": "maxiter",
+      "converged": false,
+      "iterations": 2500,
+      "winner_size": null,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [],
+      "true_relative_residuals": [
+        9.565747733601096e-05
+      ],
+      "last_checked_iterations": [
+        2500
+      ],
+      "original_verifications": [
+        126
+      ],
+      "literal_original_kernel_passes": 126,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 2500,
+      "scalar_operator_products": 2500,
+      "setup_seconds": 0.0061662579828407615,
+      "setup_cpu_seconds": 0.0038634000000001834,
+      "total_seconds": 7.107011526997667,
+      "total_cpu_seconds": 7.179197499999999,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 665448448,
+        "entry_blocks": 68125,
+        "full_matvecs": 126
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 103168,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90880,
+          "shared_top_cross": 191984,
+          "shared_bottom_lifted": 190768,
+          "shared_final_arrays": 102400,
+          "CG_vector_update": 102400,
+          "literal_original_kernel_verification": 190000,
+          "original_residual_vector_update": 106496
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            78,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "literal_original_kernel_verification": [
+            22
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 0,
+      "dataset": "smooth",
+      "n": 512,
+      "regularization": 1e-05,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "shared_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 295,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        9.216105609336429e-09
+      ],
+      "last_checked_iterations": [
+        295
+      ],
+      "original_verifications": [
+        15
+      ],
+      "literal_original_kernel_passes": 15,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 295,
+      "scalar_operator_products": 295,
+      "setup_seconds": 0.004017162980744615,
+      "setup_cpu_seconds": 0.003092400000003437,
+      "total_seconds": 0.8355281219992321,
+      "total_cpu_seconds": 0.8524309000000017,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 79243264,
+        "entry_blocks": 8221,
+        "full_matvecs": 15
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_factor_padded_leading_solve": 96768,
+          "full_core_triangular_product": 100864,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90112,
+          "shared_top_cross": 191872,
+          "shared_bottom_lifted": 188464,
+          "shared_final_arrays": 100096,
+          "CG_vector_update": 98560,
+          "verification_reconstruction_cross": 191872,
+          "literal_original_kernel_verification": 191864,
+          "original_residual_vector_update": 104192
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            80,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "verification_reconstruction_cross": [
+            80,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            23
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "smooth",
+      "n": 512,
+      "regularization": 1e-05,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "race",
+      "status": "converged",
+      "converged": true,
+      "iterations": 297,
+      "winner_size": 96,
+      "candidate_sizes": [
+        0,
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        0.35009457042482617,
+        9.90157298759211e-09
+      ],
+      "last_checked_iterations": [
+        280,
+        297
+      ],
+      "original_verifications": [
+        14,
+        15
+      ],
+      "literal_original_kernel_passes": 15,
+      "residual_replacements": [
+        0,
+        0
+      ],
+      "operator_batches": 297,
+      "scalar_operator_products": 594,
+      "setup_seconds": 0.0036479599948506802,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.9314447200158611,
+      "total_cpu_seconds": 0.9645124999999979,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 79749120,
+        "entry_blocks": 10142,
+        "full_matvecs": 29
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192104,
+        "peak_with_reserve_bytes": 257640,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 121344,
+          "full_factor_padded_leading_solve": 113920,
+          "shared_initial_rhs": 192064,
+          "initial_rhs_copy": 99072,
+          "shared_top_cross": 192016,
+          "shared_bottom_lifted": 189008,
+          "shared_final_arrays": 121344,
+          "CG_vector_update": 116480,
+          "verification_reconstruction_cross": 192104,
+          "literal_original_kernel_verification": 191648,
+          "original_residual_vector_update": 124672
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            116
+          ],
+          "shared_top_cross": [
+            61,
+            128
+          ],
+          "shared_bottom_lifted": [
+            17
+          ],
+          "verification_reconstruction_cross": [
+            61,
+            69,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            18,
+            20
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "smooth",
+      "n": 512,
+      "regularization": 1e-05,
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "natural_plain",
+      "status": "converged",
+      "converged": true,
+      "iterations": 46,
+      "winner_size": 0,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [
+        0
+      ],
+      "true_relative_residuals": [
+        8.043543912824521e-09
+      ],
+      "last_checked_iterations": [
+        46
+      ],
+      "original_verifications": [
+        3
+      ],
+      "literal_original_kernel_passes": 3,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 46,
+      "scalar_operator_products": 46,
+      "setup_seconds": 4.50710067525506e-05,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.11718952999217436,
+      "total_cpu_seconds": 0.1191987999999995,
+      "kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 12845056,
+        "entry_blocks": 637,
+        "full_matvecs": 49
+      },
+      "setup_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 0,
+        "entry_blocks": 0,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 188752,
+        "peak_with_reserve_bytes": 254288,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 188752,
+          "plain_operator_shift": 20480,
+          "CG_vector_update": 24576,
+          "natural_true_residual_update": 20480
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            42
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [],
+      "selected_indices_sha256": null,
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "mixed",
+      "n": 512,
+      "regularization": 0.001,
+      "data_sha256": "958937e7ab7acafffd43be5914afcb6d594b97062a0c51d9a9deb8c3ddba290c"
+    },
+    {
+      "mode": "natural_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 41,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        8.419298412157436e-09
+      ],
+      "last_checked_iterations": [
+        41
+      ],
+      "original_verifications": [
+        3
+      ],
+      "literal_original_kernel_passes": 3,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 41,
+      "scalar_operator_products": 41,
+      "setup_seconds": 0.003169637988321483,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.11344095997628756,
+      "total_cpu_seconds": 0.10816520000000196,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 11374592,
+        "entry_blocks": 1333,
+        "full_matvecs": 3
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 191920,
+        "peak_with_reserve_bytes": 257456,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "core_rhs_solve": 96768,
+          "reduced_rhs": 191384,
+          "Schur_first_pass": 191920,
+          "Schur_vector_update": 99328,
+          "Schur_second_pass": 191184,
+          "CG_vector_update": 97792,
+          "reconstruct_cross": 190000,
+          "reconstruct_vector": 92672,
+          "full_verification": 190392,
+          "natural_true_residual_update": 100096,
+          "natural_order_true_residual": 100096
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            123
+          ],
+          "Schur_first_pass": [
+            22
+          ],
+          "Schur_second_pass": [
+            106
+          ],
+          "reconstruct_cross": [
+            22
+          ],
+          "full_verification": [
+            23
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "mixed",
+      "n": 512,
+      "regularization": 0.001,
+      "data_sha256": "958937e7ab7acafffd43be5914afcb6d594b97062a0c51d9a9deb8c3ddba290c"
+    },
+    {
+      "mode": "shared_plain",
+      "status": "converged",
+      "converged": true,
+      "iterations": 48,
+      "winner_size": 0,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [
+        0
+      ],
+      "true_relative_residuals": [
+        2.8141434562413063e-09
+      ],
+      "last_checked_iterations": [
+        48
+      ],
+      "original_verifications": [
+        3
+      ],
+      "literal_original_kernel_passes": 3,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 48,
+      "scalar_operator_products": 48,
+      "setup_seconds": 0.004029973992146552,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.1410435079887975,
+      "total_cpu_seconds": 0.14501479999999844,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 13025280,
+        "entry_blocks": 1421,
+        "full_matvecs": 3
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 103168,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90880,
+          "shared_top_cross": 191984,
+          "shared_bottom_lifted": 190768,
+          "shared_final_arrays": 102400,
+          "CG_vector_update": 102400,
+          "literal_original_kernel_verification": 190000,
+          "original_residual_vector_update": 106496
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            78,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "literal_original_kernel_verification": [
+            22
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "mixed",
+      "n": 512,
+      "regularization": 0.001,
+      "data_sha256": "958937e7ab7acafffd43be5914afcb6d594b97062a0c51d9a9deb8c3ddba290c"
+    },
+    {
+      "mode": "shared_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 42,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        7.306271023253446e-09
+      ],
+      "last_checked_iterations": [
+        42
+      ],
+      "original_verifications": [
+        3
+      ],
+      "literal_original_kernel_passes": 3,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 42,
+      "scalar_operator_products": 42,
+      "setup_seconds": 0.003710780991241336,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.1266978299827315,
+      "total_cpu_seconds": 0.1239832000000014,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 11627520,
+        "entry_blocks": 1283,
+        "full_matvecs": 3
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_factor_padded_leading_solve": 96768,
+          "full_core_triangular_product": 100864,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90112,
+          "shared_top_cross": 191872,
+          "shared_bottom_lifted": 188464,
+          "shared_final_arrays": 100096,
+          "CG_vector_update": 98560,
+          "verification_reconstruction_cross": 191872,
+          "literal_original_kernel_verification": 191864,
+          "original_residual_vector_update": 104192
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            80,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "verification_reconstruction_cross": [
+            80,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            23
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "mixed",
+      "n": 512,
+      "regularization": 0.001,
+      "data_sha256": "958937e7ab7acafffd43be5914afcb6d594b97062a0c51d9a9deb8c3ddba290c"
+    },
+    {
+      "mode": "race",
+      "status": "converged",
+      "converged": true,
+      "iterations": 42,
+      "winner_size": 96,
+      "candidate_sizes": [
+        0,
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        4.545385711847898e-08,
+        7.343483033397629e-09
+      ],
+      "last_checked_iterations": [
+        40,
+        42
+      ],
+      "original_verifications": [
+        2,
+        3
+      ],
+      "literal_original_kernel_passes": 3,
+      "residual_replacements": [
+        0,
+        0
+      ],
+      "operator_batches": 42,
+      "scalar_operator_products": 84,
+      "setup_seconds": 0.003753127995878458,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.18408466601977125,
+      "total_cpu_seconds": 0.18652409999999975,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 11627520,
+        "entry_blocks": 1550,
+        "full_matvecs": 5
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192104,
+        "peak_with_reserve_bytes": 257640,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 121344,
+          "full_factor_padded_leading_solve": 113920,
+          "shared_initial_rhs": 192064,
+          "initial_rhs_copy": 99072,
+          "shared_top_cross": 192016,
+          "shared_bottom_lifted": 189008,
+          "shared_final_arrays": 121344,
+          "CG_vector_update": 116480,
+          "verification_reconstruction_cross": 192104,
+          "literal_original_kernel_verification": 191648,
+          "original_residual_vector_update": 124672
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            116
+          ],
+          "shared_top_cross": [
+            61,
+            128
+          ],
+          "shared_bottom_lifted": [
+            17
+          ],
+          "verification_reconstruction_cross": [
+            61,
+            69,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            18,
+            20
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "mixed",
+      "n": 512,
+      "regularization": 0.001,
+      "data_sha256": "958937e7ab7acafffd43be5914afcb6d594b97062a0c51d9a9deb8c3ddba290c"
+    },
+    {
+      "mode": "natural_plain",
+      "status": "converged",
+      "converged": true,
+      "iterations": 49,
+      "winner_size": 0,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [
+        0
+      ],
+      "true_relative_residuals": [
+        6.008386040294052e-09
+      ],
+      "last_checked_iterations": [
+        49
+      ],
+      "original_verifications": [
+        3
+      ],
+      "literal_original_kernel_passes": 3,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 49,
+      "scalar_operator_products": 49,
+      "setup_seconds": 7.580299279652536e-05,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.12163424299797043,
+      "total_cpu_seconds": 0.12502970000000246,
+      "kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 13631488,
+        "entry_blocks": 676,
+        "full_matvecs": 52
+      },
+      "setup_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 0,
+        "entry_blocks": 0,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 188752,
+        "peak_with_reserve_bytes": 254288,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 188752,
+          "plain_operator_shift": 20480,
+          "CG_vector_update": 24576,
+          "natural_true_residual_update": 20480
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            42
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [],
+      "selected_indices_sha256": null,
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "mixed",
+      "n": 512,
+      "regularization": 1e-05,
+      "data_sha256": "958937e7ab7acafffd43be5914afcb6d594b97062a0c51d9a9deb8c3ddba290c"
+    },
+    {
+      "mode": "natural_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 218,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        6.821488102295782e-09
+      ],
+      "last_checked_iterations": [
+        218
+      ],
+      "original_verifications": [
+        11
+      ],
+      "literal_original_kernel_passes": 11,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 218,
+      "scalar_operator_products": 218,
+      "setup_seconds": 0.003310528991278261,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.5898518419999164,
+      "total_cpu_seconds": 0.6121176000000013,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 58559488,
+        "entry_blocks": 6513,
+        "full_matvecs": 11
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 191920,
+        "peak_with_reserve_bytes": 257456,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "core_rhs_solve": 96768,
+          "reduced_rhs": 191384,
+          "Schur_first_pass": 191920,
+          "Schur_vector_update": 99328,
+          "Schur_second_pass": 191184,
+          "CG_vector_update": 97792,
+          "reconstruct_cross": 190000,
+          "reconstruct_vector": 92672,
+          "full_verification": 190392,
+          "natural_true_residual_update": 100096,
+          "natural_order_true_residual": 100096
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            123
+          ],
+          "Schur_first_pass": [
+            22
+          ],
+          "Schur_second_pass": [
+            106
+          ],
+          "reconstruct_cross": [
+            22
+          ],
+          "full_verification": [
+            23
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "mixed",
+      "n": 512,
+      "regularization": 1e-05,
+      "data_sha256": "958937e7ab7acafffd43be5914afcb6d594b97062a0c51d9a9deb8c3ddba290c"
+    },
+    {
+      "mode": "shared_plain",
+      "status": "converged",
+      "converged": true,
+      "iterations": 47,
+      "winner_size": 0,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [
+        0
+      ],
+      "true_relative_residuals": [
+        5.506059782002081e-09
+      ],
+      "last_checked_iterations": [
+        47
+      ],
+      "original_verifications": [
+        3
+      ],
+      "literal_original_kernel_passes": 3,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 47,
+      "scalar_operator_products": 47,
+      "setup_seconds": 0.003385577001608908,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.13304230300127529,
+      "total_cpu_seconds": 0.13086309999999912,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 12772352,
+        "entry_blocks": 1395,
+        "full_matvecs": 3
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 103168,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90880,
+          "shared_top_cross": 191984,
+          "shared_bottom_lifted": 190768,
+          "shared_final_arrays": 102400,
+          "CG_vector_update": 102400,
+          "literal_original_kernel_verification": 190000,
+          "original_residual_vector_update": 106496
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            78,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "literal_original_kernel_verification": [
+            22
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "mixed",
+      "n": 512,
+      "regularization": 1e-05,
+      "data_sha256": "958937e7ab7acafffd43be5914afcb6d594b97062a0c51d9a9deb8c3ddba290c"
+    },
+    {
+      "mode": "shared_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 216,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        8.103409227173392e-09
+      ],
+      "last_checked_iterations": [
+        216
+      ],
+      "original_verifications": [
+        11
+      ],
+      "literal_original_kernel_passes": 11,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 216,
+      "scalar_operator_products": 216,
+      "setup_seconds": 0.005215609009610489,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.6230701820168179,
+      "total_cpu_seconds": 0.6416776000000013,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 58053632,
+        "entry_blocks": 6047,
+        "full_matvecs": 11
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_factor_padded_leading_solve": 96768,
+          "full_core_triangular_product": 100864,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90112,
+          "shared_top_cross": 191872,
+          "shared_bottom_lifted": 188464,
+          "shared_final_arrays": 100096,
+          "CG_vector_update": 98560,
+          "verification_reconstruction_cross": 191872,
+          "literal_original_kernel_verification": 191864,
+          "original_residual_vector_update": 104192
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            80,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "verification_reconstruction_cross": [
+            80,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            23
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "mixed",
+      "n": 512,
+      "regularization": 1e-05,
+      "data_sha256": "958937e7ab7acafffd43be5914afcb6d594b97062a0c51d9a9deb8c3ddba290c"
+    },
+    {
+      "mode": "race",
+      "status": "converged",
+      "converged": true,
+      "iterations": 48,
+      "winner_size": 0,
+      "candidate_sizes": [
+        0,
+        96
+      ],
+      "first_verified_converged_sizes": [
+        0
+      ],
+      "true_relative_residuals": [
+        6.3441532482473355e-09,
+        0.0003886000654858611
+      ],
+      "last_checked_iterations": [
+        48,
+        40
+      ],
+      "original_verifications": [
+        3,
+        2
+      ],
+      "literal_original_kernel_passes": 3,
+      "residual_replacements": [
+        0,
+        0
+      ],
+      "operator_batches": 48,
+      "scalar_operator_products": 96,
+      "setup_seconds": 0.0038091960013844073,
+      "setup_cpu_seconds": 0.003277199999999425,
+      "total_seconds": 0.16383933500037529,
+      "total_cpu_seconds": 0.16936199999999957,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 13105152,
+        "entry_blocks": 1735,
+        "full_matvecs": 5
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 98304,
+        "entry_blocks": 101,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192064,
+        "peak_with_reserve_bytes": 257600,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 121344,
+          "full_factor_padded_leading_solve": 113920,
+          "shared_initial_rhs": 192064,
+          "initial_rhs_copy": 99072,
+          "shared_top_cross": 192016,
+          "shared_bottom_lifted": 189008,
+          "shared_final_arrays": 121344,
+          "CG_vector_update": 116480,
+          "verification_reconstruction_cross": 192016,
+          "literal_original_kernel_verification": 191648,
+          "original_residual_vector_update": 124672
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            116
+          ],
+          "shared_top_cross": [
+            61,
+            128
+          ],
+          "shared_bottom_lifted": [
+            17
+          ],
+          "verification_reconstruction_cross": [
+            61,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            18,
+            20
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        216,
+        64,
+        181,
+        487,
+        490,
+        374,
+        74,
+        244,
+        156,
+        439,
+        119,
+        143,
+        249,
+        94,
+        391,
+        67,
+        279,
+        416,
+        259,
+        248,
+        83,
+        164,
+        334,
+        3,
+        510,
+        452,
+        449,
+        321,
+        435,
+        44,
+        71,
+        238,
+        108,
+        400,
+        308,
+        396,
+        29,
+        138,
+        445,
+        384,
+        177,
+        69,
+        225,
+        474,
+        417,
+        30,
+        508,
+        93,
+        213,
+        154,
+        4,
+        101,
+        75,
+        389,
+        425,
+        55,
+        382,
+        359,
+        501,
+        257,
+        23,
+        366,
+        219,
+        114,
+        25,
+        431,
+        126,
+        300,
+        10,
+        52,
+        458,
+        333,
+        198,
+        89,
+        201,
+        402,
+        130,
+        339,
+        327,
+        182,
+        340,
+        367,
+        361,
+        395,
+        231,
+        1,
+        436,
+        155,
+        441,
+        132,
+        235,
+        208,
+        17,
+        299,
+        309
+      ],
+      "selected_indices_sha256": "a8d71971df4cf64ad7b05fd1bd6c8e9d448f1b636a869b89abe0ab4f30b6c3a1",
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "mixed",
+      "n": 512,
+      "regularization": 1e-05,
+      "data_sha256": "958937e7ab7acafffd43be5914afcb6d594b97062a0c51d9a9deb8c3ddba290c"
+    },
+    {
+      "mode": "natural_plain",
+      "status": "converged",
+      "converged": true,
+      "iterations": 677,
+      "winner_size": 0,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [
+        0
+      ],
+      "true_relative_residuals": [
+        7.678294833166942e-09
+      ],
+      "last_checked_iterations": [
+        677
+      ],
+      "original_verifications": [
+        34
+      ],
+      "literal_original_kernel_passes": 34,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 677,
+      "scalar_operator_products": 677,
+      "setup_seconds": 0.000146359991049394,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 4.201130916015245,
+      "total_cpu_seconds": 4.472566199999999,
+      "kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 482751936,
+        "entry_blocks": 23463,
+        "full_matvecs": 711
+      },
+      "setup_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 0,
+        "entry_blocks": 0,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 191368,
+        "peak_with_reserve_bytes": 256904,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 191368,
+          "plain_operator_shift": 32960,
+          "CG_vector_update": 39552,
+          "natural_true_residual_update": 32960
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            25
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [],
+      "selected_indices_sha256": null,
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 0.001,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "natural_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 89,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        8.475351213471456e-09
+      ],
+      "last_checked_iterations": [
+        89
+      ],
+      "original_verifications": [
+        5
+      ],
+      "literal_original_kernel_passes": 5,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 89,
+      "scalar_operator_products": 89,
+      "setup_seconds": 0.004372989002149552,
+      "setup_cpu_seconds": 0.00268649999999937,
+      "total_seconds": 0.6637887750111986,
+      "total_cpu_seconds": 0.7085039000000002,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 63511168,
+        "entry_blocks": 11812,
+        "full_matvecs": 5
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 158208,
+        "entry_blocks": 104,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192320,
+        "peak_with_reserve_bytes": 257856,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "core_rhs_solve": 109248,
+          "reduced_rhs": 191336,
+          "Schur_first_pass": 191800,
+          "Schur_vector_update": 116800,
+          "Schur_second_pass": 191040,
+          "CG_vector_update": 115264,
+          "reconstruct_cross": 192320,
+          "reconstruct_vector": 105152,
+          "full_verification": 190176,
+          "natural_true_residual_update": 117568,
+          "natural_order_true_residual": 117568
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            117
+          ],
+          "Schur_first_pass": [
+            7
+          ],
+          "Schur_second_pass": [
+            88
+          ],
+          "reconstruct_cross": [
+            8
+          ],
+          "full_verification": [
+            12
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        620,
+        463,
+        76,
+        674,
+        96,
+        795,
+        251,
+        546,
+        215,
+        255,
+        548,
+        763,
+        224,
+        377,
+        532,
+        617,
+        92,
+        440,
+        106,
+        320,
+        147,
+        631,
+        194,
+        447,
+        41,
+        802,
+        443,
+        822,
+        819,
+        353,
+        333,
+        585,
+        230,
+        529,
+        277,
+        268,
+        42,
+        39,
+        345,
+        399,
+        508,
+        54,
+        675,
+        506,
+        50,
+        332,
+        636,
+        186,
+        412,
+        453,
+        211,
+        228,
+        509,
+        200,
+        296,
+        619,
+        648,
+        485,
+        699,
+        214,
+        404,
+        114,
+        397,
+        430,
+        394,
+        421,
+        159,
+        475,
+        350,
+        72,
+        535,
+        639,
+        524,
+        378,
+        8,
+        405,
+        168,
+        310,
+        552,
+        61,
+        368,
+        519,
+        29,
+        410,
+        578,
+        414,
+        258,
+        246,
+        764,
+        129,
+        580,
+        747,
+        750,
+        452,
+        27
+      ],
+      "selected_indices_sha256": "507ec8688d41b11440bbfc2a6ac231868378937e0a006db5c01d583f6a11b66a",
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 0.001,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "shared_plain",
+      "status": "converged",
+      "converged": true,
+      "iterations": 671,
+      "winner_size": 0,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [
+        0
+      ],
+      "true_relative_residuals": [
+        6.8916086177689785e-09
+      ],
+      "last_checked_iterations": [
+        671
+      ],
+      "original_verifications": [
+        34
+      ],
+      "literal_original_kernel_passes": 34,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 671,
+      "scalar_operator_products": 671,
+      "setup_seconds": 0.005247213004622608,
+      "setup_cpu_seconds": 0.0015557999999984418,
+      "total_seconds": 4.853336669999408,
+      "total_cpu_seconds": 5.117784800000003,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 472652352,
+        "entry_blocks": 55663,
+        "full_matvecs": 34
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 158208,
+        "entry_blocks": 104,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192104,
+        "peak_with_reserve_bytes": 257640,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_core_triangular_product": 118144,
+          "shared_initial_rhs": 192104,
+          "initial_rhs_copy": 100864,
+          "shared_top_cross": 191856,
+          "shared_bottom_lifted": 187352,
+          "shared_final_arrays": 119872,
+          "CG_vector_update": 119872,
+          "literal_original_kernel_verification": 186584,
+          "original_residual_vector_update": 126464
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            117
+          ],
+          "shared_top_cross": [
+            64,
+            94
+          ],
+          "shared_bottom_lifted": [
+            11
+          ],
+          "literal_original_kernel_verification": [
+            11
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        620,
+        463,
+        76,
+        674,
+        96,
+        795,
+        251,
+        546,
+        215,
+        255,
+        548,
+        763,
+        224,
+        377,
+        532,
+        617,
+        92,
+        440,
+        106,
+        320,
+        147,
+        631,
+        194,
+        447,
+        41,
+        802,
+        443,
+        822,
+        819,
+        353,
+        333,
+        585,
+        230,
+        529,
+        277,
+        268,
+        42,
+        39,
+        345,
+        399,
+        508,
+        54,
+        675,
+        506,
+        50,
+        332,
+        636,
+        186,
+        412,
+        453,
+        211,
+        228,
+        509,
+        200,
+        296,
+        619,
+        648,
+        485,
+        699,
+        214,
+        404,
+        114,
+        397,
+        430,
+        394,
+        421,
+        159,
+        475,
+        350,
+        72,
+        535,
+        639,
+        524,
+        378,
+        8,
+        405,
+        168,
+        310,
+        552,
+        61,
+        368,
+        519,
+        29,
+        410,
+        578,
+        414,
+        258,
+        246,
+        764,
+        129,
+        580,
+        747,
+        750,
+        452,
+        27
+      ],
+      "selected_indices_sha256": "507ec8688d41b11440bbfc2a6ac231868378937e0a006db5c01d583f6a11b66a",
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 0.001,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "shared_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 89,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        7.62704995750616e-09
+      ],
+      "last_checked_iterations": [
+        89
+      ],
+      "original_verifications": [
+        5
+      ],
+      "literal_original_kernel_passes": 5,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 89,
+      "scalar_operator_products": 89,
+      "setup_seconds": 0.0046733600029256195,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.6500998839910608,
+      "total_cpu_seconds": 0.6719675000000009,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 63511168,
+        "entry_blocks": 6912,
+        "full_matvecs": 5
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 158208,
+        "entry_blocks": 104,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192104,
+        "peak_with_reserve_bytes": 257640,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_factor_padded_leading_solve": 109248,
+          "full_core_triangular_product": 115840,
+          "shared_initial_rhs": 192104,
+          "initial_rhs_copy": 100096,
+          "shared_top_cross": 191504,
+          "shared_bottom_lifted": 191712,
+          "shared_final_arrays": 117568,
+          "CG_vector_update": 116032,
+          "verification_reconstruction_cross": 191504,
+          "literal_original_kernel_verification": 190944,
+          "original_residual_vector_update": 124160
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            117
+          ],
+          "shared_top_cross": [
+            66,
+            97
+          ],
+          "shared_bottom_lifted": [
+            12
+          ],
+          "verification_reconstruction_cross": [
+            66,
+            97
+          ],
+          "literal_original_kernel_verification": [
+            12
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        620,
+        463,
+        76,
+        674,
+        96,
+        795,
+        251,
+        546,
+        215,
+        255,
+        548,
+        763,
+        224,
+        377,
+        532,
+        617,
+        92,
+        440,
+        106,
+        320,
+        147,
+        631,
+        194,
+        447,
+        41,
+        802,
+        443,
+        822,
+        819,
+        353,
+        333,
+        585,
+        230,
+        529,
+        277,
+        268,
+        42,
+        39,
+        345,
+        399,
+        508,
+        54,
+        675,
+        506,
+        50,
+        332,
+        636,
+        186,
+        412,
+        453,
+        211,
+        228,
+        509,
+        200,
+        296,
+        619,
+        648,
+        485,
+        699,
+        214,
+        404,
+        114,
+        397,
+        430,
+        394,
+        421,
+        159,
+        475,
+        350,
+        72,
+        535,
+        639,
+        524,
+        378,
+        8,
+        405,
+        168,
+        310,
+        552,
+        61,
+        368,
+        519,
+        29,
+        410,
+        578,
+        414,
+        258,
+        246,
+        764,
+        129,
+        580,
+        747,
+        750,
+        452,
+        27
+      ],
+      "selected_indices_sha256": "507ec8688d41b11440bbfc2a6ac231868378937e0a006db5c01d583f6a11b66a",
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 65948,
+      "final_full_buffer_columns": 1,
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 0.001,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "race",
+      "status": "converged",
+      "converged": true,
+      "iterations": 90,
+      "winner_size": 96,
+      "candidate_sizes": [
+        0,
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        1.8944167817690378,
+        8.593693097485601e-09
+      ],
+      "last_checked_iterations": [
+        80,
+        90
+      ],
+      "original_verifications": [
+        4,
+        5
+      ],
+      "literal_original_kernel_passes": 5,
+      "residual_replacements": [
+        0,
+        0
+      ],
+      "operator_batches": 90,
+      "scalar_operator_products": 180,
+      "setup_seconds": 0.00470520299859345,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 0.7956368770101108,
+      "total_cpu_seconds": 0.825855599999997,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 64180928,
+        "entry_blocks": 11638,
+        "full_matvecs": 9
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 158208,
+        "entry_blocks": 104,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192256,
+        "peak_with_reserve_bytes": 257792,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_core_triangular_product": 148800,
+          "full_factor_padded_leading_solve": 136384,
+          "shared_initial_rhs": 191920,
+          "initial_rhs_copy": 114048,
+          "shared_top_cross": 191904,
+          "shared_bottom_lifted": 192176,
+          "shared_final_arrays": 151296,
+          "CG_vector_update": 143936,
+          "verification_reconstruction_cross": 192256,
+          "literal_original_kernel_verification": 190728,
+          "original_residual_vector_update": 157120
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            107
+          ],
+          "shared_top_cross": [
+            36,
+            54
+          ],
+          "shared_bottom_lifted": [
+            7
+          ],
+          "verification_reconstruction_cross": [
+            36,
+            48,
+            54,
+            72
+          ],
+          "literal_original_kernel_verification": [
+            7,
+            9
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        620,
+        463,
+        76,
+        674,
+        96,
+        795,
+        251,
+        546,
+        215,
+        255,
+        548,
+        763,
+        224,
+        377,
+        532,
+        617,
+        92,
+        440,
+        106,
+        320,
+        147,
+        631,
+        194,
+        447,
+        41,
+        802,
+        443,
+        822,
+        819,
+        353,
+        333,
+        585,
+        230,
+        529,
+        277,
+        268,
+        42,
+        39,
+        345,
+        399,
+        508,
+        54,
+        675,
+        506,
+        50,
+        332,
+        636,
+        186,
+        412,
+        453,
+        211,
+        228,
+        509,
+        200,
+        296,
+        619,
+        648,
+        485,
+        699,
+        214,
+        404,
+        114,
+        397,
+        430,
+        394,
+        421,
+        159,
+        475,
+        350,
+        72,
+        535,
+        639,
+        524,
+        378,
+        8,
+        405,
+        168,
+        310,
+        552,
+        61,
+        368,
+        519,
+        29,
+        410,
+        578,
+        414,
+        258,
+        246,
+        764,
+        129,
+        580,
+        747,
+        750,
+        452,
+        27
+      ],
+      "selected_indices_sha256": "507ec8688d41b11440bbfc2a6ac231868378937e0a006db5c01d583f6a11b66a",
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 66204,
+      "final_full_buffer_columns": 1,
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 0.001,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "natural_plain",
+      "status": "cpu_screen_cap",
+      "converged": false,
+      "iterations": 1169,
+      "winner_size": null,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [],
+      "true_relative_residuals": [
+        0.4073828047092415
+      ],
+      "last_checked_iterations": [
+        1169
+      ],
+      "original_verifications": [
+        59
+      ],
+      "literal_original_kernel_passes": 59,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 1169,
+      "scalar_operator_products": 1169,
+      "setup_seconds": 6.969599053263664e-05,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 7.530185613984941,
+      "total_cpu_seconds": 7.815961399999999,
+      "kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 833782528,
+        "entry_blocks": 40524,
+        "full_matvecs": 1228
+      },
+      "setup_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 0,
+        "entry_blocks": 0,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 191368,
+        "peak_with_reserve_bytes": 256904,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 191368,
+          "plain_operator_shift": 32960,
+          "CG_vector_update": 39552,
+          "natural_true_residual_update": 32960
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            25
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [],
+      "selected_indices_sha256": null,
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 66204,
+      "final_full_buffer_columns": 0,
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 1e-05,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "natural_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 714,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        8.470081830645452e-09
+      ],
+      "last_checked_iterations": [
+        714
+      ],
+      "original_verifications": [
+        36
+      ],
+      "literal_original_kernel_passes": 36,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 714,
+      "scalar_operator_products": 714,
+      "setup_seconds": 0.010654321988113225,
+      "setup_cpu_seconds": 0.01037929999999676,
+      "total_seconds": 5.520398183987709,
+      "total_cpu_seconds": 5.729409499999996,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 505325952,
+        "entry_blocks": 93698,
+        "full_matvecs": 36
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 158208,
+        "entry_blocks": 104,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192320,
+        "peak_with_reserve_bytes": 257856,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "core_rhs_solve": 109248,
+          "reduced_rhs": 191336,
+          "Schur_first_pass": 191800,
+          "Schur_vector_update": 116800,
+          "Schur_second_pass": 191040,
+          "CG_vector_update": 115264,
+          "reconstruct_cross": 192320,
+          "reconstruct_vector": 105152,
+          "full_verification": 190176,
+          "natural_true_residual_update": 117568,
+          "natural_order_true_residual": 117568
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            117
+          ],
+          "Schur_first_pass": [
+            7
+          ],
+          "Schur_second_pass": [
+            88
+          ],
+          "reconstruct_cross": [
+            8
+          ],
+          "full_verification": [
+            12
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        620,
+        463,
+        76,
+        674,
+        96,
+        795,
+        251,
+        546,
+        215,
+        255,
+        548,
+        763,
+        224,
+        377,
+        532,
+        617,
+        92,
+        440,
+        106,
+        320,
+        147,
+        631,
+        194,
+        447,
+        41,
+        802,
+        443,
+        822,
+        819,
+        353,
+        333,
+        585,
+        230,
+        529,
+        277,
+        268,
+        42,
+        39,
+        345,
+        399,
+        508,
+        54,
+        675,
+        506,
+        50,
+        332,
+        636,
+        186,
+        412,
+        453,
+        211,
+        228,
+        509,
+        200,
+        296,
+        619,
+        648,
+        485,
+        699,
+        214,
+        404,
+        114,
+        397,
+        430,
+        394,
+        421,
+        159,
+        475,
+        350,
+        72,
+        535,
+        639,
+        524,
+        378,
+        8,
+        405,
+        168,
+        310,
+        552,
+        61,
+        368,
+        519,
+        29,
+        410,
+        578,
+        414,
+        258,
+        246,
+        764,
+        129,
+        580,
+        747,
+        750,
+        452,
+        27
+      ],
+      "selected_indices_sha256": "507ec8688d41b11440bbfc2a6ac231868378937e0a006db5c01d583f6a11b66a",
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 66204,
+      "final_full_buffer_columns": 1,
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 1e-05,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "shared_plain",
+      "status": "cpu_screen_cap",
+      "converged": false,
+      "iterations": 1014,
+      "winner_size": null,
+      "candidate_sizes": [
+        0
+      ],
+      "first_verified_converged_sizes": [],
+      "true_relative_residuals": [
+        0.18922458730894592
+      ],
+      "last_checked_iterations": [
+        1014
+      ],
+      "original_verifications": [
+        51
+      ],
+      "literal_original_kernel_passes": 51,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 1014,
+      "scalar_operator_products": 1014,
+      "setup_seconds": 0.006613803998334333,
+      "setup_cpu_seconds": 0.0012404000000003634,
+      "total_seconds": 7.553086925006937,
+      "total_cpu_seconds": 7.810808799999997,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 713922624,
+        "entry_blocks": 84035,
+        "full_matvecs": 51
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 158208,
+        "entry_blocks": 104,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192104,
+        "peak_with_reserve_bytes": 257640,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_core_triangular_product": 118144,
+          "shared_initial_rhs": 192104,
+          "initial_rhs_copy": 100864,
+          "shared_top_cross": 191856,
+          "shared_bottom_lifted": 187352,
+          "shared_final_arrays": 119872,
+          "CG_vector_update": 119872,
+          "literal_original_kernel_verification": 186584,
+          "original_residual_vector_update": 126464
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            117
+          ],
+          "shared_top_cross": [
+            64,
+            94
+          ],
+          "shared_bottom_lifted": [
+            11
+          ],
+          "literal_original_kernel_verification": [
+            11
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        620,
+        463,
+        76,
+        674,
+        96,
+        795,
+        251,
+        546,
+        215,
+        255,
+        548,
+        763,
+        224,
+        377,
+        532,
+        617,
+        92,
+        440,
+        106,
+        320,
+        147,
+        631,
+        194,
+        447,
+        41,
+        802,
+        443,
+        822,
+        819,
+        353,
+        333,
+        585,
+        230,
+        529,
+        277,
+        268,
+        42,
+        39,
+        345,
+        399,
+        508,
+        54,
+        675,
+        506,
+        50,
+        332,
+        636,
+        186,
+        412,
+        453,
+        211,
+        228,
+        509,
+        200,
+        296,
+        619,
+        648,
+        485,
+        699,
+        214,
+        404,
+        114,
+        397,
+        430,
+        394,
+        421,
+        159,
+        475,
+        350,
+        72,
+        535,
+        639,
+        524,
+        378,
+        8,
+        405,
+        168,
+        310,
+        552,
+        61,
+        368,
+        519,
+        29,
+        410,
+        578,
+        414,
+        258,
+        246,
+        764,
+        129,
+        580,
+        747,
+        750,
+        452,
+        27
+      ],
+      "selected_indices_sha256": "507ec8688d41b11440bbfc2a6ac231868378937e0a006db5c01d583f6a11b66a",
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 66204,
+      "final_full_buffer_columns": 0,
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 1e-05,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "shared_schur",
+      "status": "converged",
+      "converged": true,
+      "iterations": 718,
+      "winner_size": 96,
+      "candidate_sizes": [
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        9.655562969549521e-09
+      ],
+      "last_checked_iterations": [
+        718
+      ],
+      "original_verifications": [
+        36
+      ],
+      "literal_original_kernel_passes": 36,
+      "residual_replacements": [
+        0
+      ],
+      "operator_batches": 718,
+      "scalar_operator_products": 718,
+      "setup_seconds": 0.004781068011652678,
+      "setup_cpu_seconds": 0.0031408999999982257,
+      "total_seconds": 5.246015792014077,
+      "total_cpu_seconds": 5.469901999999998,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 508004992,
+        "entry_blocks": 54680,
+        "full_matvecs": 36
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 158208,
+        "entry_blocks": 104,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192104,
+        "peak_with_reserve_bytes": 257640,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_factor_padded_leading_solve": 109248,
+          "full_core_triangular_product": 115840,
+          "shared_initial_rhs": 192104,
+          "initial_rhs_copy": 100096,
+          "shared_top_cross": 191504,
+          "shared_bottom_lifted": 191712,
+          "shared_final_arrays": 117568,
+          "CG_vector_update": 116032,
+          "verification_reconstruction_cross": 191504,
+          "literal_original_kernel_verification": 190944,
+          "original_residual_vector_update": 124160
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            117
+          ],
+          "shared_top_cross": [
+            66,
+            97
+          ],
+          "shared_bottom_lifted": [
+            12
+          ],
+          "verification_reconstruction_cross": [
+            66,
+            97
+          ],
+          "literal_original_kernel_verification": [
+            12
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        620,
+        463,
+        76,
+        674,
+        96,
+        795,
+        251,
+        546,
+        215,
+        255,
+        548,
+        763,
+        224,
+        377,
+        532,
+        617,
+        92,
+        440,
+        106,
+        320,
+        147,
+        631,
+        194,
+        447,
+        41,
+        802,
+        443,
+        822,
+        819,
+        353,
+        333,
+        585,
+        230,
+        529,
+        277,
+        268,
+        42,
+        39,
+        345,
+        399,
+        508,
+        54,
+        675,
+        506,
+        50,
+        332,
+        636,
+        186,
+        412,
+        453,
+        211,
+        228,
+        509,
+        200,
+        296,
+        619,
+        648,
+        485,
+        699,
+        214,
+        404,
+        114,
+        397,
+        430,
+        394,
+        421,
+        159,
+        475,
+        350,
+        72,
+        535,
+        639,
+        524,
+        378,
+        8,
+        405,
+        168,
+        310,
+        552,
+        61,
+        368,
+        519,
+        29,
+        410,
+        578,
+        414,
+        258,
+        246,
+        764,
+        129,
+        580,
+        747,
+        750,
+        452,
+        27
+      ],
+      "selected_indices_sha256": "507ec8688d41b11440bbfc2a6ac231868378937e0a006db5c01d583f6a11b66a",
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 66204,
+      "final_full_buffer_columns": 1,
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 1e-05,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "race",
+      "status": "converged",
+      "converged": true,
+      "iterations": 714,
+      "winner_size": 96,
+      "candidate_sizes": [
+        0,
+        96
+      ],
+      "first_verified_converged_sizes": [
+        96
+      ],
+      "true_relative_residuals": [
+        0.6440653018514124,
+        8.82916708885335e-09
+      ],
+      "last_checked_iterations": [
+        700,
+        714
+      ],
+      "original_verifications": [
+        35,
+        36
+      ],
+      "literal_original_kernel_passes": 36,
+      "residual_replacements": [
+        0,
+        0
+      ],
+      "operator_batches": 714,
+      "scalar_operator_products": 1428,
+      "setup_seconds": 0.005745057977037504,
+      "setup_cpu_seconds": 0.0,
+      "total_seconds": 6.18484339499264,
+      "total_cpu_seconds": 6.464137599999994,
+      "kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 505325952,
+        "entry_blocks": 91327,
+        "full_matvecs": 71
+      },
+      "setup_kernel_stats": {
+        "column_queries": 96,
+        "entry_evaluations": 158208,
+        "entry_blocks": 104,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 192256,
+        "peak_with_reserve_bytes": 257792,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_core_triangular_product": 148800,
+          "full_factor_padded_leading_solve": 136384,
+          "shared_initial_rhs": 191920,
+          "initial_rhs_copy": 114048,
+          "shared_top_cross": 191904,
+          "shared_bottom_lifted": 192176,
+          "shared_final_arrays": 151296,
+          "CG_vector_update": 143936,
+          "verification_reconstruction_cross": 192256,
+          "literal_original_kernel_verification": 190728,
+          "original_residual_vector_update": 157120
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            107
+          ],
+          "shared_top_cross": [
+            36,
+            54
+          ],
+          "shared_bottom_lifted": [
+            7
+          ],
+          "verification_reconstruction_cross": [
+            36,
+            48,
+            54,
+            72
+          ],
+          "literal_original_kernel_verification": [
+            7,
+            9
+          ]
+        }
+      },
+      "all_core_buffer_aliases": true,
+      "selected_indices": [
+        0,
+        620,
+        463,
+        76,
+        674,
+        96,
+        795,
+        251,
+        546,
+        215,
+        255,
+        548,
+        763,
+        224,
+        377,
+        532,
+        617,
+        92,
+        440,
+        106,
+        320,
+        147,
+        631,
+        194,
+        447,
+        41,
+        802,
+        443,
+        822,
+        819,
+        353,
+        333,
+        585,
+        230,
+        529,
+        277,
+        268,
+        42,
+        39,
+        345,
+        399,
+        508,
+        54,
+        675,
+        506,
+        50,
+        332,
+        636,
+        186,
+        412,
+        453,
+        211,
+        228,
+        509,
+        200,
+        296,
+        619,
+        648,
+        485,
+        699,
+        214,
+        404,
+        114,
+        397,
+        430,
+        394,
+        421,
+        159,
+        475,
+        350,
+        72,
+        535,
+        639,
+        524,
+        378,
+        8,
+        405,
+        168,
+        310,
+        552,
+        61,
+        368,
+        519,
+        29,
+        410,
+        578,
+        414,
+        258,
+        246,
+        764,
+        129,
+        580,
+        747,
+        750,
+        452,
+        27
+      ],
+      "selected_indices_sha256": "507ec8688d41b11440bbfc2a6ac231868378937e0a006db5c01d583f6a11b66a",
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 66204,
+      "final_full_buffer_columns": 1,
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 1e-05,
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    }
+  ],
+  "allocation_audits": [
+    {
+      "mode": "race",
+      "memory": {
+        "named_peak_bytes": 192064,
+        "peak_with_reserve_bytes": 257600,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 121344,
+          "full_factor_padded_leading_solve": 113920,
+          "shared_initial_rhs": 192064,
+          "initial_rhs_copy": 99072,
+          "shared_top_cross": 192016,
+          "shared_bottom_lifted": 189008,
+          "shared_final_arrays": 121344,
+          "CG_vector_update": 116480,
+          "verification_reconstruction_cross": 192016,
+          "literal_original_kernel_verification": 191648,
+          "original_residual_vector_update": 124672
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            116
+          ],
+          "shared_top_cross": [
+            61,
+            128
+          ],
+          "shared_bottom_lifted": [
+            17
+          ],
+          "verification_reconstruction_cross": [
+            61,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            18
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 203228,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8170031657921881,
+        0.21484981961438832
+      ],
+      "dataset": "smooth"
+    },
+    {
+      "mode": "natural_plain",
+      "memory": {
+        "named_peak_bytes": 188752,
+        "peak_with_reserve_bytes": 254288,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 188752,
+          "plain_operator_shift": 20480,
+          "CG_vector_update": 24576,
+          "natural_true_residual_update": 20480
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            42
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 192900,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8170031657921881
+      ],
+      "dataset": "smooth"
+    },
+    {
+      "mode": "natural_schur",
+      "memory": {
+        "named_peak_bytes": 191920,
+        "peak_with_reserve_bytes": 257456,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "core_rhs_solve": 96768,
+          "reduced_rhs": 191384,
+          "Schur_first_pass": 191920,
+          "Schur_vector_update": 99328,
+          "Schur_second_pass": 191184,
+          "CG_vector_update": 97792,
+          "reconstruct_cross": 190000,
+          "reconstruct_vector": 92672,
+          "full_verification": 190392,
+          "natural_true_residual_update": 100096,
+          "natural_order_true_residual": 100096
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            123
+          ],
+          "Schur_first_pass": [
+            22
+          ],
+          "Schur_second_pass": [
+            106
+          ],
+          "reconstruct_cross": [
+            22
+          ],
+          "full_verification": [
+            23
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 199727,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.2148498196146851
+      ],
+      "dataset": "smooth"
+    },
+    {
+      "mode": "shared_plain",
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_core_triangular_product": 103168,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90880,
+          "shared_top_cross": 191984,
+          "shared_bottom_lifted": 190768,
+          "shared_final_arrays": 102400,
+          "CG_vector_update": 102400,
+          "literal_original_kernel_verification": 190000,
+          "original_residual_vector_update": 106496
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            78,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "literal_original_kernel_verification": [
+            22
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 199252,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8170031657921881
+      ],
+      "dataset": "smooth"
+    },
+    {
+      "mode": "shared_schur",
+      "memory": {
+        "named_peak_bytes": 192152,
+        "peak_with_reserve_bytes": 257688,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 8960,
+          "core_assembly": 157696,
+          "inplace_cholesky": 81920,
+          "full_factor_padded_leading_solve": 96768,
+          "full_core_triangular_product": 100864,
+          "shared_initial_rhs": 192152,
+          "initial_rhs_copy": 90112,
+          "shared_top_cross": 191872,
+          "shared_bottom_lifted": 188464,
+          "shared_final_arrays": 100096,
+          "CG_vector_update": 98560,
+          "verification_reconstruction_cross": 191872,
+          "literal_original_kernel_verification": 191864,
+          "original_residual_vector_update": 104192
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            123
+          ],
+          "shared_top_cross": [
+            80,
+            128
+          ],
+          "shared_bottom_lifted": [
+            22
+          ],
+          "verification_reconstruction_cross": [
+            80,
+            128
+          ],
+          "literal_original_kernel_verification": [
+            23
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 200660,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.21484981961437144
+      ],
+      "dataset": "smooth"
+    },
+    {
+      "mode": "race",
+      "memory": {
+        "named_peak_bytes": 192176,
+        "peak_with_reserve_bytes": 257712,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_core_triangular_product": 148800,
+          "full_factor_padded_leading_solve": 136384,
+          "shared_initial_rhs": 191920,
+          "initial_rhs_copy": 114048,
+          "shared_top_cross": 191904,
+          "shared_bottom_lifted": 192176,
+          "shared_final_arrays": 151296,
+          "CG_vector_update": 143936,
+          "verification_reconstruction_cross": 191904,
+          "literal_original_kernel_verification": 190640,
+          "original_residual_vector_update": 157120
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            107
+          ],
+          "shared_top_cross": [
+            36,
+            54
+          ],
+          "shared_bottom_lifted": [
+            7
+          ],
+          "verification_reconstruction_cross": [
+            36,
+            54
+          ],
+          "literal_original_kernel_verification": [
+            7
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 202440,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        1.2457372384100465,
+        0.8246775270684631
+      ],
+      "dataset": "Concrete"
+    },
+    {
+      "mode": "natural_plain",
+      "memory": {
+        "named_peak_bytes": 191368,
+        "peak_with_reserve_bytes": 256904,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 191368,
+          "plain_operator_shift": 32960,
+          "CG_vector_update": 39552,
+          "natural_true_residual_update": 32960
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            25
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 195188,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        1.2457372384100467
+      ],
+      "dataset": "Concrete"
+    },
+    {
+      "mode": "natural_schur",
+      "memory": {
+        "named_peak_bytes": 192320,
+        "peak_with_reserve_bytes": 257856,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "core_rhs_solve": 109248,
+          "reduced_rhs": 191336,
+          "Schur_first_pass": 191800,
+          "Schur_vector_update": 116800,
+          "Schur_second_pass": 191040,
+          "CG_vector_update": 115264,
+          "reconstruct_cross": 192320,
+          "reconstruct_vector": 105152,
+          "full_verification": 190176,
+          "natural_true_residual_update": 117568,
+          "natural_order_true_residual": 117568
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            117
+          ],
+          "Schur_first_pass": [
+            7
+          ],
+          "Schur_second_pass": [
+            88
+          ],
+          "reconstruct_cross": [
+            8
+          ],
+          "full_verification": [
+            12
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 199768,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8246775270684783
+      ],
+      "dataset": "Concrete"
+    },
+    {
+      "mode": "shared_plain",
+      "memory": {
+        "named_peak_bytes": 192104,
+        "peak_with_reserve_bytes": 257640,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_core_triangular_product": 118144,
+          "shared_initial_rhs": 192104,
+          "initial_rhs_copy": 100864,
+          "shared_top_cross": 191856,
+          "shared_bottom_lifted": 187352,
+          "shared_final_arrays": 119872,
+          "CG_vector_update": 119872,
+          "literal_original_kernel_verification": 186584,
+          "original_residual_vector_update": 126464
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            117
+          ],
+          "shared_top_cross": [
+            64,
+            94
+          ],
+          "shared_bottom_lifted": [
+            11
+          ],
+          "literal_original_kernel_verification": [
+            11
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 198992,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        1.2457372384100467
+      ],
+      "dataset": "Concrete"
+    },
+    {
+      "mode": "shared_schur",
+      "memory": {
+        "named_peak_bytes": 192104,
+        "peak_with_reserve_bytes": 257640,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 13952,
+          "core_assembly": 160192,
+          "inplace_cholesky": 84416,
+          "full_factor_padded_leading_solve": 109248,
+          "full_core_triangular_product": 115840,
+          "shared_initial_rhs": 192104,
+          "initial_rhs_copy": 100096,
+          "shared_top_cross": 191504,
+          "shared_bottom_lifted": 191712,
+          "shared_final_arrays": 117568,
+          "CG_vector_update": 116032,
+          "verification_reconstruction_cross": 191504,
+          "literal_original_kernel_verification": 190944,
+          "original_residual_vector_update": 124160
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "shared_initial_rhs": [
+            117
+          ],
+          "shared_top_cross": [
+            66,
+            97
+          ],
+          "shared_bottom_lifted": [
+            12
+          ],
+          "verification_reconstruction_cross": [
+            66,
+            97
+          ],
+          "literal_original_kernel_verification": [
+            12
+          ]
+        }
+      },
+      "tracemalloc_peak_bytes": 200180,
+      "trace_within_budget": true,
+      "all_core_buffer_aliases": true,
+      "verification_relative_residuals": [
+        0.8246775270683206
+      ],
+      "dataset": "Concrete"
+    }
+  ],
+  "validation_sha256": "1b2126bd6764b7c70d4f550468423ab6b48e1522fbc790ae83018221b1b0ec4a",
+  "elapsed_cpu_seconds": 66.3926735,
+  "elapsed_wall_seconds": 64.68833529599942,
+  "allocation_audit_source": "Separate pre-timing validation artifact; same frozen code and shapes, lambda1e-5."
+}

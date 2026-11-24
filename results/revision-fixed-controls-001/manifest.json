@@ -1,0 +1,150 @@
+{
+  "protocol": {
+    "purpose": "Compare established fixed preconditioners before further adaptive development.",
+    "workloads": [
+      {
+        "dataset": "synthetic",
+        "target": "smooth"
+      },
+      {
+        "dataset": "synthetic",
+        "target": "random"
+      },
+      {
+        "dataset": "concrete"
+      },
+      {
+        "dataset": "airfoil"
+      }
+    ],
+    "synthetic_n": 640,
+    "seeds": [
+      0
+    ],
+    "regularization": [
+      0.001
+    ],
+    "repetitions": 1,
+    "solver_defaults": {
+      "checkpoint": 20
+    },
+    "variants": [
+      {
+        "id": "flex_fixed_k16",
+        "method": "flex_fixed",
+        "rank": 16,
+        "history_size": 1
+      },
+      {
+        "id": "flex_spectral_k16",
+        "method": "flex_spectral",
+        "rank": 16,
+        "history_size": 1
+      },
+      {
+        "id": "flex_diagonal_k16",
+        "method": "flex_diagonal",
+        "rank": 16,
+        "history_size": 1
+      },
+      {
+        "id": "flex_fixed_k32",
+        "method": "flex_fixed",
+        "rank": 32,
+        "history_size": 1
+      },
+      {
+        "id": "flex_spectral_k32",
+        "method": "flex_spectral",
+        "rank": 32,
+        "history_size": 1
+      },
+      {
+        "id": "flex_diagonal_k32",
+        "method": "flex_diagonal",
+        "rank": 32,
+        "history_size": 1
+      },
+      {
+        "id": "flex_fixed_k64",
+        "method": "flex_fixed",
+        "rank": 64,
+        "history_size": 1
+      },
+      {
+        "id": "flex_spectral_k64",
+        "method": "flex_spectral",
+        "rank": 64,
+        "history_size": 1
+      },
+      {
+        "id": "flex_diagonal_k64",
+        "method": "flex_diagonal",
+        "rank": 64,
+        "history_size": 1
+      }
+    ],
+    "max_wall_seconds": 175,
+    "run_timeout_seconds": 30
+  },
+  "status": "complete",
+  "source_sha256": {
+    "src/nystrom_project/__init__.py": "160f59e9dc27f2624dd9467757579e986251bd3804b7278e98355a9910564967",
+    "src/nystrom_project/benchmark.py": "7db234a0d6f0e1c3dab88b0fe4b66f19247220c612e9f5d0f86af0ae667df43d",
+    "src/nystrom_project/curvature.py": "d9a768371a2555746bd6fad6105299833fb5a438b05d4fac01dd53b42492c71d",
+    "src/nystrom_project/datasets.py": "c5bce3d8b80f4535c161f064e16250d77654276fb153bafb17c2791feefdb803",
+    "src/nystrom_project/diagnostics.py": "04080c2dfa3dfdf833f6003527dc23cf8ec686fbfad097fbd8aeebd306e1ff92",
+    "src/nystrom_project/exchange.py": "a75af2a4063e7d82cb76af036889fcabd77ad572603198b241908ca49e9868ca",
+    "src/nystrom_project/flexible.py": "96f496589036216bb2fa2d6dba27d81af57ec36c018b5cc0a4d7fbc542d59337",
+    "src/nystrom_project/numerics.py": "27015a3d96632e4547c6faaaa736eb387308cf98ad6020ee6c6d4ffe6f937a0d",
+    "src/nystrom_project/preconditioners.py": "ead09c64373296d4d485494e4adfe295587f0157188d5505e7f2099da8b59638",
+    "src/nystrom_project/revisions.py": "804cb37df519cc7d478f3c18403049f7c6a9db8a60eb3217451a9674ee931713",
+    "src/nystrom_project/solvers.py": "8e4f7c6b0ce9df20f4dedba3abd6f3f721ddd0b6398febb70869e9b5ec73274f",
+    "src/nystrom_project/sweep.py": "c41281181b31358910ec7c1b7386b0c349d7fabbcb3dfe100e6d1773850e175a",
+    "src/nystrom_project/worker.py": "03156abd8fd35015a63f063803228acf3097673b8f66fbca629f10bc2996120a"
+  },
+  "completed_runs": 36,
+  "python": "3.13.12 (main, Feb  4 2026, 09:25:39) [GCC 13.3.0]",
+  "platform": "Linux-5.15.167.4-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "order": [
+    "synthetic-n640-smooth-s0-lambda0.001-flex_spectral_k32-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-flex_diagonal_k32-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-flex_diagonal_k16-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-flex_fixed_k64-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-flex_fixed_k32-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-flex_diagonal_k64-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-flex_spectral_k64-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-flex_fixed_k16-r0",
+    "synthetic-n640-smooth-s0-lambda0.001-flex_spectral_k16-r0",
+    "synthetic-n640-random-s0-lambda0.001-flex_spectral_k32-r0",
+    "synthetic-n640-random-s0-lambda0.001-flex_diagonal_k32-r0",
+    "synthetic-n640-random-s0-lambda0.001-flex_diagonal_k16-r0",
+    "synthetic-n640-random-s0-lambda0.001-flex_fixed_k64-r0",
+    "synthetic-n640-random-s0-lambda0.001-flex_fixed_k32-r0",
+    "synthetic-n640-random-s0-lambda0.001-flex_diagonal_k64-r0",
+    "synthetic-n640-random-s0-lambda0.001-flex_spectral_k64-r0",
+    "synthetic-n640-random-s0-lambda0.001-flex_fixed_k16-r0",
+    "synthetic-n640-random-s0-lambda0.001-flex_spectral_k16-r0",
+    "concrete-observed-s0-lambda0.001-flex_spectral_k32-r0",
+    "concrete-observed-s0-lambda0.001-flex_diagonal_k32-r0",
+    "concrete-observed-s0-lambda0.001-flex_diagonal_k16-r0",
+    "concrete-observed-s0-lambda0.001-flex_fixed_k64-r0",
+    "concrete-observed-s0-lambda0.001-flex_fixed_k32-r0",
+    "concrete-observed-s0-lambda0.001-flex_diagonal_k64-r0",
+    "concrete-observed-s0-lambda0.001-flex_spectral_k64-r0",
+    "concrete-observed-s0-lambda0.001-flex_fixed_k16-r0",
+    "concrete-observed-s0-lambda0.001-flex_spectral_k16-r0",
+    "airfoil-observed-s0-lambda0.001-flex_spectral_k32-r0",
+    "airfoil-observed-s0-lambda0.001-flex_diagonal_k32-r0",
+    "airfoil-observed-s0-lambda0.001-flex_diagonal_k16-r0",
+    "airfoil-observed-s0-lambda0.001-flex_fixed_k64-r0",
+    "airfoil-observed-s0-lambda0.001-flex_fixed_k32-r0",
+    "airfoil-observed-s0-lambda0.001-flex_diagonal_k64-r0",
+    "airfoil-observed-s0-lambda0.001-flex_spectral_k64-r0",
+    "airfoil-observed-s0-lambda0.001-flex_fixed_k16-r0",
+    "airfoil-observed-s0-lambda0.001-flex_spectral_k16-r0"
+  ],
+  "failures": [],
+  "timing": "All setup, updates, kernel products and verification are inside worker solve time. Parent references and worker startup are outside.",
+  "elapsed_wall_seconds": 84.26427186498768
+}

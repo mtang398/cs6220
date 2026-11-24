@@ -1,0 +1,1803 @@
+{
+  "status": "complete",
+  "protocol": {
+    "purpose": "Tiny algebra/trajectory validation and native one-step cost; no full race",
+    "maximum_core": 320,
+    "candidate_pairs": [
+      [
+        256,
+        320
+      ],
+      [
+        0,
+        320
+      ]
+    ],
+    "native_regularization": 0.001,
+    "datasets": [
+      "synthetic-n640-smooth",
+      "concrete-observed"
+    ],
+    "candidate_states": "Independent ordinary reduced-system CG, no cross-trajectory directions or restart",
+    "future_stopping_rule": "First original-system TRUE-converged branch wins; no residual forecast pruning",
+    "array_budget_bytes": 1048576,
+    "reserve_bytes": 65536,
+    "blas_threads": 1,
+    "immutable_inputs": "Original X/b shared; all temporary feature packs counted",
+    "maximum_core_setup_charged": true,
+    "lock": "/tmp/cs6220-project-benchmark.lock",
+    "scope_limit": "No solve-level CPU, convergence, feedback benefit, or novelty claim; full verification schedule is not benchmarked"
+  },
+  "source_sha256": {
+    "scripts/check_shared_schur_action.py": "00d1d2ccae0c17c391c3d4ed6f8e76cf7856c060fb2d0c2d032b2c1154db4b2b",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "observations": [
+    {
+      "mode": "joint",
+      "candidate_sizes": [
+        256,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.01871692799613811,
+      "setup_cpu_seconds": 0.018419500000000033,
+      "step_seconds": 0.0019460380135569721,
+      "step_cpu_seconds": 0.0,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 159744,
+        "entry_blocks": 12,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 327680,
+        "entry_blocks": 332,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978528,
+        "peak_with_reserve_bytes": 1044064,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 10752,
+          "core_assembly": 976896,
+          "inplace_cholesky": 827392,
+          "full_factor_padded_leading_solve": 851456,
+          "full_core_triangular_product": 857088,
+          "shared_initial_rhs": 978528,
+          "initial_rhs_copy": 844288,
+          "shared_top_cross": 977456,
+          "shared_bottom_lifted": 976656,
+          "shared_final_arrays": 857088,
+          "CG_scalar_update": 846336
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            52
+          ],
+          "shared_initial_rhs": [
+            46
+          ],
+          "shared_top_cross": [
+            71
+          ],
+          "shared_bottom_lifted": [
+            29
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68264,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1221.6297482027596,
+          "r_norm": 1.2582948201565018
+        },
+        {
+          "x_norm": 1228.9856773757078,
+          "r_norm": 0.5324833589217136
+        }
+      ],
+      "selected_indices_sha256": "94579c3ee80aefadeaa306319f5af16d6a55673d3efc18bc626963f802b5b313",
+      "dataset": "synthetic-n640-smooth",
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "independent_shared_representation",
+      "candidate_sizes": [
+        256,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.023946468019858003,
+      "setup_cpu_seconds": 0.0155999,
+      "step_seconds": 0.0034681420074775815,
+      "step_cpu_seconds": 0.010367800000000038,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 319488,
+        "entry_blocks": 22,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 327680,
+        "entry_blocks": 332,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978528,
+        "peak_with_reserve_bytes": 1044064,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 10752,
+          "core_assembly": 976896,
+          "inplace_cholesky": 827392,
+          "full_factor_padded_leading_solve": 844800,
+          "full_core_triangular_product": 848896,
+          "shared_initial_rhs": 978528,
+          "initial_rhs_copy": 844288,
+          "shared_top_cross": 978344,
+          "shared_bottom_lifted": 978176,
+          "shared_final_arrays": 846336,
+          "CG_scalar_update": 842240
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            52
+          ],
+          "shared_initial_rhs": [
+            46
+          ],
+          "shared_top_cross": [
+            77
+          ],
+          "shared_bottom_lifted": [
+            32
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68332,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1221.6297482025373,
+          "r_norm": 1.2582948201565387
+        },
+        {
+          "x_norm": 1228.9856773760496,
+          "r_norm": 0.532483358921208
+        }
+      ],
+      "selected_indices_sha256": "94579c3ee80aefadeaa306319f5af16d6a55673d3efc18bc626963f802b5b313",
+      "dataset": "synthetic-n640-smooth",
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "joint",
+      "candidate_sizes": [
+        0,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.021458528004586697,
+      "setup_cpu_seconds": 0.014201800000000042,
+      "step_seconds": 0.002217686007497832,
+      "step_cpu_seconds": 0.010372399999999948,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 159744,
+        "entry_blocks": 12,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 327680,
+        "entry_blocks": 332,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978752,
+        "peak_with_reserve_bytes": 1044288,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 10752,
+          "core_assembly": 976896,
+          "inplace_cholesky": 827392,
+          "full_core_triangular_product": 863232,
+          "full_factor_padded_leading_solve": 857600,
+          "shared_initial_rhs": 978528,
+          "initial_rhs_copy": 846336,
+          "shared_top_cross": 978752,
+          "shared_bottom_lifted": 978624,
+          "shared_final_arrays": 863232,
+          "CG_scalar_update": 856576
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            52
+          ],
+          "shared_initial_rhs": [
+            46
+          ],
+          "shared_top_cross": [
+            68
+          ],
+          "shared_bottom_lifted": [
+            28
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68332,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 0.46747562775105855,
+          "r_norm": 18.48629321126394
+        },
+        {
+          "x_norm": 1228.9856773757078,
+          "r_norm": 0.5324833589217136
+        }
+      ],
+      "selected_indices_sha256": "94579c3ee80aefadeaa306319f5af16d6a55673d3efc18bc626963f802b5b313",
+      "dataset": "synthetic-n640-smooth",
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "independent_shared_representation",
+      "candidate_sizes": [
+        0,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.014863507996778935,
+      "setup_cpu_seconds": 0.006646099999999988,
+      "step_seconds": 0.0032607410103082657,
+      "step_cpu_seconds": 0.010369599999999979,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 319488,
+        "entry_blocks": 24,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 327680,
+        "entry_blocks": 332,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978528,
+        "peak_with_reserve_bytes": 1044064,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 10752,
+          "core_assembly": 976896,
+          "inplace_cholesky": 827392,
+          "full_core_triangular_product": 855040,
+          "full_factor_padded_leading_solve": 850944,
+          "shared_initial_rhs": 978528,
+          "initial_rhs_copy": 846336,
+          "shared_top_cross": 978056,
+          "shared_bottom_lifted": 975984,
+          "shared_final_arrays": 852480,
+          "CG_scalar_update": 852480
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            52
+          ],
+          "shared_initial_rhs": [
+            46
+          ],
+          "shared_top_cross": [
+            73
+          ],
+          "shared_bottom_lifted": [
+            30
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68332,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 0.4674756277510584,
+          "r_norm": 18.486293211263934
+        },
+        {
+          "x_norm": 1228.9856773763788,
+          "r_norm": 0.5324833589209924
+        }
+      ],
+      "selected_indices_sha256": "94579c3ee80aefadeaa306319f5af16d6a55673d3efc18bc626963f802b5b313",
+      "dataset": "synthetic-n640-smooth",
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "shared_representation_singleton",
+      "candidate_sizes": [
+        0
+      ],
+      "maximum_retained_core": 320,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.013871948001906276,
+      "setup_cpu_seconds": 0.01096700000000006,
+      "step_seconds": 0.002014534024056047,
+      "step_cpu_seconds": 0.0,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 159744,
+        "entry_blocks": 12,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 327680,
+        "entry_blocks": 331,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978272,
+        "peak_with_reserve_bytes": 1043808,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 10752,
+          "core_assembly": 976896,
+          "inplace_cholesky": 827392,
+          "full_core_triangular_product": 850432,
+          "shared_initial_rhs": 976768,
+          "initial_rhs_copy": 838144,
+          "shared_top_cross": 978272,
+          "shared_bottom_lifted": 975544,
+          "shared_final_arrays": 847872,
+          "CG_scalar_update": 847872
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            52
+          ],
+          "shared_initial_rhs": [
+            48
+          ],
+          "shared_top_cross": [
+            76
+          ],
+          "shared_bottom_lifted": [
+            31
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68332,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 0.4674756277510584,
+          "r_norm": 18.486293211263934
+        }
+      ],
+      "selected_indices_sha256": "94579c3ee80aefadeaa306319f5af16d6a55673d3efc18bc626963f802b5b313",
+      "dataset": "synthetic-n640-smooth",
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "shared_representation_singleton",
+      "candidate_sizes": [
+        256
+      ],
+      "maximum_retained_core": 320,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.025131444010185078,
+      "setup_cpu_seconds": 0.024270900000000095,
+      "step_seconds": 0.0017807680123951286,
+      "step_cpu_seconds": 0.0,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 159744,
+        "entry_blocks": 10,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 327680,
+        "entry_blocks": 331,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978560,
+        "peak_with_reserve_bytes": 1044096,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 10752,
+          "core_assembly": 976896,
+          "inplace_cholesky": 827392,
+          "full_factor_padded_leading_solve": 840192,
+          "full_core_triangular_product": 844288,
+          "shared_initial_rhs": 976768,
+          "initial_rhs_copy": 836096,
+          "shared_top_cross": 978560,
+          "shared_bottom_lifted": 977736,
+          "shared_final_arrays": 841728,
+          "CG_scalar_update": 837632
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            52
+          ],
+          "shared_initial_rhs": [
+            48
+          ],
+          "shared_top_cross": [
+            80
+          ],
+          "shared_bottom_lifted": [
+            33
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68332,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1221.6297482032699,
+          "r_norm": 1.2582948201563946
+        }
+      ],
+      "selected_indices_sha256": "94579c3ee80aefadeaa306319f5af16d6a55673d3efc18bc626963f802b5b313",
+      "dataset": "synthetic-n640-smooth",
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "shared_representation_singleton",
+      "candidate_sizes": [
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.022367510973708704,
+      "setup_cpu_seconds": 0.01409170000000004,
+      "step_seconds": 0.003504168998915702,
+      "step_cpu_seconds": 0.010382000000000002,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 159744,
+        "entry_blocks": 10,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 327680,
+        "entry_blocks": 331,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978632,
+        "peak_with_reserve_bytes": 1044168,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 10752,
+          "core_assembly": 976896,
+          "inplace_cholesky": 827392,
+          "full_factor_padded_leading_solve": 838656,
+          "full_core_triangular_product": 836608,
+          "shared_initial_rhs": 976768,
+          "initial_rhs_copy": 835584,
+          "shared_top_cross": 978632,
+          "shared_bottom_lifted": 976200,
+          "shared_final_arrays": 840192,
+          "CG_scalar_update": 835072
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            52
+          ],
+          "shared_initial_rhs": [
+            48
+          ],
+          "shared_top_cross": [
+            81
+          ],
+          "shared_bottom_lifted": [
+            33
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68332,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1228.9856773754277,
+          "r_norm": 0.5324833589211119
+        }
+      ],
+      "selected_indices_sha256": "94579c3ee80aefadeaa306319f5af16d6a55673d3efc18bc626963f802b5b313",
+      "dataset": "synthetic-n640-smooth",
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "natural",
+      "candidate_sizes": [
+        0
+      ],
+      "maximum_retained_core": 0,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.00015771400649100542,
+      "setup_cpu_seconds": 0.0,
+      "step_seconds": 0.01007544799358584,
+      "step_cpu_seconds": 0.006795500000000065,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 262144,
+        "entry_blocks": 4,
+        "full_matvecs": 1
+      },
+      "setup_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 0,
+        "entry_blocks": 0,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 541696,
+        "peak_with_reserve_bytes": 607232,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 541696,
+          "CG_scalar_update": 24576
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            128
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68332,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 0.4674756277510586,
+          "r_norm": 18.486293211263945
+        }
+      ],
+      "dataset": "synthetic-n640-smooth",
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "natural",
+      "candidate_sizes": [
+        256
+      ],
+      "maximum_retained_core": 256,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.018763946020044386,
+      "setup_cpu_seconds": 0.016154399999999902,
+      "step_seconds": 0.002569567004684359,
+      "step_cpu_seconds": 0.0,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 196608,
+        "entry_blocks": 6,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 256,
+        "entry_evaluations": 262144,
+        "entry_blocks": 260,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 830464,
+        "peak_with_reserve_bytes": 896000,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 10240,
+          "core_assembly": 806912,
+          "inplace_cholesky": 532480,
+          "core_rhs_solve": 544768,
+          "reduced_rhs": 820224,
+          "Schur_first_pass": 818176,
+          "Schur_vector_update": 544768,
+          "Schur_second_pass": 830464,
+          "CG_scalar_update": 540672
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            128
+          ],
+          "Schur_first_pass": [
+            128
+          ],
+          "Schur_second_pass": [
+            128
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68644,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1221.6297482025107,
+          "r_norm": 1.2582948201561048
+        }
+      ],
+      "selected_indices_sha256": "bb73dafe68f42779d283238ca9b0b4e2551459e02eb61c56815bbad93fae2821",
+      "dataset": "synthetic-n640-smooth",
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "natural",
+      "candidate_sizes": [
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.015112205990590155,
+      "setup_cpu_seconds": 0.008317099999999966,
+      "step_seconds": 0.0016134119941852987,
+      "step_cpu_seconds": 0.0,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 159744,
+        "entry_blocks": 11,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 327680,
+        "entry_blocks": 331,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 977648,
+        "peak_with_reserve_bytes": 1043184,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 10752,
+          "core_assembly": 976896,
+          "inplace_cholesky": 827392,
+          "core_rhs_solve": 838656,
+          "reduced_rhs": 976840,
+          "Schur_first_pass": 977072,
+          "Schur_vector_update": 837632,
+          "Schur_second_pass": 977648,
+          "CG_scalar_update": 832512
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            52
+          ],
+          "reduced_rhs": [
+            49
+          ],
+          "Schur_first_pass": [
+            86
+          ],
+          "Schur_second_pass": [
+            46
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68644,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1228.9856773762422,
+          "r_norm": 0.5324833589215479
+        }
+      ],
+      "selected_indices_sha256": "94579c3ee80aefadeaa306319f5af16d6a55673d3efc18bc626963f802b5b313",
+      "dataset": "synthetic-n640-smooth",
+      "data_sha256": "d8af939ab9147e4afff2e3c8d611399bf0d5b90e3f4d9b01dc923b7814b21717"
+    },
+    {
+      "mode": "joint",
+      "candidate_sizes": [
+        256,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.021278514992445707,
+      "setup_cpu_seconds": 0.022090699999999908,
+      "step_seconds": 0.006038774008629844,
+      "step_cpu_seconds": 0.0,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 576576,
+        "entry_blocks": 56,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 527360,
+        "entry_blocks": 339,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978096,
+        "peak_with_reserve_bytes": 1043632,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 15744,
+          "core_assembly": 976832,
+          "inplace_cholesky": 829888,
+          "full_factor_padded_leading_solve": 873920,
+          "full_core_triangular_product": 884544,
+          "shared_initial_rhs": 978096,
+          "initial_rhs_copy": 859264,
+          "shared_top_cross": 975936,
+          "shared_bottom_lifted": 976416,
+          "shared_final_arrays": 887040,
+          "CG_scalar_update": 873792
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            51
+          ],
+          "shared_initial_rhs": [
+            43
+          ],
+          "shared_top_cross": [
+            16
+          ],
+          "shared_bottom_lifted": [
+            14
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 2467.3753552316402,
+          "r_norm": 7.600884142916199
+        },
+        {
+          "x_norm": 3044.946775215812,
+          "r_norm": 5.451562682701316
+        }
+      ],
+      "selected_indices_sha256": "23c6247f7445d93bf427c2dda3718be9abb1f7789fc0ac0dae85bf3a31ead31d",
+      "dataset": "concrete-observed",
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "independent_shared_representation",
+      "candidate_sizes": [
+        256,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.032242952001979575,
+      "setup_cpu_seconds": 0.025173600000000018,
+      "step_seconds": 0.022878651012433693,
+      "step_cpu_seconds": 0.03111140000000001,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 1153152,
+        "entry_blocks": 98,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 527360,
+        "entry_blocks": 339,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978096,
+        "peak_with_reserve_bytes": 1043632,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 15744,
+          "core_assembly": 976832,
+          "inplace_cholesky": 829888,
+          "full_factor_padded_leading_solve": 864768,
+          "full_core_triangular_product": 871360,
+          "shared_initial_rhs": 978096,
+          "initial_rhs_copy": 859264,
+          "shared_top_cross": 974936,
+          "shared_bottom_lifted": 973888,
+          "shared_final_arrays": 871296,
+          "CG_scalar_update": 867200
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            51
+          ],
+          "shared_initial_rhs": [
+            43
+          ],
+          "shared_top_cross": [
+            19
+          ],
+          "shared_bottom_lifted": [
+            16
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 2467.375355230874,
+          "r_norm": 7.6008841429114655
+        },
+        {
+          "x_norm": 3044.946775217913,
+          "r_norm": 5.451562682704175
+        }
+      ],
+      "selected_indices_sha256": "23c6247f7445d93bf427c2dda3718be9abb1f7789fc0ac0dae85bf3a31ead31d",
+      "dataset": "concrete-observed",
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "joint",
+      "candidate_sizes": [
+        0,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.024035194976022467,
+      "setup_cpu_seconds": 0.02435379999999998,
+      "step_seconds": 0.006010575976688415,
+      "step_cpu_seconds": 0.0,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 576576,
+        "entry_blocks": 61,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 527360,
+        "entry_blocks": 339,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978096,
+        "peak_with_reserve_bytes": 1043632,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 15744,
+          "core_assembly": 976832,
+          "inplace_cholesky": 829888,
+          "full_core_triangular_product": 890688,
+          "full_factor_padded_leading_solve": 880064,
+          "shared_initial_rhs": 978096,
+          "initial_rhs_copy": 861312,
+          "shared_top_cross": 977968,
+          "shared_bottom_lifted": 975888,
+          "shared_final_arrays": 893184,
+          "CG_scalar_update": 884032
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            51
+          ],
+          "shared_initial_rhs": [
+            43
+          ],
+          "shared_top_cross": [
+            15
+          ],
+          "shared_bottom_lifted": [
+            13
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1.2556086041270365,
+          "r_norm": 35.757837441858115
+        },
+        {
+          "x_norm": 3044.946775215812,
+          "r_norm": 5.451562682701316
+        }
+      ],
+      "selected_indices_sha256": "23c6247f7445d93bf427c2dda3718be9abb1f7789fc0ac0dae85bf3a31ead31d",
+      "dataset": "concrete-observed",
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "independent_shared_representation",
+      "candidate_sizes": [
+        0,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.020538623997708783,
+      "setup_cpu_seconds": 0.017713199999999985,
+      "step_seconds": 0.012420568993547931,
+      "step_cpu_seconds": 0.010372200000000165,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 1153152,
+        "entry_blocks": 104,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 527360,
+        "entry_blocks": 339,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978096,
+        "peak_with_reserve_bytes": 1043632,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 15744,
+          "core_assembly": 976832,
+          "inplace_cholesky": 829888,
+          "full_core_triangular_product": 877504,
+          "full_factor_padded_leading_solve": 870912,
+          "shared_initial_rhs": 978096,
+          "initial_rhs_copy": 861312,
+          "shared_top_cross": 976976,
+          "shared_bottom_lifted": 973368,
+          "shared_final_arrays": 877440,
+          "CG_scalar_update": 877440
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            51
+          ],
+          "shared_initial_rhs": [
+            43
+          ],
+          "shared_top_cross": [
+            18
+          ],
+          "shared_bottom_lifted": [
+            15
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1.2556086041270365,
+          "r_norm": 35.757837441858115
+        },
+        {
+          "x_norm": 3044.9467752170212,
+          "r_norm": 5.451562682703068
+        }
+      ],
+      "selected_indices_sha256": "23c6247f7445d93bf427c2dda3718be9abb1f7789fc0ac0dae85bf3a31ead31d",
+      "dataset": "concrete-observed",
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "shared_representation_singleton",
+      "candidate_sizes": [
+        0
+      ],
+      "maximum_retained_core": 320,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.013737883971771225,
+      "setup_cpu_seconds": 0.007780499999999968,
+      "step_seconds": 0.005375287000788376,
+      "step_cpu_seconds": 0.010374299999999836,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 576576,
+        "entry_blocks": 46,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 527360,
+        "entry_blocks": 338,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 977192,
+        "peak_with_reserve_bytes": 1042728,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 15744,
+          "core_assembly": 976832,
+          "inplace_cholesky": 829888,
+          "full_core_triangular_product": 865408,
+          "shared_initial_rhs": 976496,
+          "initial_rhs_copy": 848128,
+          "shared_top_cross": 977192,
+          "shared_bottom_lifted": 974600,
+          "shared_final_arrays": 865344,
+          "CG_scalar_update": 865344
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            51
+          ],
+          "shared_initial_rhs": [
+            46
+          ],
+          "shared_top_cross": [
+            21
+          ],
+          "shared_bottom_lifted": [
+            17
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1.2556086041270365,
+          "r_norm": 35.757837441858115
+        }
+      ],
+      "selected_indices_sha256": "23c6247f7445d93bf427c2dda3718be9abb1f7789fc0ac0dae85bf3a31ead31d",
+      "dataset": "concrete-observed",
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "shared_representation_singleton",
+      "candidate_sizes": [
+        256
+      ],
+      "maximum_retained_core": 320,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.019910414004698396,
+      "setup_cpu_seconds": 0.013923300000000083,
+      "step_seconds": 0.007125290983822197,
+      "step_cpu_seconds": 0.01037559999999993,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 576576,
+        "entry_blocks": 43,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 527360,
+        "entry_blocks": 338,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 976832,
+        "peak_with_reserve_bytes": 1042368,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 15744,
+          "core_assembly": 976832,
+          "inplace_cholesky": 829888,
+          "full_factor_padded_leading_solve": 852672,
+          "full_core_triangular_product": 859264,
+          "shared_initial_rhs": 976496,
+          "initial_rhs_copy": 846080,
+          "shared_top_cross": 975152,
+          "shared_bottom_lifted": 975120,
+          "shared_final_arrays": 859200,
+          "CG_scalar_update": 855104
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            51
+          ],
+          "shared_initial_rhs": [
+            46
+          ],
+          "shared_top_cross": [
+            22
+          ],
+          "shared_bottom_lifted": [
+            18
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 2467.375355230178,
+          "r_norm": 7.600884142905493
+        }
+      ],
+      "selected_indices_sha256": "23c6247f7445d93bf427c2dda3718be9abb1f7789fc0ac0dae85bf3a31ead31d",
+      "dataset": "concrete-observed",
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "shared_representation_singleton",
+      "candidate_sizes": [
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.027053815982071683,
+      "setup_cpu_seconds": 0.0202426,
+      "step_seconds": 0.005330765008693561,
+      "step_cpu_seconds": 0.010373599999999872,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 576576,
+        "entry_blocks": 42,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 527360,
+        "entry_blocks": 338,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 977720,
+        "peak_with_reserve_bytes": 1043256,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 15744,
+          "core_assembly": 976832,
+          "inplace_cholesky": 829888,
+          "full_factor_padded_leading_solve": 851136,
+          "full_core_triangular_product": 841600,
+          "shared_initial_rhs": 976496,
+          "initial_rhs_copy": 845568,
+          "shared_top_cross": 977720,
+          "shared_bottom_lifted": 973584,
+          "shared_final_arrays": 857664,
+          "CG_scalar_update": 852544
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            51
+          ],
+          "shared_initial_rhs": [
+            46
+          ],
+          "shared_top_cross": [
+            23
+          ],
+          "shared_bottom_lifted": [
+            18
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 3044.9467752161677,
+          "r_norm": 5.451562682706704
+        }
+      ],
+      "selected_indices_sha256": "23c6247f7445d93bf427c2dda3718be9abb1f7789fc0ac0dae85bf3a31ead31d",
+      "dataset": "concrete-observed",
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "natural",
+      "candidate_sizes": [
+        0
+      ],
+      "maximum_retained_core": 0,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.00017025400302372873,
+      "setup_cpu_seconds": 0.0,
+      "step_seconds": 0.012289219012018293,
+      "step_cpu_seconds": 0.006937299999999924,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 678976,
+        "entry_blocks": 7,
+        "full_matvecs": 1
+      },
+      "setup_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 0,
+        "entry_blocks": 0,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 871168,
+        "peak_with_reserve_bytes": 936704,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "full_verification": 871168,
+          "CG_scalar_update": 39552
+        },
+        "phase_row_sizes": {
+          "full_verification": [
+            128
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1.2556086041270367,
+          "r_norm": 35.75783744185812
+        }
+      ],
+      "dataset": "concrete-observed",
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "natural",
+      "candidate_sizes": [
+        256
+      ],
+      "maximum_retained_core": 256,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.028411947016138583,
+      "setup_cpu_seconds": 0.022401400000000127,
+      "step_seconds": 0.00614888800191693,
+      "step_cpu_seconds": 0.010363599999999806,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 613440,
+        "entry_blocks": 15,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 256,
+        "entry_evaluations": 421888,
+        "entry_blocks": 263,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 974376,
+        "peak_with_reserve_bytes": 1039912,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 15232,
+          "core_assembly": 809408,
+          "inplace_cholesky": 534976,
+          "core_rhs_solve": 557248,
+          "reduced_rhs": 825216,
+          "Schur_first_pass": 974376,
+          "Schur_vector_update": 562240,
+          "Schur_second_pass": 845440,
+          "CG_scalar_update": 558144
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            128
+          ],
+          "reduced_rhs": [
+            128
+          ],
+          "Schur_first_pass": [
+            85
+          ],
+          "Schur_second_pass": [
+            128
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 2467.3753552298904,
+          "r_norm": 7.600884142915684
+        }
+      ],
+      "selected_indices_sha256": "da2a4628d96d3d51b0c288e03544a9a689506f37403c9993e8d6f7af95efb1b7",
+      "dataset": "concrete-observed",
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    },
+    {
+      "mode": "natural",
+      "candidate_sizes": [
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.015906237007584423,
+      "setup_cpu_seconds": 0.008234999999999992,
+      "step_seconds": 0.005351214000256732,
+      "step_cpu_seconds": 0.010375199999999918,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 576576,
+        "entry_blocks": 46,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 527360,
+        "entry_blocks": 338,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 977736,
+        "peak_with_reserve_bytes": 1043272,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 15744,
+          "core_assembly": 976832,
+          "inplace_cholesky": 829888,
+          "core_rhs_solve": 851136,
+          "reduced_rhs": 976568,
+          "Schur_first_pass": 977736,
+          "Schur_vector_update": 855104,
+          "Schur_second_pass": 976832,
+          "CG_scalar_update": 849984
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            51
+          ],
+          "reduced_rhs": [
+            47
+          ],
+          "Schur_first_pass": [
+            25
+          ],
+          "Schur_second_pass": [
+            40
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 3044.9467752160226,
+          "r_norm": 5.45156268270343
+        }
+      ],
+      "selected_indices_sha256": "23c6247f7445d93bf427c2dda3718be9abb1f7789fc0ac0dae85bf3a31ead31d",
+      "dataset": "concrete-observed",
+      "data_sha256": "3a5d20791aa201c4d1925288fb559718aefae5709c1eca2351c1a33fa49e34b2"
+    }
+  ],
+  "allocation_audits": [
+    {
+      "mode": "joint",
+      "candidate_sizes": [
+        256,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.05971706900163554,
+      "setup_cpu_seconds": 0.05540290000000003,
+      "step_seconds": 0.0032416550093330443,
+      "step_cpu_seconds": 0.0,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 159744,
+        "entry_blocks": 12,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 327680,
+        "entry_blocks": 332,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978528,
+        "peak_with_reserve_bytes": 1044064,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 10752,
+          "core_assembly": 976896,
+          "inplace_cholesky": 827392,
+          "full_factor_padded_leading_solve": 851456,
+          "full_core_triangular_product": 857088,
+          "shared_initial_rhs": 978528,
+          "initial_rhs_copy": 844288,
+          "shared_top_cross": 977456,
+          "shared_bottom_lifted": 976656,
+          "shared_final_arrays": 857088,
+          "CG_scalar_update": 846336
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            52
+          ],
+          "shared_initial_rhs": [
+            46
+          ],
+          "shared_top_cross": [
+            71
+          ],
+          "shared_bottom_lifted": [
+            29
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1221.6297482027596,
+          "r_norm": 1.2582948201565018
+        },
+        {
+          "x_norm": 1228.9856773757078,
+          "r_norm": 0.5324833589217136
+        }
+      ],
+      "selected_indices_sha256": "94579c3ee80aefadeaa306319f5af16d6a55673d3efc18bc626963f802b5b313",
+      "tracemalloc_peak_bytes": 987858,
+      "tracemalloc_current_bytes": 842259,
+      "trace_within_1MiB": true,
+      "untimed_allocation_audit": true,
+      "dataset": "synthetic-n640-smooth"
+    },
+    {
+      "mode": "joint",
+      "candidate_sizes": [
+        0,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 512,
+      "regularization": 0.001,
+      "setup_seconds": 0.0257942290045321,
+      "setup_cpu_seconds": 0.024619900000000028,
+      "step_seconds": 0.0028587569831870496,
+      "step_cpu_seconds": 0.0,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 159744,
+        "entry_blocks": 12,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 327680,
+        "entry_blocks": 332,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978752,
+        "peak_with_reserve_bytes": 1044288,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 10752,
+          "core_assembly": 976896,
+          "inplace_cholesky": 827392,
+          "full_core_triangular_product": 863232,
+          "full_factor_padded_leading_solve": 857600,
+          "shared_initial_rhs": 978528,
+          "initial_rhs_copy": 846336,
+          "shared_top_cross": 978752,
+          "shared_bottom_lifted": 978624,
+          "shared_final_arrays": 863232,
+          "CG_scalar_update": 856576
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            52
+          ],
+          "shared_initial_rhs": [
+            46
+          ],
+          "shared_top_cross": [
+            68
+          ],
+          "shared_bottom_lifted": [
+            28
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 36864,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 0.46747562775105855,
+          "r_norm": 18.48629321126394
+        },
+        {
+          "x_norm": 1228.9856773757078,
+          "r_norm": 0.5324833589217136
+        }
+      ],
+      "selected_indices_sha256": "94579c3ee80aefadeaa306319f5af16d6a55673d3efc18bc626963f802b5b313",
+      "tracemalloc_peak_bytes": 988778,
+      "tracemalloc_current_bytes": 847859,
+      "trace_within_1MiB": true,
+      "untimed_allocation_audit": true,
+      "dataset": "synthetic-n640-smooth"
+    },
+    {
+      "mode": "joint",
+      "candidate_sizes": [
+        256,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.03477007400942966,
+      "setup_cpu_seconds": 0.026058799999999938,
+      "step_seconds": 0.009438692999538034,
+      "step_cpu_seconds": 0.010375000000000023,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 576576,
+        "entry_blocks": 56,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 527360,
+        "entry_blocks": 339,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978096,
+        "peak_with_reserve_bytes": 1043632,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 15744,
+          "core_assembly": 976832,
+          "inplace_cholesky": 829888,
+          "full_factor_padded_leading_solve": 873920,
+          "full_core_triangular_product": 884544,
+          "shared_initial_rhs": 978096,
+          "initial_rhs_copy": 859264,
+          "shared_top_cross": 975936,
+          "shared_bottom_lifted": 976416,
+          "shared_final_arrays": 887040,
+          "CG_scalar_update": 873792
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            51
+          ],
+          "shared_initial_rhs": [
+            43
+          ],
+          "shared_top_cross": [
+            16
+          ],
+          "shared_bottom_lifted": [
+            14
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 2467.3753552316402,
+          "r_norm": 7.600884142916199
+        },
+        {
+          "x_norm": 3044.946775215812,
+          "r_norm": 5.451562682701316
+        }
+      ],
+      "selected_indices_sha256": "23c6247f7445d93bf427c2dda3718be9abb1f7789fc0ac0dae85bf3a31ead31d",
+      "tracemalloc_peak_bytes": 985182,
+      "tracemalloc_current_bytes": 858935,
+      "trace_within_1MiB": true,
+      "untimed_allocation_audit": true,
+      "dataset": "concrete-observed"
+    },
+    {
+      "mode": "joint",
+      "candidate_sizes": [
+        0,
+        320
+      ],
+      "maximum_retained_core": 320,
+      "n": 824,
+      "regularization": 0.001,
+      "setup_seconds": 0.02683503701700829,
+      "setup_cpu_seconds": 0.026194900000000132,
+      "step_seconds": 0.009458176995394751,
+      "step_cpu_seconds": 0.010373799999999989,
+      "step_kernel_stats": {
+        "column_queries": 0,
+        "entry_evaluations": 576576,
+        "entry_blocks": 61,
+        "full_matvecs": 0
+      },
+      "setup_kernel_stats": {
+        "column_queries": 320,
+        "entry_evaluations": 527360,
+        "entry_blocks": 339,
+        "full_matvecs": 0
+      },
+      "memory": {
+        "named_peak_bytes": 978096,
+        "peak_with_reserve_bytes": 1043632,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 15744,
+          "core_assembly": 976832,
+          "inplace_cholesky": 829888,
+          "full_core_triangular_product": 890688,
+          "full_factor_padded_leading_solve": 880064,
+          "shared_initial_rhs": 978096,
+          "initial_rhs_copy": 861312,
+          "shared_top_cross": 977968,
+          "shared_bottom_lifted": 975888,
+          "shared_final_arrays": 893184,
+          "CG_scalar_update": 884032
+        },
+        "phase_row_sizes": {
+          "core_assembly": [
+            51
+          ],
+          "shared_initial_rhs": [
+            43
+          ],
+          "shared_top_cross": [
+            15
+          ],
+          "shared_bottom_lifted": [
+            13
+          ]
+        }
+      },
+      "common_immutable_input_bytes": 59328,
+      "process_peak_rss_kib": 68908,
+      "all_core_buffer_aliases": true,
+      "factor_buffer_alias": true,
+      "states_after_step": [
+        {
+          "x_norm": 1.2556086041270365,
+          "r_norm": 35.757837441858115
+        },
+        {
+          "x_norm": 3044.946775215812,
+          "r_norm": 5.451562682701316
+        }
+      ],
+      "selected_indices_sha256": "23c6247f7445d93bf427c2dda3718be9abb1f7789fc0ac0dae85bf3a31ead31d",
+      "tracemalloc_peak_bytes": 986174,
+      "tracemalloc_current_bytes": 864751,
+      "trace_within_1MiB": true,
+      "untimed_allocation_audit": true,
+      "dataset": "concrete-observed"
+    }
+  ],
+  "independent_validation": {
+    "generic_SPD_padded_solve_relative_errors": [
+      0.0,
+      1.192550808850333e-16,
+      6.829489696993896e-15,
+      2.47555933002412e-16
+    ],
+    "padded_tail_norms": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "padded_buffer_aliases": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "kernel_checks": [
+      {
+        "regularization": 0.001,
+        "action_relative_error": 1.836898376895162e-15,
+        "reduced_rhs_relative_error": 1.507904886594127e-15,
+        "prefix8_relative_errors": [
+          2.6014013856949125e-15,
+          2.411272425319324e-15,
+          6.61937835118377e-15,
+          8.03088362995685e-15,
+          8.787040507175552e-15,
+          1.5638253875600878e-14,
+          2.9044486381396404e-13,
+          3.1000600756369336e-12
+        ],
+        "queried_entries_per_joint_action": 1357,
+        "formula_entries": 1357,
+        "all_full_factor_BLAS_and_solve_buffers_alias": true
+      },
+      {
+        "regularization": 1e-05,
+        "action_relative_error": 2.9144116641324156e-15,
+        "reduced_rhs_relative_error": 8.156436866509324e-16,
+        "prefix8_relative_errors": [
+          9.30168804170842e-16,
+          1.921031268038451e-15,
+          5.41032058605358e-15,
+          9.897271470315795e-15,
+          1.423975188730111e-14,
+          9.57835267103253e-14,
+          1.3681587149198498e-12,
+          2.4438747673650743e-11
+        ],
+        "queried_entries_per_joint_action": 1357,
+        "formula_entries": 1357,
+        "all_full_factor_BLAS_and_solve_buffers_alias": true
+      }
+    ]
+  },
+  "elapsed_cpu_seconds": 0.7791871000000001,
+  "elapsed_wall_seconds": 1.7905256089870818
+}

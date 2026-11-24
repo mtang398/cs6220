@@ -1,0 +1,172 @@
+{
+  "status": "complete",
+  "source_sha256": "8355790406dcbc3c331ea6d2cecf6a10bec9f7a5e691502310e7ced4077c6c17",
+  "protocol": {
+    "cores": [
+      416,
+      600
+    ],
+    "regularizations": [
+      0.001,
+      1e-05
+    ],
+    "rtol": 1e-08,
+    "core_refinement_products": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "endpoint": "Literal original full residual checked each step, including reconstruction; initial reduced-only endpoint attempt failed assert and produced no result file",
+    "scope": "Exact dense core solves and setup free; only kernel-entry headroom, no native-memory/time/approximateconvergence claim",
+    "entry_model": "iterations*(n\u00b2\u2212m\u00b2+j*m\u00b2), j regenerated core products eachSchur action; ignore extra RHS/reconstruction refinement"
+  },
+  "runs": [
+    {
+      "dataset": "smooth",
+      "regularization": 0.001,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "exact_core416": {
+        "iterations": 27,
+        "converged": true,
+        "true_relative_residual": 6.929289528731435e-09
+      },
+      "exact_core600": {
+        "iterations": 20,
+        "converged": true,
+        "true_relative_residual": 9.295085637655218e-09
+      },
+      "break_even_core_products_per_action": 4.428835555555555,
+      "query_ratios": {
+        "1": 0.7726188118344981,
+        "2": 0.8389332163841968,
+        "3": 0.9052476209338954,
+        "4": 0.9715620254835942
+      },
+      "retained_packed_fp32_core600_bytes": 721200,
+      "retained_packed_fp64_core416_bytes": 693888
+    },
+    {
+      "dataset": "smooth",
+      "regularization": 1e-05,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "exact_core416": {
+        "iterations": 73,
+        "converged": true,
+        "true_relative_residual": 8.995401528735412e-09
+      },
+      "exact_core600": {
+        "iterations": 40,
+        "converged": true,
+        "true_relative_residual": 7.4432912905412975e-09
+      },
+      "break_even_core_products_per_action": 9.734648888888888,
+      "query_ratios": {
+        "1": 0.5715262443707246,
+        "2": 0.620580735407488,
+        "3": 0.6696352264442514,
+        "4": 0.7186897174810148
+      },
+      "retained_packed_fp32_core600_bytes": 721200,
+      "retained_packed_fp64_core416_bytes": 693888
+    },
+    {
+      "dataset": "random",
+      "regularization": 0.001,
+      "data_sha256": "d57f4bf47494e33f8714c7d9ce2e01420cb2f972a5fe7f904964f1b28b8885a4",
+      "exact_core416": {
+        "iterations": 31,
+        "converged": true,
+        "true_relative_residual": 4.0775186356943784e-09
+      },
+      "exact_core600": {
+        "iterations": 22,
+        "converged": true,
+        "true_relative_residual": 8.917014958561131e-09
+      },
+      "break_even_core_products_per_action": 5.088888888888889,
+      "query_ratios": {
+        "1": 0.7402186681124062,
+        "2": 0.8037521460196982,
+        "3": 0.8672856239269902,
+        "4": 0.9308191018342821
+      },
+      "retained_packed_fp32_core600_bytes": 721200,
+      "retained_packed_fp64_core416_bytes": 693888
+    },
+    {
+      "dataset": "random",
+      "regularization": 1e-05,
+      "data_sha256": "d57f4bf47494e33f8714c7d9ce2e01420cb2f972a5fe7f904964f1b28b8885a4",
+      "exact_core416": {
+        "iterations": 84,
+        "converged": true,
+        "true_relative_residual": 9.753191764565665e-09
+      },
+      "exact_core600": {
+        "iterations": 45,
+        "converged": true,
+        "true_relative_residual": 9.85108314952534e-09
+      },
+      "break_even_core_products_per_action": 10.20007111111111,
+      "query_ratios": {
+        "1": 0.5587689621303067,
+        "2": 0.6067284868492852,
+        "3": 0.6546880115682636,
+        "4": 0.7026475362872422
+      },
+      "retained_packed_fp32_core600_bytes": 721200,
+      "retained_packed_fp64_core416_bytes": 693888
+    },
+    {
+      "dataset": "mixed",
+      "regularization": 0.001,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "exact_core416": {
+        "iterations": 29,
+        "converged": true,
+        "true_relative_residual": 7.461004146430364e-09
+      },
+      "exact_core600": {
+        "iterations": 22,
+        "converged": true,
+        "true_relative_residual": 4.838136354773947e-09
+      },
+      "break_even_core_products_per_action": 4.073422222222222,
+      "query_ratios": {
+        "1": 0.7912682314305033,
+        "2": 0.8591833285038153,
+        "3": 0.9270984255771274,
+        "4": 0.9950135226504395
+      },
+      "retained_packed_fp32_core600_bytes": 721200,
+      "retained_packed_fp64_core416_bytes": 693888
+    },
+    {
+      "dataset": "mixed",
+      "regularization": 1e-05,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "exact_core416": {
+        "iterations": 67,
+        "converged": true,
+        "true_relative_residual": 7.747260817659138e-09
+      },
+      "exact_core600": {
+        "iterations": 36,
+        "converged": true,
+        "true_relative_residual": 7.036040926366196e-09
+      },
+      "break_even_core_products_per_action": 10.138014814814815,
+      "query_ratios": {
+        "1": 0.560436929181442,
+        "2": 0.6085396166607756,
+        "3": 0.6566423041401093,
+        "4": 0.7047449916194429
+      },
+      "retained_packed_fp32_core600_bytes": 721200,
+      "retained_packed_fp64_core416_bytes": 693888
+    }
+  ],
+  "elapsed_wall_seconds": 3.431694726983551,
+  "elapsed_cpu_seconds": 3.2966207
+}

@@ -1,0 +1,225 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_hss_spectrum.py": "363ff46de4c0fe0097fda71e7a9279cf42e0a8352392d444fc0bcd55541e7ea6",
+    "scripts/check_scaled_hss_headroom.py": "00227d4d162d92411357ceeb7bbc5e891bdb1bbd4fe7c942653eea0c7d30eaf0",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "protocol": {
+    "question": "Are failures explained by a few isolated generalized eigenvalues or a broad spectrum?",
+    "scope": "Exact dense generalized eigenanalysis of the previous four development cases. No runtime, memory feasibility, or adaptive-method claim.",
+    "spectral_correction": "Replace r extreme eigenvalues in an exact generalized eigenbasis. Minimum remaining condition number is min_j lambda[j+n-r-1]/lambda[j]. This does not optimize CG iterations.",
+    "budgets": "120 wall seconds, 80 CPU seconds, BLAS1; charged to existing campaign"
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "n": 2048,
+      "rank": 10,
+      "relative_matrix_error": 0.06133637017830641,
+      "eigenvalue_quantiles": {
+        "min": 3.2621359629642787e-06,
+        "p1": 1.679257282298487e-05,
+        "p10": 0.000490311322560898,
+        "median": 0.029010824422974146,
+        "p90": 0.9453649521203585,
+        "p99": 32.77919664076031,
+        "max": 40.440187158080725
+      },
+      "ideal_spectral_corrections": {
+        "0": {
+          "best_condition_number": 12396842.932730807,
+          "remove_low": 0,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.0,
+          "dense_vector_storage_lower_bound_bytes": 0
+        },
+        "4": {
+          "best_condition_number": 4506188.098801122,
+          "remove_low": 4,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.008083354949805022,
+          "dense_vector_storage_lower_bound_bytes": 65536
+        },
+        "16": {
+          "best_condition_number": 2915733.7779101133,
+          "remove_low": 16,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.014795886806959375,
+          "dense_vector_storage_lower_bound_bytes": 262144
+        },
+        "32": {
+          "best_condition_number": 1363625.287200914,
+          "remove_low": 31,
+          "remove_high": 1,
+          "removed_initial_energy_fraction": 0.024320571180664087,
+          "dense_vector_storage_lower_bound_bytes": 524288
+        }
+      },
+      "minimum_eigenmode_replacements_for_condition_number": {
+        "10": 1380,
+        "100": 860,
+        "1000": 500
+      },
+      "initial_energy_fraction_below_0_1": 0.8024271281113047,
+      "initial_energy_fraction_above_10": 0.003398143761795413
+    },
+    {
+      "dataset": "mixed",
+      "n": 2048,
+      "rank": 10,
+      "relative_matrix_error": 0.06133637017830641,
+      "eigenvalue_quantiles": {
+        "min": 3.2621359629642787e-06,
+        "p1": 1.679257282298487e-05,
+        "p10": 0.000490311322560898,
+        "median": 0.029010824422974146,
+        "p90": 0.9453649521203585,
+        "p99": 32.77919664076031,
+        "max": 40.440187158080725
+      },
+      "ideal_spectral_corrections": {
+        "0": {
+          "best_condition_number": 12396842.932730807,
+          "remove_low": 0,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.0,
+          "dense_vector_storage_lower_bound_bytes": 0
+        },
+        "4": {
+          "best_condition_number": 4506188.098801122,
+          "remove_low": 4,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 6.139718513136149e-06,
+          "dense_vector_storage_lower_bound_bytes": 65536
+        },
+        "16": {
+          "best_condition_number": 2915733.7779101133,
+          "remove_low": 16,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.0005103249065764218,
+          "dense_vector_storage_lower_bound_bytes": 262144
+        },
+        "32": {
+          "best_condition_number": 1363625.287200914,
+          "remove_low": 31,
+          "remove_high": 1,
+          "removed_initial_energy_fraction": 0.0009405679205531264,
+          "dense_vector_storage_lower_bound_bytes": 524288
+        }
+      },
+      "minimum_eigenmode_replacements_for_condition_number": {
+        "10": 1380,
+        "100": 860,
+        "1000": 500
+      },
+      "initial_energy_fraction_below_0_1": 0.2709369740464713,
+      "initial_energy_fraction_above_10": 0.0007096262837922922
+    },
+    {
+      "dataset": "Concrete",
+      "n": 824,
+      "rank": 19,
+      "relative_matrix_error": 0.022457372776791253,
+      "eigenvalue_quantiles": {
+        "min": 2.2904911449263705e-05,
+        "p1": 0.00015301588627634238,
+        "p10": 0.0025456577988879742,
+        "median": 0.445060243969574,
+        "p90": 2.32020161019266,
+        "p99": 10.239468903088431,
+        "max": 12.317447289203065
+      },
+      "ideal_spectral_corrections": {
+        "0": {
+          "best_condition_number": 537764.4579193087,
+          "remove_low": 0,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.0,
+          "dense_vector_storage_lower_bound_bytes": 0
+        },
+        "4": {
+          "best_condition_number": 184996.040290188,
+          "remove_low": 4,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.001229996519890146,
+          "dense_vector_storage_lower_bound_bytes": 26368
+        },
+        "16": {
+          "best_condition_number": 53869.13459789305,
+          "remove_low": 16,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.029679032764496804,
+          "dense_vector_storage_lower_bound_bytes": 105472
+        },
+        "32": {
+          "best_condition_number": 25297.877034001845,
+          "remove_low": 32,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.057395177550249574,
+          "dense_vector_storage_lower_bound_bytes": 210944
+        }
+      },
+      "minimum_eigenmode_replacements_for_condition_number": {
+        "10": 430,
+        "100": 274,
+        "1000": 147
+      },
+      "initial_energy_fraction_below_0_1": 0.3888232221246552,
+      "initial_energy_fraction_above_10": 9.828768535341473e-05
+    },
+    {
+      "dataset": "Airfoil",
+      "n": 1202,
+      "rank": 13,
+      "relative_matrix_error": 0.055868845477630456,
+      "eigenvalue_quantiles": {
+        "min": 2.437808701050268e-06,
+        "p1": 3.773619285773429e-05,
+        "p10": 0.0016003795587217135,
+        "median": 0.8802746067461027,
+        "p90": 1.2210830895389342,
+        "p99": 13.564172503584828,
+        "max": 22.57383391906283
+      },
+      "ideal_spectral_corrections": {
+        "0": {
+          "best_condition_number": 9259887.336253032,
+          "remove_low": 0,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.0,
+          "dense_vector_storage_lower_bound_bytes": 0
+        },
+        "4": {
+          "best_condition_number": 1426818.7159156117,
+          "remove_low": 4,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.029247788376645226,
+          "dense_vector_storage_lower_bound_bytes": 38464
+        },
+        "16": {
+          "best_condition_number": 431267.81438194483,
+          "remove_low": 16,
+          "remove_high": 0,
+          "removed_initial_energy_fraction": 0.0864373043563158,
+          "dense_vector_storage_lower_bound_bytes": 153856
+        },
+        "32": {
+          "best_condition_number": 154725.36991141486,
+          "remove_low": 28,
+          "remove_high": 4,
+          "removed_initial_energy_fraction": 0.11214094706840083,
+          "dense_vector_storage_lower_bound_bytes": 307712
+        }
+      },
+      "minimum_eigenmode_replacements_for_condition_number": {
+        "10": 493,
+        "100": 333,
+        "1000": 202
+      },
+      "initial_energy_fraction_below_0_1": 0.44683640907280925,
+      "initial_energy_fraction_above_10": 0.00039326875445910994
+    }
+  ],
+  "elapsed_wall_seconds": 15.083608548040502
+}

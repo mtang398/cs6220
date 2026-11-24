@@ -1,0 +1,332 @@
+{
+  "scope": "One seed0 pilot at256KiB, six cases, one observation each; no confirmation or novelty claim.",
+  "result_sha256": "bf34ca93444a76a64fd031e623dfb91366432bf1b20c497bb77daf2853640f44",
+  "validation_sha256": "1b2126bd6764b7c70d4f550468423ab6b48e1522fbc790ae83018221b1b0ec4a",
+  "source_sha256": {
+    "scripts/check_shared_schur_race.py": "aa3802aed7ccc08fc9ccfe10c4819cb8afc184c6a5cce5ea89ac110db95cdc9b",
+    "scripts/check_shared_schur_action.py": "00d1d2ccae0c17c391c3d4ed6f8e76cf7856c060fb2d0c2d032b2c1154db4b2b",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959"
+  },
+  "aggregate": {
+    "natural_plain": {
+      "cases": 6,
+      "converged": 4,
+      "observed_wall_seconds": 19.039600208983757,
+      "observed_cpu_seconds": 19.9005244,
+      "is_total_completion_time": false
+    },
+    "natural_schur": {
+      "cases": 6,
+      "converged": 6,
+      "observed_wall_seconds": 7.859637545974692,
+      "observed_cpu_seconds": 8.1601614,
+      "is_total_completion_time": true
+    },
+    "shared_plain": {
+      "cases": 6,
+      "converged": 4,
+      "observed_wall_seconds": 20.866602977970615,
+      "observed_cpu_seconds": 21.514122999999994,
+      "is_total_completion_time": false
+    },
+    "shared_schur": {
+      "cases": 6,
+      "converged": 6,
+      "observed_wall_seconds": 7.610415848001139,
+      "observed_cpu_seconds": 7.893124300000003,
+      "is_total_completion_time": true
+    },
+    "race": {
+      "cases": 6,
+      "converged": 6,
+      "observed_wall_seconds": 8.399932308035204,
+      "observed_cpu_seconds": 8.749318299999988,
+      "is_total_completion_time": true
+    }
+  },
+  "per_case": [
+    {
+      "dataset": "smooth",
+      "regularization": 0.001,
+      "winner_size": 96,
+      "iterations": 44,
+      "race_seconds": 0.14008331499644555,
+      "race_cpu_seconds": 0.13892649999999973,
+      "winner_true_relative_residual": 9.142380030290178e-09,
+      "comparisons": {
+        "natural_plain": {
+          "reference_status": "converged",
+          "reference_seconds": 0.9389734249853063,
+          "reference_iterations": 391,
+          "completion_wall_ratio": 0.14918773127007046
+        },
+        "natural_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 0.13208137301262468,
+          "reference_iterations": 44,
+          "completion_wall_ratio": 1.0605834252120927
+        },
+        "shared_plain": {
+          "reference_status": "converged",
+          "reference_seconds": 1.0790820449765306,
+          "reference_iterations": 391,
+          "completion_wall_ratio": 0.12981711228407317
+        },
+        "shared_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 0.1290040379972197,
+          "reference_iterations": 44,
+          "completion_wall_ratio": 1.0858831798696458
+        }
+      },
+      "best_observed_completed_singleton": "shared_schur",
+      "race_over_best_observed_completed_singleton": 1.0858831798696458
+    },
+    {
+      "dataset": "smooth",
+      "regularization": 1e-05,
+      "winner_size": 96,
+      "iterations": 297,
+      "race_seconds": 0.9314447200158611,
+      "race_cpu_seconds": 0.9645124999999979,
+      "winner_true_relative_residual": 9.90157298759211e-09,
+      "comparisons": {
+        "natural_plain": {
+          "reference_status": "maxiter",
+          "reference_seconds": 6.13048648100812,
+          "reference_iterations": 2500,
+          "completion_wall_ratio": null,
+          "censoring_limit": "This elapsed time covers an incomplete run; no completed-solve ratio is assigned."
+        },
+        "natural_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 0.8400764119869564,
+          "reference_iterations": 296,
+          "completion_wall_ratio": 1.1087619015665486
+        },
+        "shared_plain": {
+          "reference_status": "maxiter",
+          "reference_seconds": 7.107011526997667,
+          "reference_iterations": 2500,
+          "completion_wall_ratio": null,
+          "censoring_limit": "This elapsed time covers an incomplete run; no completed-solve ratio is assigned."
+        },
+        "shared_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 0.8355281219992321,
+          "reference_iterations": 295,
+          "completion_wall_ratio": 1.1147975699335195
+        }
+      },
+      "best_observed_completed_singleton": "shared_schur",
+      "race_over_best_observed_completed_singleton": 1.1147975699335195
+    },
+    {
+      "dataset": "mixed",
+      "regularization": 0.001,
+      "winner_size": 96,
+      "iterations": 42,
+      "race_seconds": 0.18408466601977125,
+      "race_cpu_seconds": 0.18652409999999975,
+      "winner_true_relative_residual": 7.343483033397629e-09,
+      "comparisons": {
+        "natural_plain": {
+          "reference_status": "converged",
+          "reference_seconds": 0.11718952999217436,
+          "reference_iterations": 46,
+          "completion_wall_ratio": 1.570828605866616
+        },
+        "natural_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 0.11344095997628756,
+          "reference_iterations": 41,
+          "completion_wall_ratio": 1.6227354392826918
+        },
+        "shared_plain": {
+          "reference_status": "converged",
+          "reference_seconds": 0.1410435079887975,
+          "reference_iterations": 48,
+          "completion_wall_ratio": 1.305162276837246
+        },
+        "shared_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 0.1266978299827315,
+          "reference_iterations": 42,
+          "completion_wall_ratio": 1.4529425329925651
+        }
+      },
+      "best_observed_completed_singleton": "natural_schur",
+      "race_over_best_observed_completed_singleton": 1.6227354392826918
+    },
+    {
+      "dataset": "mixed",
+      "regularization": 1e-05,
+      "winner_size": 0,
+      "iterations": 48,
+      "race_seconds": 0.16383933500037529,
+      "race_cpu_seconds": 0.16936199999999957,
+      "winner_true_relative_residual": 6.3441532482473355e-09,
+      "comparisons": {
+        "natural_plain": {
+          "reference_status": "converged",
+          "reference_seconds": 0.12163424299797043,
+          "reference_iterations": 49,
+          "completion_wall_ratio": 1.3469836368621053
+        },
+        "natural_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 0.5898518419999164,
+          "reference_iterations": 218,
+          "completion_wall_ratio": 0.27776353879793175
+        },
+        "shared_plain": {
+          "reference_status": "converged",
+          "reference_seconds": 0.13304230300127529,
+          "reference_iterations": 47,
+          "completion_wall_ratio": 1.2314830043103266
+        },
+        "shared_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 0.6230701820168179,
+          "reference_iterations": 216,
+          "completion_wall_ratio": 0.26295486404122764
+        }
+      },
+      "best_observed_completed_singleton": "natural_plain",
+      "race_over_best_observed_completed_singleton": 1.3469836368621053
+    },
+    {
+      "dataset": "Concrete",
+      "regularization": 0.001,
+      "winner_size": 96,
+      "iterations": 90,
+      "race_seconds": 0.7956368770101108,
+      "race_cpu_seconds": 0.825855599999997,
+      "winner_true_relative_residual": 8.593693097485601e-09,
+      "comparisons": {
+        "natural_plain": {
+          "reference_status": "converged",
+          "reference_seconds": 4.201130916015245,
+          "reference_iterations": 677,
+          "completion_wall_ratio": 0.18938635641585028
+        },
+        "natural_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 0.6637887750111986,
+          "reference_iterations": 89,
+          "completion_wall_ratio": 1.1986296047213028
+        },
+        "shared_plain": {
+          "reference_status": "converged",
+          "reference_seconds": 4.853336669999408,
+          "reference_iterations": 671,
+          "completion_wall_ratio": 0.16393605700760255
+        },
+        "shared_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 0.6500998839910608,
+          "reference_iterations": 89,
+          "completion_wall_ratio": 1.223868664805132
+        }
+      },
+      "best_observed_completed_singleton": "shared_schur",
+      "race_over_best_observed_completed_singleton": 1.223868664805132
+    },
+    {
+      "dataset": "Concrete",
+      "regularization": 1e-05,
+      "winner_size": 96,
+      "iterations": 714,
+      "race_seconds": 6.18484339499264,
+      "race_cpu_seconds": 6.464137599999994,
+      "winner_true_relative_residual": 8.82916708885335e-09,
+      "comparisons": {
+        "natural_plain": {
+          "reference_status": "cpu_screen_cap",
+          "reference_seconds": 7.530185613984941,
+          "reference_iterations": 1169,
+          "completion_wall_ratio": null,
+          "censoring_limit": "This elapsed time covers an incomplete run; no completed-solve ratio is assigned."
+        },
+        "natural_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 5.520398183987709,
+          "reference_iterations": 714,
+          "completion_wall_ratio": 1.1203618269660693
+        },
+        "shared_plain": {
+          "reference_status": "cpu_screen_cap",
+          "reference_seconds": 7.553086925006937,
+          "reference_iterations": 1014,
+          "completion_wall_ratio": null,
+          "censoring_limit": "This elapsed time covers an incomplete run; no completed-solve ratio is assigned."
+        },
+        "shared_schur": {
+          "reference_status": "converged",
+          "reference_seconds": 5.246015792014077,
+          "reference_iterations": 718,
+          "completion_wall_ratio": 1.1789601175825137
+        }
+      },
+      "best_observed_completed_singleton": "shared_schur",
+      "race_over_best_observed_completed_singleton": 1.1789601175825137
+    }
+  ],
+  "aggregate_race_over_natural_schur": 1.0687429616060633,
+  "aggregate_race_over_same_representation_schur": 1.1037415662695265,
+  "measured_findings": [
+    "All six races satisfy the unchanged original-system1e-8 residual threshold. Five select the96-point Schur branch; mixed at1e-5 selects plain CG.",
+    "Mixed at1e-5 improves over either fixed Schur96 representation, while the other five cases pay for the unused branch.",
+    "Across all six completed cases, the race is6.9% slower than natural Schur96 and10.4% slower than the same-representation Schur96 control in summed wall time.",
+    "The race is slower than the best observed completed singleton on every case. It demonstrates automatic recovery from a poor fixed choice, not an aggregate efficiency improvement in this pilot.",
+    "Natural and shared-representation plainCG each have two incomplete controls: smooth1e-5 hits2500iterations; Concrete1e-5 hits the CPU cap. Their aggregate observed wall is screening cost, not total completion time."
+  ],
+  "resource_checks": {
+    "maximum_named_arrays_plus_reserve": 257856,
+    "maximum_separate_tracemalloc_peak": 203228,
+    "all_allocation_paths_within_budget": true,
+    "all_factor_and_vector_alias_checks": true,
+    "maximum_run_cpu_seconds": 7.815961399999999,
+    "native_experiment_cpu_seconds": 66.3926735,
+    "allocation_scope": "Ten separate untimed setup/one-step/literal-verification traces cover both input shapes and all five methods; full runs additionally enforce named-array guards every phase. Tracemalloc is stopped in finally. Common immutable X/b and interpreter/RSS are separate from the algorithm-array cap."
+  },
+  "initial_failure_preserved": {
+    "source": "results/shared-schur-race-initial-source.zip",
+    "diagnosis": "results/shared-schur-race-initial-allocation-failure.json",
+    "repair": "Bounded128-column feature packs for cross-kernel passes, identical operator and exact queried-entry count; fixed before numerical validation/native timing."
+  },
+  "validation": {
+    "n": 37,
+    "maximum": 9,
+    "checks": [
+      {
+        "iteration": 20,
+        "candidate_size": 0,
+        "original_relative_residual": 0.00869025864688971,
+        "literal_residual_relative_error": 4.664607809333785e-15
+      },
+      {
+        "iteration": 20,
+        "candidate_size": 9,
+        "original_relative_residual": 0.00203417431411637,
+        "literal_residual_relative_error": 1.0902540047049054e-14
+      },
+      {
+        "iteration": 31,
+        "candidate_size": 9,
+        "original_relative_residual": 8.981501850614379e-11,
+        "literal_residual_relative_error": 3.908598870936195e-15
+      }
+    ],
+    "winner_size": 9,
+    "iterations": 31,
+    "independent_branch_iterations": [
+      45,
+      31
+    ],
+    "solution_relative_error": 4.5772197806460946e-12,
+    "true_relative_residual": 8.981467037046295e-11,
+    "all_core_buffer_aliases": true
+  },
+  "interpretation": "The shared-kernel race is numerically valid and fits the declared memory allowance on this pilot. It selects the useful family on mixed hard but does not improve summed runtime over fixed Schur96. No additional races, tuning, or confirmation seeds were run."
+}

@@ -1,0 +1,236 @@
+{
+  "status": "complete",
+  "original_sources_unchanged": {
+    "scripts/check_packed_float_factor.py": true,
+    "scripts/packed_float_factor.c": true,
+    "scripts/check_schur_inplace_frontier_v2.py": true,
+    "results/packed_float_factor.so": true
+  },
+  "sources": {
+    "scripts/check_packed_float_allocation.py": "09216df37c25aee4096d94fc2c49a5cdaa6c89ebdc086f88107fd263519545f1",
+    "results/packed-float-factor.json": "e3d2b80d91dc6e746416a0af670d68dd12e9501af477a7a6a5694fbf8d7ffa27",
+    "scripts/check_packed_float_factor.py": "aba5e0daebae9fbde98897523ad44e41bf8f5cc974f2950cabbce3d375489909",
+    "scripts/packed_float_factor.c": "a5e847d19c76cee939b2054b4e0444950d6ef8d70e3b4d08ed52d0ad31e13f94",
+    "results/packed_float_factor.so": "13408d14463ede1b1a13015cc92a0991d43cde780177c280615fc4da40614ac3"
+  },
+  "changes": "Only Python ctypes argument marshalling differs. Same original PackedFloat class, C arithmetic, FPS, factor storage and solve.",
+  "equivalence": {
+    "factor_sha256": true,
+    "indices_sha256": true,
+    "single_solve_sha256": true
+  },
+  "runs": [
+    {
+      "interface": "original_ndpointer",
+      "m": 600,
+      "n": 2048,
+      "regularization": 1e-05,
+      "setup_algorithm_traced_current_bytes": 1066146,
+      "setup_algorithm_traced_peak_bytes": 1161910,
+      "trace_within_1MiB": false,
+      "named_setup": {
+        "named_peak_bytes": 774000,
+        "peak_with_reserve_bytes": 839536,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 37568,
+          "stream_setup": 769200,
+          "stream_column_update": 774000,
+          "mixed_triangular_solve": 740400
+        },
+        "phase_row_sizes": {}
+      },
+      "traced_bytes_before_explicit_gc": 761780,
+      "traced_bytes_after_explicit_gc": 739684,
+      "bytes_released_by_explicit_gc": 22096,
+      "gc_collected_objects": 4,
+      "gc_counts_before": [
+        0,
+        0,
+        0
+      ],
+      "gc_thresholds": [
+        2000,
+        10,
+        10
+      ],
+      "top_live_allocations_after_setup": [
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_packed_float_factor.py:54",
+          "bytes": 721296,
+          "count": 2
+        },
+        {
+          "traceback": "/usr/lib/python3.13/ctypes/__init__.py:539",
+          "bytes": 212800,
+          "count": 2494
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/.venv/lib/python3.13/site-packages/numpy/_core/_internal.py:267",
+          "bytes": 106416,
+          "count": 832
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:54",
+          "bytes": 9360,
+          "count": 78
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_schur_inplace_frontier_v2.py:82",
+          "bytes": 4896,
+          "count": 2
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_packed_float_factor.py:55",
+          "bytes": 4896,
+          "count": 2
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/.venv/lib/python3.13/site-packages/scipy/spatial/distance.py:2929",
+          "bytes": 670,
+          "count": 10
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_packed_float_factor.py:50",
+          "bytes": 656,
+          "count": 2
+        },
+        {
+          "traceback": "/usr/lib/python3.13/re/_compiler.py:764",
+          "bytes": 440,
+          "count": 2
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_packed_float_allocation.py:50",
+          "bytes": 416,
+          "count": 2
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_schur_inplace_frontier_v2.py:50",
+          "bytes": 352,
+          "count": 5
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_schur_inplace_frontier_v2.py:77",
+          "bytes": 280,
+          "count": 1
+        }
+      ],
+      "factor_sha256": "d724d5d49e47f481b685a4398d45f8bc4738cefe052e8e320c25795ee3f457a7",
+      "indices_sha256": "37b40159cf956f3572e2c53b1aabf03ce779e3dfb74d5a57b6a6d1334b972c1a",
+      "single_solve_sha256": "4127648f88ca2fc732cc6459eaab921b7fb383c8da4516af83ba2473c0ca7b1b",
+      "minimum_pivot": 1.3599476871192778e-05,
+      "audit_wall_seconds": 0.1486635550390929,
+      "audit_cpu_seconds": 0.15626030000000002,
+      "scope": "Separate traced FPS+factor construction. Snapshot/GC/hash/one solve are not included in the saved setup peak. Audit times are not native benchmark times."
+    },
+    {
+      "interface": "raw_pointer_adapter",
+      "m": 600,
+      "n": 2048,
+      "regularization": 1e-05,
+      "setup_algorithm_traced_current_bytes": 744372,
+      "setup_algorithm_traced_peak_bytes": 788260,
+      "trace_within_1MiB": true,
+      "named_setup": {
+        "named_peak_bytes": 774000,
+        "peak_with_reserve_bytes": 839536,
+        "reserve_bytes": 65536,
+        "phase_named_peaks": {
+          "selection": 37568,
+          "stream_setup": 769200,
+          "stream_column_update": 774000,
+          "mixed_triangular_solve": 740400
+        },
+        "phase_row_sizes": {}
+      },
+      "traced_bytes_before_explicit_gc": 750944,
+      "traced_bytes_after_explicit_gc": 737928,
+      "bytes_released_by_explicit_gc": 13016,
+      "gc_collected_objects": 0,
+      "gc_counts_before": [
+        0,
+        0,
+        0
+      ],
+      "gc_thresholds": [
+        2000,
+        10,
+        10
+      ],
+      "top_live_allocations_after_setup": [
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_packed_float_factor.py:54",
+          "bytes": 721296,
+          "count": 2
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:54",
+          "bytes": 9424,
+          "count": 79
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_schur_inplace_frontier_v2.py:82",
+          "bytes": 4896,
+          "count": 2
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_packed_float_factor.py:55",
+          "bytes": 4896,
+          "count": 2
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_packed_float_factor.py:50",
+          "bytes": 640,
+          "count": 2
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_schur_inplace_frontier_v2.py:50",
+          "bytes": 352,
+          "count": 5
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_packed_float_allocation.py:50",
+          "bytes": 320,
+          "count": 1
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/.venv/lib/python3.13/site-packages/scipy/spatial/distance.py:2929",
+          "bytes": 240,
+          "count": 3
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:1452",
+          "bytes": 240,
+          "count": 2
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_schur_inplace_frontier_v2.py:39",
+          "bytes": 216,
+          "count": 1
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_schur_inplace_frontier_v2.py:43",
+          "bytes": 184,
+          "count": 3
+        },
+        {
+          "traceback": "/mnt/c/users/maosen/cs6220/project/scripts/check_schur_inplace_frontier_v2.py:74",
+          "bytes": 184,
+          "count": 2
+        }
+      ],
+      "factor_sha256": "d724d5d49e47f481b685a4398d45f8bc4738cefe052e8e320c25795ee3f457a7",
+      "indices_sha256": "37b40159cf956f3572e2c53b1aabf03ce779e3dfb74d5a57b6a6d1334b972c1a",
+      "single_solve_sha256": "4127648f88ca2fc732cc6459eaab921b7fb383c8da4516af83ba2473c0ca7b1b",
+      "minimum_pivot": 1.3599476871192778e-05,
+      "audit_wall_seconds": 0.12000069598434493,
+      "audit_cpu_seconds": 0.12502330000000006,
+      "scope": "Separate traced FPS+factor construction. Snapshot/GC/hash/one solve are not included in the saved setup peak. Audit times are not native benchmark times."
+    }
+  ],
+  "elapsed_wall_seconds": 0.3364764020079747,
+  "elapsed_cpu_seconds": 0.31253359999999997,
+  "process_peak_rss_kib": 65748,
+  "limitation": "Raw adapter trusts the caller contract: contiguous native float32 factor, contiguous float64 work/RHS, valid lengths, and live arrays during synchronous C calls. This validates setup allocation only, not a full solver."
+}

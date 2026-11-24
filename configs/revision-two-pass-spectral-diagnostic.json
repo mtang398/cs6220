@@ -1,0 +1,47 @@
+{
+  "status": "planned_not_executed",
+  "purpose": "Test whether a small reconstructed spectral correction captures useful finite-precision stabilization after charging its replay cost.",
+  "representation": "Keep the initial actual kernel columns; add at most four learned vectors and count all additional retained and transient storage.",
+  "workloads": [
+    "synthetic-n640-smooth",
+    "concrete-observed"
+  ],
+  "development_seed": 0,
+  "regularizations": [
+    0.001,
+    1e-05
+  ],
+  "initial_ranks": [
+    16,
+    32
+  ],
+  "prefix_iterations": 20,
+  "maximum_reconstructed_modes": 4,
+  "selection": "Largest Ritz values; identify relative duplicates at sqrt(machine epsilon), then verify physical independence using the reconstructed M-Gram matrix.",
+  "scalar_lanczos_convention": "For q_i=z_i/sqrt(rho_i), use negative off-diagonals; preserve first-pass alpha, beta, rho and operation order during replay.",
+  "replay": "Twenty sequential operator products, with every preconditioner application and vector accumulation counted. No change of recurrence or reorthogonalization during replay.",
+  "small_matrices": "Normalize independent reconstructed modes in the M metric; recompute T=U^T A U from actual reconstructed images.",
+  "initial_correction": "x <- x + U T^{-1} U^T r; verify its true residual and include a correction-only old-preconditioner control.",
+  "methods": [
+    "old uninterrupted",
+    "old restart after twenty iterations",
+    "coarse correction followed by old preconditioner",
+    "coarse correction followed by spectral-LMP",
+    "coarse correction followed by balanced Ritz-LMP"
+  ],
+  "strong_controls": "Unpreconditioned CG, compact RP and Gaussian-power factors using the same retained-vector allowance; use each LMP representation actual retained state to determine the control rank.",
+  "balanced_storage": "A boundary-vector implementation is allowed only after validating the Lanczos residual relation against actual A-images. Full U/AU storage is a separately counted reference, not a free substitute.",
+  "checks": [
+    "first-pass/replay consistency",
+    "physical Gram rank and orthogonality",
+    "actual Ritz residuals",
+    "SPD and inverse-action formula",
+    "true original relative residual at most 1e-8",
+    "replay-inclusive operator work",
+    "retained and transient storage including candidate vectors"
+  ],
+  "max_iterations": 2500,
+  "cpu_limit_seconds": 110,
+  "decision": "Advance only if continuation savings repay replay and survive storage-matched strong controls. No prefix/rank/threshold sweep after a negative result.",
+  "novelty_boundary": "Spectral-LMP, Ritz-LMP, same-solve recycling and two-pass Lanczos reconstruction are established. This experiment establishes neither novelty nor success of the project by itself."
+}

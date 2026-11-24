@@ -1,0 +1,631 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_phase_line_correction.py": "94f301fa982d2ca1d77387b2237ca97469aad952ab501507c2f11f2cc3ed8e25",
+    "results/core-phase-direction-repair.json": "fa7edcaddc29348087c80b1dcd438ca71f300edac0317ca6d9221e0c8f382727",
+    "scripts/check_phase_direction_repair.py": "7a406609524a89f2a3616b48965fbfa0cd57644e6b1b7756b233a950a8aa1409",
+    "scripts/check_core_direction_repair.py": "021a62e1b187ccd67545aca57b106b28a0222f76c068556a51cc07a2392bd07d",
+    "results/core-direction-repair.json": "ffbf3c684c6b5f82032f04ccaaa4a926efd257eddf9549032c9a6ec384cfcbf5",
+    "scripts/check_core_precision_allocation.py": "ce97909f61de27d880812330a31bacc6d4427fdcccc466811050282c77371f7e",
+    "scripts/check_fused_congruence_core.py": "33b205bc01549d9ba49a7646abd2a53db5fc86fb1b8688591af5d8f548e2c1ac",
+    "results/mixed_column_factor_first8.so": "943741be07c35b2e1fb85cc2116dd9367a171ac20ee3a1e23c6293478f8d277a"
+  },
+  "protocol": "Periodic8 only. Phase line correction changes y,r but preserves inherited p and old rho for ordinary FR update. No projection-only run or exact-CG claim. Same optimistic query counts, two additional n-vectors free, all reference work free; native feasibility unproven.",
+  "tiny": {
+    "image_relative_error": 2.3786590933596834e-17,
+    "line_orthogonality": 7.075076237399834e-16,
+    "projected_conjugacy": 4.768652459901679e-17
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "run": {
+        "method": "periodic_phase_line_only",
+        "status": "converged",
+        "iterations": 43,
+        "original_relative_residual": 9.843988101870199e-09,
+        "refresh_steps": [
+          8,
+          16,
+          24,
+          32,
+          40
+        ],
+        "repair_checks": [
+          {
+            "guard": "passed",
+            "gamma": 3.717319647774217e-06,
+            "curvature": 985151.6168044403,
+            "correction_norm": 1.0100673614341897,
+            "residual_norm_before": 0.7332534556569112,
+            "residual_norm_after": 0.733170719112823,
+            "residual_orthogonality": 1.540807585421764e-17
+          },
+          {
+            "guard": "passed",
+            "gamma": 1.5178894689700277e-06,
+            "curvature": 2112.8914210707344,
+            "correction_norm": 0.015100481248203313,
+            "residual_norm_before": 0.02210404674953067,
+            "residual_norm_after": 0.02210323518977889,
+            "residual_orthogonality": 4.5440829847516e-18
+          },
+          {
+            "guard": "passed",
+            "gamma": 7.778284316371613e-06,
+            "curvature": 3.118059025660556,
+            "correction_norm": 0.003085274943198873,
+            "residual_norm_before": 0.0007794772787024477,
+            "residual_norm_after": 0.000779366163351094,
+            "residual_orthogonality": 5.6114959098926576e-18
+          },
+          {
+            "guard": "passed",
+            "gamma": -1.0124230557059098e-05,
+            "curvature": 0.004476826945143007,
+            "correction_norm": 0.00015331124540026532,
+            "residual_norm_before": 3.0313159099159624e-05,
+            "residual_norm_after": 3.0317659797388042e-05,
+            "residual_orthogonality": 0.0
+          },
+          {
+            "guard": "passed",
+            "gamma": -7.409779119377844e-05,
+            "curvature": 7.291196702083109e-06,
+            "correction_norm": 4.5468463520753436e-05,
+            "residual_norm_before": 1.0830738735156477e-06,
+            "residual_norm_after": 1.084230075045582e-06,
+            "residual_orthogonality": 8.703058855596054e-18
+          }
+        ],
+        "analytical_entries": 178653352
+      },
+      "controls": [
+        {
+          "method": "periodic_fr",
+          "status": "converged",
+          "iterations": 43,
+          "original_relative_residual": 9.85177024599189e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32,
+            40
+          ],
+          "repair_checks": [],
+          "analytical_entries": 178653352
+        },
+        {
+          "method": "periodic_repair",
+          "status": "converged",
+          "iterations": 43,
+          "original_relative_residual": 9.825752954349294e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32,
+            40
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 2.422308043407522e-18,
+              "last_conjugacy": 5.753137043228003e-17
+            },
+            {
+              "residual_orthogonality": 9.20286121552132e-19,
+              "last_conjugacy": 4.1181939212507485e-17
+            },
+            {
+              "residual_orthogonality": 0.0,
+              "last_conjugacy": 1.063750760274874e-17
+            },
+            {
+              "residual_orthogonality": 7.810058251523205e-18,
+              "last_conjugacy": 3.873158207937583e-17
+            },
+            {
+              "residual_orthogonality": 8.482062846303743e-18,
+              "last_conjugacy": 1.2775001717452105e-16
+            }
+          ],
+          "analytical_entries": 178653352
+        },
+        {
+          "method": "periodic_phase",
+          "status": "converged",
+          "iterations": 53,
+          "original_relative_residual": 7.420257609381936e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32,
+            40,
+            48
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": 3.717319647774217e-06,
+              "curvature": 985151.6168044403,
+              "correction_norm": 1.0100673614341897,
+              "residual_norm_before": 0.7332534556569112,
+              "residual_norm_after": 0.733170719112823,
+              "residual_orthogonality": 1.540807585421764e-17,
+              "phase_conjugacy": 4.765821318647402e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.0011297179139726106,
+              "curvature": 2104.6795560788746,
+              "correction_norm": 11.161201462243142,
+              "residual_norm_before": 0.06338492928780722,
+              "residual_norm_after": 0.0627402941542997,
+              "residual_orthogonality": 6.806225660000598e-18,
+              "phase_conjugacy": 7.471763842253501e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.003390132725822792,
+              "curvature": 6.508160262904146,
+              "correction_norm": 2.085419334420363,
+              "residual_norm_before": 0.004008848358350427,
+              "residual_norm_after": 0.0038273208368227465,
+              "residual_orthogonality": 7.368153956159749e-19,
+              "phase_conjugacy": 1.3001997961513555e-17
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.004696408840406386,
+              "curvature": 0.030012433182447416,
+              "correction_norm": 0.17293497410625697,
+              "residual_norm_before": 0.00032556517645595536,
+              "residual_norm_after": 0.0003106550787193244,
+              "residual_orthogonality": 4.738980079667583e-18,
+              "phase_conjugacy": 1.6232646242189536e-17
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.006259556108524112,
+              "curvature": 0.00013715477763260713,
+              "correction_norm": 0.017285438071640312,
+              "residual_norm_before": 1.9118505210730095e-05,
+              "residual_norm_after": 1.7409189639587642e-05,
+              "residual_orthogonality": 1.1562565606569375e-17,
+              "phase_conjugacy": 6.040356879137037e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.007659532731605706,
+              "curvature": 5.029002513770039e-07,
+              "correction_norm": 0.0012053242077310258,
+              "residual_norm_before": 1.2916951807931402e-06,
+              "residual_norm_after": 1.1765526104340336e-06,
+              "residual_orthogonality": 3.3508011505247447e-18,
+              "phase_conjugacy": 1.1615318423713388e-17
+            }
+          ],
+          "analytical_entries": 218304168
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "run": {
+        "method": "periodic_phase_line_only",
+        "status": "converged",
+        "iterations": 38,
+        "original_relative_residual": 9.125173979668125e-09,
+        "refresh_steps": [
+          8,
+          16,
+          24,
+          32
+        ],
+        "repair_checks": [
+          {
+            "guard": "passed",
+            "gamma": -4.0866320731511155e-07,
+            "curvature": 1918254.2355748382,
+            "correction_norm": 0.04208249789586955,
+            "residual_norm_before": 0.15634702380353185,
+            "residual_norm_after": 0.15634877248807594,
+            "residual_orthogonality": 1.0812493042965327e-17
+          },
+          {
+            "guard": "passed",
+            "gamma": 4.4459199724503263e-07,
+            "curvature": 370.2832603595152,
+            "correction_norm": 0.0015325669759429917,
+            "residual_norm_before": 0.00357594875754496,
+            "residual_norm_after": 0.0035759499518963297,
+            "residual_orthogonality": 1.35099031281396e-17
+          },
+          {
+            "guard": "passed",
+            "gamma": -3.3436139304305964e-06,
+            "curvature": 0.2611679119686401,
+            "correction_norm": 0.00036327515117107114,
+            "residual_norm_before": 0.00012510799675651368,
+            "residual_norm_after": 0.0001251075940612995,
+            "residual_orthogonality": 1.196460302656499e-17
+          },
+          {
+            "guard": "passed",
+            "gamma": 5.66964247595518e-05,
+            "curvature": 0.00029711970693252433,
+            "correction_norm": 0.0002148390185243906,
+            "residual_norm_before": 4.104025872318168e-06,
+            "residual_norm_after": 4.104134636390764e-06,
+            "residual_orthogonality": 1.0212274736884957e-17
+          }
+        ],
+        "analytical_entries": 158221736
+      },
+      "controls": [
+        {
+          "method": "periodic_fr",
+          "status": "converged",
+          "iterations": 38,
+          "original_relative_residual": 9.142998041109208e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32
+          ],
+          "repair_checks": [],
+          "analytical_entries": 158221736
+        },
+        {
+          "method": "periodic_repair",
+          "status": "converged",
+          "iterations": 38,
+          "original_relative_residual": 9.053136091120779e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 1.8902856416685733e-17,
+              "last_conjugacy": 9.389322220812709e-18
+            },
+            {
+              "residual_orthogonality": 7.39356054403178e-18,
+              "last_conjugacy": 6.205014886923406e-17
+            },
+            {
+              "residual_orthogonality": 1.7895407321901477e-17,
+              "last_conjugacy": 4.974663130326003e-17
+            },
+            {
+              "residual_orthogonality": 3.779475066620753e-18,
+              "last_conjugacy": 8.774819550738721e-17
+            }
+          ],
+          "analytical_entries": 158221736
+        },
+        {
+          "method": "periodic_phase",
+          "status": "converged",
+          "iterations": 48,
+          "original_relative_residual": 7.172991705176756e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24,
+            32,
+            40,
+            48
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": -4.0866320731511155e-07,
+              "curvature": 1918254.2355748382,
+              "correction_norm": 0.04208249789586955,
+              "residual_norm_before": 0.15634702380353185,
+              "residual_norm_after": 0.15634877248807594,
+              "residual_orthogonality": 1.0812493042965327e-17,
+              "phase_conjugacy": 3.652117137241286e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.00010567569003037101,
+              "curvature": 370.004810099388,
+              "correction_norm": 0.36359611805841063,
+              "residual_norm_before": 0.005750192019717526,
+              "residual_norm_after": 0.0057497130362704416,
+              "residual_orthogonality": 4.209021825743316e-18,
+              "phase_conjugacy": 2.5227688258190926e-17
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.0011530420637097469,
+              "curvature": 0.4595497810114393,
+              "correction_norm": 0.1589593652906332,
+              "residual_norm_before": 0.00044910883193679895,
+              "residual_norm_after": 0.00044720205435794035,
+              "residual_orthogonality": 1.2310155932092982e-17,
+              "phase_conjugacy": 8.683231284756063e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.0032348305594495416,
+              "curvature": 0.0014113349538535953,
+              "correction_norm": 0.022342364644261994,
+              "residual_norm_before": 3.9115278061454146e-05,
+              "residual_norm_after": 3.8300254225691296e-05,
+              "residual_orthogonality": 1.2007492284272877e-18,
+              "phase_conjugacy": 1.521385730432607e-17
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.006137690782253868,
+              "curvature": 7.271354087834519e-06,
+              "correction_norm": 0.0025198419062105446,
+              "residual_norm_before": 3.1677113015227095e-06,
+              "residual_norm_after": 3.0203770053967268e-06,
+              "residual_orthogonality": 2.368095733320695e-17,
+              "phase_conjugacy": 7.788245373436064e-18
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.009644181979094096,
+              "curvature": 4.279668847236096e-08,
+              "correction_norm": 0.00030351313319199134,
+              "residual_norm_before": 2.515583679694292e-07,
+              "residual_norm_after": 2.3204097934575444e-07,
+              "residual_orthogonality": 7.52198601782633e-18,
+              "phase_conjugacy": 6.990180110620169e-18
+            }
+          ],
+          "analytical_entries": 199084968
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "run": {
+        "method": "periodic_phase_line_only",
+        "status": "converged",
+        "iterations": 21,
+        "original_relative_residual": 5.926141485984572e-09,
+        "refresh_steps": [
+          8,
+          16
+        ],
+        "repair_checks": [
+          {
+            "guard": "passed",
+            "gamma": -1.6069152213764584e-05,
+            "curvature": 1998181.7758354135,
+            "correction_norm": 5.981850522159978,
+            "residual_norm_before": 0.00435013457659218,
+            "residual_norm_after": 0.004508668216576712,
+            "residual_orthogonality": 2.1167488798427034e-18
+          },
+          {
+            "guard": "passed",
+            "gamma": -0.00039980942281125806,
+            "curvature": 0.6156391448885088,
+            "correction_norm": 0.07601398304530582,
+            "residual_norm_before": 8.431904552169766e-06,
+            "residual_norm_after": 7.985662069435726e-06,
+            "residual_orthogonality": 1.5620932024304256e-17
+          }
+        ],
+        "analytical_entries": 9491368
+      },
+      "controls": [
+        {
+          "method": "periodic_fr",
+          "status": "converged",
+          "iterations": 21,
+          "original_relative_residual": 7.0598425239678985e-09,
+          "refresh_steps": [
+            8,
+            16
+          ],
+          "repair_checks": [],
+          "analytical_entries": 9491368
+        },
+        {
+          "method": "periodic_repair",
+          "status": "converged",
+          "iterations": 21,
+          "original_relative_residual": 6.621727284863395e-09,
+          "refresh_steps": [
+            8,
+            16
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 9.906625868624024e-18,
+              "last_conjugacy": 7.233615934229814e-17
+            },
+            {
+              "residual_orthogonality": 1.0563518706934512e-17,
+              "last_conjugacy": 1.5790739396671605e-16
+            }
+          ],
+          "analytical_entries": 9491368
+        },
+        {
+          "method": "periodic_phase",
+          "status": "converged",
+          "iterations": 21,
+          "original_relative_residual": 3.6423529346579967e-09,
+          "refresh_steps": [
+            8,
+            16
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": -1.6069152213764584e-05,
+              "curvature": 1998181.7758354135,
+              "correction_norm": 5.981850522159978,
+              "residual_norm_before": 0.00435013457659218,
+              "residual_norm_after": 0.004508668216576712,
+              "residual_orthogonality": 2.1167488798427034e-18,
+              "phase_conjugacy": 0.0
+            },
+            {
+              "guard": "passed",
+              "gamma": -7.688705091627463e-05,
+              "curvature": 0.6152427211212265,
+              "correction_norm": 0.014612391997523832,
+              "residual_norm_before": 5.159245624226631e-06,
+              "residual_norm_after": 5.291910156972883e-06,
+              "residual_orthogonality": 1.6844174269322375e-17,
+              "phase_conjugacy": 1.3669730857238123e-17
+            }
+          ],
+          "analytical_entries": 9491368
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "run": {
+        "method": "periodic_phase_line_only",
+        "status": "converged",
+        "iterations": 24,
+        "original_relative_residual": 7.3321781542182626e-09,
+        "refresh_steps": [
+          8,
+          16,
+          24
+        ],
+        "repair_checks": [
+          {
+            "guard": "passed",
+            "gamma": 2.9826935530290817e-06,
+            "curvature": 10862222.585620191,
+            "correction_norm": 2.77230042952417,
+            "residual_norm_before": 0.03283754322220844,
+            "residual_norm_after": 0.032803311776153685,
+            "residual_orthogonality": 7.457458301622962e-18
+          },
+          {
+            "guard": "passed",
+            "gamma": -0.0002153702347133829,
+            "curvature": 32.604870838207134,
+            "correction_norm": 0.28945308920841967,
+            "residual_norm_before": 7.196445899596314e-05,
+            "residual_norm_after": 7.212823238613465e-05,
+            "residual_orthogonality": 1.0625174751271302e-17
+          },
+          {
+            "guard": "passed",
+            "gamma": 0.0005541198826455396,
+            "curvature": 0.000135102776570939,
+            "correction_norm": 0.0014740097037568717,
+            "residual_norm_before": 2.482965239366403e-07,
+            "residual_norm_after": 2.344117600832554e-07,
+            "residual_orthogonality": 8.809135659891347e-18
+          }
+        ],
+        "analytical_entries": 31453068
+      },
+      "controls": [
+        {
+          "method": "periodic_fr",
+          "status": "converged",
+          "iterations": 24,
+          "original_relative_residual": 7.471768195753466e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24
+          ],
+          "repair_checks": [],
+          "analytical_entries": 31453068
+        },
+        {
+          "method": "periodic_repair",
+          "status": "converged",
+          "iterations": 24,
+          "original_relative_residual": 7.851503002229196e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24
+          ],
+          "repair_checks": [
+            {
+              "residual_orthogonality": 3.269915016409076e-18,
+              "last_conjugacy": 5.464863333016943e-17
+            },
+            {
+              "residual_orthogonality": 2.719425871579823e-17,
+              "last_conjugacy": 5.875481086470734e-17
+            },
+            {
+              "residual_orthogonality": 1.2914793999716104e-17,
+              "last_conjugacy": 1.4951678808587357e-17
+            }
+          ],
+          "analytical_entries": 31453068
+        },
+        {
+          "method": "periodic_phase",
+          "status": "converged",
+          "iterations": 25,
+          "original_relative_residual": 7.841741363764837e-09,
+          "refresh_steps": [
+            8,
+            16,
+            24
+          ],
+          "repair_checks": [
+            {
+              "guard": "passed",
+              "gamma": 2.9826935530290817e-06,
+              "curvature": 10862222.585620191,
+              "correction_norm": 2.77230042952417,
+              "residual_norm_before": 0.03283754322220844,
+              "residual_norm_after": 0.032803311776153685,
+              "residual_orthogonality": 7.457458301622962e-18,
+              "phase_conjugacy": 9.787521979637581e-19
+            },
+            {
+              "guard": "passed",
+              "gamma": 3.6505904925831064e-05,
+              "curvature": 32.588342096244865,
+              "correction_norm": 0.04904941435220067,
+              "residual_norm_before": 0.00012246451177690604,
+              "residual_norm_after": 0.00012203713374571761,
+              "residual_orthogonality": 2.4237934089363108e-17,
+              "phase_conjugacy": 1.658541095516243e-19
+            },
+            {
+              "guard": "passed",
+              "gamma": 0.0002736243180799682,
+              "curvature": 0.00024175841150016344,
+              "correction_norm": 0.001091406129978856,
+              "residual_norm_before": 3.493661412546325e-07,
+              "residual_norm_after": 3.3436871251098113e-07,
+              "residual_orthogonality": 2.6824345194999983e-17,
+              "phase_conjugacy": 8.764477628101398e-18
+            }
+          ],
+          "analytical_entries": 32547408
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 1.0661815910134465,
+  "elapsed_cpu_seconds": 0.8082278,
+  "sources_unchanged": true
+}

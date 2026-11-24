@@ -1,0 +1,17 @@
+{
+  "purpose": "Initial cost measurement and complete execution check for all eight methods; not the multi-seed comparison.",
+  "workloads": [{"dataset": "synthetic", "target": "smooth"}, {"dataset": "airfoil", "target": "observed"}],
+  "synthetic_n": 640,
+  "seeds": [0],
+  "regularization": [0.001],
+  "ranks": [16],
+  "methods": ["cg", "fixed", "residual_exchange", "matched_restart", "target_exchange", "uniform_exchange", "periodic_rebuild", "lbfgs"],
+  "checkpoint": 20,
+  "candidates": 4,
+  "repetitions": 1,
+  "rtol": 1e-8,
+  "maxiter": 2000,
+  "block_size": 128,
+  "run_timeout_seconds": 60,
+  "max_wall_seconds": 300
+}

@@ -1,0 +1,3280 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_core_precision_trajectories.py": "808504c4a7c83adce05e9e1bb3c76c78ab7ae85dbcac1c160530303e310f10c2",
+    "results/core-precision-allocation.json": "7b9aa68f5afab30f2fffd7566930909cc41d7f5a09aae9ea1162e1786b3150fa",
+    "scripts/check_core_precision_allocation.py": "ce97909f61de27d880812330a31bacc6d4427fdcccc466811050282c77371f7e",
+    "scripts/mixed_column_factor.c": "8515cdd9b1ac498284f6cd4f12b7c97474e8fe873029385c121b25c18acb6530",
+    "results/mixed_column_factor.so": "cb74e07e083248f44c7b54fb86f06eac8e778d1bab05ea47c3843cfdbada7808",
+    "results/compressed-core-adaptive-pilot.json": "33dba630ba8c6592badbbca7474be8429b0f0823e97a9065462f73c17c90c27d",
+    "scripts/check_compressed_core_adaptive.py": "18214e209167f8f4e0792b4f85a6c522897800fa6fb3bfa3624adb2b644b09e3",
+    "scripts/packed_float_halfsolves.c": "7b5bd9037046343e5c25aabe0b855700d3c6dd143b6c572fd60af77b59ae868c",
+    "results/packed_float_halfsolves.so": "56c6210d9b01e34da1446b75fc2089ce6bf154871c74c35b1be1c7c9e743ad56",
+    "results/compressed-core-schur-odd-pilot.json": "856b215feddacc683e6137fe155fb37aa3bcbfc233b8a40494abe22a4f6e6f64",
+    "scripts/check_compressed_core_schur_odd.py": "26f0680e297a25781e913ac54fd9d07f97feedc5e945161036623c8a5dac9585",
+    "results/compressed-core-schur-pilot.json": "dd94e844054355e9edcaf496de48b140a56d58170be40c854e17fa62803a6255",
+    "scripts/check_compressed_core_schur.py": "a4e8e154e8748296a55f7afe1e81375da2cd1f6ad2817e7c8c3eaf5e32979910",
+    "scripts/check_packed_float_factor.py": "aba5e0daebae9fbde98897523ad44e41bf8f5cc974f2950cabbce3d375489909",
+    "scripts/check_packed_float_allocation.py": "09216df37c25aee4096d94fc2c49a5cdaa6c89ebdc086f88107fd263519545f1",
+    "scripts/check_packed_schur_feasibility.py": "7b853198fd2476504a40cfeb7dc9d9a3f68e5e5b2a66454580e3119ab1c519ac",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959",
+    "scripts/packed_float_factor.c": "a5e847d19c76cee939b2054b4e0444950d6ef8d70e3b4d08ed52d0ad31e13f94",
+    "results/packed_float_factor.so": "13408d14463ede1b1a13015cc92a0991d43cde780177c280615fc4da40614ac3"
+  },
+  "protocol": {
+    "cases": [
+      [
+        "smooth",
+        "synthetic-n2560-smooth-s0-lambda0.001.npz"
+      ],
+      [
+        "mixed",
+        "synthetic-n2560-mixed-s0-lambda0.001.npz"
+      ],
+      [
+        "Concrete",
+        "concrete-observed-s0-lambda1e-05.npz"
+      ],
+      [
+        "Airfoil",
+        "airfoil-observed-s0-lambda1e-05.npz"
+      ]
+    ],
+    "methods": [
+      "FIRST8_H1",
+      "epsilon_H1",
+      "initial_b_H1",
+      "current_four_H2_to_H1",
+      "uniform592_H2",
+      "uniform600_H2"
+    ],
+    "regularization": 1e-05,
+    "seed": 0,
+    "candidate_core": 592,
+    "promotions": 8,
+    "boundary_corrections": 4,
+    "current_policy": "First4 actual H2 action RHS, reuse actual z0/q from first correction, normalize score by||t||\u00b2. Rebuild original C once, continue H1 with no reset or RHS replacement.",
+    "stopping": "Recursive residual<=.5e-8||b|| then literal original residual<=1e-8. Failure is retained, with no hidden repair.",
+    "static_FIRST8": "Direct single mixed build, no preliminary all32 factor or mask selection.",
+    "FPS": "Existing SharedKernel.farthest evaluates distance and Gaussian exp; per-solver hypothetical counts charged separately from shared offline setup.",
+    "accounting": "All analytical solver Gaussian entries include FPS, streamed factor/rebuild, score core products, actions, boundary4 products, reconstruction and original verification. Extra gap/reference diagnostics are separately disclosed.",
+    "scope": "Dense actual inexact trajectories; no native runtime or full-memory claim.",
+    "per_attempt_cpu_cap": 3.0,
+    "total_cpu_cap": 43,
+    "wall_cap": 60
+  },
+  "runs": [
+    {
+      "method": "FIRST8_H1",
+      "m": 592,
+      "status": "converged",
+      "converged": true,
+      "iterations": 42,
+      "true_relative_residual": 5.370316788495657e-09,
+      "landmark_relative_residual": 1.2474920883193027e-10,
+      "tail_relative_residual": 5.36886766867038e-09,
+      "setup_diagnostic_seconds": 0.07478655804879963,
+      "total_diagnostic_seconds": 0.15473727404605597,
+      "total_diagnostic_cpu_seconds": 0.15628890000000006,
+      "counts": {
+        "action_core_products": 42,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 42,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 50,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1212416,
+        "streamed_factor_entries": 175528,
+        "Schur_cross_and_tail_entries": 161441280,
+        "core_product_entries": 17523200,
+        "boundary_cross_entries": 1723904,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 186270632,
+      "FPS_squared_distance_pair_evaluations": 1212416,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "factor_bytes": 720944,
+          "formula_factor_bytes": 720944,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.03233014099532738,
+          "minimum_raw_pivot": 1.3599494054184985e-05,
+          "epsilon_norm": 9.63109780373985e-08
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 42,
+          "relative": 5.370316788495657e-09,
+          "landmark_relative": 1.2474920883193027e-10,
+          "tail_relative": 5.36886766867038e-09
+        }
+      ],
+      "dataset": "smooth",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "method": "epsilon_H1",
+      "m": 592,
+      "status": "converged",
+      "converged": true,
+      "iterations": 42,
+      "true_relative_residual": 7.934609820415025e-09,
+      "landmark_relative_residual": 1.1848696886025727e-10,
+      "tail_relative_residual": 7.933725092315517e-09,
+      "setup_diagnostic_seconds": 0.08662421000190079,
+      "total_diagnostic_seconds": 0.16050671297125518,
+      "total_diagnostic_cpu_seconds": 0.15721459999999987,
+      "counts": {
+        "action_core_products": 42,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 2,
+        "Schur_actions": 42,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 50,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1212416,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 161441280,
+        "core_product_entries": 17523200,
+        "boundary_cross_entries": 1723904,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 186446160,
+      "FPS_squared_distance_pair_evaluations": 1212416,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.029484023980330676,
+          "minimum_raw_pivot": 1.3599476871192778e-05,
+          "epsilon_norm": 6.227349475834794e-07
+        },
+        {
+          "promoted": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            8
+          ],
+          "factor_bytes": 720940,
+          "formula_factor_bytes": 720940,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.028903310012537986,
+          "minimum_raw_pivot": 1.3599194761775424e-05,
+          "epsilon_norm": 1.152160581181489e-07
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 42,
+          "relative": 7.934609820415025e-09,
+          "landmark_relative": 1.1848696886025727e-10,
+          "tail_relative": 7.933725092315517e-09
+        }
+      ],
+      "dataset": "smooth",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "method": "initial_b_H1",
+      "m": 592,
+      "status": "recursive_stop_true_residual_failed",
+      "converged": false,
+      "iterations": 42,
+      "true_relative_residual": 1.9706579691248157e-08,
+      "landmark_relative_residual": 1.1469418639444878e-10,
+      "tail_relative_residual": 1.970624592283172e-08,
+      "setup_diagnostic_seconds": 0.09363455802667886,
+      "total_diagnostic_seconds": 0.17318639799486846,
+      "total_diagnostic_cpu_seconds": 0.1747993000000001,
+      "counts": {
+        "action_core_products": 42,
+        "boundary_core_products": 8,
+        "score_core_products": 1,
+        "factor_builds": 2,
+        "Schur_actions": 42,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 51,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1212416,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 161441280,
+        "core_product_entries": 17873664,
+        "boundary_cross_entries": 1723904,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 186796624,
+      "FPS_squared_distance_pair_evaluations": 1212416,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.03176243300549686,
+          "minimum_raw_pivot": 1.3599476871192778e-05,
+          "epsilon_norm": 6.227349475834794e-07
+        },
+        {
+          "promoted": [
+            0,
+            2,
+            3,
+            4,
+            7,
+            9,
+            10,
+            11
+          ],
+          "factor_bytes": 720872,
+          "formula_factor_bytes": 720872,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.028558215009979904,
+          "minimum_raw_pivot": 1.3599377269028697e-05,
+          "epsilon_norm": 2.7997409613178993e-07
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 42,
+          "relative": 1.9706579691248157e-08,
+          "landmark_relative": 1.1469418639444878e-10,
+          "tail_relative": 1.970624592283172e-08
+        }
+      ],
+      "dataset": "smooth",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "method": "current_four_H2_to_H1",
+      "m": 592,
+      "status": "converged",
+      "converged": true,
+      "iterations": 43,
+      "true_relative_residual": 7.841375890872378e-09,
+      "landmark_relative_residual": 1.2038183362913387e-10,
+      "tail_relative_residual": 7.84045177754998e-09,
+      "setup_diagnostic_seconds": 0.0519542460097,
+      "total_diagnostic_seconds": 0.1801455700187944,
+      "total_diagnostic_cpu_seconds": 0.1794228,
+      "counts": {
+        "action_core_products": 47,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 2,
+        "Schur_actions": 43,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 2,
+        "diagnostic_cross_products": 1
+      },
+      "paid_core_products": 55,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1212416,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 165285120,
+        "core_product_entries": 19275520,
+        "boundary_cross_entries": 1723904,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 192042320,
+      "FPS_squared_distance_pair_evaluations": 1212416,
+      "diagnostic_extra_Gaussian_entries": 1562880,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.02933930797735229,
+          "minimum_raw_pivot": 1.3599476871192778e-05,
+          "epsilon_norm": 6.227349475834794e-07
+        },
+        {
+          "promoted": [
+            0,
+            1,
+            2,
+            4,
+            5,
+            7,
+            9,
+            11
+          ],
+          "factor_bytes": 720900,
+          "formula_factor_bytes": 720900,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.03148761304328218,
+          "minimum_raw_pivot": 1.3599419028932974e-05,
+          "epsilon_norm": 1.5604817444022464e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": {
+        "after_iteration": 4,
+        "promoted": [
+          0,
+          4,
+          1,
+          2,
+          5,
+          7,
+          9,
+          11
+        ],
+        "score_top8_fraction": 0.9678113625759392,
+        "reduced_rhs_recomputed": false,
+        "recurrence_reset": false,
+        "next_action_iteration": 5,
+        "action_gap_norm": 1.0708740832259984e-11,
+        "relative_action_gap": 6.36514009787998e-08,
+        "next_action_direction_norm": 2.219704574176181
+      },
+      "verification_history": [
+        {
+          "iteration": 43,
+          "relative": 7.841375890872378e-09,
+          "landmark_relative": 1.2038183362913387e-10,
+          "tail_relative": 7.84045177754998e-09
+        }
+      ],
+      "dataset": "smooth",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "method": "uniform592_H2",
+      "m": 592,
+      "status": "converged",
+      "converged": true,
+      "iterations": 42,
+      "true_relative_residual": 7.193868877900281e-09,
+      "landmark_relative_residual": 1.2031384337322942e-10,
+      "tail_relative_residual": 7.192862713239772e-09,
+      "setup_diagnostic_seconds": 0.08147968200501055,
+      "total_diagnostic_seconds": 0.18040728999767452,
+      "total_diagnostic_cpu_seconds": 0.18586009999999997,
+      "counts": {
+        "action_core_products": 84,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 42,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 92,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1212416,
+        "streamed_factor_entries": 175528,
+        "Schur_cross_and_tail_entries": 161441280,
+        "core_product_entries": 32242688,
+        "boundary_cross_entries": 1723904,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 200990120,
+      "FPS_squared_distance_pair_evaluations": 1212416,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.02970787201775238,
+          "minimum_raw_pivot": 1.3599476871192778e-05,
+          "epsilon_norm": 6.227349475834794e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 42,
+          "relative": 7.193868877900281e-09,
+          "landmark_relative": 1.2031384337322942e-10,
+          "tail_relative": 7.192862713239772e-09
+        }
+      ],
+      "dataset": "smooth",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "method": "uniform600_H2",
+      "m": 600,
+      "status": "converged",
+      "converged": true,
+      "iterations": 41,
+      "true_relative_residual": 7.660419100175127e-09,
+      "landmark_relative_residual": 1.0005797248617531e-10,
+      "tail_relative_residual": 7.659765609499408e-09,
+      "setup_diagnostic_seconds": 0.060242236009798944,
+      "total_diagnostic_seconds": 0.16260919504566118,
+      "total_diagnostic_cpu_seconds": 0.16011419999999998,
+      "counts": {
+        "action_core_products": 82,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 41,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 90,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1228800,
+        "streamed_factor_entries": 180300,
+        "Schur_cross_and_tail_entries": 157206464,
+        "core_product_entries": 32400000,
+        "boundary_cross_entries": 1737600,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 196947468,
+      "FPS_squared_distance_pair_evaluations": 1228800,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 721200,
+          "formula_factor_bytes": 721200,
+          "column_flags_and_offsets_bytes": 5400,
+          "epsilon_bytes": 4800,
+          "raw_pivot_diagnostic_bytes": 4800,
+          "construction_working_column_max_bytes": 4800,
+          "setup_seconds": 0.029519929026719183,
+          "minimum_raw_pivot": 1.3599476871192778e-05,
+          "epsilon_norm": 6.276158348749213e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 41,
+          "relative": 7.660419100175127e-09,
+          "landmark_relative": 1.0005797248617531e-10,
+          "tail_relative": 7.659765609499408e-09
+        }
+      ],
+      "dataset": "smooth",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15"
+    },
+    {
+      "method": "FIRST8_H1",
+      "m": 592,
+      "status": "converged",
+      "converged": true,
+      "iterations": 38,
+      "true_relative_residual": 4.075268430190664e-09,
+      "landmark_relative_residual": 1.7883138859864318e-11,
+      "tail_relative_residual": 4.075229192506011e-09,
+      "setup_diagnostic_seconds": 0.05219221499282867,
+      "total_diagnostic_seconds": 0.1318668739986606,
+      "total_diagnostic_cpu_seconds": 0.13545419999999986,
+      "counts": {
+        "action_core_products": 38,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 38,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 46,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1212416,
+        "streamed_factor_entries": 175528,
+        "Schur_cross_and_tail_entries": 146065920,
+        "core_product_entries": 16121344,
+        "boundary_cross_entries": 1723904,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 169493416,
+      "FPS_squared_distance_pair_evaluations": 1212416,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "factor_bytes": 720944,
+          "formula_factor_bytes": 720944,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.030113531975075603,
+          "minimum_raw_pivot": 1.3599494054184985e-05,
+          "epsilon_norm": 9.63109780373985e-08
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 38,
+          "relative": 4.075268430190664e-09,
+          "landmark_relative": 1.7883138859864318e-11,
+          "tail_relative": 4.075229192506011e-09
+        }
+      ],
+      "dataset": "mixed",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56"
+    },
+    {
+      "method": "epsilon_H1",
+      "m": 592,
+      "status": "converged",
+      "converged": true,
+      "iterations": 38,
+      "true_relative_residual": 4.287706487606909e-09,
+      "landmark_relative_residual": 1.837316754334447e-11,
+      "tail_relative_residual": 4.287667122175041e-09,
+      "setup_diagnostic_seconds": 0.11335784196853638,
+      "total_diagnostic_seconds": 0.18073210894363,
+      "total_diagnostic_cpu_seconds": 0.18543909999999997,
+      "counts": {
+        "action_core_products": 38,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 2,
+        "Schur_actions": 38,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 46,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1212416,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 146065920,
+        "core_product_entries": 16121344,
+        "boundary_cross_entries": 1723904,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 169668944,
+      "FPS_squared_distance_pair_evaluations": 1212416,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.02848448697477579,
+          "minimum_raw_pivot": 1.3599476871192778e-05,
+          "epsilon_norm": 6.227349475834794e-07
+        },
+        {
+          "promoted": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            8
+          ],
+          "factor_bytes": 720940,
+          "formula_factor_bytes": 720940,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.02831216499907896,
+          "minimum_raw_pivot": 1.3599194761775424e-05,
+          "epsilon_norm": 1.152160581181489e-07
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 38,
+          "relative": 4.287706487606909e-09,
+          "landmark_relative": 1.837316754334447e-11,
+          "tail_relative": 4.287667122175041e-09
+        }
+      ],
+      "dataset": "mixed",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56"
+    },
+    {
+      "method": "initial_b_H1",
+      "m": 592,
+      "status": "recursive_stop_true_residual_failed",
+      "converged": false,
+      "iterations": 38,
+      "true_relative_residual": 2.2571014342853998e-08,
+      "landmark_relative_residual": 1.820275130565885e-11,
+      "tail_relative_residual": 2.2571007002904542e-08,
+      "setup_diagnostic_seconds": 0.10709820501506329,
+      "total_diagnostic_seconds": 0.17641983600333333,
+      "total_diagnostic_cpu_seconds": 0.18250009999999994,
+      "counts": {
+        "action_core_products": 38,
+        "boundary_core_products": 8,
+        "score_core_products": 1,
+        "factor_builds": 2,
+        "Schur_actions": 38,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 47,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1212416,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 146065920,
+        "core_product_entries": 16471808,
+        "boundary_cross_entries": 1723904,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 170019408,
+      "FPS_squared_distance_pair_evaluations": 1212416,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.02850882604252547,
+          "minimum_raw_pivot": 1.3599476871192778e-05,
+          "epsilon_norm": 6.227349475834794e-07
+        },
+        {
+          "promoted": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9,
+            10
+          ],
+          "factor_bytes": 720900,
+          "formula_factor_bytes": 720900,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.029777088027913123,
+          "minimum_raw_pivot": 1.3599466760812873e-05,
+          "epsilon_norm": 2.6218119139032286e-07
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 38,
+          "relative": 2.2571014342853998e-08,
+          "landmark_relative": 1.820275130565885e-11,
+          "tail_relative": 2.2571007002904542e-08
+        }
+      ],
+      "dataset": "mixed",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56"
+    },
+    {
+      "method": "current_four_H2_to_H1",
+      "m": 592,
+      "status": "converged",
+      "converged": true,
+      "iterations": 38,
+      "true_relative_residual": 7.156381502478046e-09,
+      "landmark_relative_residual": 1.8045609989501282e-11,
+      "tail_relative_residual": 7.156358750437965e-09,
+      "setup_diagnostic_seconds": 0.0776540799997747,
+      "total_diagnostic_seconds": 0.20656570798018947,
+      "total_diagnostic_cpu_seconds": 0.20833630000000003,
+      "counts": {
+        "action_core_products": 42,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 2,
+        "Schur_actions": 38,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 2,
+        "diagnostic_cross_products": 1
+      },
+      "paid_core_products": 50,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1212416,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 146065920,
+        "core_product_entries": 17523200,
+        "boundary_cross_entries": 1723904,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 171070800,
+      "FPS_squared_distance_pair_evaluations": 1212416,
+      "diagnostic_extra_Gaussian_entries": 1562880,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.03232824697624892,
+          "minimum_raw_pivot": 1.3599476871192778e-05,
+          "epsilon_norm": 6.227349475834794e-07
+        },
+        {
+          "promoted": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            9,
+            11
+          ],
+          "factor_bytes": 720916,
+          "formula_factor_bytes": 720916,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.02898711897432804,
+          "minimum_raw_pivot": 1.3599412588572253e-05,
+          "epsilon_norm": 1.5506798766361588e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": {
+        "after_iteration": 4,
+        "promoted": [
+          0,
+          2,
+          4,
+          1,
+          5,
+          9,
+          11,
+          3
+        ],
+        "score_top8_fraction": 0.9620716647296993,
+        "reduced_rhs_recomputed": false,
+        "recurrence_reset": false,
+        "next_action_iteration": 5,
+        "action_gap_norm": 8.36674894786838e-12,
+        "relative_action_gap": 2.3685848691719026e-07,
+        "next_action_direction_norm": 0.3710719951820148
+      },
+      "verification_history": [
+        {
+          "iteration": 38,
+          "relative": 7.156381502478046e-09,
+          "landmark_relative": 1.8045609989501282e-11,
+          "tail_relative": 7.156358750437965e-09
+        }
+      ],
+      "dataset": "mixed",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56"
+    },
+    {
+      "method": "uniform592_H2",
+      "m": 592,
+      "status": "converged",
+      "converged": true,
+      "iterations": 38,
+      "true_relative_residual": 8.03662485892407e-09,
+      "landmark_relative_residual": 1.8799693738937938e-11,
+      "tail_relative_residual": 8.036602870279929e-09,
+      "setup_diagnostic_seconds": 0.06753734400263056,
+      "total_diagnostic_seconds": 0.1515100629767403,
+      "total_diagnostic_cpu_seconds": 0.14875159999999976,
+      "counts": {
+        "action_core_products": 76,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 38,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 84,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1212416,
+        "streamed_factor_entries": 175528,
+        "Schur_cross_and_tail_entries": 146065920,
+        "core_product_entries": 29438976,
+        "boundary_cross_entries": 1723904,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 182811048,
+      "FPS_squared_distance_pair_evaluations": 1212416,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.028899502009153366,
+          "minimum_raw_pivot": 1.3599476871192778e-05,
+          "epsilon_norm": 6.227349475834794e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 38,
+          "relative": 8.03662485892407e-09,
+          "landmark_relative": 1.8799693738937938e-11,
+          "tail_relative": 8.036602870279929e-09
+        }
+      ],
+      "dataset": "mixed",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56"
+    },
+    {
+      "method": "uniform600_H2",
+      "m": 600,
+      "status": "converged",
+      "converged": true,
+      "iterations": 37,
+      "true_relative_residual": 8.946261422443951e-09,
+      "landmark_relative_residual": 1.868389667916014e-11,
+      "tail_relative_residual": 8.946241912150248e-09,
+      "setup_diagnostic_seconds": 0.059951737988740206,
+      "total_diagnostic_seconds": 0.14188816398382187,
+      "total_diagnostic_cpu_seconds": 0.14396219999999982,
+      "counts": {
+        "action_core_products": 74,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 37,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 82,
+      "entry_components": {
+        "FPS_Gaussian_entries": 1228800,
+        "streamed_factor_entries": 180300,
+        "Schur_cross_and_tail_entries": 141869248,
+        "core_product_entries": 29520000,
+        "boundary_cross_entries": 1737600,
+        "original_verification_entries": 4194304
+      },
+      "analytical_solver_Gaussian_entries": 178730252,
+      "FPS_squared_distance_pair_evaluations": 1228800,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 721200,
+          "formula_factor_bytes": 721200,
+          "column_flags_and_offsets_bytes": 5400,
+          "epsilon_bytes": 4800,
+          "raw_pivot_diagnostic_bytes": 4800,
+          "construction_working_column_max_bytes": 4800,
+          "setup_seconds": 0.03195058600977063,
+          "minimum_raw_pivot": 1.3599476871192778e-05,
+          "epsilon_norm": 6.276158348749213e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 37,
+          "relative": 8.946261422443951e-09,
+          "landmark_relative": 1.868389667916014e-11,
+          "tail_relative": 8.946241912150248e-09
+        }
+      ],
+      "dataset": "mixed",
+      "n": 2048,
+      "regularization": 1e-05,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56"
+    },
+    {
+      "method": "FIRST8_H1",
+      "m": 592,
+      "status": "recursive_stop_true_residual_failed",
+      "converged": false,
+      "iterations": 18,
+      "true_relative_residual": 2.2744015703553874e-08,
+      "landmark_relative_residual": 1.226307541239852e-10,
+      "tail_relative_residual": 2.2743685102059612e-08,
+      "setup_diagnostic_seconds": 0.03534580202540383,
+      "total_diagnostic_seconds": 0.050716606026981026,
+      "total_diagnostic_cpu_seconds": 0.052442600000000006,
+      "counts": {
+        "action_core_products": 18,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 18,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 26,
+      "entry_components": {
+        "FPS_Gaussian_entries": 487808,
+        "streamed_factor_entries": 175528,
+        "Schur_cross_and_tail_entries": 5913216,
+        "core_product_entries": 9112064,
+        "boundary_cross_entries": 274688,
+        "original_verification_entries": 678976
+      },
+      "analytical_solver_Gaussian_entries": 16642280,
+      "FPS_squared_distance_pair_evaluations": 487808,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "factor_bytes": 720944,
+          "formula_factor_bytes": 720944,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.030736848013475537,
+          "minimum_raw_pivot": 1.2005980389461594e-05,
+          "epsilon_norm": 2.2404627607871108e-07
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 18,
+          "relative": 2.2744015703553874e-08,
+          "landmark_relative": 1.226307541239852e-10,
+          "tail_relative": 2.2743685102059612e-08
+        }
+      ],
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 1e-05,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb"
+    },
+    {
+      "method": "epsilon_H1",
+      "m": 592,
+      "status": "recursive_stop_true_residual_failed",
+      "converged": false,
+      "iterations": 18,
+      "true_relative_residual": 1.6067455174762733e-08,
+      "landmark_relative_residual": 1.0967148808400254e-10,
+      "tail_relative_residual": 1.6067080878545147e-08,
+      "setup_diagnostic_seconds": 0.06673679302912205,
+      "total_diagnostic_seconds": 0.08046704204753041,
+      "total_diagnostic_cpu_seconds": 0.07736590000000021,
+      "counts": {
+        "action_core_products": 18,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 2,
+        "Schur_actions": 18,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 26,
+      "entry_components": {
+        "FPS_Gaussian_entries": 487808,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 5913216,
+        "core_product_entries": 9112064,
+        "boundary_cross_entries": 274688,
+        "original_verification_entries": 678976
+      },
+      "analytical_solver_Gaussian_entries": 16817808,
+      "FPS_squared_distance_pair_evaluations": 487808,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.028692858992144465,
+          "minimum_raw_pivot": 1.2006363062229177e-05,
+          "epsilon_norm": 6.235954214854943e-07
+        },
+        {
+          "promoted": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            6,
+            8,
+            10
+          ],
+          "factor_bytes": 720920,
+          "formula_factor_bytes": 720920,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.03256319597130641,
+          "minimum_raw_pivot": 1.200596747704647e-05,
+          "epsilon_norm": 2.1970416829435795e-07
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 18,
+          "relative": 1.6067455174762733e-08,
+          "landmark_relative": 1.0967148808400254e-10,
+          "tail_relative": 1.6067080878545147e-08
+        }
+      ],
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 1e-05,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb"
+    },
+    {
+      "method": "initial_b_H1",
+      "m": 592,
+      "status": "recursive_stop_true_residual_failed",
+      "converged": false,
+      "iterations": 18,
+      "true_relative_residual": 1.4141197567766524e-08,
+      "landmark_relative_residual": 1.0681178527955127e-10,
+      "tail_relative_residual": 1.4140794174767244e-08,
+      "setup_diagnostic_seconds": 0.0918495609657839,
+      "total_diagnostic_seconds": 0.10558856098214164,
+      "total_diagnostic_cpu_seconds": 0.10051379999999988,
+      "counts": {
+        "action_core_products": 18,
+        "boundary_core_products": 8,
+        "score_core_products": 1,
+        "factor_builds": 2,
+        "Schur_actions": 18,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 27,
+      "entry_components": {
+        "FPS_Gaussian_entries": 487808,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 5913216,
+        "core_product_entries": 9462528,
+        "boundary_cross_entries": 274688,
+        "original_verification_entries": 678976
+      },
+      "analytical_solver_Gaussian_entries": 17168272,
+      "FPS_squared_distance_pair_evaluations": 487808,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.04905500204768032,
+          "minimum_raw_pivot": 1.2006363062229177e-05,
+          "epsilon_norm": 6.235954214854943e-07
+        },
+        {
+          "promoted": [
+            0,
+            1,
+            3,
+            4,
+            9,
+            16,
+            21,
+            25
+          ],
+          "factor_bytes": 720740,
+          "formula_factor_bytes": 720740,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.02895947702927515,
+          "minimum_raw_pivot": 1.2005973610189014e-05,
+          "epsilon_norm": 2.909883423309431e-07
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 18,
+          "relative": 1.4141197567766524e-08,
+          "landmark_relative": 1.0681178527955127e-10,
+          "tail_relative": 1.4140794174767244e-08
+        }
+      ],
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 1e-05,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb"
+    },
+    {
+      "method": "current_four_H2_to_H1",
+      "m": 592,
+      "status": "converged",
+      "converged": true,
+      "iterations": 18,
+      "true_relative_residual": 8.137743205859133e-09,
+      "landmark_relative_residual": 1.1336194593019092e-10,
+      "tail_relative_residual": 8.136953579425251e-09,
+      "setup_diagnostic_seconds": 0.036594433011487126,
+      "total_diagnostic_seconds": 0.09111434302758425,
+      "total_diagnostic_cpu_seconds": 0.08574590000000004,
+      "counts": {
+        "action_core_products": 22,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 2,
+        "Schur_actions": 18,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 2,
+        "diagnostic_cross_products": 1
+      },
+      "paid_core_products": 30,
+      "entry_components": {
+        "FPS_Gaussian_entries": 487808,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 5913216,
+        "core_product_entries": 10513920,
+        "boundary_cross_entries": 274688,
+        "original_verification_entries": 678976
+      },
+      "analytical_solver_Gaussian_entries": 18219664,
+      "FPS_squared_distance_pair_evaluations": 487808,
+      "diagnostic_extra_Gaussian_entries": 838272,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.03132162004476413,
+          "minimum_raw_pivot": 1.2006363062229177e-05,
+          "epsilon_norm": 6.235954214854943e-07
+        },
+        {
+          "promoted": [
+            0,
+            1,
+            3,
+            4,
+            7,
+            9,
+            16,
+            23
+          ],
+          "factor_bytes": 720804,
+          "formula_factor_bytes": 720804,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.029194743023253977,
+          "minimum_raw_pivot": 1.2005965657263333e-05,
+          "epsilon_norm": 2.750834390660197e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": {
+        "after_iteration": 4,
+        "promoted": [
+          0,
+          1,
+          3,
+          7,
+          23,
+          9,
+          16,
+          4
+        ],
+        "score_top8_fraction": 0.9687991371342224,
+        "reduced_rhs_recomputed": false,
+        "recurrence_reset": false,
+        "next_action_iteration": 5,
+        "action_gap_norm": 5.596784892900356e-13,
+        "relative_action_gap": 1.0892961099930027e-07,
+        "next_action_direction_norm": 0.23911986299173513
+      },
+      "verification_history": [
+        {
+          "iteration": 18,
+          "relative": 8.137743205859133e-09,
+          "landmark_relative": 1.1336194593019092e-10,
+          "tail_relative": 8.136953579425251e-09
+        }
+      ],
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 1e-05,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb"
+    },
+    {
+      "method": "uniform592_H2",
+      "m": 592,
+      "status": "converged",
+      "converged": true,
+      "iterations": 18,
+      "true_relative_residual": 8.270419591923108e-09,
+      "landmark_relative_residual": 1.6415944395684583e-10,
+      "tail_relative_residual": 8.268790232157624e-09,
+      "setup_diagnostic_seconds": 0.03614928503520787,
+      "total_diagnostic_seconds": 0.05530908302171156,
+      "total_diagnostic_cpu_seconds": 0.051422200000000196,
+      "counts": {
+        "action_core_products": 36,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 18,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 44,
+      "entry_components": {
+        "FPS_Gaussian_entries": 487808,
+        "streamed_factor_entries": 175528,
+        "Schur_cross_and_tail_entries": 5913216,
+        "core_product_entries": 15420416,
+        "boundary_cross_entries": 274688,
+        "original_verification_entries": 678976
+      },
+      "analytical_solver_Gaussian_entries": 22950632,
+      "FPS_squared_distance_pair_evaluations": 487808,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.03110868897056207,
+          "minimum_raw_pivot": 1.2006363062229177e-05,
+          "epsilon_norm": 6.235954214854943e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 18,
+          "relative": 8.270419591923108e-09,
+          "landmark_relative": 1.6415944395684583e-10,
+          "tail_relative": 8.268790232157624e-09
+        }
+      ],
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 1e-05,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb"
+    },
+    {
+      "method": "uniform600_H2",
+      "m": 600,
+      "status": "converged",
+      "converged": true,
+      "iterations": 17,
+      "true_relative_residual": 7.620773686286932e-09,
+      "landmark_relative_residual": 1.8166050346693987e-10,
+      "tail_relative_residual": 7.618608208792696e-09,
+      "setup_diagnostic_seconds": 0.04779608501121402,
+      "total_diagnostic_seconds": 0.06571543298196048,
+      "total_diagnostic_cpu_seconds": 0.06490219999999969,
+      "counts": {
+        "action_core_products": 34,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 17,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 42,
+      "entry_components": {
+        "FPS_Gaussian_entries": 494400,
+        "streamed_factor_entries": 180300,
+        "Schur_cross_and_tail_entries": 5422592,
+        "core_product_entries": 15120000,
+        "boundary_cross_entries": 268800,
+        "original_verification_entries": 678976
+      },
+      "analytical_solver_Gaussian_entries": 22165068,
+      "FPS_squared_distance_pair_evaluations": 494400,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 721200,
+          "formula_factor_bytes": 721200,
+          "column_flags_and_offsets_bytes": 5400,
+          "epsilon_bytes": 4800,
+          "raw_pivot_diagnostic_bytes": 4800,
+          "construction_working_column_max_bytes": 4800,
+          "setup_seconds": 0.03365436400054023,
+          "minimum_raw_pivot": 1.2006363062229177e-05,
+          "epsilon_norm": 6.280567909086148e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 17,
+          "relative": 7.620773686286932e-09,
+          "landmark_relative": 1.8166050346693987e-10,
+          "tail_relative": 7.618608208792696e-09
+        }
+      ],
+      "dataset": "Concrete",
+      "n": 824,
+      "regularization": 1e-05,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb"
+    },
+    {
+      "method": "FIRST8_H1",
+      "m": 592,
+      "status": "recursive_stop_true_residual_failed",
+      "converged": false,
+      "iterations": 22,
+      "true_relative_residual": 2.869214039088509e-07,
+      "landmark_relative_residual": 3.4867800322861e-10,
+      "tail_relative_residual": 2.869211920452653e-07,
+      "setup_diagnostic_seconds": 0.03557703399565071,
+      "total_diagnostic_seconds": 0.05533144797664136,
+      "total_diagnostic_cpu_seconds": 0.05209550000000007,
+      "counts": {
+        "action_core_products": 22,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 22,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 30,
+      "entry_components": {
+        "FPS_Gaussian_entries": 711584,
+        "streamed_factor_entries": 175528,
+        "Schur_cross_and_tail_entries": 24075480,
+        "core_product_entries": 10513920,
+        "boundary_cross_entries": 722240,
+        "original_verification_entries": 1444804
+      },
+      "analytical_solver_Gaussian_entries": 37643556,
+      "FPS_squared_distance_pair_evaluations": 711584,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "factor_bytes": 720944,
+          "formula_factor_bytes": 720944,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.028668698971159756,
+          "minimum_raw_pivot": 1.1108161628144216e-05,
+          "epsilon_norm": 1.7000889628892452e-07
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 22,
+          "relative": 2.869214039088509e-07,
+          "landmark_relative": 3.4867800322861e-10,
+          "tail_relative": 2.869211920452653e-07
+        }
+      ],
+      "dataset": "Airfoil",
+      "n": 1202,
+      "regularization": 1e-05,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a"
+    },
+    {
+      "method": "epsilon_H1",
+      "m": 592,
+      "status": "recursive_stop_true_residual_failed",
+      "converged": false,
+      "iterations": 22,
+      "true_relative_residual": 3.5580096583795773e-07,
+      "landmark_relative_residual": 3.354290228303795e-10,
+      "tail_relative_residual": 3.558008077261689e-07,
+      "setup_diagnostic_seconds": 0.07109269202919677,
+      "total_diagnostic_seconds": 0.09050661703804508,
+      "total_diagnostic_cpu_seconds": 0.08989959999999986,
+      "counts": {
+        "action_core_products": 22,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 2,
+        "Schur_actions": 22,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 30,
+      "entry_components": {
+        "FPS_Gaussian_entries": 711584,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 24075480,
+        "core_product_entries": 10513920,
+        "boundary_cross_entries": 722240,
+        "original_verification_entries": 1444804
+      },
+      "analytical_solver_Gaussian_entries": 37819084,
+      "FPS_squared_distance_pair_evaluations": 711584,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.032655660004820675,
+          "minimum_raw_pivot": 1.1108071618399775e-05,
+          "epsilon_norm": 5.832657484576941e-07
+        },
+        {
+          "promoted": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9
+          ],
+          "factor_bytes": 720936,
+          "formula_factor_bytes": 720936,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.028941870026756078,
+          "minimum_raw_pivot": 1.1108147270722892e-05,
+          "epsilon_norm": 1.6291353561988572e-07
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 22,
+          "relative": 3.5580096583795773e-07,
+          "landmark_relative": 3.354290228303795e-10,
+          "tail_relative": 3.558008077261689e-07
+        }
+      ],
+      "dataset": "Airfoil",
+      "n": 1202,
+      "regularization": 1e-05,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a"
+    },
+    {
+      "method": "initial_b_H1",
+      "m": 592,
+      "status": "recursive_stop_true_residual_failed",
+      "converged": false,
+      "iterations": 22,
+      "true_relative_residual": 1.990087690077497e-07,
+      "landmark_relative_residual": 3.3994490440310616e-10,
+      "tail_relative_residual": 1.9900847866219632e-07,
+      "setup_diagnostic_seconds": 0.06825872597983107,
+      "total_diagnostic_seconds": 0.09134658996481448,
+      "total_diagnostic_cpu_seconds": 0.08686550000000004,
+      "counts": {
+        "action_core_products": 22,
+        "boundary_core_products": 8,
+        "score_core_products": 1,
+        "factor_builds": 2,
+        "Schur_actions": 22,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 31,
+      "entry_components": {
+        "FPS_Gaussian_entries": 711584,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 24075480,
+        "core_product_entries": 10864384,
+        "boundary_cross_entries": 722240,
+        "original_verification_entries": 1444804
+      },
+      "analytical_solver_Gaussian_entries": 38169548,
+      "FPS_squared_distance_pair_evaluations": 711584,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.02903626300394535,
+          "minimum_raw_pivot": 1.1108071618399775e-05,
+          "epsilon_norm": 5.832657484576941e-07
+        },
+        {
+          "promoted": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            12
+          ],
+          "factor_bytes": 720900,
+          "formula_factor_bytes": 720900,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.028986298013478518,
+          "minimum_raw_pivot": 1.1108111323497103e-05,
+          "epsilon_norm": 2.0536433601787543e-07
+        }
+      ],
+      "action_orders": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 22,
+          "relative": 1.990087690077497e-07,
+          "landmark_relative": 3.3994490440310616e-10,
+          "tail_relative": 1.9900847866219632e-07
+        }
+      ],
+      "dataset": "Airfoil",
+      "n": 1202,
+      "regularization": 1e-05,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a"
+    },
+    {
+      "method": "current_four_H2_to_H1",
+      "m": 592,
+      "status": "recursive_stop_true_residual_failed",
+      "converged": false,
+      "iterations": 23,
+      "true_relative_residual": 1.7682829369067668e-07,
+      "landmark_relative_residual": 3.3727925871715574e-10,
+      "tail_relative_residual": 1.768279720300435e-07,
+      "setup_diagnostic_seconds": 0.04102354496717453,
+      "total_diagnostic_seconds": 0.10540962900267914,
+      "total_diagnostic_cpu_seconds": 0.1089544,
+      "counts": {
+        "action_core_products": 27,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 2,
+        "Schur_actions": 23,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 2,
+        "diagnostic_cross_products": 1
+      },
+      "paid_core_products": 35,
+      "entry_components": {
+        "FPS_Gaussian_entries": 711584,
+        "streamed_factor_entries": 351056,
+        "Schur_cross_and_tail_entries": 25169820,
+        "core_product_entries": 12266240,
+        "boundary_cross_entries": 722240,
+        "original_verification_entries": 1444804
+      },
+      "analytical_solver_Gaussian_entries": 40665744,
+      "FPS_squared_distance_pair_evaluations": 711584,
+      "diagnostic_extra_Gaussian_entries": 1062048,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.030524895002599806,
+          "minimum_raw_pivot": 1.1108071618399775e-05,
+          "epsilon_norm": 5.832657484576941e-07
+        },
+        {
+          "promoted": [
+            0,
+            2,
+            3,
+            6,
+            7,
+            8,
+            12,
+            15
+          ],
+          "factor_bytes": 720844,
+          "formula_factor_bytes": 720844,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.0293489980394952,
+          "minimum_raw_pivot": 1.11081394037533e-05,
+          "epsilon_norm": 2.8074883714224525e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "transition": {
+        "after_iteration": 4,
+        "promoted": [
+          0,
+          2,
+          6,
+          8,
+          7,
+          3,
+          12,
+          15
+        ],
+        "score_top8_fraction": 0.948099842702663,
+        "reduced_rhs_recomputed": false,
+        "recurrence_reset": false,
+        "next_action_iteration": 5,
+        "action_gap_norm": 2.2620251324282018e-11,
+        "relative_action_gap": 8.728468810108512e-07,
+        "next_action_direction_norm": 0.6808084110305807
+      },
+      "verification_history": [
+        {
+          "iteration": 23,
+          "relative": 1.7682829369067668e-07,
+          "landmark_relative": 3.3727925871715574e-10,
+          "tail_relative": 1.768279720300435e-07
+        }
+      ],
+      "dataset": "Airfoil",
+      "n": 1202,
+      "regularization": 1e-05,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a"
+    },
+    {
+      "method": "uniform592_H2",
+      "m": 592,
+      "status": "recursive_stop_true_residual_failed",
+      "converged": false,
+      "iterations": 22,
+      "true_relative_residual": 1.8454341111070056e-07,
+      "landmark_relative_residual": 3.6043959932913075e-10,
+      "tail_relative_residual": 1.845430591153953e-07,
+      "setup_diagnostic_seconds": 0.049057975003961474,
+      "total_diagnostic_seconds": 0.07657390396343544,
+      "total_diagnostic_cpu_seconds": 0.07293880000000019,
+      "counts": {
+        "action_core_products": 44,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 22,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 52,
+      "entry_components": {
+        "FPS_Gaussian_entries": 711584,
+        "streamed_factor_entries": 175528,
+        "Schur_cross_and_tail_entries": 24075480,
+        "core_product_entries": 18224128,
+        "boundary_cross_entries": 722240,
+        "original_verification_entries": 1444804
+      },
+      "analytical_solver_Gaussian_entries": 45353764,
+      "FPS_squared_distance_pair_evaluations": 711584,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 702112,
+          "formula_factor_bytes": 702112,
+          "column_flags_and_offsets_bytes": 5328,
+          "epsilon_bytes": 4736,
+          "raw_pivot_diagnostic_bytes": 4736,
+          "construction_working_column_max_bytes": 4736,
+          "setup_seconds": 0.03181262203725055,
+          "minimum_raw_pivot": 1.1108071618399775e-05,
+          "epsilon_norm": 5.832657484576941e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 22,
+          "relative": 1.8454341111070056e-07,
+          "landmark_relative": 3.6043959932913075e-10,
+          "tail_relative": 1.845430591153953e-07
+        }
+      ],
+      "dataset": "Airfoil",
+      "n": 1202,
+      "regularization": 1e-05,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a"
+    },
+    {
+      "method": "uniform600_H2",
+      "m": 600,
+      "status": "recursive_stop_true_residual_failed",
+      "converged": false,
+      "iterations": 22,
+      "true_relative_residual": 1.8517270673102605e-07,
+      "landmark_relative_residual": 3.959633310645321e-10,
+      "tail_relative_residual": 1.851722833772242e-07,
+      "setup_diagnostic_seconds": 0.0589875639998354,
+      "total_diagnostic_seconds": 0.0865745940245688,
+      "total_diagnostic_cpu_seconds": 0.08250720000000022,
+      "counts": {
+        "action_core_products": 44,
+        "boundary_core_products": 8,
+        "score_core_products": 0,
+        "factor_builds": 1,
+        "Schur_actions": 22,
+        "boundary_cross_products": 2,
+        "original_verifications": 1,
+        "diagnostic_core_products": 0,
+        "diagnostic_cross_products": 0
+      },
+      "paid_core_products": 52,
+      "entry_components": {
+        "FPS_Gaussian_entries": 721200,
+        "streamed_factor_entries": 180300,
+        "Schur_cross_and_tail_entries": 23865688,
+        "core_product_entries": 18720000,
+        "boundary_cross_entries": 722400,
+        "original_verification_entries": 1444804
+      },
+      "analytical_solver_Gaussian_entries": 45654392,
+      "FPS_squared_distance_pair_evaluations": 721200,
+      "diagnostic_extra_Gaussian_entries": 0,
+      "accounting_note": "FPS uses SharedKernel.farthest, which evaluates both squared distances and exp. Its Gaussian entries are charged once; distance counts are separate and not added as time. Dense K/C caches and CPU times are offline only. Transition gap comparison is an extra diagnostic, not used by solver.",
+      "factor_builds": [
+        {
+          "promoted": [],
+          "factor_bytes": 721200,
+          "formula_factor_bytes": 721200,
+          "column_flags_and_offsets_bytes": 5400,
+          "epsilon_bytes": 4800,
+          "raw_pivot_diagnostic_bytes": 4800,
+          "construction_working_column_max_bytes": 4800,
+          "setup_seconds": 0.045320122968405485,
+          "minimum_raw_pivot": 1.1108071618399775e-05,
+          "epsilon_norm": 5.879789764189857e-07
+        }
+      ],
+      "action_orders": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "transition": null,
+      "verification_history": [
+        {
+          "iteration": 22,
+          "relative": 1.8517270673102605e-07,
+          "landmark_relative": 3.959633310645321e-10,
+          "tail_relative": 1.851722833772242e-07
+        }
+      ],
+      "dataset": "Airfoil",
+      "n": 1202,
+      "regularization": 1e-05,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a"
+    }
+  ],
+  "heldout_FIRST8": [
+    {
+      "scope": "Extra frozen-exact-trajectory offline accuracy check, not algorithm selection work.",
+      "exact_iterations": 40,
+      "heldout_count": 36,
+      "at_most_uniform_H2_count": 30,
+      "median_ratio": 0.4534311306677061,
+      "maximum_ratio": 3.039316733755269,
+      "history": [
+        {
+          "iteration": 5,
+          "FIRST8_H1_error": 9.05635789789812e-12,
+          "uniform_H2_error": 6.854355142693183e-12
+        },
+        {
+          "iteration": 6,
+          "FIRST8_H1_error": 5.775367886991087e-12,
+          "uniform_H2_error": 8.170571320955502e-12
+        },
+        {
+          "iteration": 7,
+          "FIRST8_H1_error": 2.254952443285261e-12,
+          "uniform_H2_error": 1.2545430248048607e-11
+        },
+        {
+          "iteration": 8,
+          "FIRST8_H1_error": 1.170370813949647e-12,
+          "uniform_H2_error": 1.1223989568039769e-12
+        },
+        {
+          "iteration": 9,
+          "FIRST8_H1_error": 5.507135340293249e-13,
+          "uniform_H2_error": 2.387593999220136e-12
+        },
+        {
+          "iteration": 10,
+          "FIRST8_H1_error": 4.971442568430229e-13,
+          "uniform_H2_error": 1.6925334955324198e-12
+        },
+        {
+          "iteration": 11,
+          "FIRST8_H1_error": 7.529196420709446e-13,
+          "uniform_H2_error": 2.477266135868191e-13
+        },
+        {
+          "iteration": 12,
+          "FIRST8_H1_error": 3.37102668922367e-13,
+          "uniform_H2_error": 4.941865992954371e-13
+        },
+        {
+          "iteration": 13,
+          "FIRST8_H1_error": 1.849661805814266e-13,
+          "uniform_H2_error": 2.978274595229044e-13
+        },
+        {
+          "iteration": 14,
+          "FIRST8_H1_error": 1.4614196450314651e-13,
+          "uniform_H2_error": 2.4844692341992323e-13
+        },
+        {
+          "iteration": 15,
+          "FIRST8_H1_error": 8.368402123580296e-14,
+          "uniform_H2_error": 1.0096678157839705e-13
+        },
+        {
+          "iteration": 16,
+          "FIRST8_H1_error": 3.543833118855618e-14,
+          "uniform_H2_error": 7.831723585856962e-14
+        },
+        {
+          "iteration": 17,
+          "FIRST8_H1_error": 2.281023043327111e-14,
+          "uniform_H2_error": 1.405584835531948e-14
+        },
+        {
+          "iteration": 18,
+          "FIRST8_H1_error": 1.7086462889761727e-14,
+          "uniform_H2_error": 3.643909411506792e-14
+        },
+        {
+          "iteration": 19,
+          "FIRST8_H1_error": 1.56727702726513e-14,
+          "uniform_H2_error": 3.449378519002364e-14
+        },
+        {
+          "iteration": 20,
+          "FIRST8_H1_error": 1.288154451183997e-14,
+          "uniform_H2_error": 5.370458700969428e-14
+        },
+        {
+          "iteration": 21,
+          "FIRST8_H1_error": 7.764484659436815e-15,
+          "uniform_H2_error": 2.585504311621854e-14
+        },
+        {
+          "iteration": 22,
+          "FIRST8_H1_error": 7.250852168863526e-15,
+          "uniform_H2_error": 3.609671792181567e-15
+        },
+        {
+          "iteration": 23,
+          "FIRST8_H1_error": 3.90585946051202e-15,
+          "uniform_H2_error": 1.0765626827003073e-14
+        },
+        {
+          "iteration": 24,
+          "FIRST8_H1_error": 2.389091898985875e-15,
+          "uniform_H2_error": 5.564104337347601e-15
+        },
+        {
+          "iteration": 25,
+          "FIRST8_H1_error": 1.814641311499703e-15,
+          "uniform_H2_error": 3.0129346444111518e-15
+        },
+        {
+          "iteration": 26,
+          "FIRST8_H1_error": 5.12373824250993e-16,
+          "uniform_H2_error": 3.3053108999565617e-15
+        },
+        {
+          "iteration": 27,
+          "FIRST8_H1_error": 4.68548403311745e-16,
+          "uniform_H2_error": 7.898910311884383e-16
+        },
+        {
+          "iteration": 28,
+          "FIRST8_H1_error": 2.4481093439307325e-16,
+          "uniform_H2_error": 5.51032162339537e-16
+        },
+        {
+          "iteration": 29,
+          "FIRST8_H1_error": 2.9866267289002e-16,
+          "uniform_H2_error": 4.209244153546265e-16
+        },
+        {
+          "iteration": 30,
+          "FIRST8_H1_error": 1.5045933414842397e-16,
+          "uniform_H2_error": 5.781017934874426e-16
+        },
+        {
+          "iteration": 31,
+          "FIRST8_H1_error": 5.634541742101167e-17,
+          "uniform_H2_error": 3.56021583482078e-16
+        },
+        {
+          "iteration": 32,
+          "FIRST8_H1_error": 3.2049423122329555e-17,
+          "uniform_H2_error": 1.1855263990896394e-16
+        },
+        {
+          "iteration": 33,
+          "FIRST8_H1_error": 2.1440519460465303e-17,
+          "uniform_H2_error": 5.414299015221774e-17
+        },
+        {
+          "iteration": 34,
+          "FIRST8_H1_error": 1.4394157902121953e-17,
+          "uniform_H2_error": 6.974479010088632e-17
+        },
+        {
+          "iteration": 35,
+          "FIRST8_H1_error": 1.5445182893091662e-17,
+          "uniform_H2_error": 6.486344373249317e-17
+        },
+        {
+          "iteration": 36,
+          "FIRST8_H1_error": 9.55496817713803e-18,
+          "uniform_H2_error": 1.6913329064741473e-17
+        },
+        {
+          "iteration": 37,
+          "FIRST8_H1_error": 7.098189544094075e-18,
+          "uniform_H2_error": 7.449745458335438e-18
+        },
+        {
+          "iteration": 38,
+          "FIRST8_H1_error": 3.1967051877677857e-18,
+          "uniform_H2_error": 1.0784751508340578e-17
+        },
+        {
+          "iteration": 39,
+          "FIRST8_H1_error": 2.107351807678436e-18,
+          "uniform_H2_error": 9.707523101751826e-18
+        },
+        {
+          "iteration": 40,
+          "FIRST8_H1_error": 1.1694530963846045e-18,
+          "uniform_H2_error": 8.093094313238451e-19
+        }
+      ],
+      "dataset": "smooth"
+    },
+    {
+      "scope": "Extra frozen-exact-trajectory offline accuracy check, not algorithm selection work.",
+      "exact_iterations": 36,
+      "heldout_count": 32,
+      "at_most_uniform_H2_count": 28,
+      "median_ratio": 0.39156125759546606,
+      "maximum_ratio": 5.495365606041623,
+      "history": [
+        {
+          "iteration": 5,
+          "FIRST8_H1_error": 1.2837336886989172e-12,
+          "uniform_H2_error": 7.297389040141634e-12
+        },
+        {
+          "iteration": 6,
+          "FIRST8_H1_error": 3.6990511419125663e-13,
+          "uniform_H2_error": 1.4784970310068444e-12
+        },
+        {
+          "iteration": 7,
+          "FIRST8_H1_error": 4.0451756713456896e-13,
+          "uniform_H2_error": 1.3087137081364931e-12
+        },
+        {
+          "iteration": 8,
+          "FIRST8_H1_error": 1.4394863437087081e-13,
+          "uniform_H2_error": 3.974013162536127e-13
+        },
+        {
+          "iteration": 9,
+          "FIRST8_H1_error": 1.8894505522171054e-13,
+          "uniform_H2_error": 4.3447701249326363e-13
+        },
+        {
+          "iteration": 10,
+          "FIRST8_H1_error": 1.0071027171722287e-13,
+          "uniform_H2_error": 5.40430449588331e-13
+        },
+        {
+          "iteration": 11,
+          "FIRST8_H1_error": 5.416431152047954e-14,
+          "uniform_H2_error": 1.9357095080189012e-14
+        },
+        {
+          "iteration": 12,
+          "FIRST8_H1_error": 1.0990361274542452e-13,
+          "uniform_H2_error": 1.3777947065292187e-13
+        },
+        {
+          "iteration": 13,
+          "FIRST8_H1_error": 4.4919070147679876e-14,
+          "uniform_H2_error": 1.801973904277077e-13
+        },
+        {
+          "iteration": 14,
+          "FIRST8_H1_error": 2.708037427574188e-14,
+          "uniform_H2_error": 7.043804897433982e-14
+        },
+        {
+          "iteration": 15,
+          "FIRST8_H1_error": 1.8859662033332588e-14,
+          "uniform_H2_error": 4.483658909739437e-14
+        },
+        {
+          "iteration": 16,
+          "FIRST8_H1_error": 7.60368554155052e-15,
+          "uniform_H2_error": 1.3836541709237695e-15
+        },
+        {
+          "iteration": 17,
+          "FIRST8_H1_error": 4.855793765045295e-15,
+          "uniform_H2_error": 4.072639664656249e-15
+        },
+        {
+          "iteration": 18,
+          "FIRST8_H1_error": 3.203300663912019e-15,
+          "uniform_H2_error": 7.412069622502655e-15
+        },
+        {
+          "iteration": 19,
+          "FIRST8_H1_error": 1.3899603275348362e-15,
+          "uniform_H2_error": 5.489355414395378e-15
+        },
+        {
+          "iteration": 20,
+          "FIRST8_H1_error": 1.6203034848906967e-15,
+          "uniform_H2_error": 2.4349597413042025e-15
+        },
+        {
+          "iteration": 21,
+          "FIRST8_H1_error": 2.1733877537528247e-15,
+          "uniform_H2_error": 5.028106349713068e-15
+        },
+        {
+          "iteration": 22,
+          "FIRST8_H1_error": 9.511283557102218e-16,
+          "uniform_H2_error": 2.203073806987151e-15
+        },
+        {
+          "iteration": 23,
+          "FIRST8_H1_error": 8.43505436250525e-16,
+          "uniform_H2_error": 4.108984989763174e-16
+        },
+        {
+          "iteration": 24,
+          "FIRST8_H1_error": 3.359202162656444e-16,
+          "uniform_H2_error": 1.5539255510518172e-15
+        },
+        {
+          "iteration": 25,
+          "FIRST8_H1_error": 2.2450213935930897e-16,
+          "uniform_H2_error": 8.99795658711353e-16
+        },
+        {
+          "iteration": 26,
+          "FIRST8_H1_error": 1.6796452024453726e-16,
+          "uniform_H2_error": 4.439085202860904e-16
+        },
+        {
+          "iteration": 27,
+          "FIRST8_H1_error": 8.102111154028791e-17,
+          "uniform_H2_error": 3.610013952995753e-16
+        },
+        {
+          "iteration": 28,
+          "FIRST8_H1_error": 5.5137780513661324e-17,
+          "uniform_H2_error": 1.1506432381546145e-16
+        },
+        {
+          "iteration": 29,
+          "FIRST8_H1_error": 4.166542670964336e-17,
+          "uniform_H2_error": 1.8273600479764958e-16
+        },
+        {
+          "iteration": 30,
+          "FIRST8_H1_error": 3.147572507820452e-17,
+          "uniform_H2_error": 7.89526405727918e-17
+        },
+        {
+          "iteration": 31,
+          "FIRST8_H1_error": 9.879011345499414e-18,
+          "uniform_H2_error": 8.056814469740101e-17
+        },
+        {
+          "iteration": 32,
+          "FIRST8_H1_error": 1.2564662223954775e-17,
+          "uniform_H2_error": 2.494103207291474e-17
+        },
+        {
+          "iteration": 33,
+          "FIRST8_H1_error": 4.326341407821774e-18,
+          "uniform_H2_error": 1.2340024492797101e-17
+        },
+        {
+          "iteration": 34,
+          "FIRST8_H1_error": 3.3853721855917995e-18,
+          "uniform_H2_error": 6.389435129007448e-18
+        },
+        {
+          "iteration": 35,
+          "FIRST8_H1_error": 1.5571690735554462e-18,
+          "uniform_H2_error": 9.622404457867836e-18
+        },
+        {
+          "iteration": 36,
+          "FIRST8_H1_error": 7.8547705554389e-19,
+          "uniform_H2_error": 1.3335518176010515e-18
+        }
+      ],
+      "dataset": "mixed"
+    },
+    {
+      "scope": "Extra frozen-exact-trajectory offline accuracy check, not algorithm selection work.",
+      "exact_iterations": 18,
+      "heldout_count": 14,
+      "at_most_uniform_H2_count": 1,
+      "median_ratio": 2.030933453549329,
+      "maximum_ratio": 6.098344996973302,
+      "history": [
+        {
+          "iteration": 5,
+          "FIRST8_H1_error": 6.412574601197059e-13,
+          "uniform_H2_error": 3.7525684562532887e-13
+        },
+        {
+          "iteration": 6,
+          "FIRST8_H1_error": 1.9679113644189237e-13,
+          "uniform_H2_error": 1.1730703763203688e-13
+        },
+        {
+          "iteration": 7,
+          "FIRST8_H1_error": 7.287131378114944e-14,
+          "uniform_H2_error": 4.266473391489619e-14
+        },
+        {
+          "iteration": 8,
+          "FIRST8_H1_error": 2.974939129164007e-14,
+          "uniform_H2_error": 6.6151374803479446e-15
+        },
+        {
+          "iteration": 9,
+          "FIRST8_H1_error": 7.652625586128835e-15,
+          "uniform_H2_error": 1.254869245660412e-15
+        },
+        {
+          "iteration": 10,
+          "FIRST8_H1_error": 6.040085039471304e-15,
+          "uniform_H2_error": 1.5480295923703076e-15
+        },
+        {
+          "iteration": 11,
+          "FIRST8_H1_error": 7.020031693641622e-16,
+          "uniform_H2_error": 4.998557609483114e-16
+        },
+        {
+          "iteration": 12,
+          "FIRST8_H1_error": 3.4396267746234795e-16,
+          "uniform_H2_error": 9.157698149302303e-17
+        },
+        {
+          "iteration": 13,
+          "FIRST8_H1_error": 1.2554795705676286e-16,
+          "uniform_H2_error": 4.098196001335625e-17
+        },
+        {
+          "iteration": 14,
+          "FIRST8_H1_error": 2.948667053925046e-17,
+          "uniform_H2_error": 2.981874138988716e-17
+        },
+        {
+          "iteration": 15,
+          "FIRST8_H1_error": 2.9261528859488706e-17,
+          "uniform_H2_error": 2.5842067465370577e-17
+        },
+        {
+          "iteration": 16,
+          "FIRST8_H1_error": 9.642742705863446e-18,
+          "uniform_H2_error": 4.098032821988955e-18
+        },
+        {
+          "iteration": 17,
+          "FIRST8_H1_error": 2.5490904897817763e-18,
+          "uniform_H2_error": 8.435980513123663e-19
+        },
+        {
+          "iteration": 18,
+          "FIRST8_H1_error": 1.3972777635935746e-18,
+          "uniform_H2_error": 8.934596325497748e-19
+        }
+      ],
+      "dataset": "Concrete"
+    },
+    {
+      "scope": "Extra frozen-exact-trajectory offline accuracy check, not algorithm selection work.",
+      "exact_iterations": 21,
+      "heldout_count": 17,
+      "at_most_uniform_H2_count": 1,
+      "median_ratio": 2.9130532373739646,
+      "maximum_ratio": 11.551741437848165,
+      "history": [
+        {
+          "iteration": 5,
+          "FIRST8_H1_error": 1.6755232521482365e-11,
+          "uniform_H2_error": 1.0892544650096918e-11
+        },
+        {
+          "iteration": 6,
+          "FIRST8_H1_error": 6.149288075710651e-12,
+          "uniform_H2_error": 7.042736017995888e-12
+        },
+        {
+          "iteration": 7,
+          "FIRST8_H1_error": 4.128003969335796e-12,
+          "uniform_H2_error": 1.212318365827478e-12
+        },
+        {
+          "iteration": 8,
+          "FIRST8_H1_error": 1.992729530003094e-12,
+          "uniform_H2_error": 6.840690394657818e-13
+        },
+        {
+          "iteration": 9,
+          "FIRST8_H1_error": 3.8988432025008424e-13,
+          "uniform_H2_error": 1.344369951988885e-13
+        },
+        {
+          "iteration": 10,
+          "FIRST8_H1_error": 3.676880808109273e-13,
+          "uniform_H2_error": 5.4066034237604947e-14
+        },
+        {
+          "iteration": 11,
+          "FIRST8_H1_error": 2.4978045332726886e-13,
+          "uniform_H2_error": 2.1622753129574676e-14
+        },
+        {
+          "iteration": 12,
+          "FIRST8_H1_error": 8.830540347681084e-14,
+          "uniform_H2_error": 2.559442094356532e-14
+        },
+        {
+          "iteration": 13,
+          "FIRST8_H1_error": 2.6687270384920425e-14,
+          "uniform_H2_error": 1.5030405450052883e-14
+        },
+        {
+          "iteration": 14,
+          "FIRST8_H1_error": 1.5000200086685913e-14,
+          "uniform_H2_error": 6.9877336813081836e-15
+        },
+        {
+          "iteration": 15,
+          "FIRST8_H1_error": 8.584573008805878e-15,
+          "uniform_H2_error": 2.0396112673732456e-15
+        },
+        {
+          "iteration": 16,
+          "FIRST8_H1_error": 1.2981375336649553e-15,
+          "uniform_H2_error": 1.0974286527665928e-15
+        },
+        {
+          "iteration": 17,
+          "FIRST8_H1_error": 5.933111391318769e-16,
+          "uniform_H2_error": 3.533481294136905e-16
+        },
+        {
+          "iteration": 18,
+          "FIRST8_H1_error": 3.285046049155439e-16,
+          "uniform_H2_error": 1.988617060995317e-16
+        },
+        {
+          "iteration": 19,
+          "FIRST8_H1_error": 2.0872802643070688e-16,
+          "uniform_H2_error": 7.090846140647933e-17
+        },
+        {
+          "iteration": 20,
+          "FIRST8_H1_error": 1.0981837206812396e-16,
+          "uniform_H2_error": 2.6817692656553323e-17
+        },
+        {
+          "iteration": 21,
+          "FIRST8_H1_error": 3.094602963941778e-17,
+          "uniform_H2_error": 6.777254816299887e-18
+        }
+      ],
+      "dataset": "Airfoil"
+    }
+  ],
+  "failures": [],
+  "elapsed_wall_seconds": 6.207078773993999,
+  "elapsed_cpu_seconds": 4.7970608,
+  "process_peak_rss_kib": 179556
+}

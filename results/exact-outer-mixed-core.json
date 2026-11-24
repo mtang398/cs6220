@@ -1,0 +1,210 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_exact_outer_mixed_core.py": "178aeb32dc1d8899259c20a737bbf49e27eb6944a81bdb3e0fb002d7b9395b00",
+    "scripts/check_core_precision_allocation.py": "ce97909f61de27d880812330a31bacc6d4427fdcccc466811050282c77371f7e",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959",
+    "results/mixed_column_factor_first8.so": "943741be07c35b2e1fb85cc2116dd9367a171ac20ee3a1e23c6293478f8d277a",
+    "results/core-energy-selector.json": "1855a02b2f1c0c9310a3d5361f753640578d97ec0187f4a73df0df70b67abd40"
+  },
+  "protocol": {
+    "core": 592,
+    "shift": 1e-05,
+    "question": "Can exact original-system PCG remove approximate Schur correction costs enough to justify its larger per-step action?",
+    "inverse": "u=H rS,v=(rR-BT u)/lambda,zS=u-HBv,zR=v. H0=stored factor inverse; H1=2H0-H0 C H0. SPD block inverse if H SPD.",
+    "counts": "FullA periteration; two cross products and two core inverse actions per preconditioning. H1 adds two C products. Dense construction/verification during iterations free except final verification. No native timing/full-memory claim.",
+    "controls": "Saved converged fixed FIRST8_H1 and H2-prefix Schur policies on identical data; current selector excluded."
+  },
+  "cases": [
+    {
+      "dataset": "smooth",
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "largest_whitened_core_eigenvalue": 1.000594932040581,
+      "reference": {
+        "method": "FIRST8_H1",
+        "entries": 186270632
+      },
+      "runs": [
+        {
+          "method": "H0",
+          "iterations": 42,
+          "preconditioner_calls": 42,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.754114137198979e-09,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "operator": 176160768,
+            "cross": 72403968,
+            "core": 0,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 254146984,
+          "entry_ratio": 1.3643964229422918
+        },
+        {
+          "method": "H1",
+          "iterations": 42,
+          "preconditioner_calls": 42,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 8.481173027684543e-09,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "operator": 176160768,
+            "cross": 72403968,
+            "core": 29438976,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 283585960,
+          "entry_ratio": 1.5224405315809526
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "largest_whitened_core_eigenvalue": 1.000594932040581,
+      "reference": {
+        "method": "FIRST8_H1",
+        "entries": 169493416
+      },
+      "runs": [
+        {
+          "method": "H0",
+          "iterations": 37,
+          "preconditioner_calls": 37,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 7.000295404732373e-09,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "operator": 155189248,
+            "cross": 63784448,
+            "core": 0,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 224555944,
+          "entry_ratio": 1.3248652915225922
+        },
+        {
+          "method": "H1",
+          "iterations": 37,
+          "preconditioner_calls": 37,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 6.899601589454538e-09,
+          "entry_components": {
+            "FPS": 1212416,
+            "factor": 175528,
+            "operator": 155189248,
+            "cross": 63784448,
+            "core": 25934336,
+            "final_verification": 4194304
+          },
+          "analytical_entries": 250490280,
+          "entry_ratio": 1.477876167178081
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "largest_whitened_core_eigenvalue": 1.001636321016746,
+      "reference": {
+        "method": "FIRST8_H2prefix4_then_H1",
+        "entries": 18044136
+      },
+      "runs": [
+        {
+          "method": "H0",
+          "iterations": 18,
+          "preconditioner_calls": 18,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 3.567475469276798e-09,
+          "entry_components": {
+            "FPS": 487808,
+            "factor": 175528,
+            "operator": 12221568,
+            "cross": 4944384,
+            "core": 0,
+            "final_verification": 678976
+          },
+          "analytical_entries": 18508264,
+          "entry_ratio": 1.0257218189887285
+        },
+        {
+          "method": "H1",
+          "iterations": 18,
+          "preconditioner_calls": 18,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 3.598418813148747e-09,
+          "entry_components": {
+            "FPS": 487808,
+            "factor": 175528,
+            "operator": 12221568,
+            "cross": 4944384,
+            "core": 12616704,
+            "final_verification": 678976
+          },
+          "analytical_entries": 31124968,
+          "entry_ratio": 1.7249353474170224
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "largest_whitened_core_eigenvalue": 1.0024239123962284,
+      "reference": {
+        "method": "FIRST8_H2prefix4_then_H1",
+        "entries": 45460972
+      },
+      "runs": [
+        {
+          "method": "H0",
+          "iterations": 21,
+          "preconditioner_calls": 21,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.14644814300949e-09,
+          "entry_components": {
+            "FPS": 711584,
+            "factor": 175528,
+            "operator": 30340884,
+            "cross": 15167040,
+            "core": 0,
+            "final_verification": 1444804
+          },
+          "analytical_entries": 47839840,
+          "entry_ratio": 1.0523276977007883
+        },
+        {
+          "method": "H1",
+          "iterations": 21,
+          "preconditioner_calls": 21,
+          "status": "converged",
+          "converged": true,
+          "original_relative_residual": 9.115631460738294e-09,
+          "entry_components": {
+            "FPS": 711584,
+            "factor": 175528,
+            "operator": 30340884,
+            "cross": 15167040,
+            "core": 14719488,
+            "final_verification": 1444804
+          },
+          "analytical_entries": 62559328,
+          "entry_ratio": 1.3761106559710161
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 1.6196717249695212,
+  "elapsed_cpu_seconds": 1.5588230999999997
+}

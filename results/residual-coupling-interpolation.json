@@ -1,0 +1,636 @@
+{
+  "status": "complete",
+  "sources": {
+    "scripts/check_residual_coupling_interpolation.py": "a8cb81a19ae2142768092e4777fc6a80152edf444be92468295939be607d1405",
+    "scripts/check_int16_core_capacity.py": "092aea8830f40dec71900e48ad78b64837c3ea321a1d1cf0d8f33e9abb0e7167",
+    "scripts/check_schur_inplace_frontier_v2.py": "ae4db78d8896222ef48c2cb3c9a6cd1875ab06c96d6ed174270e943846ffc959",
+    "results/int16-core-capacity.json": "4e7facaf29e46968c95e4832434e3861ad062013232f0451e2bf1e9e5428eaf8"
+  },
+  "protocol": {
+    "payload_budget": 721200,
+    "rank": 2,
+    "prefix": 4,
+    "shift": 1e-05,
+    "core": "Maximum m<n with m\u00b2+63m\u2212152+16n<=721200, postquantized int16; includes duplicate first8 diagonals and rank2 cache.",
+    "update": "a=rS,d=(Zstar\u2212Z)^T a,v=rR\u2212Zstar^T a,c=(Zstar\u2212Z)v. DeltaZ=a d^T/(a^T a)+(c\u2212a(d^T v)/(a^T a))v^T/(v^T v), with rank1/zero degeneracies. One frozen update, original residual target, exact congruence restart.",
+    "controls": [
+      "unchanged_restart",
+      "initial_target_restart",
+      "weighted_rank2_upfront",
+      "reference_warm_restart",
+      "saved_FP32core600"
+    ],
+    "cost": "Reference actions, construction/SVD, cache arithmetic and dense decode free; n\u00b2 entries per fused action. Common prefixsetup charged once; all prefix/restart boundaries and final verifications charged. Warmstart pays one additional original A action. Per-iterate true stopping free; no native/fullmemory/novelty claim.",
+    "limits": "80/85CPU; command120wall serialized flock;4CPU per solve;BLAS1"
+  },
+  "tiny_check": [
+    {
+      "action_interpolation_relative_error": 1.4761231787028564e-16,
+      "stored_rank": 2,
+      "compatibility_defect": 2.7755575615628914e-17,
+      "left_constraint_relative_error": 1.303396363374043e-16,
+      "right_constraint_relative_error": 1.4328640589818543e-16
+    },
+    {
+      "action_interpolation_relative_error": 1.1977389653083644e-16,
+      "stored_rank": 1,
+      "compatibility_defect": 0.0,
+      "left_constraint_relative_error": 0.0,
+      "right_constraint_relative_error": 1.2889712121576717e-16
+    },
+    {
+      "action_interpolation_relative_error": 1.6605625309234266e-15,
+      "stored_rank": 1,
+      "compatibility_defect": 0.0,
+      "left_constraint_relative_error": 1.499106213975446e-16,
+      "right_constraint_relative_error": 0.0
+    },
+    {
+      "action_interpolation_relative_error": 0.0,
+      "stored_rank": 0,
+      "compatibility_defect": 0.0,
+      "left_constraint_relative_error": 0.0,
+      "right_constraint_relative_error": 0.0
+    }
+  ],
+  "cases": [
+    {
+      "dataset": "smooth",
+      "n": 2048,
+      "core": 798,
+      "payload_bytes": 719694,
+      "data_sha256": "676f9da834cedf877d894b3baaa4cf5a40bcdf5a84c0c4e3cc94acb8088cef15",
+      "prefix": {
+        "status": "prefix",
+        "converged": false,
+        "iterations": 4,
+        "original_relative_residual": 0.7287671271033357,
+        "kernel_action_batches": 4,
+        "entry_components": {
+          "FPS": 1634304,
+          "factor": 318801,
+          "actions": 16777216,
+          "boundary_cross": 1995000,
+          "verification": 4194304
+        },
+        "analytical_entries": 24919625,
+        "diagnostic_cpu_seconds": 0.020823099999999428
+      },
+      "interpolation": {
+        "current": {
+          "stored_rank": 2,
+          "compatibility_defect": 3.9968028886505635e-15,
+          "left_constraint_relative_error": 4.551929814176589e-16,
+          "right_constraint_relative_error": 3.0888997421692606e-16,
+          "full_action_relative_error": 5.690171970151094e-15
+        },
+        "initial": {
+          "stored_rank": 2,
+          "compatibility_defect": 7.36216643204557e-15,
+          "left_constraint_relative_error": 6.260762598295998e-16,
+          "right_constraint_relative_error": 2.812372788414386e-16,
+          "full_action_relative_error": 7.51221007162823e-15
+        }
+      },
+      "strong_FP32core600": {
+        "iterations": 42,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 7.0339609444211055e-09,
+        "analytical_entries": 183501772,
+        "entry_components": {
+          "FPS": 1228800,
+          "factor": 180300,
+          "actions": 176160768,
+          "boundary_cross": 1737600,
+          "final_verification": 4194304
+        },
+        "method": "float32",
+        "core": 600,
+        "factor_payload_bytes": 721200
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 377,
+          "original_relative_residual": 9.744277901164075e-09,
+          "kernel_action_batches": 377,
+          "entry_components": {
+            "FPS": 1634304,
+            "factor": 318801,
+            "actions": 1564475392,
+            "boundary_cross": 1995000,
+            "verification": 4194304
+          },
+          "analytical_entries": 1595584321,
+          "diagnostic_cpu_seconds": 2.5923758,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "cpu_cap",
+          "converged": false,
+          "iterations": 450,
+          "original_relative_residual": 0.07789652228448542,
+          "kernel_action_batches": 450,
+          "entry_components": {
+            "FPS": 1634304,
+            "factor": 318801,
+            "actions": 1870659584,
+            "boundary_cross": 1995000,
+            "verification": 4194304
+          },
+          "analytical_entries": 1901768513,
+          "diagnostic_cpu_seconds": 4.0071281,
+          "method": "current_target_restart"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 519,
+          "original_relative_residual": 3.2141611118441998e-09,
+          "kernel_action_batches": 519,
+          "entry_components": {
+            "FPS": 1634304,
+            "factor": 318801,
+            "actions": 2160066560,
+            "boundary_cross": 1995000,
+            "verification": 4194304
+          },
+          "analytical_entries": 2191175489,
+          "diagnostic_cpu_seconds": 3.2386388999999998,
+          "method": "initial_target_restart"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 228,
+          "original_relative_residual": 5.006834809761117e-09,
+          "kernel_action_batches": 228,
+          "entry_components": {
+            "FPS": 1634304,
+            "factor": 318801,
+            "actions": 956301312,
+            "boundary_cross": 1995000,
+            "verification": 4194304
+          },
+          "analytical_entries": 964443721,
+          "diagnostic_cpu_seconds": 1.4163324,
+          "method": "weighted_rank2_upfront"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 375,
+          "original_relative_residual": 9.423846321577845e-09,
+          "kernel_action_batches": 375,
+          "entry_components": {
+            "FPS": 1634304,
+            "factor": 318801,
+            "actions": 1556086784,
+            "boundary_cross": 1995000,
+            "verification": 4194304
+          },
+          "analytical_entries": 1591390017,
+          "diagnostic_cpu_seconds": 2.5202467000000013,
+          "warm_original_operator_products": 1,
+          "method": "reference_warm_restart"
+        }
+      ]
+    },
+    {
+      "dataset": "mixed",
+      "n": 2048,
+      "core": 798,
+      "payload_bytes": 719694,
+      "data_sha256": "ea120c02fbb76efc56bcc4ec373daa6356dc26f847dc5bd26b716bd7ddc8cd56",
+      "prefix": {
+        "status": "prefix",
+        "converged": false,
+        "iterations": 4,
+        "original_relative_residual": 0.4953154989943349,
+        "kernel_action_batches": 4,
+        "entry_components": {
+          "FPS": 1634304,
+          "factor": 318801,
+          "actions": 16777216,
+          "boundary_cross": 1995000,
+          "verification": 4194304
+        },
+        "analytical_entries": 24919625,
+        "diagnostic_cpu_seconds": 0.031247899999996775
+      },
+      "interpolation": {
+        "current": {
+          "stored_rank": 2,
+          "compatibility_defect": 4.440892098500626e-16,
+          "left_constraint_relative_error": 4.4381695556025354e-16,
+          "right_constraint_relative_error": 3.1555200526641726e-16,
+          "full_action_relative_error": 2.6056924564344886e-15
+        },
+        "initial": {
+          "stored_rank": 2,
+          "compatibility_defect": 1.8318679906315083e-15,
+          "left_constraint_relative_error": 6.419674704111655e-16,
+          "right_constraint_relative_error": 2.861966784797451e-16,
+          "full_action_relative_error": 2.3724218622088023e-14
+        }
+      },
+      "strong_FP32core600": {
+        "iterations": 40,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 7.146231880022853e-09,
+        "analytical_entries": 175113164,
+        "entry_components": {
+          "FPS": 1228800,
+          "factor": 180300,
+          "actions": 167772160,
+          "boundary_cross": 1737600,
+          "final_verification": 4194304
+        },
+        "method": "float32",
+        "core": 600,
+        "factor_payload_bytes": 721200
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 377,
+          "original_relative_residual": 8.567072571690648e-09,
+          "kernel_action_batches": 377,
+          "entry_components": {
+            "FPS": 1634304,
+            "factor": 318801,
+            "actions": 1564475392,
+            "boundary_cross": 1995000,
+            "verification": 4194304
+          },
+          "analytical_entries": 1595584321,
+          "diagnostic_cpu_seconds": 2.3736265000000003,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "cpu_cap",
+          "converged": false,
+          "iterations": 494,
+          "original_relative_residual": 0.0003022371379692344,
+          "kernel_action_batches": 494,
+          "entry_components": {
+            "FPS": 1634304,
+            "factor": 318801,
+            "actions": 2055208960,
+            "boundary_cross": 1995000,
+            "verification": 4194304
+          },
+          "analytical_entries": 2086317889,
+          "diagnostic_cpu_seconds": 4.007888399999999,
+          "method": "current_target_restart"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 440,
+          "original_relative_residual": 8.676533161320038e-09,
+          "kernel_action_batches": 440,
+          "entry_components": {
+            "FPS": 1634304,
+            "factor": 318801,
+            "actions": 1828716544,
+            "boundary_cross": 1995000,
+            "verification": 4194304
+          },
+          "analytical_entries": 1859825473,
+          "diagnostic_cpu_seconds": 3.909974599999998,
+          "method": "initial_target_restart"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 247,
+          "original_relative_residual": 5.7093876695938825e-09,
+          "kernel_action_batches": 247,
+          "entry_components": {
+            "FPS": 1634304,
+            "factor": 318801,
+            "actions": 1035993088,
+            "boundary_cross": 1995000,
+            "verification": 4194304
+          },
+          "analytical_entries": 1044135497,
+          "diagnostic_cpu_seconds": 1.7639413999999967,
+          "method": "weighted_rank2_upfront"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 378,
+          "original_relative_residual": 4.896465182431025e-09,
+          "kernel_action_batches": 378,
+          "entry_components": {
+            "FPS": 1634304,
+            "factor": 318801,
+            "actions": 1568669696,
+            "boundary_cross": 1995000,
+            "verification": 4194304
+          },
+          "analytical_entries": 1603972929,
+          "diagnostic_cpu_seconds": 2.9052721000000012,
+          "warm_original_operator_products": 1,
+          "method": "reference_warm_restart"
+        }
+      ]
+    },
+    {
+      "dataset": "Concrete",
+      "n": 824,
+      "core": 810,
+      "payload_bytes": 720162,
+      "data_sha256": "7de934164c5b2a9af1b17d28822a02b5d644b87206af93e5fae8cab6962f21fb",
+      "prefix": {
+        "status": "prefix",
+        "converged": false,
+        "iterations": 4,
+        "original_relative_residual": 1.541952300707375,
+        "kernel_action_batches": 4,
+        "entry_components": {
+          "FPS": 667440,
+          "factor": 328455,
+          "actions": 2715904,
+          "boundary_cross": 22680,
+          "verification": 678976
+        },
+        "analytical_entries": 4413455,
+        "diagnostic_cpu_seconds": 0.010377399999995873
+      },
+      "interpolation": {
+        "current": {
+          "stored_rank": 2,
+          "compatibility_defect": 3.9968028886505635e-15,
+          "left_constraint_relative_error": 1.7419967250150977e-15,
+          "right_constraint_relative_error": 1.4844236970866974e-16,
+          "full_action_relative_error": 5.3707331999324104e-14
+        },
+        "initial": {
+          "stored_rank": 2,
+          "compatibility_defect": 3.3306690738754696e-15,
+          "left_constraint_relative_error": 3.513998892661509e-16,
+          "right_constraint_relative_error": 1.4725533950270556e-16,
+          "full_action_relative_error": 9.763911973197193e-15
+        }
+      },
+      "strong_FP32core600": {
+        "iterations": 18,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 4.899669055332535e-09,
+        "analytical_entries": 13844044,
+        "entry_components": {
+          "FPS": 494400,
+          "factor": 180300,
+          "actions": 12221568,
+          "boundary_cross": 268800,
+          "final_verification": 678976
+        },
+        "method": "float32",
+        "core": 600,
+        "factor_payload_bytes": 721200
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 46,
+          "original_relative_residual": 5.246748571430699e-09,
+          "kernel_action_batches": 46,
+          "entry_components": {
+            "FPS": 667440,
+            "factor": 328455,
+            "actions": 28516992,
+            "boundary_cross": 22680,
+            "verification": 678976
+          },
+          "analytical_entries": 33632103,
+          "diagnostic_cpu_seconds": 0.07256490000000326,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 64,
+          "original_relative_residual": 6.27128841432005e-10,
+          "kernel_action_batches": 64,
+          "entry_components": {
+            "FPS": 667440,
+            "factor": 328455,
+            "actions": 40738560,
+            "boundary_cross": 22680,
+            "verification": 678976
+          },
+          "analytical_entries": 45853671,
+          "diagnostic_cpu_seconds": 0.11400589999999511,
+          "method": "current_target_restart"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 62,
+          "original_relative_residual": 9.847224946329203e-09,
+          "kernel_action_batches": 62,
+          "entry_components": {
+            "FPS": 667440,
+            "factor": 328455,
+            "actions": 39380608,
+            "boundary_cross": 22680,
+            "verification": 678976
+          },
+          "analytical_entries": 44495719,
+          "diagnostic_cpu_seconds": 0.09335730000000098,
+          "method": "initial_target_restart"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 27,
+          "original_relative_residual": 2.9172230125870706e-09,
+          "kernel_action_batches": 27,
+          "entry_components": {
+            "FPS": 667440,
+            "factor": 328455,
+            "actions": 18332352,
+            "boundary_cross": 22680,
+            "verification": 678976
+          },
+          "analytical_entries": 20029903,
+          "diagnostic_cpu_seconds": 0.06223340000000377,
+          "method": "weighted_rank2_upfront"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 47,
+          "original_relative_residual": 7.783159627906458e-10,
+          "kernel_action_batches": 47,
+          "entry_components": {
+            "FPS": 667440,
+            "factor": 328455,
+            "actions": 29195968,
+            "boundary_cross": 22680,
+            "verification": 678976
+          },
+          "analytical_entries": 34990055,
+          "diagnostic_cpu_seconds": 0.08207829999999916,
+          "warm_original_operator_products": 1,
+          "method": "reference_warm_restart"
+        }
+      ]
+    },
+    {
+      "dataset": "Airfoil",
+      "n": 1202,
+      "core": 807,
+      "payload_bytes": 721170,
+      "data_sha256": "071d02dbe89ec770d981695572fd9a4695b2cc58370aa1bf733f3f7909a80d0a",
+      "prefix": {
+        "status": "prefix",
+        "converged": false,
+        "iterations": 4,
+        "original_relative_residual": 2.124038621816666,
+        "kernel_action_batches": 4,
+        "entry_components": {
+          "FPS": 970014,
+          "factor": 326028,
+          "actions": 5779216,
+          "boundary_cross": 637530,
+          "verification": 1444804
+        },
+        "analytical_entries": 9157592,
+        "diagnostic_cpu_seconds": 0.010374199999994005
+      },
+      "interpolation": {
+        "current": {
+          "stored_rank": 2,
+          "compatibility_defect": 2.1316282072803006e-14,
+          "left_constraint_relative_error": 4.719176954846446e-16,
+          "right_constraint_relative_error": 2.0955634054967844e-16,
+          "full_action_relative_error": 2.380037019702363e-14
+        },
+        "initial": {
+          "stored_rank": 2,
+          "compatibility_defect": 1.0658141036401503e-14,
+          "left_constraint_relative_error": 4.681827503395805e-16,
+          "right_constraint_relative_error": 2.1156248114530063e-16,
+          "full_action_relative_error": 9.39544168825439e-15
+        }
+      },
+      "strong_FP32core600": {
+        "iterations": 23,
+        "status": "converged",
+        "converged": true,
+        "original_relative_residual": 4.469196890564323e-09,
+        "analytical_entries": 36299196,
+        "entry_components": {
+          "FPS": 721200,
+          "factor": 180300,
+          "actions": 33230492,
+          "boundary_cross": 722400,
+          "final_verification": 1444804
+        },
+        "method": "float32",
+        "core": 600,
+        "factor_payload_bytes": 721200
+      },
+      "runs": [
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 343,
+          "original_relative_residual": 9.678993914323067e-09,
+          "kernel_action_batches": 343,
+          "entry_components": {
+            "FPS": 970014,
+            "factor": 326028,
+            "actions": 489788556,
+            "boundary_cross": 637530,
+            "verification": 1444804
+          },
+          "analytical_entries": 501028482,
+          "diagnostic_cpu_seconds": 1.0376833999999988,
+          "method": "unchanged_restart"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 604,
+          "original_relative_residual": 6.3911235427442286e-09,
+          "kernel_action_batches": 604,
+          "entry_components": {
+            "FPS": 970014,
+            "factor": 326028,
+            "actions": 866882400,
+            "boundary_cross": 637530,
+            "verification": 1444804
+          },
+          "analytical_entries": 878122326,
+          "diagnostic_cpu_seconds": 2.192561900000001,
+          "method": "current_target_restart"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 562,
+          "original_relative_residual": 7.635650552100878e-09,
+          "kernel_action_batches": 562,
+          "entry_components": {
+            "FPS": 970014,
+            "factor": 326028,
+            "actions": 806200632,
+            "boundary_cross": 637530,
+            "verification": 1444804
+          },
+          "analytical_entries": 817440558,
+          "diagnostic_cpu_seconds": 1.8375867999999969,
+          "method": "initial_target_restart"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 217,
+          "original_relative_residual": 9.512068701238251e-09,
+          "kernel_action_batches": 217,
+          "entry_components": {
+            "FPS": 970014,
+            "factor": 326028,
+            "actions": 313522468,
+            "boundary_cross": 637530,
+            "verification": 1444804
+          },
+          "analytical_entries": 316900844,
+          "diagnostic_cpu_seconds": 1.0023143000000019,
+          "method": "weighted_rank2_upfront"
+        },
+        {
+          "status": "converged",
+          "converged": true,
+          "iterations": 339,
+          "original_relative_residual": 9.552948335369114e-09,
+          "kernel_action_batches": 339,
+          "entry_components": {
+            "FPS": 970014,
+            "factor": 326028,
+            "actions": 484009340,
+            "boundary_cross": 637530,
+            "verification": 1444804
+          },
+          "analytical_entries": 496694070,
+          "diagnostic_cpu_seconds": 1.3886328000000034,
+          "warm_original_operator_products": 1,
+          "method": "reference_warm_restart"
+        }
+      ]
+    }
+  ],
+  "elapsed_wall_seconds": 38.455078516039066,
+  "elapsed_cpu_seconds": 38.8083338
+}

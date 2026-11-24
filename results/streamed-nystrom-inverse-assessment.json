@@ -1,0 +1,278 @@
+{
+  "scope": "Numerical feasibility and storage accounting only; no solver/runtime or fixed-rank claim",
+  "result_sha256": "b5154ed565174fc3b22c84a520e610e7ac407802f585e5f73a4f33da3f29a33b",
+  "source_hashes_still_match": true,
+  "completed_cases": 8,
+  "cpu_seconds": 2.1864166999999997,
+  "SPD_formula": "H=(I-U U^T)^2/lambda + U diag(1/(lambda+theta)) U^T, U=C T",
+  "SPD_argument": "For any x, x^T H x=||(I-UU^T)x||^2/lambda + ||diag(1/sqrt(lambda+theta))U^T x||^2. If both vanish then U^T x=0 and (I-UU^T)x=x=0. Thus exact-arithmetic H is SPD even with nonorthogonal U, provided lambda>0 and theta>=0.",
+  "exact_inverse_condition": "If U^T U=I, H equals(lambda I+U diag(theta)U^T)^-1. Finite-precision reconstruction C*T may alter both basis and intended Nystr\u00f6m approximation; mathematical SPD alone does not establish inverse accuracy.",
+  "stream_schedule": [
+    "Pass1 forms q=U^T r.",
+    "Pass2 forms t=r-Uq and q_t=U^T t.",
+    "Pass3 returns(t-Uq_t)/lambda+U diag(1/(lambda+theta))q."
+  ],
+  "kernel_counts": "Setup m^2+3nm entries in this audited implementation, including final Gram audit. Each positive application queries3nm entries; raw Woodbury queries2nm. With one A product per PCG step this would add3m/n relative full kernel-entry passes, before other costs.",
+  "arithmetic": "Explicit row-basis reconstruction costs O(nmr) per application; factored C/T contractions reduce this to O(nm+mr), but were less accurate and failed the symmetry tolerance on stress cases.",
+  "storage_boundary": "Retained state is indices(m), T(m*r), theta(r), plus scalar metadata and shared input features. No full C or U is retained. Setup and application workspaces are explicitly separate, so a retained-state fit is not a total-memory-budget fit.",
+  "caveat": "Dense C/F/U/M/H are validation oracles only.512-RHS H construction is not a performance-memory observation. Numerical array allowances are source-based bounds; shared features and process/library internals remain separate.",
+  "representation": "All tested effective ranks were64 or128. This trades recomputation and m^2 state for a higher rank than a compact rank16/32 factor; it is not fixed rank or original fixed-column-count adaptation.",
+  "cases": [
+    {
+      "bandwidth_multiplier": 1.0,
+      "m": 64,
+      "regularization": 0.001,
+      "effective_rank": 64,
+      "basis_gram_defect_2": 8.363617035565863e-12,
+      "stable_row_basis": {
+        "retained_bytes": 33792,
+        "application_allowance_including_state_bytes": 70656,
+        "setup_named_array_peak_bytes": 264192,
+        "setup_array_allowance_with_lapack_bytes": 399360,
+        "minimum_applied_H_eigenvalue": 0.002931644060055785,
+        "relative_asymmetry": 1.049224708114779e-16,
+        "M_weighted_inverse_error": 1.4264495140636768e-09,
+        "max_probe_relative_action_error": 2.847477563214646e-07,
+        "vector_entries": 98304,
+        "extra_entries_per_full_kernel": 0.375,
+        "minimum_equivalent_n_times_k_columns_for_retained": 9,
+        "minimum_equivalent_n_times_k_columns_for_application": 18
+      },
+      "fast_contraction": {
+        "relative_asymmetry": 9.429269746457587e-13,
+        "M_weighted_inverse_error": 7.618539465958918e-09,
+        "max_probe_relative_action_error": 6.119588970938695e-07,
+        "symmetric_positive_check": true
+      },
+      "raw_woodbury": {
+        "setup_failure": null,
+        "minimum_applied_H_eigenvalue": 0.002931644026716692,
+        "M_weighted_inverse_error": 5.8610199278330555e-06
+      }
+    },
+    {
+      "bandwidth_multiplier": 1.0,
+      "m": 64,
+      "regularization": 1e-05,
+      "effective_rank": 64,
+      "basis_gram_defect_2": 8.363617035565863e-12,
+      "stable_row_basis": {
+        "retained_bytes": 33792,
+        "application_allowance_including_state_bytes": 70656,
+        "setup_named_array_peak_bytes": 264192,
+        "setup_array_allowance_with_lapack_bytes": 399360,
+        "minimum_applied_H_eigenvalue": 0.0029316525828620844,
+        "relative_asymmetry": 1.0640657313126743e-16,
+        "M_weighted_inverse_error": 2.0362094232950767e-09,
+        "max_probe_relative_action_error": 3.319851019578351e-07,
+        "vector_entries": 98304,
+        "extra_entries_per_full_kernel": 0.375,
+        "minimum_equivalent_n_times_k_columns_for_retained": 9,
+        "minimum_equivalent_n_times_k_columns_for_application": 18
+      },
+      "fast_contraction": {
+        "relative_asymmetry": 9.251805664590296e-13,
+        "M_weighted_inverse_error": 3.18062063353608e-08,
+        "max_probe_relative_action_error": 7.200086270325418e-07,
+        "symmetric_positive_check": true
+      },
+      "raw_woodbury": {
+        "setup_failure": null,
+        "minimum_applied_H_eigenvalue": 0.0029316773607484404,
+        "M_weighted_inverse_error": 0.0006517934228855715
+      }
+    },
+    {
+      "bandwidth_multiplier": 1.0,
+      "m": 128,
+      "regularization": 0.001,
+      "effective_rank": 128,
+      "basis_gram_defect_2": 1.8079001879999465e-10,
+      "stable_row_basis": {
+        "retained_bytes": 133120,
+        "application_allowance_including_state_bytes": 193024,
+        "setup_named_array_peak_bytes": 1052672,
+        "setup_array_allowance_with_lapack_bytes": 1585152,
+        "minimum_applied_H_eigenvalue": 0.0029314860256219365,
+        "relative_asymmetry": 1.868283370217718e-16,
+        "M_weighted_inverse_error": 7.667984491810387e-08,
+        "max_probe_relative_action_error": 3.518265333878123e-05,
+        "vector_entries": 196608,
+        "extra_entries_per_full_kernel": 0.75,
+        "minimum_equivalent_n_times_k_columns_for_retained": 33,
+        "minimum_equivalent_n_times_k_columns_for_application": 48
+      },
+      "fast_contraction": {
+        "relative_asymmetry": 2.3442779068612034e-11,
+        "M_weighted_inverse_error": 1.5092493991231137e-06,
+        "max_probe_relative_action_error": 9.292110687600215e-05,
+        "symmetric_positive_check": true
+      },
+      "raw_woodbury": {
+        "setup_failure": null,
+        "minimum_applied_H_eigenvalue": 0.0029314873712300757,
+        "M_weighted_inverse_error": 5.0177487987190794e-05
+      }
+    },
+    {
+      "bandwidth_multiplier": 1.0,
+      "m": 128,
+      "regularization": 1e-05,
+      "effective_rank": 128,
+      "basis_gram_defect_2": 1.8079001879999465e-10,
+      "stable_row_basis": {
+        "retained_bytes": 133120,
+        "application_allowance_including_state_bytes": 193024,
+        "setup_named_array_peak_bytes": 1052672,
+        "setup_array_allowance_with_lapack_bytes": 1585152,
+        "minimum_applied_H_eigenvalue": 0.002931494531959609,
+        "relative_asymmetry": 1.8857039110006097e-16,
+        "M_weighted_inverse_error": 1.3015550504036355e-07,
+        "max_probe_relative_action_error": 0.00011069518177792261,
+        "vector_entries": 196608,
+        "extra_entries_per_full_kernel": 0.75,
+        "minimum_equivalent_n_times_k_columns_for_retained": 33,
+        "minimum_equivalent_n_times_k_columns_for_application": 48
+      },
+      "fast_contraction": {
+        "relative_asymmetry": 1.7848509226689765e-11,
+        "M_weighted_inverse_error": 4.586260661465502e-06,
+        "max_probe_relative_action_error": 0.00031158536481381156,
+        "symmetric_positive_check": true
+      },
+      "raw_woodbury": {
+        "setup_failure": null,
+        "minimum_applied_H_eigenvalue": 0.0029315812622898764,
+        "M_weighted_inverse_error": 0.010544924845121262
+      }
+    },
+    {
+      "bandwidth_multiplier": 4.0,
+      "m": 64,
+      "regularization": 0.001,
+      "effective_rank": 64,
+      "basis_gram_defect_2": 1.5285519759324404e-08,
+      "stable_row_basis": {
+        "retained_bytes": 33792,
+        "application_allowance_including_state_bytes": 70656,
+        "setup_named_array_peak_bytes": 264192,
+        "setup_array_allowance_with_lapack_bytes": 399360,
+        "minimum_applied_H_eigenvalue": 0.00201273834970604,
+        "relative_asymmetry": 1.0835495216691354e-16,
+        "M_weighted_inverse_error": 1.0120234010146945e-05,
+        "max_probe_relative_action_error": 0.00709406252933152,
+        "vector_entries": 98304,
+        "extra_entries_per_full_kernel": 0.375,
+        "minimum_equivalent_n_times_k_columns_for_retained": 9,
+        "minimum_equivalent_n_times_k_columns_for_application": 18
+      },
+      "fast_contraction": {
+        "relative_asymmetry": 3.7062045793555246e-09,
+        "M_weighted_inverse_error": 0.00021194052012696307,
+        "max_probe_relative_action_error": 0.017407535993068036,
+        "symmetric_positive_check": false
+      },
+      "raw_woodbury": {
+        "setup_failure": null,
+        "minimum_applied_H_eigenvalue": 0.0020127430057698278,
+        "M_weighted_inverse_error": 0.00026597240002756983
+      }
+    },
+    {
+      "bandwidth_multiplier": 4.0,
+      "m": 64,
+      "regularization": 1e-05,
+      "effective_rank": 64,
+      "basis_gram_defect_2": 1.5285519759324404e-08,
+      "stable_row_basis": {
+        "retained_bytes": 33792,
+        "application_allowance_including_state_bytes": 70656,
+        "setup_named_array_peak_bytes": 264192,
+        "setup_array_allowance_with_lapack_bytes": 399360,
+        "minimum_applied_H_eigenvalue": 0.0020127423819010165,
+        "relative_asymmetry": 1.0763469956148619e-16,
+        "M_weighted_inverse_error": 7.933010965888165e-05,
+        "max_probe_relative_action_error": 0.4571562520318198,
+        "vector_entries": 98304,
+        "extra_entries_per_full_kernel": 0.375,
+        "minimum_equivalent_n_times_k_columns_for_retained": 9,
+        "minimum_equivalent_n_times_k_columns_for_application": 18
+      },
+      "fast_contraction": {
+        "relative_asymmetry": 3.284330660738573e-09,
+        "M_weighted_inverse_error": 0.021558749410110822,
+        "max_probe_relative_action_error": 1.2187660083632508,
+        "symmetric_positive_check": false
+      },
+      "raw_woodbury": {
+        "setup_failure": null,
+        "minimum_applied_H_eigenvalue": -35536.86206149667,
+        "M_weighted_inverse_error": 1.824612534041068
+      }
+    },
+    {
+      "bandwidth_multiplier": 4.0,
+      "m": 128,
+      "regularization": 0.001,
+      "effective_rank": 128,
+      "basis_gram_defect_2": 1.4114471422349467e-06,
+      "stable_row_basis": {
+        "retained_bytes": 133120,
+        "application_allowance_including_state_bytes": 193024,
+        "setup_named_array_peak_bytes": 1052672,
+        "setup_array_allowance_with_lapack_bytes": 1585152,
+        "minimum_applied_H_eigenvalue": 0.002012740121052407,
+        "relative_asymmetry": 1.8270441655665605e-16,
+        "M_weighted_inverse_error": 0.0009577049065467858,
+        "max_probe_relative_action_error": 0.674260479837193,
+        "vector_entries": 196608,
+        "extra_entries_per_full_kernel": 0.75,
+        "minimum_equivalent_n_times_k_columns_for_retained": 33,
+        "minimum_equivalent_n_times_k_columns_for_application": 48
+      },
+      "fast_contraction": {
+        "relative_asymmetry": 1.7241116030387857e-07,
+        "M_weighted_inverse_error": 0.02712790022241518,
+        "max_probe_relative_action_error": 1.1864211239301685,
+        "symmetric_positive_check": false
+      },
+      "raw_woodbury": {
+        "setup_failure": null,
+        "minimum_applied_H_eigenvalue": 0.0020127778625089535,
+        "M_weighted_inverse_error": 0.002989713066942845
+      }
+    },
+    {
+      "bandwidth_multiplier": 4.0,
+      "m": 128,
+      "regularization": 1e-05,
+      "effective_rank": 128,
+      "basis_gram_defect_2": 1.4114471422349467e-06,
+      "stable_row_basis": {
+        "retained_bytes": 133120,
+        "application_allowance_including_state_bytes": 193024,
+        "setup_named_array_peak_bytes": 1052672,
+        "setup_array_allowance_with_lapack_bytes": 1585152,
+        "minimum_applied_H_eigenvalue": 0.0020129266661479506,
+        "relative_asymmetry": 1.843843468870165e-16,
+        "M_weighted_inverse_error": 0.00945692712868662,
+        "max_probe_relative_action_error": 64.72299511514369,
+        "vector_entries": 196608,
+        "extra_entries_per_full_kernel": 0.75,
+        "minimum_equivalent_n_times_k_columns_for_retained": 33,
+        "minimum_equivalent_n_times_k_columns_for_application": 48
+      },
+      "fast_contraction": {
+        "relative_asymmetry": 1.774990967447944e-07,
+        "M_weighted_inverse_error": 0.4280952435135701,
+        "max_probe_relative_action_error": 115.90721473252138,
+        "symmetric_positive_check": false
+      },
+      "raw_woodbury": {
+        "setup_failure": "Internal potrf return info = [68] for slices [0].",
+        "minimum_applied_H_eigenvalue": null,
+        "M_weighted_inverse_error": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "protocol": {
+    "purpose": "Initial five-seed comparison of residual exchanges, fixed preconditioning, matched restarts, and CG; additional baseline execution is recorded separately in the pilot.",
+    "workloads": [
+      {
+        "dataset": "synthetic",
+        "target": "smooth"
+      },
+      {
+        "dataset": "synthetic",
+        "target": "random"
+      },
+      {
+        "dataset": "concrete",
+        "target": "observed"
+      },
+      {
+        "dataset": "airfoil",
+        "target": "observed"
+      }
+    ],
+    "synthetic_n": 640,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "regularization": [
+      0.001
+    ],
+    "ranks": [
+      16
+    ],
+    "methods": [
+      "cg",
+      "fixed",
+      "residual_exchange",
+      "matched_restart"
+    ],
+    "checkpoint": 20,
+    "candidates": 4,
+    "repetitions": 3,
+    "rtol": 1e-08,
+    "maxiter": 2000,
+    "block_size": 128,
+    "run_timeout_seconds": 60,
+    "max_wall_seconds": 900
+  },
+  "status": "complete",
+  "completed_runs": 3,
+  "source_sha256": {
+    "src/nystrom_project/__init__.py": "160f59e9dc27f2624dd9467757579e986251bd3804b7278e98355a9910564967",
+    "src/nystrom_project/benchmark.py": "e143884df85b2887603fc3dd8fd86371f28562c267f8de5ac3a9bcfec7d86dad",
+    "src/nystrom_project/datasets.py": "c5bce3d8b80f4535c161f064e16250d77654276fb153bafb17c2791feefdb803",
+    "src/nystrom_project/diagnostics.py": "04080c2dfa3dfdf833f6003527dc23cf8ec686fbfad097fbd8aeebd306e1ff92",
+    "src/nystrom_project/numerics.py": "83687504daccfe9db0a464e25b78536231685c51136bca950e6a1087f35311d7",
+    "src/nystrom_project/solvers.py": "8e4f7c6b0ce9df20f4dedba3abd6f3f721ddd0b6398febb70869e9b5ec73274f",
+    "src/nystrom_project/worker.py": "c1beb193df015c152a9e69b68b29a76315e74c25e89c5a419f517e165fbdb65a"
+  },
+  "continuation_of": "/mnt/c/users/maosen/cs6220/project/results/initial-001",
+  "max_wall_seconds": 120.0,
+  "run_order": [
+    "airfoil-observed-s4-lambda0.001-k16-matched_restart-r2",
+    "airfoil-observed-s4-lambda0.001-k16-fixed-r2",
+    "airfoil-observed-s4-lambda0.001-k16-cg-r2"
+  ],
+  "reason": "Complete only missing measurements after the original execution budget ended.",
+  "elapsed_wall_seconds": 22.195987734012306
+}

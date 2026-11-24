@@ -1,0 +1,1935 @@
+--- PAGE 1 ---
+ITERATIVECUR: LARGE RANK-ADAPTIVE APPROXIMATION
+FROM A SMALL RECYCLED SKETCH ∗
+NATHANIEL PRITCHARD†, TAEJUN PARK‡, YUJI NAKATSUKASA†, AND
+PER-GUNNAR MARTINSSON§
+Abstract. The computation of accurate low-rank matrix approximations is central to improving
+the scalability of various techniques in machine learning, uncertainty quantification, and control. Tra-
+ditionally, low-rank approximations are constructed using SVD-based approaches such as truncated
+SVD or Randomized SVD. Although these SVD approaches—especially Randomized SVD—have
+proven to be very computationally efficient, other low-rank approximation methods can offer even
+greater performance. One such approach is the CUR decomposition, which forms a low-rank approx-
+imation using direct row and column subsets of a matrix. Because CUR uses direct matrix subsets,
+it is also often better able to preserve native matrix structures like sparsity or non-negativity than
+SVD-based approaches and can facilitate data interpretation in many contexts. This paper intro-
+duces IterativeCUR, which draws on previous work in randomized numerical linear algebra to build
+a new algorithm that is highly competitive compared to prior work. IterativeCUR is adaptive in the
+sense that it takes as an input parameter the desired tolerance ϵ and outputs (with arbitrarily high
+probability) an approximation of error bounded by ϵ, rather than requiring an a priori guess of the
+numerical rank. IterativeCUR typically runs significantly faster than both existing CUR algorithms
+and techniques such as Randomized SVD, in particular when these methods are run in an adaptive
+rank mode. Its asymptotic complexity is O(mn + (m + n)r2) for an m × n matrix of output rank r.
+IterativeCUR relies on a single small sketch from the matrix that is successively downdated as the
+algorithm proceeds. We demonstrate through extensive experiments that IterativeCUR achieves up
+to 4× speed-up over state-of-the-art pivoting-on-sketch approaches with no loss of accuracy, and up
+to 40× speed-up over rank-adaptive randomized SVD approaches.
+Key words. CUR, index selection, low-rank approximation, rank-adaptive
+AMS subject classifications. 65F55, 15A23, 68W20
+1. Introduction. For decades, low-rank approximations have been essential for
+the scalability improvements achieved in a variety of scientific computing fields, rang-
+ing from mass spectrometry [42], surrogate modeling [23, 44], genetics [24], and deep
+learning [17, 25, 32]. In these fields, practitioners often form low-rank approximations
+using optimal SVD-based approaches such as the truncated SVD [16, 30] and the
+Randomized SVD [21]. However, while some SVD-based methods are very computa-
+tionally efficient, it turns out that performance can be further improved by switching
+to alternative low-rank approximation methodologies such as the CUR decomposition,
+which has the additional advantage that it facilitates data interpretation [24].
+The CUR decomposition [19, 24] aims to find a rank-r approximation to a matrix
+A ∈Rm×n by choosing columns of A, C ∈Rm×r, rows of A, R ∈Rr×n, and a core
+matrix U ∈Rr×r such that
+(1.1)
+A ≈CUR.
+The CUR decomposition offers superior scalability and better preservation of
+∗Submitted to the editors September 26, 2025.
+Funding: The work reported was supported by the Office of Naval Research (N00014- 18-
+1-2354), by the National Science Foundation (DMS-2313434), and by the Department of Energy
+ASCR (DE-SC0025312). For the purpose of open access, the authors have applied a CC BY public
+copyright license to any author accepted manuscript arising from this submission.
+†Mathematical Institute at the University of Oxford.
+‡Institute of Mathematics at EPFL.
+§Department of Mathematics and the Oden Institute at the University of Texas at Austin.
+1
+arXiv:2509.21963v2  [math.NA]  22 Sep 2026
+
+
+--- PAGE 2 ---
+2
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+sparsity and non-negativity compared to SVD-based methods because it works di-
+rectly with selected subsets of the original matrix’s rows and columns. However, this
+advantage comes with a trade-off: CUR approximations typically achieve somewhat
+lower accuracy than their SVD counterparts. This accuracy limitation stems from the
+constraint that the C and R matrices must consist of actual column and row sub-
+sets from the original matrix, preventing CUR from reaching the optimal accuracy
+that a truncated SVD of the same rank can achieve. Nonetheless, the CUR factor-
+ization will be at worst within a factor of r + 1 from the optimal SVD-based rank-r
+approximation in the Frobenius norm, provided that optimal rows and columns are
+chosen [7, 11, 31]1.
+Selecting rows and columns that optimally minimize the Frobenius norm of the
+error is NP-Hard [35, 45]. Instead, most CUR index selection techniques aim to guar-
+antee high-quality approximations to a matrix. Broadly, these selection techniques can
+be categorized as sampling techniques, pivoting techniques, or pivoting on a subspace
+techniques. Sampling techniques select indices by sampling from fixed distributions
+(e.g., Uniform, Leverage Score, DPP) over the row and column indices [10, 18, 24].
+Pivoting techniques select indices by applying a pivoting procedure directly to the
+matrix (e.g., LU with partial pivoting and QR with column pivoting) [37]. Pivoting
+on subspace techniques work by applying a pivoting technique to a subspace of the
+matrix, typically obtained via the truncated SVD or through matrix sketching. These
+techniques offer some of the best approximation performance and computational effi-
+ciency in practice, but are often more difficult to analyze theoretically [14]. Examples
+of pivoting on a subspace techniques include pivoting on a sketch approaches such as
+sketched LU with partial pivoting [14], DEIM [36], Osinsky’s selection approach [31]
+as well as many others [4, 8, 15, 31]. Beyond these categories, there are many hybrid
+approaches, which often involve choosing pivots via sampling that include techniques
+such as robust block-wise random pivoting [13] or RP-Cholesky [5].
+Typically, index-selection techniques require that the rank be known before se-
+lecting the indices [4, 8, 14, 15, 24]. Unfortunately, in many applications, practitioners
+do not have this knowledge [23, 32, 42]. Instead, practitioners often prefer that the
+approximation, bA, satisfies a particular quality threshold, for example, the relative
+error, ∥A−bA∥F /∥A∥F < ϵ. Current CUR approaches can approximate this behavior
+using a rank estimation procedure such as the one proposed in [27] that uses esti-
+mates of singular values to determine a rank that corresponds to the desired quality
+threshold. Unfortunately, owing to the sub-optimality of the CUR for the best rank-r
+approximation to a matrix, this approach does not guarantee that the returned CUR
+approximation will satisfy the desired quality threshold.
+Guaranteeing quality requires a rank-adaptive CUR approach.
+Rank-adaptive
+approaches iteratively increase the rank of an approximation until a particular qual-
+ity threshold is satisfied. As an example, a rank-adaptive variant of RandomizedSVD
+[21] known as SVDSketch [43] iteratively updates the range approximator, Q, with
+sketches of size b of A until ∥A∥2
+F −∥Q⊤A∥2
+F is small enough. Beyond Randomized
+SVD, several innovative and highly effective rank-adaptive approaches have been pro-
+posed for one-sided interpolatory decompositions, which are closely related to CUR
+but select either rows or columns (not both) [13, 34].
+1This is for the ”efficient” choice of U, U = A(I, J)†, sometimes called CUR cross approxima-
+tion [33]. One can improve the suboptimality factor to
+p
+2(r + 1) [7] with U = C†AR† (CUR best
+approximation), which minimizes the Frobenius norm error; but computing this is expensive, and we
+make little use of it in this paper.
+
+
+--- PAGE 3 ---
+ITERATIVE CUR
+3
+This work introduces a rank-adaptive CUR framework, IterativeCUR, that re-
+quires only O(r(m + n)) memory to update the approximation with the same com-
+putational complexity, O(mn + (m + n)r2), as other state-of-the-art CUR approaches
+[14]. IterativeCUR forms a CUR approximation by selecting indices from a single
+recycled sketch of the residual, A −CUR, that holds O(1) vectors.
+This single
+sketch allows IterativeCUR to thrive in environments where matrix-vector operations
+are expensive, e.g., when the matrix A is very large and dense. The sketch of the
+residual also facilitates the creation of a risk-aware stopping criterion for Iterative-
+CUR, which allows users to control the probability that the approximation returned
+by IterativeCUR violates their quality threshold. In experiments, we demonstrate the
+effectiveness of IterativeCUR on a range of moderately sized real-world and synthetic
+matrices. Specifically, we observed that IterativeCUR is four times faster than the
+state-of-the-art column selection procedure, Sketched LUPP [14] (which is not rank-
+adaptive), while matching its accuracy. Additionally, compared to the rank-adaptive
+approach for the Randomized SVD, SVDSketch, IterativeCUR is typically nearly as
+accurate and up to 40 times faster. Experiments examining IterativeCUR revealed
+that high accuracy is maintained even for block sizes as small as five. However, for
+optimal computational speed, larger block sizes (around 100) perform better. The ex-
+periments further indicate that while the choice of index selection strategy does have
+an impact on accuracy, the differences are small. For more details on the experiments,
+see section 5.
+Put simply, this paper introduces an efficient and practical method for com-
+puting CUR approximations that substantially outperforms Randomized SVD. The
+approach achieves this efficiency through two key features: it requires surprisingly
+few matrix-vector products with the full matrix (as few as five), and its rank-adaptive
+design automatically determines a sufficient rank to achieve ϵ-approximations with
+ϵ approaching machine precision. By contrast, SVDSketch is unable to ensure the
+accuracy of an approximation for any accuracy higher than the square root of the
+machine precision [43].
+In the next subsection, we introduce the relevant notation for the paper. After this
+notation is introduced, the paper will proceed in the following manner. In section 2,
+we present background relating to the CUR decomposition and random embeddings
+that is relevant for understanding IterativeCUR. In section 3, we present the intuition,
+describe the specifics, and explore the computational complexity of IterativeCUR. In
+section 4, we present an upper bound on the accuracy of IterativeCUR. In section 5,
+we present extensive numerical experiments that demonstrate the efficiency of row and
+column selection compared to other fixed-rank approaches, the overall effectiveness
+of IterativeCUR when identifying an approximation for a specified error tolerance,
+and the impact of sketch size and index selection method on the performance of
+IterativeCUR. Finally, in section 6, we conclude with a summary of IterativeCUR’s
+practical advantages and remaining theoretical challenges.
+1.1. Notation. This paper will focus on techniques to construct a rank-r ap-
+proximation to a matrix A. To refer to the jth column of A we use the notation
+A(:, j) and to refer to the ith row of A we use the notation A(i, :).
+Our approach will iteratively form a CUR approximation to A where C = A(:
+, J), U = A(I, J)†, and R = A(I, :). Here, I is the set of all row indices selected after
+k iterations, and J represents the set of all column indices selected after k iterations.
+Each iteration improves the approximation of iteration k −1 by selecting b = O(1)
+new row indices Ik and column indices Jk. We will denote appending the new indices
+
+
+--- PAGE 4 ---
+4
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+Ik and Jk to I and J with I = [I, Ik] and J = [J, Jk].
+The true approximation quality of a CUR approximation can be determined by
+computing its residual, S = A−CUR. In addition to this quantity, we also define two
+other residuals. The first is the column-residual, Scol
+k , which applies a fixed sketching
+matrix G ∈Rc×m, c = ⌊1.1b⌋where ⌊·⌋is the floor function to the residual to obtain
+Scol
+k
+= GA −GCUR. The second quantity is the row-residual, Srow
+k
+, which is the
+residual at the column indices Jk. Specifically, Srow
+k
+= A(:, Jk) −CUR(:, Jk). We
+can then use the column residual to measure the quality of a CUR approximation
+ρk = ∥Scol
+k ∥F /∥GA∥F . We can also determine that a solution is good enough when
+ρk < ϵ, where ϵ is a user-selected criterion for approximation quality.
+2. Preliminaries. The following section will present the background necessary
+to describe our proposed method for forming CUR approximations. We will begin by
+developing an understanding of the power of random vectors for revealing dominant
+singular subspaces through a discussion of the random subspace embeddings and the
+Randomized Rangefinder. With an understanding of the power of random sketching,
+we introduce important ideas relating to CUR approximations.
+2.1. Subspace Embeddings and the Randomized Rangefinder. A power-
+ful tool in the field of Randomized Numerical Linear Algebra is the random subspace
+embedding. We define a random subspace embedding as
+Definition 2.1. For a given matrix A ∈Rm×n, distortion parameter δ ∈(0, 1),
+and probability γ ∈(0, 1), a random linear map G : Rm →Rb is considered a random
+subspace embedding with distortion δ if for all x
+(2.1)
+P ((1 −δ)∥Ax∥2 ≤∥GAx∥2 ≤(1 + δ)∥Ax∥2) ≥1 −γ.
+Random linear maps that satisfy Definition 2.1 for large enough b include Gauss-
+ian matrices [22], sub-sampled random trigonometric transforms [1, 39, 41], and the
+sparse sign matrix [6, 29]. Because subspace embeddings approximately preserve the
+norms of matrices, they allow linear algebra operations to be performed on a substan-
+tially lower-dimensional space. The reductions in computations afforded by operating
+on this lower-dimensional space have been central to the performance improvements
+offered by Randomized Numerical Linear Algebra approaches.
+The Randomized Rangefinder [21] is one technique that uses random linear maps
+with the subspace embedding property (Definition 2.1) to form accurate low-rank
+approximations to the range of a matrix A. Remarkably, the Randomized Rangefinder
+can accurately form these low-rank approximations even if the embedding dimension,
+b, is not large enough for the chosen random linear map to satisfy Definition 2.1.
+Specifically, noting that [16] shows that the optimal range approximator to a matrix
+A is given by the r right singular vectors, V r, of a matrix, A, corresponding to the
+largest singular values of A and has an error ∥A −AV rV ⊤
+r ∥2
+F = Pmin(m,n)
+i=r+1
+σi(A)2,
+[21] shows that if X = GA with G ∈Rb×m then
+(2.2)
+E
+h
+∥A −AX†X∥2
+F
+i
+≤
+
+1 +
+r
+b −r −1
+
+∥A −AV rV ⊤
+r ∥2
+F .
+This result demonstrates that for b slightly larger than r, multiplying b-Gaussian
+vectors with a matrix A is remarkably effective at approximating the dominant r-
+dimensional space. As noted in the original work, the quality of this approximation
+depends on the decay of the singular values [21]. In particular, when the singular
+
+
+--- PAGE 5 ---
+ITERATIVE CUR
+5
+values decay slowly, the bound is tight.
+Conversely, when the singular values de-
+cay quickly, the approximation can be significantly more accurate than (2.2) would
+indicate.
+2.2. The CUR Decomposition. The CUR decomposition is a low-rank ap-
+proximation technique that approximates the matrix A ∈Rm×n by selecting subsets
+of the rows and columns of A. In notation, we represent the CUR decomposition as
+selecting row indices I and column indices J and then forming the decomposition
+(2.3)
+A ≈CUR,
+where C = A(:, J), R = A(I, :), and U is a small weight matrix. The theoretically
+optimal choice for the weight matrix is U = C†AR†, but this can be expensive to
+form. A more economical choice that often provides comparable accuracy is the “cross
+approximation”, U = A(I, J)†. We note that when the cross-approximation is used,
+it is often helpful to select indices dependently for purposes of numerical stability.
+That is, first select rows (or columns), and then select columns (or rows) based on
+the information in the chosen rows (columns). See [33] for a full discussion.
+Aside from the index selection approaches discussed in section 1, another impor-
+tant consideration for CUR methods is rank-adaptivity. Unlike standard techniques
+that require a priori knowledge of the rank, rank-adaptive techniques iteratively in-
+crease the rank of an approximation until the approximation satisfies a specified error
+tolerance, ϵ. For rank-adaptive techniques to be effective, the error of the approxi-
+mation must be at least cheap to estimate. For example, in the case of Randomized
+SVD an effective rank-adaptive approach relies on the observation that the squared
+Frobenius norm of the error is the difference between the squared Frobenius norm
+of the original matrix and the squared Frobenius norm of its approximation [43]. In
+the case of CUR, no such equivalence exists, and thus rank-adaptivity is typically a
+harder goal to achieve.
+Progress has been made in developing rank-adaptive approaches for interpolative
+decompositions, which can be thought of as one-sided CUR decompositions where only
+row or column indices are selected. Rank-adaptive interpolative approaches include
+the sketched LU approach of Pearce et al. [34] that relies on the sketched residual
+to attain rank-adaptivity in a similar manner to IterativeCUR and a closely related
+hybrid sampling approach known as Robust Blockwise Randomized Pivoting of Dong
+et al. [13]. Unfortunately, neither approach easily generalizes to CUR because of
+CUR’s need for selecting both rows and columns dependently at each iteration.
+We note that there is a strong connection between CUR and LU with complete
+pivoting. Namely, let PI, PJ be permutation matrices that bring the indices I, J to
+the leading ones (the ordering of the other indices does not matter). A ≈CUR gives
+the same approximation as PIAPJ ≈LU, the partial LU factorization obtained by
+running r steps of the LU elimination, that is, L ∈Rm×r, U ∈Rr×n. That is, we
+have CUR = P T
+I LUP T
+J . As a result, one can use IterativeCUR to compute an LU
+approximation with complete pivoting to any matrix A.
+3. IterativeCUR. With an understanding of the ideas and techniques underly-
+ing the CUR decomposition, we now lay out the intuition and details for IterativeCUR.
+This discussion will first overview the IterativeCUR algorithm (Algorithm 3.1). After
+overviewing IterativeCUR, we will discuss important aspects of IterativeCUR. In par-
+ticular, we will discuss how IterativeCUR selects row and column indices, which will
+reveal how IterativeCUR iteratively constructs the CUR decomposition. With this
+
+
+--- PAGE 6 ---
+6
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+intuition for constructing the decomposition, we will then discuss stopping Iterative-
+CUR via a computationally efficient a posteriori estimator and stopping criterion. We
+then finish this section by totaling the computational complexity of IterativeCUR.
+3.1. Overview of IterativeCUR. When the rank of a matrix is unknown, we
+usually want to form a CUR approximation that satisfies ∥A −CUR∥F /∥A∥F < ϵ.
+A na¨ıve approach for creating an ϵ-accurate CUR approximation selects a set of b
+column indices, J, a set of b row indices, I, and computes the residual of the CUR
+decomposition,
+(3.1)
+S = A −CUR.
+From this residual, one then selects b additional column indices, J+, and b additional
+row indices, I+.
+These indices are then appended to the previously selected sets
+so that J = [J, J+] and I = [I, I+] after which a new residual is computed. This
+process is repeated until ∥A −CUR∥F /∥A∥F < ϵ. Although this na¨ıve approach
+can be performed for small matrices, for large matrices, it becomes computationally
+impractical owing to the O(mnr) computational complexity and the expense of having
+to access the full matrix A at each iteration.
+At a high level, IterativeCUR (Algorithm 3.1) performs the na¨ıve approach, using
+a single sketch of S, GS ∈Rc×n with m ≫c > b and a block subset of the columns of
+S. Specifically, at each iteration, IterativeCUR selects a new block of column indices,
+J+, by applying an index selection procedure, such as partially pivoted LU (LUPP),
+to GS. Then once J+, is selected, IterativeCUR selects a new set of row indices,
+I+, by applying an index selection procedure to the matrix S(:, J+). Once the new
+row and column indices are selected, IterativeCUR updates the matrices C, U, R, by
+computing a new residual GS, and repeating this procedure until ∥GS∥F /∥GA∥F <
+ϵ.
+In total, for a dense matrix, IterativeCUR targets an ϵ-accurate approximation
+to a matrix A in O(mn + (m + n)r2) operations where r is the rank of the ϵ-accurate
+approximation. This computational complexity is comparable to other efficient rank-
+adaptive randomized SVD algorithms, e.g. SVDSketch [43]. However, unlike SVDS-
+ketch, which uses ∥A−bA∥2
+F to make stopping decisions and can only provide approx-
+imations up to 10−8 when using double precision arithmetic, IterativeCUR makes
+stopping decisions using ∥GA −GCUR∥F allowing it to generate approximations
+that are accurate to near machine precision.
+3.2. Index Selection. With an overview of IterativeCUR, we now examine the
+details of the algorithm. We begin with its approach to selecting row and column
+indices. For this discussion, we rely on the observation by [33] that when using the
+cross-approximation form of U, A(I, J)†, row and column indices should be selected
+in a dependent manner to ensure the numerical stability of the approximation. That
+is, if we first select a set of column indices, J, we should choose row indices using only
+the selected columns, i.e. A(:, J), or we risk the core matrix being poorly conditioned.
+For example, when performing CUR on the matrix
+A =
+"
+0
+1
+√n
+. . .
+1
+√n
+1
+√n + η
+0
+. . .
+0
+#
+∈R2×(n+1)
+we can apply QR with Column Pivoting (QRCP) to the rows and columns indepen-
+dently to form a rank-one approximation. If η+1/√n < 1, selecting rows and columns
+
+
+--- PAGE 7 ---
+ITERATIVE CUR
+7
+Algorithm 3.1 IterativeCUR
+Input:
+ϵ > 0
+▷The desired quality of ∥A −CUR∥/∥A∥F
+b > 0
+▷Block/sketch size; usually 5 ≤b ≤250
+Column Selection
+▷LUPP as default could use QRCP or Osinsky [31]
+Row Selection
+▷LUPP as default could use QRCP or Osinsky [31]
+Output: C, U, R
+1: procedure IterativeCUR(b, ϵ, Column Selection, Row Selection)
+2:
+Generate a sketch matrix G ∈R⌊1.1b⌋×m
+3:
+J = ∅, I = ∅, U 0 = ∅, C0 = ∅, R0 = ∅
+4:
+Scol
+0
+= GA
+5:
+ρ0 = ∥Scol
+0 ∥F /∥GA∥F
+6:
+k = 1
+7:
+while ρk−1 > ϵ do
+8:
+Jk ←Column Selection(Scol
+k−1)
+9:
+Srow
+k
+= A(:, Jk) −Ck−1U k−1Rk−1(:, Jk)
+▷Compute row residual
+10:
+J ←[J, Jk]
+11:
+Ik ←Row Selection(Srow
+k
+)
+12:
+I ←[I, Ik]
+13:
+U k ←A(I, J)†
+▷Default QR, improved efficiency with LU
+14:
+Ck ←A(:, J), Rk ←A(I, :)
+15:
+Scol
+k
+←GA −GCkU kRk
+▷Use GCk from GA
+16:
+ρk ←∥Scol
+k ∥F /∥GA∥F
+17:
+k ←k + 1
+18:
+end while
+19: end procedure
+independently will result in us selecting the first row and first column of the matrix,
+meaning the cross approximation core will be 1/0. On the other hand, if instead we
+were to select entries dependently by selecting columns and then rows, we would select
+the first column and second row, resulting in 1/(η + 1/√n) being the core matrix.
+With an understanding of the need for dependent index selection, in the remainder
+of this subsection, we present intuition for how to select column indices using O(bn)
+memory. Then we present how to use the selected columns to select row indices using
+O(bm) memory.
+3.2.1. Column Selection. To ensure that selecting column indices at each it-
+eration of IterativeCUR incurs the same, small, constant computational and storage
+cost, we select column indices from the sketched residual matrix, G(A−CUR) where
+G ∈Rc×m, m ≫c ≥b, is a random matrix with Gaussian entries. Authors have
+repeatedly shown that selecting indices from such a sketch of a matrix is highly ef-
+fective [4, 15, 14, 26, 28, 34]. Typically, these authors select these indices using QR
+with column pivoting (QRCP) or LU with partial pivoting (LUPP).2 Interestingly,
+applying LUPP or QRCP to a sketch of A typically results in better index selection
+than applying either technique to A directly [13, 15].
+The success of pivoting on a sketch of A over pivoting directly on A may at
+2There is no reason in principle why one could not also use sampling techniques such as leverage
+score sampling to perform the selection [24].
+
+
+--- PAGE 8 ---
+8
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+first seem surprising. However, the success becomes clearer when we consider that,
+as (2.2) demonstrates, sketching A results in a representation that approximately
+captures the dominant b-dimensional subspace of A. Therefore, when we pivot on a
+sketch of A, we select columns that best align with an approximation to the subspace
+most important for selecting the indices that lead to the most accurate approximation
+of A [8, 31]. In this way, approaches that pivot on a sketch behave more similarly
+to approaches that use the true best b-dimensional approximation to A like DEIM
+[3, 36] or Osinsky [31].
+Considering that much like [34], IterativeCUR operates on the residual of the
+previous iteration’s CUR approximation, sketching at each iteration reveals an ap-
+proximation to the best b-dimensional subspace of that residual matrix. This means
+that when IterativeCUR uses a pivoting approach to select indices from the sketched
+residual, the selected indices will closely align with the dominant directions left un-
+explained by the previous iteration’s CUR approximation.
+This intuition of index selection leads to two distinct implications for the nature
+of IterativeCUR. First, because IterativeCUR makes selection decisions with only b-
+dimensional information rather than the ideal min{m, n}-dimensional information,
+IterativeCUR is a greedy algorithm. Second, by selecting the indices that most align
+with the dominant directions of the residual, IterativeCUR is able to select indices
+that correct for a previous iteration’s poorly selected indices, if any. In other words,
+IterativeCUR is a self-correcting algorithm. As we will see in section 5, these two
+implied behaviors mean that IterativeCUR is aware of the mistakes caused by its greed
+and able to correct for them, which leads it to exhibit what we term a conscientiously
+greedy behavior.
+Aside from the selection method, another important aspect of IterativeCUR’s
+column selection is the reuse of a single O(1) sketch. Computationally, the benefits
+of reusing a sketch are obvious: we only need to access the full matrix once for b
+matrix-vector products, in line 4 of Algorithm 3.1. At the same time, the potential
+drawback is that the dependence induced by the reuse of the sketch could lead to
+a systematic avoidance of important vectors. Fortunately, other authors who have
+considered reusing a sketch in pivoting on a sketch procedures such as [4, 26] have not
+observed this to be the case. This is remarkable when we note that the residual of
+Randomized SVD A −AV V T is orthogonal to the sketch, i.e., G(A −AV V T ) = 0,
+by construction. Here, (GA)T = V R is the economical QR factorization.
+To see why dependency is not nearly as problematic as we might expect in CUR,
+we consider the following contrived example.
+Example 3.1. Let A =
+c1v1
+c2v2
+c3v3
+
+∈R3×3 where c1 > c2 > c3 > 0
+and v1, v2, v3 orthonormal. Additionally, assume that we generate a single sketching
+vector g = d2v2 + d3v3, where d2 > d3 > 0. Finally, for simplicity, assume that
+v2(2) > v2(1) > v2(3) > 0 and that v1(2) = v3(2) > 0. Now, let us consider using
+IterativeCUR to form a rank-2 approximation of the matrix A. It should be clear
+that the best approximation includes the first and second columns of A. We now see
+what happens when we apply IterativeCUR reusing the sketching vector g, which is
+pathological in that it is orthogonal to the first column of A.
+Iteration 1: Applying the sketching vector g to A we obtain:
+(3.2)
+g⊤A =
+0
+c2d2
+c3d3
+
+.
+Taking the norms of the columns of g⊤A, it is obvious based on the relationships
+
+
+--- PAGE 9 ---
+ITERATIVE CUR
+9
+between c2, d2 and c3, d3 that we would select the second column. Using our knowledge
+about the entries of v2 we know that the second entry has the largest row and thus we
+select the second row.
+Iteration 2: Selecting the second column and second row of A means that the
+residual after the first iteration is:
+g⊤(A −CUR)
+(3.3)
+= g⊤
+c1v1
+c2v2
+c3v3
+
+−
+c2v2
+c2v2(2)
+c1v1(2)
+c2v2(2)
+c3v3(2)
+(3.4)
+=
+h
+−c1d2
+v2(2)v1(2)
+0
+c3d3 −c3d2
+v2(2)v3(2)
+i
+(3.5)
+Using the constant relations defined at the beginning of the example, we select the first
+column and obtain the optimal rank-2 approximation of the matrix A.
+In this example, we see how selecting from the residual mitigates the dependency
+of index selection that comes from reusing a single sketching vector. Superficially, this
+example’s sketching vector is bad because it has no components aligned with the most
+important vector. However, using the residual mitigates much of the adverse effect of
+the reused sketch because the sketched residual punishes columns most aligned with
+the second column and rewards those that are both large and not aligned with the
+second column. This results in IterativeCUR still selecting the first column in the
+second iteration, as we would hope. Of course, this mitigation is not perfect. If we
+were to allow v1(2) = v3(2) = 0, then we would select incorrect indices. However,
+when we consider that we typically use a sketch size greater than one and that a
+Gaussian vector is orthogonal to any particular vector with probability zero, then we
+can see how, provided that we are selecting enough indices, it is difficult to construct
+situations where, even when reusing the sketch, IterativeCUR will select many bad
+indices.
+3.2.2. Row Selection. Because IterativeCUR uses the cross-approximation as
+its core matrix, it is important that entries at the intersection of the selected rows and
+selected columns form a non-singular matrix. Superficially, there are two ways we can
+ensure that we select rows that interact well with the previously selected columns.
+We can either choose the rows by pivoting on the residual at all previously selected
+columns or we can choose rows by looking at the residual at only the most recently
+selected columns. It turns out that, if we look carefully at the residual of the CUR
+decomposition, in the context of IterativeCUR, these choices are equivalent. First, if
+we let I be the set of selected row indices and J be the set of selected column indices.
+We define Ic = {k : k ∈[1, . . . , m] ∩k ̸∈I} and Jc = {k : k ∈[1, . . . , n] ∩k ̸∈J}. We
+let C = [A(I, J)⊤A(Ic, J)⊤]⊤, R = [A(I, J) A(I, Jc)], and U = A(I, J)† (which
+here we assume is square and nonsingular, as would almost always be the case in
+IterativeCUR), for an appropriately pivoted A the residual of a particular CUR,
+S = A −CUR, is
+S =
+ A(I, J)
+A(I, Jc)
+A(Ic, J)
+A(Ic, Jc)
+
+−
+ A(I, J)
+A(Ic, J)
+ 
+A(I, J)
+† 
+A(I, J)
+A(I, Jc)
+
+=
+
+0
+0
+0
+A(Ic, Jc) −A(Ic, J)A(I, J)−1A(I, Jc)
+
+.
+
+
+--- PAGE 10 ---
+10
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+Looking at the residual matrix S, it is clear that the residual entries corresponding
+to previously selected rows, I, and columns, J, are 0. Thus, for a new selected set of
+column indices J+, the row indices that best align with the selected columns J ∪J+
+can only be determined using S(:, J ∪J+). Since S(:, J) = 0, selecting rows from
+S(:, J ∪J+) is equivalent to selecting rows from S(:, J+). This reduction allows for
+row selections to be performed with similar computational complexities and memory
+costs to those incurred while selecting columns.
+3.3. Stopping IterativeCUR. With an understanding of how IterativeCUR
+updates its low-rank approximation, we now discuss how to cheaply determine when
+an ϵ-accurate solution has been achieved. Because of the dependence of the residual
+computations, it is difficult to obtain strong guarantees on the accuracy of the error
+estimate.
+We therefore consider the case where an appropriately scaled Gaussian
+matrix is used as the sketch, and ∥A∥F is used in place of ∥GA∥F in the denominator
+of the relative residual estimate to derive a good stopping criterion. Additionally,
+to remove dependencies between the selection and error evaluation process we can
+take extra w = O(1) vectors in the sketch, which are strictly separated for use in the
+error evaluation, and not part of the algorithm. All of these are simple variants of
+Algorithm 3.1, and are made to derive a stopping rule that can act as a reasonable
+heuristic to provide rigorous control over the stopping behavior, if desired.
+In an ideal world, we would be able to use the relative Frobenius norm of the
+residual as an estimator, ∥A −CUR∥F /∥A∥F , and use that to make exact stopping
+decisions. Of course, computing this quantity requires that we access the full A at
+each iteration, which is expensive. To avoid this computational expense, we use the
+Frobenius norm of the sketched residual as an estimate of this quantity (see line 16).
+Although careful analysis by [34] has shown that the norm of the sketched residual
+is an extremely accurate estimator, it is still reasonable to want to control the amount
+that the norm of the sketched residual deviates from the norm of the full residual.
+To come up with a criterion that provides the user with such control when stopping
+IterativeCUR, we rely on the probabilistic bound derived by [20] when the sketching
+matrix is Gaussian. Specifically, the bound is
+Theorem 3.2 (Theorem 3.1 [20]).
+Let A ∈Rm×n be a matrix of rank r whose
+Frobenius norm is to be estimated, and let G ∈Rw×m be a matrix with independent
+mean zero variance 1/w Gaussian entries. Then for any τ > 1
+(3.6)
+P [∥GA∥F ≤(1/τ)∥A∥F ] ≤exp
+
+−w(τ 2 −1)2
+4τ 4
+
+.
+Using the bound from [20], we wish to determine an adjustment to ϵ that will
+provide high-probability guarantees that the deviation of ∥GA∥F from ∥A∥F does not
+result in IterativeCUR stopping before the desired quality of approximation has been
+reached. To do this, we allow the user to specify ϵ, δ > 0 representing the maximum
+allowable deviation ∥GA∥F from ∥A∥F , and α ∈(0, 1) representing the probability
+that the δ deviation is not satisfied. Then combining this information with the bound
+of [20], we can derive the following corollary.
+Corollary 3.3. Given ϵ, δ > 0, and selecting α ∈(0, 1), w > 0 such that w >
+−4 ln(α), then for matrices A ∈Rm×n and G ∈Rw×m where G has independent
+mean zero, variance 1/w Gaussian entries if ξ = (1 + δ)
+q
+1 −2
+p
+−ln(α)/w we have
+
+
+--- PAGE 11 ---
+ITERATIVE CUR
+11
+(3.7)
+P
+∥G(A −CUR)∥F
+∥A∥F
+< ξϵ
+\ ∥A −CUR∥F
+∥A∥F
+> (1 + δ)ϵ
+
+≤α.
+Proof. We begin by observing that we can bound (3.7)
+P
+∥G(A −CUR)∥F
+∥A∥F
+< ξϵ
+\ ∥A −CUR∥F
+∥A∥F
+> (1 + δ)ϵ
+
+= P
+∥G(A −CUR)∥F ∥A −CUR∥F
+∥A −CUR∥F ∥A∥F
+< ξϵ
+\ ∥A −CUR∥F
+∥A∥F
+> (1 + δ)ϵ
+
+≤P
+∥G(A −CUR)∥F
+∥A −CUR∥F
+< ξ/(1 + δ)
+
+,
+where the final inequality comes from using the lower bound of ∥A−CUR∥F /∥A∥F .
+Now by letting s = 1/τ = ξ/(1 + δ) applying the bound from Theorem 3.2 we have
+(3.8)
+P
+∥G(A −CUR)∥F
+∥A −CUR∥F
+< ξ/(1 + δ)
+
+≤exp
+
+−ws4(1 −1/s2)2
+4
+
+Setting the right-hand side equal to α and solving the resulting equation for s gives
+the desired result.
+This bound tells us that to prevent a problematic failure, a failure where ∥A −
+CUR∥F /∥A∥F > (1 + δ)ϵ, we should stop IterativeCUR using the threshold ϵ(1 +
+δ)
+q
+1 −2
+p
+−ln(α)/w.
+Additionally, because we are making stopping decisions at
+each iteration, we still have multiple testing issues [38]. One can alleviate these con-
+cerns by using αi in place of α in the equation for ξ in Corollary 3.3 where for the
+ith iteration, αi =
+α
+(i+1) log2(i+1)β [38], where β is chosen so that P
+i αi = α. This
+schedule is beneficial in the case of an IterativeCUR because we often expect to make
+stopping decisions at later iterations rather than earlier ones. This weighting schedule
+ensures that enough weight is allocated to the later iterations that it is still reason-
+ably likely to stop at the correct iteration. For this bound to be well defined, we
+need w > −4 log(α). This means that for every desired α there is a minimum number
+of extra columns, w, that can be chosen to ensure the desired stopping control. For
+example, we can ensure an incorrect stopping probability of 10−10 by setting w = 100
+and dividing ϵ by 4.98. In practice, using this adjustment at w = 100 is unnecessary
+(see section 5).
+3.4. Computational Complexity and Memory Requirements. We can
+now consider the computational complexity of IterativeCUR. In Table 1 we display a
+complete breakdown of the computational cost for the dense matrix case when LUPP
+is used for row and column selection. For these costs, b is the block size and c is the
+sketch size, which in our implementation is set to c = 1.1b.
+The primary costs of IterativeCUR are: (1) computing the column residual (Line
+15 of Algorithm 3.1), (2) computing the row residual (Line 9 of Algorithm 3.1), (3)
+updating the pseudoinverse (Line 13 of Algorithm 3.1), and (4) computing the initial
+sketch (Line 4 of Algorithm 3.1).
+
+
+--- PAGE 12 ---
+12
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+The primary expense in the residual computation is the matrix-matrix multipli-
+cations, multiplying the GCU with R in the column residual case and multiplying C
+with UR[:, Jk] in the row residual case. This cost can be substantially reduced when
+the C and R factors are sparse, which typically occurs when A is sparse. Further-
+more, because matrix-matrix multiplication is a BLAS-3 operation, parallelization
+allows this operation to be executed in a substantially more scalable manner than the
+O((m + n)r2) cost suggests.
+When the residual computation is not the dominant cost, computing the pseu-
+doinverse for the core matrix becomes the dominant cost. If this pseudoinverse is
+recomputed at every iteration, this cost is O(r4). However, we can reduce this cost
+by recognizing that each update to the CUR appends blocks of rows and columns
+to the intersection matrix, which allows us to use Givens rotations-based updating
+of the pseudoinverse described in [37]. Such pseudoinverse updates only require a
+complexity of O((bk)2) at each iteration k. In practice, we rarely see benefits from
+this updating procedure over the recomputation of the pseudoinverse because of LA-
+PACK’s highly efficient parallelization of the QR factorization [2]. The update to
+QR can still be beneficial when small block sizes are used or when the rank of the
+approximation is very high, e.g. r > 10, 000 depending on the architecture of the
+system. When ϵ is not too small, one could also improve the practicality of the pseu-
+doinverse phase by computing the LU decomposition rather than the QR. The LU
+is typically more parallelizable and equally as accurate provided that the matrix is
+not too poorly conditioned, as would be the case when ϵ is not too small and the
+matrix is not exactly low-rank. Additionally, if one wanted to obtain an approxima-
+tion with orthonormal and diagonal factors, one can compute two QR factorizations
+C = QCRC, R = R⊤
+RQ⊤
+R, compute the SVD RCURT
+R = UUΣUVU
+T , and output
+A ≈(QCUU)ΣU(QRVU)T . The additional cost is O((m + n)r2), so the complexity
+of IterativeCUR remains the same.
+The 1.1bn(2m−1) cost of computing the sketch of the matrix A could potentially
+be problematic for very large m and n. This problem can be reduced if we sketch
+using a sparse-sign sketch [6] or a Subsampled Randomized Trigonometric Transform
+sketch [40]. In our experiments, we used a Gaussian matrix because for small sketch
+sizes b, all sketching techniques have roughly the same complexity.
+In terms of storage, in the dense case, we need mr storage for Ck, r2 storage for
+U k, and rn storage for Rk. Additionally, we need O(bn) space to store the sketch of A
+and the column residual. Finally, we need O(bm) space to store the row residual. The
+small space required for the residuals allows for reduced data-movement costs, which
+lead to highly efficient pivoting on large matrices. When A is sparse, the storage for
+Ck, Rk will be reduced accordingly.
+4. Understanding the Performance of IterativeCUR. With an under-
+standing of the algorithm, we now focus on the theoretical performance of Itera-
+tiveCUR (Algorithm 3.1). In this section, we first describe the connections between
+IterativeCUR and existing algorithms in the literature to indicate why it works well in
+practice. We then derive a bound that provides some insight into the inner workings
+of IterativeCUR.
+4.1. Connections to existing algorithms. Adaptive pivoting strategies form
+a powerful class of methods for the column subset selection problem (CSSP). Possibly
+the first such algorithm was introduced by Deshpande and Vempala [12], where a
+column is chosen with probability proportional to the squared column norm of the
+
+
+--- PAGE 13 ---
+ITERATIVE CUR
+13
+Table 1
+Computational Complexity of IterativeCUR (Algorithm 3.1)
+Action
+Total Cost
+Sketch
+1.1bn(2m −1)
+LUPP for Cols
+rb(n −1/2) + 7/6r −rb2/3
+LUPP for Rows
+rb(m −1/2) + 7/6r −rb2/3
+Updated QR for U
+1/12(r3(14 −8/b) + r2(36b −6/b) + r(43b2 −7b −12))
+Col Residual
+c/(6b)(r3 + r2(6n −b + 3) + r(b2 −3) + bn
+Row Residual
+1/6(r3 + r2(6m −b + 3) + r(b2 −3) + bm
+Norm of Col Residual
+2bn −1
+current residual with an interpolative decomposition, i.e., A −CC†A. When A is
+positive semidefinite, significant simplifications ensue, resulting in the Randomly piv-
+oted Cholesky algorithm, for which an efficient implementation and extensive theory
+have been developed in [5].
+Let us now consider IterativeCUR from this viewpoint. Just like the adaptive
+sampling method of Deshpande-Vempala’s, we update the sampling strategy based
+on the current residual. There are two notable differences: (i) Our goal is CUR, not
+CC†A (which is significantly more expensive); accordingly our residual is A −CUR
+instead of A −CC†A. (ii) In IterativeCUR we find the pivots via (usually LUPP
+applied to) a sketched residual G(A −CUR). As discussed above, this is a powerful
+strategy to find pivots for CSSP applied to the residual, and more efficient than
+computing the column norms of the residuals every time. Despite these differences,
+IterativeCUR can be seen as a variant of Deshpande-Vempala’s method where CUR
+is the objective and a sketched pivoting strategy is used (which is empirically at least
+equally powerful) instead of norm-wise sampling. These close connections to existing
+adaptive sampling methods explain why IterativeCUR is expected to work, at least
+qualitatively.
+4.2. Error bound. With intuition for the expected behavior of IterativeCUR,
+we now derive an error bound for IterativeCUR. Deriving this bound relies on an
+index selection method proposed by [31] as opposed to the QR with column pivoting
+(QRCP) and LU with partial pivoting (LUPP) approaches suggested in section 3. We
+do so because [31] has stronger and more interpretable theoretical bounds than the
+LUPP or QRCP approaches, and in practice performs only slightly better than the
+LUPP or QRCP selection approaches [8].
+To derive our bound, we rely on the cross-approximation result from Osinsky [31].
+This result applies to the scenario where the row and column indices are selected using
+[31, Algorithm 1] and a cross-approximation is used to compute the matrix U, as we
+do in IterativeCUR (Algorithm 3.1). In this scenario, [31] obtains
+Theorem 4.1 (Theorem 2 [31]). Let A, Z ∈Rm×n where Z is a rank-r approx-
+imation to A. Then it is possible to find columns indices, J, and row indices, I of
+the matrix A, such that
+(4.1)
+∥A −A(:, J)A(I, J)†A(I, :)∥F ≤(r + 1)∥A −Z∥F
+and that
+(4.2)
+∥A −A(:, J)A(I, J)†A(I, :)∥2 ≤
+p
+1 + r(r + 2)(min(m, n) −r)∥A −Z∥2.
+
+
+--- PAGE 14 ---
+14
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+It is important to note that this bound applies for any rank-r subspace. To make
+use of this result, we first derive a recursive relationship on the CUR residual. Then
+we repeatedly apply Theorem 4.1 to rank-b subspace approximations to the residual
+at each iteration. For the residual recursion of CUR residual we have
+Lemma 4.2. Let A ∈Rm×n, and let AI,J = A(:, J)A(I, J)−1A(I, :) be the CUR
+approximation to the matrix A with row indices, I, and columns indices J where
+|I| = |J| and A(I, J) is invertible. Define the residual S = A −AI,J. Then for any
+other set of row indices I+ and J+ satisfying I ∩I+ = ∅, J ∩J+ = ∅, |I+| = |J+| and
+such that S(I+, J+) is invertible, we have
+(4.3)
+A −AI∪I+,J∪J+ = A −AI,J −SI+,J+(= S −SI+,J+)
+where SI+,J+ = S(:, J+)S(I+, J+)−1S(I+, :).
+Proof. First, by expanding AI∪I+,J∪J+ we get
+AI∪I+,J∪J+ =
+A(:, J)
+A(:, J+)  A(I, J)
+A(I, J+)
+A(I+, J)
+A(I+, J+)
+−1  A(I, :)
+A(I+, :)
+
+.
+Now define C = A(:, J), C0 = A(:, J+), R = A(I, :), R0 = A(I+, :), U 11 = A(I, J),
+U 10 = A(I, J+), U 01 = A(I+, J), U 00 = A(I+, J+) for shorthand. Let us use the
+block inversion formula to expand the pseudoinverse term.
+(4.4)
+U 11
+U 10
+U 01
+U 00
+−1
+=
+U −1
+11 + U −1
+11 U 10N −1U 01U −1
+11
+−U −1
+11 U 10N −1
+−N −1U 01U −1
+11
+N −1
+
+where N = A(I+, J+)−A(I+, J)A(I, J)−1A(I, J+) = U 00−U 01U −1
+11 U 10. Therefore,
+AI∪I+,J∪J+ = CU −1
+11 R + CU −1
+11 U 10N −1U 01U −1
+11 R −C0N −1U 01U −1
+11 R
+−CU −1
+11 U 10N −1R0 + C0N −1R0
+= CU −1
+11 R + (C0 −CU −1
+11 U 10)N −1(R0 −U 01U −1
+11 R)
+= AI,J + S(:, J+)S(I+, J+)−1S(I+, :)
+= AI,J + SI+,J+,
+which concludes the proof.
+Remark 4.3. The invertibility assumption in Lemma 4.2 is very mild, assuming
+a sensible pivoting strategy is used; if there is no suitable choice of I+ and J+ such
+that S(I+, J+) is numerically nonsingular, this means that the residual has numerical
+rank smaller than the requested block size, in which case a smaller final block may be
+used.
+Lemma 4.2 can naturally be thought of as a variant of a continuation of a block
+LU with complete pivoting procedure with the starting pivots I and J and to which
+a set of new pivots I+ and J+ is appended. Also, the CUR decomposition of A with
+I ∪I+ and J ∪J+ equals the CUR decomposition of A with I and J plus the CUR
+decomposition of the residual matrix S = A −AI,J with I+ and J+. For a series of
+sets of indices I1, ..., Ik and J1, ..., Jk, Lemma 4.2 implies
+(4.5)
+
+A −A kS
+j=1
+Ij,
+kS
+j=1
+Jj
+
+= ∥A∥
+k
+Y
+i=1
+S(i) −S(i)
+Ii,Ji
+
+S(i)
+
+
+--- PAGE 15 ---
+ITERATIVE CUR
+15
+where S(i) = A −Ai−1
+S
+j=1
+Ij,
+i−1
+S
+j=1
+Jj
+and S(1) = A.
+As Algorithm 3.1 obtains a set of b row and column indices per iteration, it allows
+us to establish the following result. Here, b is the block size.
+Theorem 4.4. Suppose we run k iterations of Algorithm 3.1 with block size b
+where we use Algorithm 1 in [31] on the row sketch of the residual matrix S(i) to
+obtain the row and column indices. Then we obtain a rank-(bk) CUR approximation
+to A and the CUR decomposition satisfies
+(4.6)
+
+A −A kS
+j=1
+Ij,
+kS
+j=1
+Jj
+
+F
+≤(1 + b)k ∥A∥F
+k
+Y
+i=1
+S(i) −S(i)X†
+iXi
+
+F
+S(i)
+F
+where Ij and Jj are the row and column indices obtained in the jth iteration of Algo-
+rithm 3.1, and
+(4.7)
+Xi = GS(i) = G
+
+A −Ai−1
+S
+j=1
+Ij,
+i−1
+S
+j=1
+Jj
+
+.
+The matrix G ∈Rb×m is a sketching matrix.
+Proof. The proof follows by applying result (14) in Theorem 2 of [31] on (4.5).
+Remark 4.5. As S(i) is the residual error matrix of the CUR decomposition with
+the indices Si−1
+j=1 Ij and Si−1
+j=1 Jj and hence has connections to the Schur complement,
+it is generally difficult to quantify the singular values of S(i). Roughly, if the set of
+indices Si−1
+j=1 Ij and Si−1
+j=1 Jj are good we expect
+(4.8)
+S(i)
+F ≲
+v
+u
+u
+t
+n
+X
+ℓ=b(i−1)+1
+σℓ(A)2.
+On the other hand, if we ignore the dependency of the sketching matrix G with the
+sets of indices I1, .., Ik and J1, ..., Jk, then
+S(i) −S(i)X†
+iXi
+
+F is the randomized
+SVD error of S(i) with target rank b. Therefore, we roughly have
+(4.9)
+S(i) −S(i)X†
+iXi
+
+F ≲
+v
+u
+u
+t
+n
+X
+ℓ=b+1
+σℓ
+
+S(i)2
+≲
+v
+u
+u
+t
+n
+X
+ℓ=bi+1
+σℓ(A)2.
+If we cancel out the terms in the product (4.6) in a telescoping way, we very roughly
+obtain
+(4.10)
+∥A −AI,J∥F ≲(1 + b)k
+v
+u
+u
+t
+n
+X
+ℓ=bk+1
+σℓ(A)2 = (1 + b)k ∥A −JAKbk∥F .
+In experiments, we have not observed any cases where IterativeCUR has a rela-
+tive error worse than twice that of the error from the CUR produced using [31], even
+when testing Matlab’s gallery matrices with slow spectral decay. This indicates that
+
+
+--- PAGE 16 ---
+16
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+the suboptimality factor in Theorem 4.4 is far more conservative than what is ob-
+served in practice. Despite this conservativeness, Theorem 4.4 provides intuition for
+IterativeCUR’s worst-case performance if IterativeCUR behaved as a wholly greedy
+algorithm. Specifically, this analysis reveals that at every iteration, the index selection
+phase aims to capture the best rank-b approximation that, when using [31], will be a
+(b+1)-suboptimal approximation in the worst case. What is not well-accounted for in
+this analysis is how using the residual facilitates the selection of indices that correct
+for suboptimal index selections from previous iterations. This correction seems to be
+why, as will be demonstrated in the next section, the net effect of these costs and
+benefits seems to be IterativeCUR performing the same as the sketched and pivoted
+techniques.
+5. Numerical Experiments. With an understanding of the details of Iter-
+ativeCUR, we now examine its practical effectiveness through two broad types of
+experiments. Both experiments were performed on a 48-core, 2.6/4.0 GHz Intel(R)
+Xeon(R) Gold 6442Y CPU with 2 TB of memory. All implementations were written
+and run in MATLAB version 2025a3. In the first type of experiment, we perform 10
+runs of IterativeCUR4 with a fixed stopping threshold and collect information about
+its accuracy, speed, and rank of approximation. In the second type of experiment, we
+perform five runs of IterativeCUR for each rank in a sequence of ranks and examine
+its median accuracy and median computation time. The first set of experiments gives
+us an indication of how IterativeCUR performs when a solution of a specified toler-
+ance is desired. The second set of experiments indicates how effectively IterativeCUR
+collects indices.
+We compare the performance of IterativeCUR using LUPP column and row index
+selection with two methods, rank-adaptive Randomized SVD (SVDSketch), proposed
+in [43] 5, and sketched LU with Partial Pivoting (s-LUPP), proposed in [14]. By virtue
+of being an approximation of the SVD of A, SVDSketch provides a good baseline
+for the best approximation performance at a particular rank that a rank-adaptive
+technique can achieve. S-LUPP, which is a very high-quality CUR method in terms
+of computational time and accuracy (but is not rank-adaptive), provides us with an
+effective baseline for how accurate an effectively chosen CUR can be on a particular
+problem. This comparison is particularly important because as CUR is constrained to
+selecting subsets of rows and columns, the best possible error of a CUR approximation
+at a particular rank, r, can be up to a factor of r + 1 worse than the truncated SVD
+[31].
+For our experiments, we first consider how well IterativeCUR performs in its in-
+tended use, returning an approximation of a desired quality. Here we use the first
+experiment type to compare IterativeCUR, s-LUPP, and SVDSketch to each other
+in terms of accuracy, computational time, and rank when run to a specific tolerance.
+Then, with an understanding of how well IterativeCUR performs in its designed con-
+text, we next investigate how efficiently IterativeCUR selects columns by comparing
+the accuracy of each method’s approximation at fixed ranks. We close this section
+with investigations into the effects that index selection method and block size have
+3Code to recreate all experiments can be found at https://github.com/nathanielpritchard/
+IterativeCUR code.
+4Although in Algorithm 3.1 we use ∥GA∥F in the denominator, because the experiments use
+a Gaussian sketching matrix and we need to compute ∥A∥F for the final error computation of the
+other methods, we considered using the relative error with ∥A∥F in the denominator.
+5Can be called using svdsketch in MATLAB.
+
+
+--- PAGE 17 ---
+ITERATIVE CUR
+17
+on approximation accuracy of IterativeCUR.
+5.1. Threshold Examples. We first examine the performance of Iterative-
+CUR in the rank-adaptive regime. Here we consider approximating the two square
+matrices displayed in Table 2.
+The first matrix is the Low-Rank matrix, which
+is exactly low-rank and is formed by generating two standard Gaussian matrices,
+Gi ∈R30000×2000, i ∈{1, 2}, and setting A = G1G⊤
+2 . The second matrix is the c-67
+matrix from the SuiteSparse library [9].
+Table 2
+Matrix information for fixed rank experiment.
+Matrix
+Dimension
+Sparse
+Tolerance
+Low-Rank
+30,000
+False
+1 × 10−6
+c-67
+57,975
+True
+1 × 10−2
+In the experiment, we run each method (IterativeCUR, s-LUPP, SVDSketch), 10
+times. SVDSketch and IterativeCUR were run with a block size of 250 and stopped
+when the relative error reached the threshold specified in Table 2. The results of
+these experiments are displayed in Figures 1 and 2 as box-and-whisker plots where
+the middle line represents the median, the outer lines on the box represent the 25th
+and 75th percentiles, and the outer endpoints represent the minimum and maximum.
+0
+0.5
+1
+·10−13
+s-LUPP
+IterativeCUR-LUPP
+SVDSketch
+∥A−ˆ
+Ak∥F
+∥A∥F
+Accuracy for Low-Rank
+1,800
+2,000
+2,200
+2,400
+Rank
+Rank for Low-Rank
+50
+100
+Time (seconds)
+Time for Low-Rank
+Fig. 1. Box plots for the performance of SVDSketch, s-LUPP, and IterativeCUR-LUPP applied
+to a low-rank matrix in Table 2. The left plot displays the accuracy of the approximation, the
+middle plot displays the rank of the approximation, and the right plot displays the computational
+time.
+In the experiments for the Low-Rank matrix we can observe that all three
+methods return an approximation with the original matrix’s rank, 2000, and are
+far more accurate than the desired threshold, 1 × 10−6, with the median accuracy for
+SVDSketch being an order of magnitude more accurate at 4 × 10−15 than the CUR
+approaches (both 9 × 10−14). The major difference between the methods is observed
+in the timings where IterativeCUR is the fastest method with a median time of 12
+seconds, slightly faster than s-LUPP’s median time of 15 seconds, and about 7 times
+faster than SVDSketch’s median time of 85 seconds. Overall, from this experiment, we
+can see in the easy-to-handle exactly low-rank case, IterativeCUR performs effectively.
+When we make the experiment more difficult by considering a large sparse c-67
+matrix, we still see that IterativeCUR performs well. Here, the stopping threshold
+is 1 × 10−2, and we observe that IterativeCUR finds solutions that are slightly more
+accurate than SVDSketch and similarly accurate to s-LUPP with the added advantage
+
+
+--- PAGE 18 ---
+18
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+4.67
+4.68
+·10−4
+s-LUPP
+IterativeCUR-LUPP
+SVDSketch
+∥A−ˆ
+Ak∥F
+∥A∥F
+Accuracy for c-67
+1,200
+1,400
+1,600
+1,800
+Rank
+Rank for c-67
+0
+20
+40
+Time (seconds)
+Time for c-67
+Fig. 2. Box plots for the performance of SVDSketch, s-LUPP, and IterativeCUR-LUPP applied
+to a c-67 matrix in Table 2. The left plot displays the accuracy of the approximation, the middle
+plot displays the rank of the approximation, and the right plot displays the computational time.
+of being less variable than s-LUPP. Further, IterativeCUR uses only a median time
+of 2.6 seconds to find this solution as opposed to the median time of 3.9 seconds for
+s-LUPP, and the median time of 41 seconds for SVDSketch. Overall, we can see that
+IterativeCUR can perform highly effectively in the rank-adaptive context.
+5.2. Efficiency of Selection. While it is clear that IterativeCUR can effec-
+tively form approximations of a single specified quality, it is unclear whether Itera-
+tiveCUR can efficiently form such approximations for an arbitrary rank. To examine
+the efficiency of the approximation, we compare the speed and accuracy of Itera-
+tiveCUR’s approximation with the s-LUPP and SVDSketch approximations of fixed
+ranks {500, 1000, 1500, 2000, 2500, 3000, 3500, 4000} for the matrices listed in Table 3.
+The Low-Rank PD matrix is generated the same way as the low-rank matrix
+in subsection 5.1 with the addition of a diagonal matrix containing on its diagonal
+the vector (1 −exp(−log(30, 000)/log(5))i, i ∈{1, 2, . . . , 30000}. The G7Jac200 and
+Bayer01 matrices come from SuiteSparse [9]. We run each method, matrix, and
+rank combination five times and display the median runtime, accuracy, total number
+of Floating Point Operations 6, and Floating Point Operations per second in Figure 3,
+Figure 4, and Figure 5. For each run, IterativeCUR and SVDSketch are run with a
+block size of 250.
+Table 3
+Matrix information for fixed-rank experiment.
+Matrix
+Dimension
+Sparse
+Low-Rank PD
+30,000
+False
+G7Jac200
+57,310
+True
+Bayer01
+57,735
+True
+From these results, we can see that the median relative errors of the approxima-
+tions formed by IterativeCUR are as small, if not smaller, than the median s-LUPP
+relative error at every rank. Additionally, the IterativeCUR relative error typically is
+only at most twice the relative error of SVDSketch.
+In terms of runtime, IterativeCUR is much faster than SVDSketch. In the best
+case, IterativeCUR is 36 times faster than SVDSketch when estimating a rank-4000
+6For sparse matrices, we approximate sparse times dense matrix multiplications used for sketching
+with the number of floating point operations for all matrices.
+
+
+--- PAGE 19 ---
+ITERATIVE CUR
+19
+approximation for the G7Jac200 matrix, and in the worst case, IterativeCUR is still
+six times faster than SVDSketch for the rank 500 approximations to the G7Jac200
+and Low-Rank PD matrices. This time difference is much smaller for s-LUPP with
+IterativeCUR being only four times faster in the best case, rank 4000 approxima-
+tion to Low-Rank PD, and providing no speed-up in the worst cases, the rank 500
+approximations for the G7Jac200 and Bayer01 matrices. Compared to both al-
+ternatives, it is also important to note that the benefits are greatest for the densest
+matrix, Low-Rank PD, where the memory load is the highest. This seems to sug-
+gest that on much larger matrices with larger memory loads, the benefits afforded
+by a single small sketch for IterativeCUR should lead to even greater performance
+improvements over these alternatives.
+We also can find more evidence for this hypothesis when we factor in median
+FLOP counts and median FLOP rates. For FLOP counts, we can see that Itera-
+tiveCUR offers around a five to ten time reduction in FLOP count for all matrices
+compared to s-LUPP and SVDSketch. However, IterativeCUR also has FLOP rates
+that are about a factor four worse than s-LUPP in the worst case (rank 4000 ap-
+proximation of Bayer01 matrix). As s-LUPP has almost all of its cost come from the
+matrix multiplication required for sketching the matrix, it is not surprising that its
+FLOP rates are better than IterativeCUR. Similarly, because SVDSketch requires or-
+thogonalization, it is also not surprising that it has the slowest FLOP rate compared
+to the other two methods.
+1,000
+2,000
+3,000
+4,000
+10−7
+10−5
+10−3
+10−1
+101
+Rank of Approximation
+Relative Frobenius Error
+Accuracy for Low-Rank PD
+SVDSketch
+s-LUPP
+IterativeCUR-LUPP
+1,000
+2,000
+3,000
+4,000
+101
+102
+103
+Rank of Approximation
+Time (Seconds)
+Time for Low-Rank PD
+1,000
+2,000
+3,000
+4,000
+1012
+1013
+Rank of Approximation
+Floating Point Operations
+Total FLOPs for Low-Rank PD
+1,000
+2,000
+3,000
+4,000
+1010
+1010.2
+1010.4
+1010.6
+1010.8
+1011
+Rank of Approximation
+FLOP Rate
+FLOP Rate for Low-Rank PD
+Fig. 3. This plot shows the change in median relative error, median runtime, median number
+of FLOPs, and median FLOP rate for SVDSketch, IterativeCUR-LUPP, and s-LUPP with approx-
+imations of varying rank for a Low-Rank PD matrix.
+
+
+--- PAGE 20 ---
+20
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+1,000
+2,000
+3,000
+4,000
+10−2
+10−1
+Rank of Approximation
+Relative Frobenius Error
+Accuracy for G7Jac200
+SVDSketch
+s-LUPP
+IterativeCUR-LUPP
+1,000
+2,000
+3,000
+4,000
+101
+102
+Rank of Approximation
+Time (Seconds)
+Time for G7Jac200
+1,000
+2,000
+3,000
+4,000
+1012.5
+1013
+1013.5
+Rank of Approximation
+Floating Point Operations
+Total FLOPs for G7Jac200
+1,000
+2,000
+3,000
+4,000
+1011.5
+1012
+1012.5
+Rank of Approximation
+FLOP Rate
+FLOP Rate for G7Jac200
+Fig. 4. This plot shows the change in median relative error, median runtime, median number
+of FLOPs, and median FLOP rate for SVDSketch, IterativeCUR-LUPP, and s-LUPP with approx-
+imations of varying rank for a G7Jac200 matrix.
+5.3. Selection Methods. It is clear that IterativeCUR with LUPP index se-
+lection is highly effective, it is next useful to consider whether using different index
+selection methods will have an impact on the performance. For this experiment, we
+consider the approximation quality of IterativeCUR when indices are selected with
+QRCP [26], LUPP [14], and Osinsky7 [31] for a Lehmer matrix with 1, 000 rows and
+columns from MATLAB’s gallery and a Low-Rank PD8 matrix with 1, 000 rows and
+columns. We consider each method’s approximation performance with block size 50
+at ranks {150, 350, 550, 750, 950}. For a baseline, we also consider the approximation
+performance of a truncated SVD and SVDSketch approximations. As we did not have
+an optimized implementation of Osinsky’s selection approach, we did not consider the
+runtime, although it should be noted that Osinsky’s is substantially slower than the
+alternatives.
+We display the results of the experiment in Figure 6. In both experiments, the
+LUPP and QRCP versions of IterativeCUR perform the same. The Osinsky method
+outperforms the other two selection approaches for the Low-Rank PD matrix, but is
+outperformed by the LUPP and QRCP approaches in the Lehmer matrix. Although
+initially it may be surprising that the best index selection approach does not always
+result in the best IterativeCUR approximation, one can make sense of this behavior
+7The Osinsky implementation selects columns with Osinsky and rows with QRCP.
+8For the diagonal matrix we take only the first 100 entries from the vector defined in subsec-
+tion 5.2. Additionally, instead of rank 2, 000 we use a rank of 100 for the two Gaussian matrices.
+
+
+--- PAGE 21 ---
+ITERATIVE CUR
+21
+1,000
+2,000
+3,000
+4,000
+10−3.3
+10−3.2
+10−3.1
+Rank of Approximation
+Relative Frobenius Error
+Accuracy for Bayer01
+SVDSketch
+s-LUPP
+IterativeCUR-LUPP
+1,000
+2,000
+3,000
+4,000
+101
+102
+Rank of Approximation
+Time (Seconds)
+Time for Bayer01
+1,000
+2,000
+3,000
+4,000
+1012.5
+1013
+1013.5
+Rank of Approximation
+Floating Point Operations
+Total FLOPs for Bayer01
+1,000
+2,000
+3,000
+4,000
+1011.5
+1012
+1012.5
+Rank of Approximation
+FLOP Rate
+FLOP Rate for Bayer01
+Fig. 5. This plot shows the change in median relative error, median runtime, median number
+of FLOPs, and median FLOP rate for SVDSketch, IterativeCUR-LUPP, and s-LUPP with approx-
+imations of varying rank for a Bayer01 matrix.
+by thinking about the conscientiously greedy interpretation of IterativeCUR discussed
+in section 4. Under this interpretation, at each iteration sketching the residual reveals
+the approximate dominant b-dimensional subspace of the residual. If this subspace
+contains enough information to make effective global index selections, then choosing
+the best possible indices will work exceptionally well. However, if the subspace does
+not contain enough information to make good global selections, then choosing the best
+indices for this b-dimensional subspace could mean poor global index selection because
+the index selection is more aggressive than the information quality warrants. This
+seems to be what occurs in these experiments, although it is very computationally
+expensive to truly verify whether the b-dimensional space contains enough information
+for effective global index selection in the Low-Rank PD case but not in the Lehmer
+case. Although, we can hypothesize this to be the case owing to Lehmer having
+a slower spectral decay than Low-Rank PD. What is remarkable is that even with
+this potentially greedy behavior in the Lehmer case, the worst-case approximation of
+the three methods is not substantially worse than the other two. This lends credence
+to the conscientiously greedy interpretation of IterativeCUR where making selections
+using the residual limits the downside risk that one would observe from a wholly
+greedy approach.
+Overall, when one considers that in general LUPP is about twice as fast as QRCP
+and about three times as fast as Osinsky, it seems clear that the best selection ap-
+proach to choose in most scenarios is LUPP. If one desires greater accuracy, Osinsky
+
+
+--- PAGE 22 ---
+22
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+may result in better approximations and may be worth trying; however, as a default,
+we suggest the use of sketched LUPP in IterativeCUR.
+200
+400
+600
+800
+1,000
+10−5
+10−4
+10−3
+Rank of Approximation
+∥A−ˆ
+Ak∥F
+∥A∥F
+Index Selection for Lehmer
+SVD
+SVDSketch
+QRCP
+LUPP
+Osinsky
+200
+400
+600
+800
+1,000
+10−9
+10−8
+10−7
+10−6
+10−5
+10−4
+10−3
+10−2
+Rank of Approximation
+∥A−ˆ
+Ak∥F
+∥A∥F
+Index Selection for Low Rank PD
+SVD
+SVDSketch
+QRCP
+LUPP
+Osinsky
+Fig. 6.
+The performance of IterativeCUR using [31] (Osinsky), QR with column pivoting
+(QRCP), and LU with partial pivoting (LUPP) as the column and row selection strategies.
+5.4. Block Size. In addition to index selection strategies, another important
+aspect of IterativeCUR is the effect that block size has on runtime and accuracy. For
+this experiment, we compare IterativeCUR with LUPP index selection at block sizes
+5, 50, 100, and 500 on the Bayer01 and Low-Rank PD matrices from Table 3 at
+ranks {500, 1000, 1500, 2000, 2500}.
+500
+1,000
+1,500
+2,000
+2,500
+6 · 10−4
+7 · 10−4
+8 · 10−4
+Rank of Approximation
+∥A−ˆ
+Ak∥F
+∥A∥F
+Accuracy for Bayer01 Across Block Sizes
+5
+50
+100
+500
+500
+1,000
+1,500
+2,000
+2,500
+1
+2
+3
+4
+Rank of Approximation
+Time (Seconds)
+Time for Bayer01 Across Block Sizes
+Fig. 7. Comparison of time and accuracy of IterativeCUR for block sizes 5, 50, 100, and 500
+for a Bayer01 matrix. The left plot shows median relative error over five runs while the right plot
+shows median runtime over five runs.
+The results of these experiments are shown in Figure 7 and Figure 8. By first
+looking at the runtime we can see that for the sparse Bayer01 matrix the choice of
+block size does not seem to have a substantial impact on runtime. When we consider
+the dense Low-Rank PD matrix, decreasing block size leads to slower performance.
+This makes sense because provided the matrix is not too big, large block sizes allow
+LAPACK to better exploit efficient blocked operations.
+In terms of accuracy, we see that, in the Bayer01 matrix case, larger block sizes
+offer very small improvements in accuracy. Alternatively, for the Low-Rank PD
+matrix a smaller block size seems to lead to more accurate solutions, with a block
+
+
+--- PAGE 23 ---
+ITERATIVE CUR
+23
+500
+1,000
+1,500
+2,000
+2,500
+0
+2
+4
+Rank of Approximation
+∥A−ˆ
+Ak∥F
+∥A∥F
+Accuracy for Low-Rank PD Across Block Sizes
+5
+50
+100
+500
+500
+1,000
+1,500
+2,000
+2,500
+0
+100
+200
+300
+Rank of Approximation
+Time (Seconds)
+Time for Low-Rank PD Across Block Sizes
+Fig. 8. Comparison of time and accuracy of IterativeCUR for block sizes 5, 50, 100, and 500
+for a Low-Rank PD matrix. The left plot shows median relative error over five runs while the right
+plot shows median runtime over five runs.
+size of 5 having about a 10 times lower median relative error than a block size of 500
+and half the error as the block size of 50. These results align with the conscientiously
+greedy interpretation of IterativeCUR where smaller block sizes would be expected to
+produce approximations that are more accurate than the approximations produced
+by larger block sizes.
+Overall, this experiment suggests that the block size should be chosen based on
+the user’s balancing of potential computational accelerations from blocking operations
+and the user’s intuition on the rank of the matrix. When the user suspects that the
+matrix has a rank less than 100, then potentially choosing a block size as small as
+5 may be sufficient. However, when the user expects the rank to be in the 1000s,
+moderate block sizes, around 200, should be chosen to best capitalize on the benefits
+of blocked LAPACK operations.
+5.5. Large-Scale Comparison. We finish our experiment section by compar-
+ing the methods on a sparse 18,571,154 by 18,571,154 mawi 201512012345 matrix
+from SuiteSparse [9]. For this experiment, we approximate the matrix at fixed ranks
+{100, 200, 450, 900, 1800, 3600} on the same computer as all previous experiments. For
+each trial, only one run is performed because of the large runtimes for SVDSketch
+and s-LUPP on high ranks. For IterativeCUR and SVDsketch, we perform the exper-
+iments using a block size of 50.
+From the results of the experiments in Figure 9, we can see that all three meth-
+ods return essentially the same approximation for up to rank 900.
+Then, beyond
+rank 900, the memory requirements for the orthogonal matrix in SVDSketch and the
+sketch in s-LUPP exceed the resources available on the compute node, leading to
+substantial slowdowns or a halt (both methods were killed after 12 hours of runtime).
+IterativeCUR on the other hand continues to return accurate approximations without
+substantial computational costs, as C and R inherit the sparsity of A. This experi-
+ment demonstrates how the small sketch and sparsity preserving CUR approximation
+offered by IterativeCUR make it an attractive method for low-rank approximations
+of large sparse matrices.
+6. Conclusion. IterativeCUR is an efficient rank-adaptive method for comput-
+ing CUR approximations. Because IterativeCUR’s reuse of the sketch allows it to
+form high-quality approximations of matrices with only a small number of matrix-
+
+
+--- PAGE 24 ---
+24
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+102
+103
+104
+10−3
+10−2
+10−1
+Rank of Approximation
+Relative Frobenius Error
+Accuracy for Mawai
+SVDSketch
+s-LUPP
+IterativeCUR-LUPP
+102
+103
+104
+102
+103
+104
+Rank of Approximation
+Time (Seconds)
+Time for Mawai
+102
+103
+104
+1017
+1018
+Rank of Approximation
+Floating Point Operations
+Total FLOPs for Mawai
+102
+103
+104
+1013
+1014
+1015
+Rank of Approximation
+FLOP Rate
+FLOP Rate for Mawai
+Fig. 9. This plot shows the change in relative error, runtime, number of FLOPs, and FLOP rate
+for SVDSketch, IterativeCUR-LUPP, and s-LUPP with approximations of varying rank for a sparse
+18,571,154 by 18,571,154 mawi 201512012345 matrix. Runs exceeding 12 hours were terminated.
+vector multiplications, it is exceptionally well suited for forming approximations to
+large matrices. Additionally, by incorporating risk-aware stopping criteria based on a
+posteriori estimators, IterativeCUR provides high-probability guarantees of approxi-
+mation quality that a user can adjust to align with their confidence in their chosen
+stopping threshold. Further, while previous algorithms such as SVDSketch could only
+guarantee a relative accuracy of √ϵmach, IterativeCUR can easily handle tolerances
+very close to ϵmach. (This is achieved by directly estimating the norm of the residual,
+rather than relying on an indirect formula that expresses the error as a difference
+of two squared norms.) In experiments, we have shown that IterativeCUR is highly
+competitive, matching and at times exceeding a state-of-the-art CUR method such as
+sketched LUPP, both in terms of accuracy and performance. Despite IterativeCUR’s
+strong practical performance, work remains to be done to close the gap between the
+current conservative theoretical bounds and the observed results.
+REFERENCES
+[1] N. Ailon and B. Chazelle, The Fast Johnson–Lindenstrauss Transform and Approximate
+Nearest Neighbors, SIAM Journal on Computing, 39 (2009), pp. 302–322, https://doi.org/
+10.1137/060673096, http://epubs.siam.org/doi/10.1137/060673096 (accessed 2025-04-17).
+[2] A. Buttari, J. Langou, J. Kurzak, and J. Dongarra, Parallel tiled QR factorization
+for multicore architectures, Concurrency and Computation: Practice and Experience, 20
+(2008), pp. 1573–1590, https://doi.org/10.1002/cpe.1301, https://onlinelibrary.wiley.com/
+
+
+--- PAGE 25 ---
+ITERATIVE CUR
+25
+doi/10.1002/cpe.1301 (accessed 2025-04-03).
+[3] S. Chaturantabut and D. C. Sorensen, Nonlinear Model Reduction via Discrete Em-
+pirical Interpolation, SIAM Journal on Scientific Computing, 32 (2010), pp. 2737–
+2764, https://doi.org/10.1137/090766498, http://epubs.siam.org/doi/10.1137/090766498
+(accessed 2025-06-30).
+[4] C. Chen, M. Gu, Z. Zhang, W. Zhang, and Y. Yu, Efficient Spectrum-Revealing CUR Matrix
+Decomposition, in Proceedings of the Twenty Third International Conference on Artificial
+Intelligence and Statistics, PMLR, June 2020, pp. 766–775, https://proceedings.mlr.press/
+v108/chen20a.html (accessed 2025-02-05).
+[5] Y. Chen, E. N. Epperly, J. A. Tropp, and R. J. Webber, Randomly pivoted Cholesky:
+Practical approximation of a kernel matrix with few entry evaluations, Communications
+on Pure and Applied Mathematics, 78 (2025), pp. 995–1041, https://doi.org/10.1002/cpa.
+22234, https://onlinelibrary.wiley.com/doi/10.1002/cpa.22234 (accessed 2025-04-23).
+[6] M. B. Cohen, Nearly Tight Oblivious Subspace Embeddings by Trace Inequalities, in Pro-
+ceedings of the Twenty-Seventh Annual ACM-SIAM Symposium on Discrete Algorithms,
+Society for Industrial and Applied Mathematics, Jan. 2016, pp. 278–287, https://doi.org/
+10.1137/1.9781611974331.ch21, http://epubs.siam.org/doi/10.1137/1.9781611974331.ch21
+(accessed 2025-04-28).
+[7] A. Cortinovis and D. Kressner, Low-Rank Approximation in the Frobenius Norm by Col-
+umn and Row Subset Selection, SIAM Journal on Matrix Analysis and Applications, 41
+(2020), pp. 1651–1673, https://doi.org/10.1137/19M1281848, https://epubs.siam.org/doi/
+10.1137/19M1281848 (accessed 2025-09-12).
+[8] A. Cortinovis and D. Kressner, Adaptive randomized pivoting for column subset selec-
+tion, DEIM, and low-rank approximation, Dec. 2024, https://doi.org/10.48550/arXiv.2412.
+13992, http://arxiv.org/abs/2412.13992 (accessed 2025-04-03). arXiv:2412.13992.
+[9] T. A. Davis and Y. Hu, The university of Florida sparse matrix collection, ACM Transactions
+on Mathematical Software, 38 (2011), pp. 1–25, https://doi.org/10.1145/2049662.2049663,
+https://dl.acm.org/doi/10.1145/2049662.2049663 (accessed 2025-07-05).
+[10] M. Derezi´nski and M. W. Mahoney, Determinantal Point Processes in Randomized Numeri-
+cal Linear Algebra, Notices of the American Mathematical Society, 68 (2021), p. 1, https://
+doi.org/10.1090/noti2202, https://www.ams.org/notices/202101/rnoti-p34.pdf (accessed
+2025-04-17).
+[11] A. Deshpande, L. Rademacher, S. S. Vempala, and G. Wang, Matrix Approximation and
+Projective Clustering Via Volume Sampling, Theory of Computing, 2 (2006), pp. 225–
+247, https://doi.org/10.4086/toc.2006.v002a012, https://theoryofcomputing.org/articles/
+v002a012 (accessed 2025-04-24).
+[12] A. Deshpande and S. Vempala, Adaptive Sampling and Fast Low-Rank Matrix Approxi-
+mation, in Approximation, Randomization, and Combinatorial Optimization. Algorithms
+and Techniques, D. Hutchison, T. Kanade, J. Kittler, J. M. Kleinberg, F. Mattern, J. C.
+Mitchell, M. Naor, O. Nierstrasz, C. Pandu Rangan, B. Steffen, M. Sudan, D. Ter-
+zopoulos, D. Tygar, M. Y. Vardi, G. Weikum, J. D´ıaz, K. Jansen, J. D. P. Rolim, and
+U. Zwick, eds., vol. 4110, Springer Berlin Heidelberg, Berlin, Heidelberg, 2006, pp. 292–
+303, https://doi.org/10.1007/11830924 28, http://link.springer.com/10.1007/11830924 28
+(accessed 2025-04-24). Series Title: Lecture Notes in Computer Science.
+[13] Y. Dong, C. Chen, P.-G. Martinsson, and K. Pearce, Robust Blockwise Random Piv-
+oting: Fast and Accurate Adaptive Interpolative Decomposition, Dec. 2024, https://doi.
+org/10.48550/arXiv.2309.16002, http://arxiv.org/abs/2309.16002 (accessed 2025-04-15).
+arXiv:2309.16002 [math].
+[14] Y. Dong and P.-G. Martinsson, Simpler is better:
+a comparative study of randomized
+pivoting algorithms for CUR and interpolative decompositions, Advances in Computa-
+tional Mathematics, 49 (2023), p. 66, https://doi.org/10.1007/s10444-023-10061-z, https:
+//link.springer.com/10.1007/s10444-023-10061-z (accessed 2025-02-05).
+[15] J. A. Duersch and M. Gu, Randomized Projection for Rank-Revealing Matrix Factoriza-
+tions and Low-Rank Approximations, SIAM Review, 62 (2020), pp. 661–682, https://
+doi.org/10.1137/20M1335571, https://epubs.siam.org/doi/10.1137/20M1335571 (accessed
+2025-01-14).
+[16] C. Eckart and G. Young, The Approximation of One Matrix by Another of Lower Rank,
+Psychometrika, 1 (1936), pp. 211–218, https://doi.org/10.1007/BF02288367, https://www.
+cambridge.org/core/product/identifier/S0033312300051085/type/journal article (accessed
+2025-04-18).
+[17] M. Flynn, A. Wang, D. E. Alvarez, C. D. Sa, and A. Damle, STAT: Shrinking Transformers
+After Training, May 2024, https://doi.org/10.48550/arXiv.2406.00061, http://arxiv.org/
+
+
+--- PAGE 26 ---
+26
+N. PRITCHARD, T. PARK, Y. NAKATSUKASA, AND P.G. MARTINSSON
+abs/2406.00061 (accessed 2025-04-15). arXiv:2406.00061 [cs].
+[18] A. Frieze, R. Kannan, and S. Vempala, Fast monte-carlo algorithms for finding low-rank
+approximations, Journal of the ACM, 51 (2004), pp. 1025–1041, https://doi.org/10.1145/
+1039488.1039494, https://dl.acm.org/doi/10.1145/1039488.1039494 (accessed 2025-04-17).
+[19] S. Goreinov,
+E. Tyrtyshnikov,
+and N. Zamarashkin,
+A theory of pseudoskeleton
+approximations, Linear Algebra and its Applications, 261 (1997), pp. 1–21, https:
+//doi.org/10.1016/S0024-3795(96)00301-1,
+https://linkinghub.elsevier.com/retrieve/pii/
+S0024379596003011 (accessed 2025-06-29).
+[20] S. Gratton and D. Titley-Peloquin, Improved Bounds for Small-Sample Estimation,
+SIAM Journal on Matrix Analysis and Applications, 39 (2018), pp. 922–931, https://
+doi.org/10.1137/17M1137541, https://epubs.siam.org/doi/10.1137/17M1137541 (accessed
+2025-05-27).
+[21] N. Halko, P. G. Martinsson, and J. A. Tropp, Finding Structure with Randomness: Prob-
+abilistic Algorithms for Constructing Approximate Matrix Decompositions, SIAM Review,
+53 (2011), pp. 217–288, https://doi.org/10.1137/090771806, http://epubs.siam.org/doi/10.
+1137/090771806 (accessed 2025-01-24).
+[22] P. Indyk and R. Motwani, Approximate nearest neighbors: towards removing the curse of
+dimensionality, in Proceedings of the thirtieth annual ACM symposium on Theory of
+computing - STOC ’98, Dallas, Texas, United States, 1998, ACM Press, pp. 604–613,
+https://doi.org/10.1145/276698.276876, http://portal.acm.org/citation.cfm?doid=276698.
+276876 (accessed 2025-04-17).
+[23] B. Kramer, B. Peherstorfer, and K. E. Willcox, Learning Nonlinear Reduced Models from
+Data with Operator Inference, Annual Review of Fluid Mechanics, 56 (2024), pp. 521–
+548, https://doi.org/10.1146/annurev-fluid-121021-025220, https://www.annualreviews.
+org/doi/10.1146/annurev-fluid-121021-025220 (accessed 2025-03-24).
+[24] M. W. Mahoney and P. Drineas, CUR matrix decompositions for improved data analysis,
+Proceedings of the National Academy of Sciences, 106 (2009), pp. 697–702, https://doi.org/
+10.1073/pnas.0803205106, https://pnas.org/doi/full/10.1073/pnas.0803205106 (accessed
+2025-02-17).
+[25] A. Mai, L. Tran, L. Tran, and N. Trinh, VGG deep neural network compression via SVD
+and CUR decomposition techniques, in 2020 7th NAFOSTED Conference on Information
+and Computer Science (NICS), Ho Chi Minh City, Vietnam, Nov. 2020, IEEE, pp. 118–123,
+https://doi.org/10.1109/NICS51282.2020.9335842, https://ieeexplore.ieee.org/document/
+9335842/ (accessed 2025-04-03).
+[26] P.-G. Martinsson, G. Quintana Ort´I, N. Heavner, and R. Van De Geijn, Householder
+QR Factorization With Randomization for Column Pivoting (HQRRP), SIAM Journal
+on Scientific Computing, 39 (2017), pp. C96–C115, https://doi.org/10.1137/16M1081270,
+https://epubs.siam.org/doi/10.1137/16M1081270 (accessed 2025-04-23).
+[27] M. Meier and Y. Nakatsukasa, Fast randomized numerical rank estimation for nu-
+merically low-rank matrices, Linear Algebra and its Applications, 686 (2024), pp. 1–
+32,
+https://doi.org/10.1016/j.laa.2024.01.001,
+https://linkinghub.elsevier.com/retrieve/
+pii/S0024379524000016 (accessed 2025-04-15).
+[28] C. Melgaard and M. Gu, Gaussian Elimination with Randomized Complete Pivoting, 2015,
+https://doi.org/10.48550/ARXIV.1511.08528, https://arxiv.org/abs/1511.08528 (accessed
+2025-01-14).
+[29] X. Meng and M. W. Mahoney, Low-distortion subspace embeddings in input-sparsity time
+and applications to robust linear regression, in Proceedings of the forty-fifth annual ACM
+symposium on Theory of Computing, Palo Alto California USA, June 2013, ACM, pp. 91–
+100, https://doi.org/10.1145/2488608.2488621, https://dl.acm.org/doi/10.1145/2488608.
+2488621 (accessed 2025-04-17).
+[30] L. Mirsky, Symmetric Gauge Functions and Unitarily Invariant Norms, The Quarterly Jour-
+nal of Mathematics, 11 (1960), pp. 50–59, https://doi.org/10.1093/qmath/11.1.50, https://
+academic.oup.com/qjmath/article-lookup/doi/10.1093/qmath/11.1.50 (accessed 2025-06-
+29).
+[31] A. Osinsky, Close to optimal column approximation using a single SVD, Linear Algebra and
+its Applications, 725 (2025), pp. 359–377, https://doi.org/10.1016/j.laa.2025.07.016, https:
+//linkinghub.elsevier.com/retrieve/pii/S0024379525003003 (accessed 2025-07-24).
+[32] S. Park and S.-M. Moon, CURing Large Models: Compression via CUR Decomposition,
+Jan. 2025, https://doi.org/10.48550/arXiv.2501.04211, http://arxiv.org/abs/2501.04211
+(accessed 2025-04-15). arXiv:2501.04211 [cs].
+[33] T. Park and Y. Nakatsukasa, Accuracy and Stability of CUR Decompositions with Oversam-
+pling, SIAM Journal on Matrix Analysis and Applications, 46 (2025), pp. 780–810, https://
+
+
+--- PAGE 27 ---
+ITERATIVE CUR
+27
+doi.org/10.1137/24M1660346, https://epubs.siam.org/doi/10.1137/24M1660346 (accessed
+2025-06-30).
+[34] K. Pearce, C. Chen, Y. Dong, and P. Martinsson, Adaptive Parallelizable Algorithms for
+Interpolative Decompositions via Partially Pivoted LU, Numerical Linear Algebra with Ap-
+plications, 32 (2025), p. e70002, https://doi.org/10.1002/nla.70002, https://onlinelibrary.
+wiley.com/doi/10.1002/nla.70002 (accessed 2025-05-08).
+[35] Y. Shitov, Column subset selection is NP-complete, Linear Algebra and its Applications, 610
+(2021), pp. 52–58, https://doi.org/10.1016/j.laa.2020.09.015, https://linkinghub.elsevier.
+com/retrieve/pii/S0024379520304377 (accessed 2025-06-29).
+[36] D. C. Sorensen and M. Embree, A DEIM Induced CUR Factorization, SIAM Journal on
+Scientific Computing, 38 (2016), pp. A1454–A1482, https://doi.org/10.1137/140978430,
+http://epubs.siam.org/doi/10.1137/140978430 (accessed 2025-04-15).
+[37] G. W. Stewart, Matrix Algorithms: Volume 1: Basic Decompositions, Society for Industrial
+and Applied Mathematics, Jan. 1998, https://doi.org/10.1137/1.9781611971408, http://
+epubs.siam.org/doi/book/10.1137/1.9781611971408 (accessed 2025-02-19).
+[38] J. Tian and A. Ramdas, Online control of the familywise error rate, Statistical Methods
+in Medical Research, 30 (2021), pp. 976–993, https://doi.org/10.1177/0962280220983381,
+https://journals.sagepub.com/doi/10.1177/0962280220983381 (accessed 2026-09-09).
+[39] J.
+A.
+Tropp,
+Improved
+Analysis
+of
+the
+Subsampled
+Randomized
+Hadamard
+Trans-
+form,
+Advances
+in
+Adaptive
+Data
+Analysis,
+03
+(2011),
+pp.
+115–126,
+https://
+doi.org/10.1142/S1793536911000787,
+https://www.worldscientific.com/doi/abs/10.1142/
+S1793536911000787 (accessed 2025-07-03).
+[40] J. A. Tropp, A. Yurtsever, M. Udell, and V. Cevher, Streaming Low-Rank Matrix Ap-
+proximation with an Application to Scientific Simulation, SIAM Journal on Scientific
+Computing, 41 (2019), pp. A2430–A2463, https://doi.org/10.1137/18M1201068, https:
+//epubs.siam.org/doi/10.1137/18M1201068 (accessed 2025-04-28).
+[41] F. Woolfe, E. Liberty, V. Rokhlin, and M. Tygert, A fast randomized algorithm for the
+approximation of matrices, Applied and Computational Harmonic Analysis, 25 (2008),
+pp. 335–366, https://doi.org/10.1016/j.acha.2007.12.002, https://linkinghub.elsevier.com/
+retrieve/pii/S1063520307001364 (accessed 2025-04-17).
+[42] J. Yang, O. R¨ubel, Prabhat, M. W. Mahoney, and B. P. Bowen, Identifying Important
+Ions and Positions in Mass Spectrometry Imaging Data Using CUR Matrix Decomposi-
+tions, Analytical Chemistry, 87 (2015), pp. 4658–4666, https://doi.org/10.1021/ac5040264,
+https://pubs.acs.org/doi/10.1021/ac5040264 (accessed 2025-04-15).
+[43] W. Yu, Y. Gu, and Y. Li, Efficient Randomized Algorithms for the Fixed-Precision Low-
+Rank Matrix Approximation, SIAM Journal on Matrix Analysis and Applications, 39
+(2018), pp. 1339–1359, https://doi.org/10.1137/17M1141977, https://epubs.siam.org/doi/
+10.1137/17M1141977 (accessed 2025-02-11).
+[44] N. Zheng, D. Hayes, A. Christlieb, and J.-M. Qiu, A semi-Lagrangian adaptive-rank
+(SLAR) method for linear advection and nonlinear Vlasov-Poisson system, Journal of
+Computational Physics, 532 (2025), p. 113970, https://doi.org/10.1016/j.jcp.2025.113970,
+https://linkinghub.elsevier.com/retrieve/pii/S0021999125002530 (accessed 2025-04-15).
+[45] A. C¸ivril and M. Magdon-Ismail, On selecting a maximum volume sub-matrix of a
+matrix and related problems, Theoretical Computer Science, 410 (2009), pp. 4801–
+4811, https://doi.org/10.1016/j.tcs.2009.06.018, https://linkinghub.elsevier.com/retrieve/
+pii/S0304397509004101 (accessed 2025-04-15).

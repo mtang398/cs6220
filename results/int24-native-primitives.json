@@ -1,0 +1,44 @@
+{
+  "status": "complete",
+  "compile_command": [
+    "gcc",
+    "-O3",
+    "-march=native",
+    "-ffp-contract=off",
+    "-shared",
+    "-fPIC",
+    "/mnt/c/users/maosen/cs6220/project/scripts/packed_int24_factor.c",
+    "-lm",
+    "-o",
+    "/mnt/c/users/maosen/cs6220/project/results/packed_int24_factor.so"
+  ],
+  "sources": {
+    "scripts/check_int24_native_primitives.py": "3593bf6fa66092f86867f29baad0643782e90ad815df123d9cf6c260c9711d04",
+    "scripts/packed_int24_factor.c": "53b70224003d5e13d97113614f7329dd3b154d66dfb3e93f78871fa6bd368dc8",
+    "results/packed_int24_factor.so": "4aa9cee0fd4136cd9ed6d83eec9a9c2425fde37bffcaf099caedee9ea6ddd528",
+    "scripts/check_packed_int24_factor.py": "4017ad1b06af7bb0027d201ee2588c6e849463839c62e58f930125d133e0e3f2"
+  },
+  "checks": [
+    {
+      "case": "signed",
+      "solve_relative_error": 1.799567552086634e-16,
+      "product_relative_error": 1.1408086299465695e-16
+    },
+    {
+      "case": "zero_scales",
+      "solve_relative_error": 0.0,
+      "product_relative_error": 0.0
+    },
+    {
+      "case": "native_core675",
+      "solve_relative_error": 2.058785447854485e-15,
+      "product_relative_error": 2.0016483604032578e-15,
+      "factor_bytes": 720109,
+      "factor_seconds": 0.08952257101191208,
+      "minimum_raw_pivot": 1.3599948022500276e-05
+    }
+  ],
+  "scope": "Primitive correctness and native construction; dense references outside production path. No total-solver memory/runtime claim.",
+  "elapsed_wall_seconds": 1.4271221409435384,
+  "elapsed_cpu_seconds": 0.19652390000000075
+}

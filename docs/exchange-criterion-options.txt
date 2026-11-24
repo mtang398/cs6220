@@ -1,0 +1,1091 @@
+Exchange criteria tied to solver progress
+2026-11-23
+
+One additional kernel application to learned and static bases
+
+scripts/check_learned_power_refinement.py and
+results/learned-power-refinement-diagnostic.json test a distinct global
+refinement. Ordinary fixed-RP PCG supplies the first ten p,Kp pairs to a
+separate rank-32 shadow factor; its active preconditioner remains unchanged.
+At step 10, one block application Y=KQ and W=Q^T Y constructs a generalized
+Nyström factor from the learned basis. Identical polishing of the initial RP
+basis is applied both upfront and after the same prefix. Two-pass Gaussian
+Nyström is the other static control. Every factor also supplies QR pivots for
+32 actual queried columns, so comparisons preserve their final representation.
+
+All 40 solves reached true original relative residual 1e-8. Actual-column total
+iterations, including the ten-step prefix when present, were:
+
+    case/lambda       static RP polish upfront   static after10   learned after10
+    smooth/.001                            81               86                86
+    smooth/1e-5                           681              709               713
+    Concrete/.001                         172              175               177
+    Concrete/1e-5                        1506             1494              1508
+
+Learning therefore adds no useful improvement once the factor is converted
+back to actual columns: it loses all four upfront comparisons and ties one,
+loses three against the same delayed static refinement. Do not sweep warmup
+lengths or power counts on the strength of this actual-column result.
+
+The generalized factors show an exploratory distinction: learned/static
+after10 totals are 77/80, 635/649, 156/166, and 1332/1418 in the same order.
+Against upfront Gaussian two-pass factors, they are 77/74, 635/635, 156/156,
+and 1332/1414. These counts use dense products and ordinary PCG. The existing
+production result
+results/revision-power-concrete-001/runs/concrete-observed-s0-lambda1e-05-flex_power-r0.json
+uses blocked kernel products and reorthogonalized FCG with history one, and
+requires 1341 iterations for the same Gaussian sketch seed. Finite-precision
+trajectories differ across these recurrences/products. Thus 1332 versus 1414
+is not an established six-percent improvement over the strongest implementation.
+
+The new diagnostic used 4.95 CPU seconds. RP polishing charges 32 initial
+column queries and one 32-RHS kernel block product; Gaussian two-pass charges
+64 block RHS. Actual-column conversion adds 32 column queries to either route.
+Learning reuses the ten prefix products but adds ten shadow compression
+updates. Old-plus-shadow retained states occupy 402176 bytes on smooth data
+and 641792 bytes on Concrete, before transient factors and solver vectors.
+Final generalized factors occupy 131328/211200 bytes; final actual-column
+states occupy 270848/430592 bytes. Dense operators, shared control states,
+audit matrices, and LAPACK workspaces are additional offline resources.
+All actual index sets are unique and contain 32 indices; actual cores and
+columns match the kernel. Independent dense Cholesky/application checks passed,
+with maximum inverse-action discrepancy 1.11e-9 and generalized-core
+reconstruction discrepancy 6.41e-15. No production timing or fixed-memory
+advantage follows from these exploratory iteration counts.
+
+Structural alternatives after the covariance-correction failures
+
+The brainstorming and creative-thinking preflights suggest changing the
+representation rather than continuing local score tuning. The two concrete
+routes below approximate an inverse factor or hierarchical conditional
+couplings. A fixed memory budget remains essential; retaining exactly k actual
+kernel columns and retaining only a rank-k approximation are distinct contracts.
+
+1. AFN with fixed-nnz sparse inverse-pattern exchanges
+
+Partition A using k landmark indices as
+
+    A = [[A11,C^T],[C,A22]],  L L^T=A11,  B=C L^{-T},
+    S = A22-B B^T.
+
+S is SPD. Its individual entries require kernel pairs and inner products of
+the cached rows of B, not new full columns. For a lower-triangular row pattern
+J containing its diagonal i, canonical FSAI coefficients are
+
+    u = S[J,J]^{-1} e_i,        g[J] = u/sqrt(u_i).
+
+Each row has g^T S g=1 and a positive diagonal. Consequently H=G^T G is SPD
+at any retained pattern. Applying the full AFN inverse to residual r uses
+
+    t = L^{-1}r1,       q = r2-B t,
+    z2 = H q,          z1 = L^{-T}(t-B^T z2).
+
+This preserves k actual landmark columns but adds sparse G. Count B, L,
+permutation, sparse values and indices; comparisons require fixed total bytes,
+not just k. Static AFN is established, and its sparse precision correction
+differs from adding block covariance to Nyström. The static diagnostic showed
+substantial headroom on Concrete, weaker results on smooth data, and no clear
+advantage on Airfoil; that finding is not a solve-adaptive contribution.
+
+An exact score on remaining-residual right-hand sides
+
+For recent Schur residuals q_l, define z_l=H q_l, d_l=q_l-S z_l, and
+
+    J(H) = sum_l w_l [z_l^T S z_l - 2 q_l^T z_l].
+
+The unknown constant sum_l w_l q_l^T S^{-1}q_l turns J into
+sum_l w_l ||Hq_l-S^{-1}q_l||_S^2. Thus differences of J are exact differences
+of inverse-action error in the Schur energy norm. This includes the curvature
+term missing from a bare q^T Hq score. It is still not a multistep convergence
+guarantee. With several residuals, fix positive weights before comparing
+candidates, for example w_l=1/(q_l^T H_old q_l).
+
+Replacing one canonical row g by h changes its action by
+
+    delta_z_l = h(h^T q_l)-g(g^T q_l),
+    delta_J = sum_l w_l [-2 d_l^T delta_z_l
+                         + delta_z_l^T S delta_z_l].
+
+Only the union of the old/new sparse patterns supports delta_z_l. Candidate
+scores therefore require small actual Schur blocks. For multiple changed rows,
+sum their action differences before evaluating the quadratic term: cross terms
+must not be discarded. A fixed-nnz donor/recipient exchange has the same form.
+Canonical coefficients always come from S, not a fit to solver secants.
+
+Ordinary PCG provides the score data without another production kernel product
+if implemented carefully. From p=z+beta p_old and the ordinary Ap, recover
+Az=Ap-beta Ap_old. Then
+
+    S z2 = (Az)2-B L^{-1}(Az)1.
+
+The offline test instead explicitly charged one extra dense S product for the
+initial score and another product per selected rule for combined verification.
+One early update/restart, followed by a frozen preconditioner, separates useful
+pattern selection from recurrent disruption. Strong controls are static AFN,
+aFSAI/Kaporin pattern improvement, and an unchanged matched restart.
+
+Bounded experiment, now completed
+
+scripts/check_fsai_pattern_exchange.py reused check_schur_fsai.py and its PCG
+helper. results/fsai-pattern-exchange-diagnostic.json records eight cases:
+smooth/Concrete, lambda=.001/1e-5, k=16/32, b=8 nonzeros per row, checkpoint 8.
+All candidate patterns preserve row counts exactly. Four nearest earlier
+neighbors outside each row were considered, with every old off-diagonal
+entry eligible for deletion. The same eight rows with largest determinant
+potential, selected independently of the RHS, were offered to both rules.
+Both accepted eight changes in every case. Total iterations include the prefix:
+
+    case/lambda/k          old restart    determinant    inverse-action J
+    smooth/.001/16                 198            198                 202
+    smooth/.001/32                 113            112                 116
+    smooth/1e-5/16                1215           1176                1216
+    smooth/1e-5/32                 661            647                 632
+    Concrete/.001/16               238            233                 234
+    Concrete/.001/32               151            148                 148
+    Concrete/1e-5/16              1244           1246                1246
+    Concrete/1e-5/32               786            747                 756
+
+All 24 branches converged to the directly checked 1e-8 tolerance. Combined
+score verification had maximum relative error 4.47e-15; CSR sizes and positive
+diagonals were preserved. The run used 10.15 CPU seconds. J beat determinant
+in one case, tied two, and lost five, despite improving its intended objective
+more strongly. This does not support a useful solve-aware contribution from
+these fixed-row swaps. It does not by itself test reallocating a fixed global
+nonzero budget between rows, but no such extension earns a novelty/speed claim
+from this experiment.
+
+An additional distinct allocator was tested without changing canonical pattern
+selection within a row. Because g_i^T S g_i=1, the exact line-minimizing local
+correction along g_i has squared-energy decrease |g_i^T q|^2. Thus |Gq|^2
+measures current exposure of these directions. Their overlap means these gains
+are not independent, so neither their sum nor exposure alone guarantees benefit.
+The allocator selected eight rows by exposure times the available positive
+log-determinant gain, then applied the globally best determinant pattern within
+each selected row. This changes which rows are updated, without fitting their
+patterns or coefficients to q. Both selectors used the identical regenerated
+canonical pool; no extra Schur product is required for exposure.
+
+scripts/check_fsai_row_exposure.py and
+results/fsai-row-exposure-diagnostic.json record the same eight cases. Static
+determinant/exposure totals were 198/192,112/114,1176/1174,647/651 for smooth
+in the preceding table's order, and 233/235,148/152,1246/1220,747/742 for
+Concrete. Four wins and four losses ranged from 3.0% fewer to 2.7% more
+iterations. All 16 solves reached the true 1e-8 tolerance, both selectors made
+exactly eight swaps with unchanged CSR bytes/nnz, and all static counts exactly
+reproduced the earlier test. The run used 8.86 CPU seconds. This provides no
+consistent benefit to justify promotion or further sweeps of exposure weights.
+
+Global neighbor admission was then tested as new information acquisition rather
+than another weight choice. Each selected row queried the b full Schur columns
+in its existing support. These provide Sg_i and all candidate cross entries.
+For old neighbors N, sigma_i=1/G_ii^2, and any new index j, define
+
+    v_j = S_jj-S_jN S_NN^{-1} S_Nj,
+    admission_ratio_j = (Sg_i)_j^2/v_j.
+
+This equals squared conditional covariance divided by sigma_i v_j, the relative
+conditional-variance reduction from adding j before deleting a neighbor. The
+four largest admissible ratios were considered; every old off-diagonal neighbor
+was then eligible for deletion, and canonical coefficients/maximal determinant
+gain chose the final fixed-nnz pattern. The known Schur diagonal and queried
+support columns suffice for every denominator and candidate local block; no
+unrecorded new-column lookup enters selection.
+
+At checkpoint 8, three allocators each selected eight rows: current |Gq|^2,
+seeded uniform rows, or the RHS-independent remaining conditional variance
+fraction 1/(G_ii^2 S_ii). Each received exactly 64 Schur-column queries. A
+nearest-four control used the same current-residual rows. The fair methods
+preserved all k landmark information and identical CSR bytes/row counts.
+Temporary query workspaces and existing sparse-factor storage remain extra
+resources relative to a bare column-only preconditioner.
+
+scripts/check_fsai_global_admission.py and
+results/fsai-global-admission-diagnostic.json contain all 12 smooth/Concrete/
+Airfoil cases at lambda=.001/1e-5 and k=16/32. All 61 branches reached true1e-8.
+Global exposure won/tied/lost 6/1/5 against nearest exposure, 6/0/6 against
+uniform global rows, and 4/2/6 against the better same-budget static control.
+Its relative iteration differences against that better control ranged from
+2.3% fewer to 2.9% more. Determinant gains improved in all 12 comparisons with
+nearest exposure, so better structural score again failed to predict useful
+solve improvement. The extra-query Concrete/.001/k32 all-row search used 6272
+column queries for 147 iterations, versus 64 queries for each fair allocator,
+151 iterations with matched restart, and 149 with uninterrupted AFN.
+
+This retires the bounded eight-row nonlocal allocator; no correlation/weight
+sweep is justified by these results. It does not prove all sparsity adaptation
+impossible. Recorded CPU totals were 21.67 seconds plus a small unlogged tail
+from an initial JSON scalar-serialization failure. The exact first-attempt
+source/partial results are preserved; the continuation fixes only the scalar
+type and retains completed branches. Maximum row-normalization error was
+1.44e-12, and source/provenance hashes were checked.
+
+Whole-factor capacity allocation was then tested to remove the limitation that
+eight changed rows affect only a small fraction of G. The new offline script
+scripts/check_fsai_global_allocation.py and its result
+results/fsai-global-allocation-diagnostic.json use nested nearest-neighbor
+patterns of sizes 2, 4, 8, and 16 (capped by i+1), with canonical coefficients.
+Both allocators start at the smallest pattern and greedily admit the next level
+by 2 log(g_ii,new/g_ii,old) per added entry. The static allocator uses this gain
+directly; the solve-aware allocator multiplies it by the fixed old |Gq|^2 at
+the common uniform-eight checkpoint 8. Final single-entry canonical increments
+fill exactly the uniform-eight total nnz. Both use the same queried maximum
+principal blocks, with all canonical refits counted. No dense-reference solve
+enters selection, and neither rule needs a further Schur product for its score.
+
+All eight cases use seed 0 and k=32. Total iterations include the common prefix:
+
+    case/lambda       uninterrupted  matched restart  static capacity  residual capacity
+    smooth/.001                 113              113              111                146
+    random/.001                 119              122              116                148
+    Concrete/.001               149              151              144                174
+    Airfoil/.001                120              124              111                125
+    smooth/1e-5                 658              661              693                989
+    random/1e-5                 751              752              778               1069
+    Concrete/1e-5               782              786              959               1507
+    Airfoil/1e-5                861              839              849               1225
+
+All 24 continuation branches reached the directly checked 1e-8 tolerance.
+The residual allocator lost all eight comparisons with both matched restart
+and static allocation, requiring 12.6--57.1% more iterations than static.
+Static allocation helped the four moderate-regularization cases but hurt the
+four small-regularization cases against matched restart. Between 45.2% and
+89.6% of rows changed size, so this is a substantial capacity redistribution.
+Retained CSR bytes and nnz match exactly: 3812, 6308, or 9332 entries depending
+on dataset size. Maximum canonical row-normalization error was 1.81e-12, and
+positive triangular diagonals certify SPD. An independent small SPD example
+checked the full block inverse against a separately assembled factorization;
+relative action errors were below 5e-16 for both allocation rules.
+
+The diagnostic used 8.35 CPU seconds. Candidate construction charged 120280--
+296920 kernel-entry queries and 1906--4666 distinct canonical refits per case;
+the result also records initial setup, candidate-array storage, residual-score
+hashes, source hashes, and the solver helper's uncounted final verification
+product. Dense setup and shared candidate caching make this an offline capacity
+test, not a production timing comparison. No claim is made against larger
+compact or power-Nystrom states at equal total memory.
+
+These results retire the canonical FSAI row-capacity allocation route for this
+project. They do not prove that every sparse inverse adaptation is impossible.
+The failure now covers large changes to retained capacity, so further tuning
+of residual weights or small neighbor pools is not justified. A useful project
+outcome still requires a different mechanism and broad paired evidence.
+
+Replacing exposure by exact-error coordinate squares is not a justified next
+oracle. With B=G S G^T, u=Gq, and e=S^{-1}q=G^T v, v=B^{-1}u contains the
+coefficients of e in the nonorthogonal canonical row basis. The true energy is
+v^T B v, including cross terms; v_i^2 is not an independent row contribution.
+Changing capacity replaces a row direction, rather than independently reducing
+a diagonal mode error. Its benefit also depends on the replacement direction's
+overlap with e and on other rows. Thus weighting determinant gains by v_i^2
+would remain a heuristic even with exact error access, and would not determine
+whether accurate error information can support a useful allocation mechanism.
+No such weight sweep was run.
+
+AFN: Zhao et al., SISC 46(4), A2351--A2376 (2024),
+https://doi.org/10.1137/23M1565139 and https://arxiv.org/html/2304.05460v2.
+Dynamic FSAI: Bernaschi et al., SISC 41(3), C139--C160 (2019),
+https://doi.org/10.1137/18M1197461; official implementation description
+https://hypre.readthedocs.io/en/latest/solvers-fsai.html.
+MSPAI already includes subspace probing constraints: Huckle and Sedlacek (2010),
+https://doi.org/10.1155/2010/930218. RSAI also selects adaptive patterns, but its
+residual is from approximate-inverse construction, rather than the current
+linear-system solve: Jia and Kang (2017),
+https://arxiv.org/html/1503.04500v4. No first-solve or novelty claim follows from
+this bounded primary-source check.
+
+2. Hierarchical conditional couplings under a byte cap
+
+A substantively different representation keeps accurate small diagonal blocks
+and compresses interactions between spatial clusters. This changes the original
+actual-column constraint to a fixed total factor-storage budget. Leaf factors,
+off-diagonal bases, cores, indices and workspaces all count. A binary geometry
+tree and one early redistribution/restart are enough for an initial study;
+a complete HODLR production implementation should wait for a capacity test.
+
+A two-block calculation identifies the correct inverse-sensitive quantity.
+With exact diagonal factorizations A11=L1 L1^T and A22=L2 L2^T, whiten the
+coupling T=L1^{-1} A12 L2^{-T}. Since A is SPD, all its singular values satisfy
+sigma_j<1. Retaining any subset of T's SVD modes leaves
+[[I,T_ret],[T_ret^T,I]] SPD. This preserves positive definiteness without
+inserting unrelated covariance in the discarded complement.
+
+For whitened residual q=(L1^{-1}r1,L2^{-1}r2), write a_j=u_j^T q1 and
+b_j=v_j^T q2. Omitting coupling mode (u_j,sigma_j,v_j) gives the exact
+two-block inverse-action error contribution
+
+    sigma_j^2 [(a_j+b_j)^2/(2(1+sigma_j))
+                 +(a_j-b_j)^2/(2(1-sigma_j))].
+
+The difference component is particularly sensitive when sigma_j approaches
+one. Thus compressing unwhitened blocks by singular magnitude alone can miss
+the modes important for the inverse. Sum this expression over recent residuals
+and compare its reduction per stored scalar when considering exchanges of
+coupling modes between nodes. At a single exact merge this is an exact energy
+calculation. Scores across approximate nested children are not additive without
+further analysis; approximate children can also make a whitened coupling's
+norm exceed one. Those are explicit factorization/stability problems to resolve,
+not details covered by the two-block identity.
+
+First informative experiment: on the existing small workloads, inspect a
+geometric tree's whitened coupling spectra and compare a static storage-matched
+hierarchical factor with global Nyström. Include equal-rank, approximation-error
+allocation, and residual-weighted allocation at the same bytes. Dense local SVDs
+may diagnose representational headroom, but their cost is not a production
+claim. Only if a frozen hierarchical factor shows material headroom should an
+entry-based construction and one adaptive reallocation be implemented. Retain
+all datasets/regularizations in evaluation; do not restrict to favorable low-
+dimensional geometry or bandwidths. The present sample sizes may be too small
+to repay hierarchical setup, which the eventual total-time test must decide.
+
+Hierarchical preconditioning is established; Chen and Martinsson (2022),
+https://arxiv.org/abs/2208.06290, gives HODLR factorizations with kernel-system
+applications. Solver-dependent block refinement is also established: Bauer
+and Bebendorf, Block-adaptive Cross Approximation of Discrete Integral
+Operators (2019), https://arxiv.org/abs/1905.01918, adapts block accuracy to
+solution error while interlacing assembly and solution. Hard-memory coarsening
+and inverse-sensitive stable factor allocation would therefore need distinct
+evidence beyond naming residual-guided hierarchical ranks.
+
+Tested alternative: small PSD residual blocks with all k columns retained
+
+The bounded test below is now negative. scripts/check_paired_residual_fit.py and
+results/paired-residual-fit-diagnostic.json contain six seed-0 cases, lambda=.001,
+eight training secants, four held-out secants, and a common step-12 restart.
+The run completed in 5.07 CPU seconds. Total iterations, including the prefix:
+
+    case/rank       uninterrupted  old restart  learned diag  learned pairs  PITC
+    smooth/16                 148          154           362            651   317
+    smooth/32                  85           87           168            248   164
+    Concrete/16               292          297          1381           2055   818
+    Concrete/32               180          184           685            960   495
+    Airfoil/16                204          208          1027           1376   764
+    Airfoil/32                105          109           338            368   293
+
+All 30 solves reached the directly checked 1e-8 relative residual. All block
+bases were SPD with minimum eigenvalue at least lambda to roundoff; inverse
+action residuals were at most 1.41e-11. The learned-pair validation gate passed
+four of six cases despite the slowdown. Therefore improved held-out Euclidean
+secant fit is insufficient, even with SPD, residual-diagonal caps, and freezing.
+The diagnostic used a fixed eight-neighbor standardized-input graph, not the
+secant-feature graph proposed below, and did not tune that choice afterward.
+
+Persistent application overhead for the learned pair model was 8.4--20.5 KiB
+over the two n-by-k arrays, including pair indices; training storage was
+96--225 KiB for P and Y. Offline peak RSS was 425 MiB, including dense K,
+comparison states, and transient factors. Dense solve times in this diagnostic
+are not production kernel timings. No production implementation was changed.
+This route should not proceed to a timing campaign or finer pair-search tuning
+on the strength of its training/validation score.
+
+The newer fixed-budget probe-reallocation screens were mostly negative. Root
+reports modest iteration reductions from continuous rank truncation followed by
+freezing/restarting, with PSD and total-time checks still pending. This separate
+alternative keeps all k actual landmark columns and their original Nyström
+factor F. It learns a cheap block-diagonal residual correction from the solve:
+
+    E = K-F F^T,       M_new = F F^T + lambda I + D,       D >= 0.
+
+Static diag(E) was already strongly negative in this scope. A small rank-one
+block can model correlated residual directions while leaving the perpendicular
+direction alone. For example, [[1,1],[1,1]] leaves (1,-1) unpenalized, whereas
+its diagonal penalizes it. The proposed learned correction also shrinks to zero
+when the observed secants do not support positive residual curvature. This is
+a causal hypothesis for testing, not an inferred speedup.
+
+Data available without new kernel products
+
+Collect a short set P of ordinary search directions and their already computed
+A-images. Normalize each column by sqrt(p^T Ap), applying the same scaling to
+its image. Obtain residual secants in O(nkh) work for h directions:
+
+    Y = E P = AP-lambda P-F(F^T P).
+
+The current residual diagonal e=diag(E)=1-row_norms(F)^2 is available in O(nk).
+Guard numerical negative entries. Retain P and Y only during construction;
+they cost 2nh entries. No exact solution, offline eigenvectors, or extra kernel
+products enter the fit. Using raw residuals instead would require their A-images
+and must be charged unless those products are already available.
+
+Closed-form pair model and a score against learned diagonal correction
+
+First fit the diagonal control from the same secants:
+
+    c_i = <P[i,:],Y[i,:]>,   g_i = ||P[i,:]||^2,
+    d_i = clip(c_i/g_i, 0, e_i),
+    gain_i = 2 d_i c_i - d_i^2 g_i.
+
+A zero input row gets d_i=0. For a candidate pair B={i,j}, let v be the unit
+top eigenvector of the 2-by-2 matrix Y_B Y_B^T. This fixes a locally dominant
+observed residual direction without querying new kernel entries. Define
+
+    t = v^T P_B,       c = <t,v^T Y_B>,       g = ||t||^2,
+    a_max = min_{ell in B: v_ell^2>0} e_ell/v_ell^2,
+    a = clip(c/g, 0, a_max),       D_B = a v v^T,
+    gain_B = 2 a c - a^2 g.
+
+Skip negligible Y_B or g. The formula for a exactly minimizes
+||Y_B-a v v^T P_B||_F^2 over this one-parameter PSD family. The cap ensures
+diag(D_B)<=diag(E_BB); it does not imply D<=E. Negative off-diagonal entries
+are permitted when the two components of v have opposite signs.
+
+Score a pair by gain_B-gain_i-gain_j. Sort positive scores and greedily take
+disjoint pairs; leave unmatched entries at their fitted d_i. Thus the training
+objective cannot worsen relative to the learned diagonal control. The vector
+v was chosen from Y_B, so this is exact only within the stated rank-one family,
+not a claim to solve the full PSD block-fitting problem.
+
+Avoid an O(n^2) search in the actual solver. A concrete first candidate graph
+queries a fixed small number of nearest neighbors of both signs of each
+normalized row Y[i,:] in h dimensions. Include pairs with nearly opposite
+signatures because PSD blocks can have negative off-diagonal entries. Ignore
+negligible rows, deduplicate the graph, and cap its degree before scoring.
+Use the same graph size for random-pair and input-neighbor controls. Candidate
+search time counts; an exhaustive small-n diagnostic is not the production cost.
+
+Validate on later secants, then freeze once
+
+Fit on an early fixed training window, for example eight directions, and keep
+the old preconditioner for the next four ordinary steps. Accumulate validation
+loss ||Y_val-D P_val||_F^2 online, using the same A-normalization, and compare
+with D=0 and the fitted diagonal model. Activate the block model only if its
+validation loss beats both by a predetermined margin. The held-out secants
+do not tune the pairing or amplitudes. This tests extrapolation to subsequent
+directions rather than only fitting directions whose corrections are finished.
+Validation fit is still not a bound on convergence or remaining energy error.
+
+After activation, recompute the true residual, restart once, and freeze the
+preconditioner. Charge that product and all construction/validation work. A
+rejected model leaves ordinary PCG uninterrupted. Compare with an old-model
+restart at the same checkpoint as a separate control, alongside uninterrupted
+fixed PCG. End-to-end results include the learning steps before activation.
+
+SPD and a stable cheap inverse
+
+Every block is PSD, so B=lambda I+D is SPD and M_new=B+F F^T is SPD. Unlike
+unmodified Nyström, M_new<=A is not guaranteed, so its old error upper bound
+and SR1 secant-preservation arguments do not apply. A training fit is not an
+exact global secant condition, nor does it preserve past CG conjugacy.
+
+Apply T=B^{-1/2} blockwise. On a pair with perpendicular unit vectors v,w,
+
+    T_B r_B = v(v^T r_B)/sqrt(lambda+a)
+              + w(w^T r_B)/sqrt(lambda).
+
+This avoids subtracting two large nearly equal terms. Form T F=U Sigma V^T
+once, then apply
+
+    M_new^{-1}r = T (I+U Sigma^2 U^T)^{-1} T r.
+
+Use the established twice-projected span/complement inverse, dividing the span
+coefficients by 1+sigma_i^2. Setup costs O(nk^2+k^3); applications cost O(nk+n).
+Final extra block storage is O(n), in addition to the original k columns and
+the whitened inverse basis. Do not retain an unnecessary duplicate original
+basis after freezing. Construction has 2nh secant storage and coexisting factors;
+both temporary bytes and peak RSS count. A fixed k-column budget is preserved;
+total rank is no longer k, and total memory is slightly larger.
+
+An independent n=32,k=5,h=4,lambda=1e-3 algebra check found maximum gain-identity
+error 3.55e-15, no residual-diagonal cap violations, minimum preconditioner
+eigenvalue lambda to roundoff, and inverse relative error 1.14e-12 against a
+dense solve. These check the fit and inverse, not a benchmark outcome.
+
+Strong controls and prior work
+
+Use uninterrupted fixed-k PCG, the old-model checkpoint restart, full static
+diag(E), learned diagonal, random/geometry pairs with the same learned fit,
+and static exact residual blocks E_BB on the selected partition. The latter
+tests whether learning is useful beyond choosing a better partition. Charge
+its extra kernel entries. Preserve the original datasets, seeds, ranks, and
+regularizations. A positive fit score or one easy case is insufficient; time,
+true residuals, prediction differences, and actual memory remain decisive.
+
+Low-rank-plus-block-diagonal kernel preconditioning already appears explicitly
+as PITC in Cutajar et al., Preconditioning Kernel Matrices (2016), Section 3.1:
+https://www.robots.ox.ac.uk/~mosb/public/pdf/3647/Cutajar%20et%20al_2016_Preconditioning%20Kernel%20Matrices.pdf.
+Their form is Khat+bldiag(K-Khat)+lambda I with blockwise inversion. The primary
+paper was checked. The present empirical question is whether secant-selected,
+shrunk off-diagonal residual blocks improve over static PITC and learned
+diagonal correction. The matrix form and block inversion are not new claims.
+
+Earlier route: allocate a fixed probe budget between landmarks and solver directions
+
+The current proposal broadens the information retained by the preconditioner.
+Keep k probes, initially coordinate vectors selecting kernel columns, and allow
+an observed search direction p to replace one probe. Its kernel image Kp=Ap-lambda p
+is already available from the solve. This uses a dense linear combination of
+kernel columns without acquiring a new kernel column or operator product.
+The earlier column-exchange criteria below remain derivations and negative
+development evidence; none has established useful end-to-end adaptation.
+
+Generalized Nyström and its exact SR1 interpretation
+
+For a conceptual probe matrix Omega, retain Y=K Omega and W=Omega^T K Omega.
+The approximation and preconditioner are
+
+    Khat = Y W^dagger Y^T,       M = lambda I + Khat.
+
+In exact arithmetic Khat Omega=K Omega, so M Omega=A Omega. Full-rank formulas
+below use W^{-1}; singular or numerically truncated cores require the actual
+represented approximation. Inserting p gives u=(K-Khat)p=Ap-Mp and
+
+    delta = p^T u,
+    Khat_aug = Khat + u u^T/delta,
+    M_aug = M + u u^T/delta.
+
+This is the standard symmetric rank-one (SR1) Hessian update with secant pair
+(p,Ap). It is positive when delta>0 because K-Khat is positive semidefinite.
+If delta is numerically negligible, skip insertion rather than divide by it.
+The SR1 identity is established algebra, not a new update formula.
+
+Dense Omega need not be stored. New cross entries are Y^T p and p^T Kp, while
+a new coordinate j has cross entries Y[j,:]. Store Y, W, and the Gram G=Y^T Y;
+the inverse application's basis/eigenvalues add their usual n-by-k storage.
+Normalize incoming p and Kp by sqrt(p^T Kp) when that quantity is reliable.
+Coordinate and learned probes can then share a unit-diagonal kernel core.
+General probes require an explicit core: columns[indices,:] is no longer valid.
+
+All-removal scores, including rejection of the new probe
+
+For the augmented k+1 probes, define V=W^{-1} and H=W+G/lambda. Deleting probe i
+has the exact scores
+
+    trace(Khat_{-i}) = trace(VG) - (V G V)_ii / V_ii,
+
+    logdet(M_{-i}) - n log(lambda)
+      = logdet(H) - logdet(W) + log((H^{-1})_ii) - log(V_ii).
+
+Thus one small factorization per augmented matrix scores all removals. Maximize
+captured trace or regularized log determinant, and include deletion of p as the
+unchanged state. They measure global approximation quality; neither guarantees
+remaining-error reduction. A fixed minimum gain or numerical tie tolerance
+must be chosen before evaluation, not adjusted using favorable solves.
+
+Rebuild and check the winner with the stable applied representation. If its
+positive eigenvalues are theta, the actual scores are sum(theta) and
+sum(log1p(theta/lambda)). Near-singular cores require stable direct evaluation;
+the inverse-diagonal identity must not be mixed with truncated factors.
+Incoming Y^T p, Y^T Kp, and ||Kp||^2 cost O(nk); all small scores cost O(k^3).
+Accepted stable QR/SVD rebuilds can cost O(nk^2), which may dominate frequent
+updates. Temporary old/augmented/new factors, the n-by-k basis, and peak RSS
+all count. Reuse Ap; no new full operator product is intrinsic to this update.
+
+Compatibility with the solve and the effect of eviction
+
+If a retained learned direction d satisfies Md=Ad and d^T r=0, then
+
+    d^T A M^{-1}r = d^T r = 0.
+
+After an exact line search along the current p, the new residual is orthogonal
+to p. If p was A-orthogonal to other retained learned directions, their residual
+orthogonality is preserved too. An accepted update that retains p can therefore
+restart with M_new^{-1}r while preserving conjugacy to the retained learned
+directions. An eviction removes the guarantee for the discarded direction.
+Coordinate probes have no corresponding residual-orthogonality guarantee.
+This is limited retained conjugacy, never a full-history CG guarantee.
+
+Do not carry ordinary fixed-PCG beta through an accepted preconditioner change.
+Rejecting the new probe leaves the preconditioner and ordinary recurrence intact.
+Accepted updates restart the recurrence; the retained secants supply only the
+orthogonality just stated. Finite precision, true-residual replacement, and
+core truncation can spoil those identities. Before discarding the current p,
+check ||M_new^{-1}Ap-p||/||p|| for an accepted insertion. Without storing old
+probe vectors, all old residual orthogonalities cannot be explicitly audited;
+extra direction storage for such checks must be counted.
+
+An important limiting case prevents overinterpreting the mechanism. If every
+direction is retained from iteration zero, exact SR1 updates plus exact line
+searches produce directions collinear with fixed-initial-preconditioner CG.
+For p=M^{-1}r, write sigma=p^T Mp, eta=p^T Ap, tau=(Ap)^T M^{-1}(Ap). After
+the line search and SR1 update, the new inverse-residual direction is
+
+    [(eta-sigma)/(eta (tau-eta))] [tau p-eta M^{-1}Ap],
+
+whereas the ordinary PCG next direction is
+
+    (sigma/eta^2) [tau p-eta M^{-1}Ap].
+
+The nonzero positive factors are immaterial to the next exact line search.
+Degenerate cases need a skip/breakdown treatment. Learning alone therefore
+does not establish a stronger exact-arithmetic solver. The scientific question
+is whether allocating the fixed representation between global coordinate
+information and observed directions improves time or numerical robustness.
+
+Required discriminating controls
+
+Compare fixed rank-k PCG with both RPCholesky and deterministic largest-diagonal
+initialization; retain the diagonal-corrected control described below. Compare
+pure learned limited-memory SR1, FIFO replacement, a fixed allocation of k0
+coordinates plus k-k0 learned probes, and score-selected allocation. A growing
+no-eviction diagnostic checks the CG-equivalent limiting case but is not a
+fixed-budget competitor. Memory-matched L-BFGS and fixed Nyström plus explicit
+limited-history orthogonalization are important strong controls. Match actual
+stored n-vectors: Y plus its inverse-application basis already costs about 2nk,
+so k BFGS secant pairs can be a fairer comparison than only floor(k/2) pairs.
+Do not retain rank k columns plus extra history and call that the same budget.
+Use the full original dataset, rank, regularization, and paired-seed scope;
+count rejected work, rebuilds, true residual checks, and all operator products.
+
+Independent in-memory algebra verification on n=40 Gaussian inputs, k=6,
+lambda=0.01, with mixed coordinate and dense probes gave maximum all-removal
+trace error 4.62e-14, logdet error 1.92e-13, inverse-secant relative error
+7.33e-14, and SR1/Nyström augmentation relative discrepancy 2.95e-16.
+These verify identities in one small case, not a useful solver outcome.
+
+Closest prior concepts and the remaining contribution question
+
+Byrd, Nocedal, and Schnabel (1994), Representations of quasi-Newton matrices and
+their use in limited memory methods, derives compact SR1 and BFGS forms:
+https://doi.org/10.1007/BF01582063.
+Bergamaschi, Marin, and Martinez (2020), Compact Quasi-Newton preconditioners
+for SPD linear systems, studies SR1/BFGS CG preconditioners and SPD conditions:
+https://arxiv.org/abs/2001.01062.
+Bourhis et al. (2026), Quasi-Newton and Krylov Methods for the Solution of
+Nonconvex Trust-Region Subproblems, studies full/limited-memory methods on SPD
+systems and reports loss from discarded curvature for limited-memory SR1;
+its LBFGS and DIOM comparisons motivate strong controls here:
+https://arxiv.org/abs/2605.23761.
+These primary abstracts were checked. The present identities do not establish
+novelty. Useful adaptive allocation and informative eviction under a real memory
+cap would need evidence beyond reproducing known SR1 learning.
+
+Diagnostic option superseded by the failed full-space oracle
+
+Full-space lookahead can compare branch corrections s from the same x0,r0 using
+
+    squared-energy decrease = 2 r0^T s - s^T A s.
+
+Both s and As accumulate from branch steps, so selection needs no exact solution
+or extra scoring product. The unchanged branch must continue its real recurrence;
+replacement branches must use exactly the intended restart/history policy.
+Batching branch directions shares kernel construction but all right-hand-side
+products and storage count. If a branch wins, commit its complete solver state
+without another restart. Root reported an offline oracle with 32 candidates,
+all removals, k=16/32, and checkpoints 5/20: none beat old continuation after
+5 or 10 steps, and even the best new gain was often about half the old gain.
+This supplied development result supersedes further lookahead-shortlist tuning.
+
+The same screens found frozen final column sets close to the initial set:
+initial 137/138 iterations; curvature-final 141 versus adaptive 322;
+energy-final 137 versus adaptive 262; direction-final 140 versus adaptive 273.
+Improved spectral condition numbers did not translate to those target solves.
+The Schur-complement coarse-space screen subsequently found new sampled columns
+worse in all eight inspected cases. These motivate changing the retained probe
+family, not claiming success for a better scalar approximation score.
+
+Earlier proposal after the negative projected-step screen
+
+The earlier projected-Delta proposal below is superseded as the preferred route.
+revision-screen-001 records 138 iterations for fixed FCG with history 8, versus
+262 for energy1, 273 for direction1, and 307 for q1; PCG with 16/24 columns took
+148/107 iterations. revision-history-001 records 74 iterations for full-history
+fixed FCG and energy selection with no accepted replacements. History 64 gave
+88 fixed iterations versus 90 with one replacement. The one-update tests at
+iteration 20 accepted no replacement. These development cases indicate that
+later local-gain updates can exploit a truncated recurrence without improving
+the retained preconditioner's longer-term usefulness. They do not establish
+that fixed-budget solver-informed adaptation is impossible.
+
+The then-proposed distinct criterion fits curvature on several solver directions,
+not optimize the correction from the current residual alone. Root has implemented
+a log-determinant curvature variant for screening. The proposal here is its
+inverse-trace alternative, which puts a stronger penalty on poorly represented
+generalized modes. It has not yet demonstrated a useful solve.
+
+Subspace and objective
+
+Take a small independent set D of recent correction/secant directions and the
+current preconditioned residual. Retain their known A-images AD. Prior directions
+and their images already exist in the limited-history solver. The current
+direction's A-image can be the operator product needed for the next ordinary
+step and must be reused; otherwise count one extra product. Do not use only old
+directions: in exact CG, the current residual is orthogonal to their span.
+
+Remove dependencies and form U with U^T A U=I_s, for example by factoring
+D^T A D=L L^T and taking U=D L^{-T}, AU=AD L^{-T}. Use a rank-revealing fallback
+when this Gram is unreliable. Merely normalizing each column's A-norm does not
+make the columns mutually A-orthogonal. This distinction matters for the score.
+Keep U fixed during that checkpoint's candidate/removal comparisons.
+
+For the original M_S=Khat_S+lambda I, define
+
+    B_S = U^T M_S U,
+    J(S) = trace(B_S^{-1}).
+
+Because 0 < M_S <= A, the eigenvalues mu_a of B_S lie in (0,1], and
+J(S)=sum_a 1/mu_a >= s. These reciprocals are the generalized A/M Rayleigh--Ritz
+eigenvalues restricted to span(U). Minimizing J improves curvature coverage of
+several observed directions and penalizes small mu much more strongly than
+maximizing sum log(mu). It is not the trace of U^T M_S^{-1} U: inversion and
+projection do not commute. Nor is it a bound on the full system's condition
+number or on the current solution error.
+
+If an unwhitened basis D is used instead, the basis-invariant equivalent is
+
+    J(S) = trace[(D^T M_S D)^{-1}(D^T A D)].
+
+The causal hypothesis is that a preconditioner which fits the curvature of
+several directions already needed by the solve will avoid repeatedly making
+those directions expensive after history truncation. Including the current
+direction allows the objective to follow newly exposed modes. This is a
+multi-direction spectral-fit hypothesis, not a guaranteed convergence result.
+
+Exact all-removal score without full operator products
+
+For augmented T=S union {j}, let C=K[:,T], W=K[T,T], V=W^{-1}, F=C^T U,
+Y=V F, and B=lambda U^T U+F^T V F. For deletion i,
+
+    a_i = Y[i,:]^T/sqrt(V_ii),
+    B_i = B - a_i a_i^T,
+    J_i = trace(B^{-1})
+          + ||B^{-1} a_i||_2^2/(1-a_i^T B^{-1} a_i).
+
+Use small solves; do not form any n-by-n inverse. A small denominator requires
+a direct Cholesky/eigendecomposition of B_i rather than a fragile downdate.
+The unchanged set is deletion of j. These identities assume the untruncated
+positive definite selected core. For truncated states, evaluate U^T M_S U from
+the actual stored basis/eigenvalues, rebuild stable trial states as needed, and
+verify the winning score against the state that would be applied.
+
+A global-quality guard can prevent improving the inspected subspace by severely
+damaging the rest of K. The residual trace is available from the existing Gram
+G=C^T C. For deletion i,
+
+    trace(K-Khat_{T\{i}})
+      = n - trace(VG) + (V[:,i]^T G V[:,i])/V_ii.
+
+For a first controlled variant, require this trace to remain no greater than
+the initialization's trace apart from numerical tolerance, and require a stable
+decrease of J. Record how often this guard blocks the best local-curvature
+replacement. A separate guard-off ablation distinguishes a poor score from an
+overrestrictive safeguard. Do not silently relax the guard only on favorable
+cases. Trace protection controls global average approximation, not every
+unobserved direction.
+
+Candidate rule matched to the inverse-trace objective
+
+Let E=K-Khat_S, d_j=E_jj, and e_j=U^T E[:,j]. For a full-rank Nyström state,
+adding j changes B_S to B_S+e_j e_j^T/d_j. The exact reduction in J from this
+addition is
+
+    gain_j = ||B_S^{-1} e_j||_2^2
+             / (d_j + e_j^T B_S^{-1} e_j).
+
+Rank or sample these gains over unselected indices with reliably positive d_j.
+All e_j are rows of EU=AU-lambda U-Khat_S U. Hence the rule uses already
+available secant/operator information and O(nks+ns^2) local work, without an
+additional full operator application per candidate. It concentrates acquisition
+on weak generalized modes because of B_S^{-1}. Uniform candidates and the
+unweighted sum((EU)[j,:]^2)/d_j rule provide distinct generator controls.
+Actual fixed-budget deletion still uses J_i; an attractive addition is not
+automatically a useful exchange.
+
+A fresh n=40 Gaussian algebra check with k=6, s=4, lambda=0.01 compared all
+removal scores against directly constructed preconditioners. Maximum relative
+score discrepancy was 3.56e-15. The addition-gain identity agreed to 5.70e-16
+relative; ||U^T A U-I|| was 6.57e-16. These are algebra checks only.
+
+Costs and the smallest useful comparison
+
+After U,AU are available, each candidate needs one kernel column, O(n(k+s))
+inner products, O(k^3) augmented-core work, and O(ks^2+s^3) inverse-trace scores.
+Initial construction of F and EU costs O(nks); their small matrices are O(k^2+s^2).
+Accepted state rebuilds retain their existing O(nk^2+k^3) cost. Keeping U and AU
+explicitly costs 2ns entries, although an existing history and small coordinate
+map can avoid duplicating those arrays. Count any current-direction operator
+product not reused by the solve. This avoids the earlier Delta scheme's
+k+1 full right-hand-side products per candidate. k kernel columns remain fixed.
+
+First compare the implemented logdet criterion with inverse trace using the same
+U, candidate indices, recurrence/history, and trace-guard policy; then compare
+their matched candidate generators separately. Inspect the projected generalized
+eigenvalues and 5/10/20-step branch progress with the same continuation state.
+An initial single-update-and-freeze comparison distinguishes a better retained
+state from frequent adaptation that damages Krylov progress. Repeated adaptation
+must subsequently earn its cost. Keep all original datasets, rank budgets,
+regularizations, seeds, accuracy checks, and total-time accounting in the broader
+study; a development screen is not a replacement for that scope.
+
+Strong static controls before crediting adaptation
+
+1. Deterministic pivoted Cholesky: select the largest remaining residual diagonal
+   at each acquisition, with the same k columns and the same stable inverse
+   implementation. This is a standard greedy pivoting control, not a guaranteed
+   improvement over RPCholesky. It tests whether the random starting set is weak.
+2. Diagonal-corrected Nyström: use
+
+       M_dc = Khat_S + diag(K-Khat_S) + lambda I.
+
+   Its diagonal term is positive and it remains SPD; it needs one additional
+   n-vector and O(nk) work to form the residual diagonal. With D=diag(K-Khat)+lambda I,
+   factor D^{-1/2} F for Khat=F F^T and apply the low-rank inverse in those scaled
+   coordinates. Setup is O(nk^2), application O(nk); count the actual basis and
+   workspace. The low-rank-plus-diagonal covariance form is established in FITC
+   Gaussian-process approximation, so this is not a new preconditioner claim.
+   M_dc need not satisfy M_dc <= A. The earlier q upper bound and J>=s argument
+   must not be transferred to this variant. If it wins statically, adaptation
+   must be tested against that stronger baseline rather than only uncorrected RP.
+3. Compare actual storage and total time with the already tested higher-rank
+   fixed preconditioner. k=16 plus direction/history storage is not the same
+   memory budget as a bare k=16 method. Report both retained-column budget and
+   total memory; do not present a memory advantage if static k=24 is cheaper
+   or equally sized and faster.
+
+The standard concepts are Rayleigh--Ritz restriction, secant curvature fitting,
+spectral equivalence, low-rank deletion/downdate identities, and adaptive
+preconditioning. They motivate a mechanism, not its novelty. Chen et al.'s
+RPCholesky paper is the primary pivoting reference:
+https://doi.org/10.1002/cpa.22234 and https://arxiv.org/abs/2207.06503.
+For low-rank-plus-diagonal covariance correction, Quiñonero-Candela and Rasmussen,
+A Unifying View of Sparse Approximate Gaussian Process Regression, JMLR 6,
+1939--1959 (2005), Section 6 and equations (21)--(22):
+https://www.jmlr.org/papers/volume6/quinonero-candela05a/quinonero-candela05a.pdf.
+These primary sources were checked for the stated conceptual relationships.
+Neither source establishes this criterion's usefulness. The negative screens
+remain recorded evidence; a useful result still requires actual total-time
+benefit at an honestly stated fixed storage budget.
+
+Earlier proposal: projected single-step decrease
+
+The earlier mechanism ranks fixed-budget column replacements by
+the exact energy decrease of the direction the solver will actually take,
+after projecting against its retained search directions. Include the unchanged
+preconditioner in this ranking and keep the search history when a replacement
+is accepted. This combines a measurable selection objective with a recurrence
+that does not automatically discard the work represented by that history.
+
+This document develops the criterion and its discriminating comparison. It is
+not evidence of a working speed improvement or a novelty claim. The project
+objective remains useful solve-adaptive preconditioning with k retained kernel
+columns, across the original synthetic/real datasets and rank/regularization
+settings. A negative result for the first score does not complete that objective.
+
+Evidence motivating the change
+
+results/initial-analysis.json contains 240 completed timed runs. Exchange/fixed
+median paired time ratios were 2.24 on smooth synthetic targets, 2.36 on random
+synthetic targets, 2.89 on Concrete, and 2.34 on Airfoil. All 20 paired cases were
+slower with the original score. In diagnostic-001.json, all 60 inspected
+checkpoints lowered q=r^T M^{-1}r, but every new-preconditioner branch had larger
+squared energy error after both 5 and 10 steps. Both branches restarted, so their
+difference cannot be attributed to unequal restart treatment.
+
+The score q is a bound on the current error, not an objective for the next
+correction. For example, multiplying an inverse preconditioner by a positive
+scalar changes q but leaves an exact line-search correction unchanged. The
+new criterion should therefore use the correction direction and its A-curvature.
+
+1. Score the projected direction actually used
+
+Let A=K+lambda I, lambda>0, r=y-Ax, and let D contain the retained solver
+directions. Their A-images AD are available from previous iterations. For a
+candidate retained set S_i with exactly k indices, form
+
+    z_i = M_{S_i}^{-1} r,
+    G_D = D^T A D,
+    p_i = z_i - D G_D^{-1} D^T A z_i,
+    A p_i = A z_i - (AD) G_D^{-1} D^T A z_i.
+
+Use a stable small solve for G_D, or sequential A-orthogonalization with a
+second pass. A diagonal normalization is valid only when the stored directions
+are sufficiently A-orthogonal. When the history is empty, p_i=z_i.
+
+For an exact line search from the current x,
+
+    a_i = (r^T p_i)/(p_i^T A p_i),
+    x_new = x + a_i p_i,
+    Delta_i = (r^T p_i)^2/(p_i^T A p_i).
+
+Delta_i is the exact decrease of squared energy error, e^T A e. To see this,
+expand the error after a step: E_new=E-2a r^T p+a^2 p^T A p. Minimizing this
+quadratic gives the expressions above. No exact solution is used in selection.
+The score is invariant under nonzero scaling of p_i.
+
+Compute r^T p_i explicitly. Replacing it by r^T z_i requires r^T D=0; true
+residual replacement and finite precision can spoil that identity. Scoring and
+the executed step must use the same residual and the same projected direction.
+
+Rank every removal, including deletion of the new candidate itself. This no-op
+must represent continuation with the current fixed-budget state and the same
+history, not an artificially restarted old solver. Accept only a stable,
+material improvement over that no-op. A small experimental gain margin such as
+2% can be fixed before the first comparison; it is a practical screening
+parameter, not a theorem that future iteration savings repay search cost.
+Keep numerical acceptance tolerances distinct from this gain margin.
+
+After acceptance, retain the history and use the selected verified p_i and A p_i
+for the next step. A rejected checkpoint leaves the state and history unchanged.
+The selected operator product should be reused; computing it again as the next
+iteration's ordinary product would charge avoidable work to the method.
+
+2. All removals can be generated from one augmented system
+
+For one new column j, write T=S union {j}, C=K[:,T], W=K[T,T], b=C^T r, and
+
+    H = W + C^T C/lambda,
+    h = H^{-1} b,
+    B = H^{-1}.
+
+In exact arithmetic with W positive definite,
+
+    z_aug = M_T^{-1} r = r/lambda - C h/lambda^2.
+
+For deletion i, embed the smaller-system solution in a vector with zero at i.
+The principal-deletion identity gives
+
+    h_deleted = h - B[:,i] h_i/B_ii,
+    z_i = z_aug + (C B[:,i]) h_i/(lambda^2 B_ii).
+
+The plus sign and lambda^2 denominator are essential. Solve for B's columns
+using the small Cholesky factors; this is a temporary small-system calculation,
+not application of a dense n-by-n inverse. Form all k+1 directions in Z, then
+compute AZ in one blockwise kernel matrix-matrix application. The kernel blocks
+are constructed once for this candidate and multiplied by all right-hand sides.
+History projection then uses Z and AZ without another operator application.
+
+A small independent in-memory algebra check used n=40 Gaussian inputs, k+1=7,
+lambda=1e-3, and cond(H)=1466.48. Every generated deletion direction matched a
+directly rebuilt stable preconditioner application; the largest relative
+difference was 1.00e-14. The one-step squared-energy identity agreed with direct
+energy differences to 7.34e-10 absolute in that check. This checks the formula
+in one well-conditioned example, not its reliability on every workload.
+
+Numerical conditions are substantive here. A numerically truncated z_aug cannot
+be combined blindly with the untruncated full-rank H deletion identity. Check
+the augmented core and score-system conditioning. Verify the generated no-op
+against the current state's stable apply(r). Rebuild the selected rank-k state
+and check its z against the predicted direction before accepting it. Reproject
+the rebuilt direction. If it differs materially, obtain its actual A-image and
+recompute Delta, charging that extra product. A singular/unreliable case can
+fall back to stable applications for each removal and still batch their A-images;
+record the expensive fallback and use the same represented numerical rank as
+the solver. The actual applied state, not the algebraically ideal formula,
+defines the accepted update.
+
+3. Cost and memory contract
+
+For s=k+1 deletion directions, one batched call shares O(n^2 d) kernel-entry
+construction for d input features, but its multiplication work is O(n^2 s).
+It is not one scalar matrix-vector product. Record both the number of batched
+operator calls and the number of right-hand-side products, together with their
+wall time. For c sequential candidates, the straightforward implementation
+uses c batches of s right-hand sides, before stable-verification fallbacks.
+
+Z and AZ require 2n(k+1) floating-point entries. Retained history D and AD require
+2nh entries for h history directions. The existing state retains its kernel
+columns, orthonormal factor basis, and small matrices. A rebuilt candidate may
+temporarily coexist with the old state. Kernel-block workspace is O(block_size*n).
+Report these arrays and process peak RSS; k retained landmark indices does not
+mean only nk floating-point entries are used. Give the fixed-FCG control exactly
+the same history capacity and count its projection overhead too.
+
+Batching is the preferable first implementation to retaining AC. An alternative
+cache J=C^T A C can evaluate all denominators using one Ar and one A-times-new-
+column product, but initializing it costs k products; its cancellation-prone
+quadratic expression also needs care. Retaining AC uses another nk entries.
+Those alternatives can be tested later if batched direction scoring dominates
+time; they are not prerequisites for this candidate.
+
+At k=16, candidate counts 1 and 4 are both already within the original planned
+study. Compare them with checkpoint interval 20. Search may still be too costly
+even when Delta improves. Measure whether saved ordinary iterations outweigh
+the batched products, stable rebuilds, and history projections. Rejected searches
+still consume time. No matrix-matrix speedup should be assumed from FLOP counts.
+
+4. Candidate generation from the current kernel approximation residual
+
+Keep the existing r_j^2 sampling in the first criterion comparison so that the
+acceptance rule is isolated. If candidate quality limits useful exchanges, the
+strongest separate generator to try uses the current continuation direction p
+and its available Ap:
+
+    E = K - Khat_S,
+    E p = (Ap-lambda p) - Khat_S p,
+    d_j = E_jj.
+
+For a full-rank Nyström state, adding an unselected column j gives
+
+    Khat_{S union {j}} - Khat_S = (E[:,j] E[j,:])/d_j,
+
+so the captured kernel energy along p is
+
+    p^T (Khat_{S union {j}}-Khat_S) p = (E p)_j^2/d_j.
+
+This suggests sampling or shortlisting (E p)_j^2/d_j over unselected indices
+with reliably positive d_j. It uses solver information and residual matrix
+curvature rather than large equation residuals alone. Khat_S p and its diagonal
+are available from the stored basis/eigenvalues in O(nk) work. With Ap reused,
+there is no additional full operator product; workspace is a few n-vectors and
+an optional n-entry diagonal cache. Guard small/negative numerical d_j values.
+For truncated states the full-rank augmentation identity need not describe the
+actual rebuilt factor, so this remains a generator; projected Delta on the
+actual replacement state decides acceptance.
+
+This generator is not a substitute for the fixed-budget removal criterion.
+Growing a matrix approximation and replacing one of k retained columns are
+different operations. Test this generator only after the score/recurrence
+comparison, with the candidate count held fixed.
+
+5. Discriminating comparison and interpretation
+
+The decisive mechanism comparison is q selection versus projected-Delta selection
+under the same limited-history flexible recurrence, initial columns, candidate
+draws, true-residual policy, and history capacity. Use the same candidate stream
+until differing accepted states make exact candidate identity impossible; keep
+the random seeds paired and record candidate indices. A fixed-preconditioner
+flexible solver with the same history distinguishes any benefit of the recurrence
+from benefit of exchanging columns. Uninterrupted fixed PCG remains the main
+runtime reference. Existing restarted runs remain evidence about the discarded
+history cost; a projected-Delta/restart ablation can isolate that interaction.
+
+At inspected checkpoints, branch old/new states with the same retained history
+and compare actual squared-energy decrease after 1, 5, 10, and 20 steps. A dense
+reference may measure these errors offline but must not enter selection. The
+one-step identity is a correctness check; longer-horizon improvement is a
+scientific test. Count all accepted, rejected, and unstable checkpoints, not
+only successful branches. Group observations by solve rather than pretending
+checkpoints are independent samples.
+
+End-to-end evidence must include total time to the directly checked residual
+tolerance, ordinary and batched operator work, selection/rebuild/projection time,
+solution and prediction differences, accepted exchanges, and peak storage.
+Compare candidate counts 1 and 4 before increasing search width. Continue the
+original datasets (both synthetic target families, Concrete, Airfoil), five
+paired seeds, rank budgets {16,32,64}, regularization {1e-1,1e-3,1e-5}, and the
+planned frequency/target controls as the research proceeds. A bounded prototype
+stage chooses an implementation; it does not reduce that scope or establish
+the project's final contribution.
+
+If projected Delta improves the first step but not 5--20-step progress, the
+criterion is still too greedy; a useful next revision is to protect or score
+several recent correction directions, not to claim the first-step identity
+establishes convergence. If branch progress improves but time does not, reduce
+candidate/search frequency or optimize the measured batching bottleneck. If
+fixed FCG accounts for all improvement, column adaptation has not yet earned
+its extra work. Useful total runtime at fixed k, rather than setup completion
+or a more favorable bound, is the success condition.
+
+6. Closest-work boundaries
+
+Flexible CG with explicit direction orthogonalization is established. Notay,
+Flexible Conjugate Gradients, SIAM J. Sci. Comput. 22(4), 1444--1460 (2000),
+DOI https://doi.org/10.1137/S1064827599362314, analyzes variable preconditioning
+and truncated direction histories. The primary publisher abstract was checked.
+This supports the recurrence choice; it does not prove a speedup for this
+landmark replacement rule.
+
+Knyazev and Lashuk, Steepest Descent and Conjugate Gradient Methods with Variable
+Preconditioning, SIAM J. Matrix Anal. Appl. 29(4), 1267--1280, published online
+2007, DOI https://doi.org/10.1137/060675290; preprint
+https://arxiv.org/abs/math/0605767. The primary abstract states that SPD variable
+preconditioning with bounded condition numbers can still lose CG's improvement
+over steepest descent. Their numerical examples also include beneficial variable
+preconditioning. Thus SPD and an improved local score alone do not establish
+the desired multistep or runtime behavior.
+
+The already supplied IterativeCUR notes ground reuse of a kernel-approximation
+residual and cached matrix information. They do not supply this solve-dependent
+fixed-budget acceptance rule. Exact line-search decrease, principal-deletion
+identities, flexible CG, and residual-based column selection are established
+ingredients. The possible contribution must be a demonstrably useful fixed-
+budget selection mechanism and its cost-aware implementation, not their names
+or composition. No exhaustive novelty search or priority claim is made here.

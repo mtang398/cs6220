@@ -1,0 +1,44 @@
+{
+  "purpose": "Compare current-solve rank truncation against two-pass Gaussian Nystr\u00f6m, including setup and all kernel products.",
+  "synthetic_n": 640,
+  "seeds": [
+    0
+  ],
+  "repetitions": 1,
+  "solver_defaults": {
+    "rank": 32,
+    "checkpoint": 20,
+    "history_size": 1,
+    "warmup_steps": 10,
+    "maxiter": 2500
+  },
+  "variants": [
+    {
+      "id": "flex_compact",
+      "method": "flex_compact"
+    },
+    {
+      "id": "flex_gaussian_qr",
+      "method": "flex_gaussian_qr"
+    },
+    {
+      "id": "flex_power",
+      "method": "flex_power"
+    },
+    {
+      "id": "flex_compress",
+      "method": "flex_compress"
+    }
+  ],
+  "max_wall_seconds": 175,
+  "run_timeout_seconds": 70,
+  "workloads": [
+    {
+      "dataset": "concrete"
+    }
+  ],
+  "regularization": [
+    0.001,
+    1e-05
+  ]
+}

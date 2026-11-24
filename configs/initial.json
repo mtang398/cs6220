@@ -1,0 +1,22 @@
+{
+  "purpose": "Initial five-seed comparison of residual exchanges, fixed preconditioning, matched restarts, and CG; additional baseline execution is recorded separately in the pilot.",
+  "workloads": [
+    {"dataset": "synthetic", "target": "smooth"},
+    {"dataset": "synthetic", "target": "random"},
+    {"dataset": "concrete", "target": "observed"},
+    {"dataset": "airfoil", "target": "observed"}
+  ],
+  "synthetic_n": 640,
+  "seeds": [0, 1, 2, 3, 4],
+  "regularization": [0.001],
+  "ranks": [16],
+  "methods": ["cg", "fixed", "residual_exchange", "matched_restart"],
+  "checkpoint": 20,
+  "candidates": 4,
+  "repetitions": 3,
+  "rtol": 1e-8,
+  "maxiter": 2000,
+  "block_size": 128,
+  "run_timeout_seconds": 60,
+  "max_wall_seconds": 900
+}
